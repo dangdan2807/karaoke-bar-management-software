@@ -1,13 +1,14 @@
 package entity;
 
 import java.sql.Date;
-import java.util.List;
 
 public class CTDichVu {
     private int maCTDichVu;
     private int soLuongDat;
     private Date ngayGioDat;
-    private List<DichVu> dichVu;
+
+    private HoaDon hoaDon;
+    private DichVu dichVu;
 
     public int getMaCTDichVu() {
         return maCTDichVu;
@@ -15,14 +16,6 @@ public class CTDichVu {
 
     public void setMaCTDichVu(int maCTDichVu) {
         this.maCTDichVu = maCTDichVu;
-    }
-
-    public List<DichVu> getDichVu() {
-        return dichVu;
-    }
-
-    public void setDichVu(List<DichVu> dichVu) {
-        this.dichVu = dichVu;
     }
 
     public int getSoLuongDat() {
@@ -41,25 +34,34 @@ public class CTDichVu {
         this.ngayGioDat = ngayGioDat;
     }
 
-    public CTDichVu(int maCTDichVu, int soLuongDat, Date ngayGioDat, List<DichVu> dichVu) {
-        this.maCTDichVu = maCTDichVu;
-        this.soLuongDat = soLuongDat;
-        this.ngayGioDat = ngayGioDat;
+    public HoaDon getHoaDon() {
+        return hoaDon;
+    }
+
+    public void setHoaDon(HoaDon hoaDon) {
+        this.hoaDon = hoaDon;
+    }
+
+    public DichVu getDichVu() {
+        return dichVu;
+    }
+
+    public void setDichVu(DichVu dichVu) {
         this.dichVu = dichVu;
     }
 
-    public Double tinhTienDichVu() {
-        Double tongTien = 0.0;
-        for (DichVu item : dichVu) {
-            tongTien += item.getGiaBan();
-        }
-        return tongTien;
+    public CTDichVu(int maCTDichVu, int soLuongDat, Date ngayGioDat, HoaDon hoaDon, DichVu dichVu) {
+        this.maCTDichVu = maCTDichVu;
+        this.soLuongDat = soLuongDat;
+        this.ngayGioDat = ngayGioDat;
+        this.hoaDon = hoaDon;
+        this.dichVu = dichVu;
     }
 
     @Override
     public String toString() {
-        return "CTDichVu [dichVu=" + dichVu + ", maCTDichVu=" + maCTDichVu + ", ngayGioDat=" + ngayGioDat
-                + ", soLuongDat=" + soLuongDat + "]";
+        return "CTDichVu [dichVu=" + dichVu + ", hoaDon=" + hoaDon + ", maCTDichVu=" + maCTDichVu + ", ngayGioDat="
+                + ngayGioDat + ", soLuongDat=" + soLuongDat + "]";
     }
 
 }

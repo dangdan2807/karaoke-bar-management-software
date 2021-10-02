@@ -4,6 +4,7 @@ public class Phong {
     private String maPhong;
     private int tinhTrang;
     private String viTri;
+    
     private LoaiPhong loaiPhong;
 
     public String getMaPhong() {

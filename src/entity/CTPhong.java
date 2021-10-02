@@ -7,6 +7,8 @@ public class CTPhong {
     private int maCTPhong;
     private Date ngayGioNhan;
     private Date ngayGioTra;
+
+    private HoaDon hoaDon;
     private Phong phong;
 
     public int getMaCTPhong() {
@@ -33,6 +35,14 @@ public class CTPhong {
         this.ngayGioTra = ngayGioTra;
     }
 
+    public HoaDon getHoaDon() {
+        return hoaDon;
+    }
+
+    public void setHoaDon(HoaDon hoaDon) {
+        this.hoaDon = hoaDon;
+    }
+
     public Phong getPhong() {
         return phong;
     }
@@ -41,17 +51,11 @@ public class CTPhong {
         this.phong = phong;
     }
 
-    public CTPhong(int maCTPhong, Date ngayGioNhan, Date ngayGioTra, Phong phong) {
+    public CTPhong(int maCTPhong, Date ngayGioNhan, Date ngayGioTra, HoaDon hoaDon, Phong phong) {
         this.maCTPhong = maCTPhong;
         this.ngayGioNhan = ngayGioNhan;
         this.ngayGioTra = ngayGioTra;
-        this.phong = phong;
-    }
-
-    public CTPhong(int maCTPhong, Phong phong) {
-        this.maCTPhong = maCTPhong;
-        this.ngayGioNhan = null;
-        this.ngayGioTra = null;
+        this.hoaDon = hoaDon;
         this.phong = phong;
     }
 
@@ -69,7 +73,8 @@ public class CTPhong {
 
     @Override
     public String toString() {
-        return "CTPhong [maCTPhong=" + maCTPhong + ", ngayGioNhan=" + ngayGioNhan + ", ngayGioTra=" + ngayGioTra
-                + ", phong=" + phong + "]";
+        return "CTPhong [hoaDon=" + hoaDon + ", maCTPhong=" + maCTPhong + ", ngayGioNhan=" + ngayGioNhan
+                + ", ngayGioTra=" + ngayGioTra + ", phong=" + phong + "]";
     }
+
 }

@@ -5,6 +5,7 @@ import java.sql.Date;
 public class KhachHang {
     private String maKH, cmnd, hoTen, soDienThoai;
     private Date ngaySinh;
+    private boolean gioiTinh;
 
     public String getMaKH() {
         return maKH;
@@ -46,17 +47,27 @@ public class KhachHang {
         this.ngaySinh = ngaySinh;
     }
 
-    @Override
-    public String toString() {
-        return "KhachHang [cmnd=" + cmnd + ", hoTen=" + hoTen + ", maKH=" + maKH + ", ngaySinh=" + ngaySinh
-                + ", soDienThoai=" + soDienThoai + "]";
+    public boolean isGioiTinh() {
+        return gioiTinh;
     }
 
-    public KhachHang(String maKH, String cmnd, String hoTen, String soDienThoai, Date ngaySinh) {
+    public void setGioiTinh(boolean gioiTinh) {
+        this.gioiTinh = gioiTinh;
+    }
+
+    public KhachHang(String maKH, String cmnd, String hoTen, String soDienThoai, Date ngaySinh, boolean gioiTinh) {
         this.maKH = maKH;
         this.cmnd = cmnd;
         this.hoTen = hoTen;
         this.soDienThoai = soDienThoai;
         this.ngaySinh = ngaySinh;
+        this.gioiTinh = gioiTinh;
     }
+
+    @Override
+    public String toString() {
+        return "KhachHang [cmnd=" + cmnd + ", gioiTinh=" + gioiTinh + ", hoTen=" + hoTen + ", maKH=" + maKH
+                + ", ngaySinh=" + ngaySinh + ", soDienThoai=" + soDienThoai + "]";
+    }
+
 }

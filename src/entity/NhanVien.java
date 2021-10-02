@@ -3,28 +3,12 @@ package entity;
 import java.sql.Date;
 
 public class NhanVien {
-    private String maNhanVien, cmnd, hoTen, soDienThoai;
+    private String maNhanVien, cmnd, hoTen, soDienThoai, chucVu;
     private Date ngaySinh;
     private Double mucLuong;
+    private boolean gioiTinh;
+
     private TaiKhoan taiKhoan;
-
-    public NhanVien(String maNhanVien, String cmnd, String hoTen, Date ngaySinh, String soDienThoai, Double mucLuong, TaiKhoan taiKhoan) {
-        this.maNhanVien = maNhanVien;
-        this.cmnd = cmnd;
-        this.hoTen = hoTen;
-        this.ngaySinh = ngaySinh;
-        this.soDienThoai = soDienThoai;
-        this.mucLuong = mucLuong;
-        this.taiKhoan = taiKhoan;
-    }
-
-    public TaiKhoan getTaiKhoan() {
-        return taiKhoan;
-    }
-
-    public void setTaiKhoan(TaiKhoan taiKhoan) {
-        this.taiKhoan = taiKhoan;
-    }
 
     public String getMaNhanVien() {
         return maNhanVien;
@@ -50,20 +34,28 @@ public class NhanVien {
         this.hoTen = hoTen;
     }
 
-    public Date getNgaySinh() {
-        return ngaySinh;
-    }
-
-    public void setNgaySinh(Date ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
-
     public String getSoDienThoai() {
         return soDienThoai;
     }
 
     public void setSoDienThoai(String soDienThoai) {
         this.soDienThoai = soDienThoai;
+    }
+
+    public String getChucVu() {
+        return chucVu;
+    }
+
+    public void setChucVu(String chucVu) {
+        this.chucVu = chucVu;
+    }
+
+    public Date getNgaySinh() {
+        return ngaySinh;
+    }
+
+    public void setNgaySinh(Date ngaySinh) {
+        this.ngaySinh = ngaySinh;
     }
 
     public Double getMucLuong() {
@@ -74,10 +66,40 @@ public class NhanVien {
         this.mucLuong = mucLuong;
     }
 
+    public boolean isGioiTinh() {
+        return gioiTinh;
+    }
+
+    public void setGioiTinh(boolean gioiTinh) {
+        this.gioiTinh = gioiTinh;
+    }
+
+    public TaiKhoan getTaiKhoan() {
+        return taiKhoan;
+    }
+
+    public void setTaiKhoan(TaiKhoan taiKhoan) {
+        this.taiKhoan = taiKhoan;
+    }
+
+    public NhanVien(String maNhanVien, String cmnd, String hoTen, String soDienThoai, String chucVu, Date ngaySinh,
+            Double mucLuong, boolean gioiTinh, TaiKhoan taiKhoan) {
+        this.maNhanVien = maNhanVien;
+        this.cmnd = cmnd;
+        this.hoTen = hoTen;
+        this.soDienThoai = soDienThoai;
+        this.chucVu = chucVu;
+        this.ngaySinh = ngaySinh;
+        this.mucLuong = mucLuong;
+        this.gioiTinh = gioiTinh;
+        this.taiKhoan = taiKhoan;
+    }
+
     @Override
     public String toString() {
-        return "NhanVien [cmnd=" + cmnd + ", hoTen=" + hoTen + ", maNhanVien=" + maNhanVien + ", mucLuong=" + mucLuong
-                + ", ngaySinh=" + ngaySinh + ", soDienThoai=" + soDienThoai + ", taiKhoan" + "]";
+        return "NhanVien [chucVu=" + chucVu + ", cmnd=" + cmnd + ", gioiTinh=" + gioiTinh + ", hoTen=" + hoTen
+                + ", maNhanVien=" + maNhanVien + ", mucLuong=" + mucLuong + ", ngaySinh=" + ngaySinh + ", soDienThoai="
+                + soDienThoai + ", taiKhoan=" + taiKhoan + "]";
     }
 
 }
