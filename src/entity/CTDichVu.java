@@ -1,8 +1,11 @@
 package entity;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class CTDichVu {
+	private int maCTDichVu;
 	private int soLuongDat;
 	private Date ngayGioDat;
 	private Double tienDichVu;
@@ -12,6 +15,14 @@ public class CTDichVu {
 
 	public int getSoLuongDat() {
 		return soLuongDat;
+	}
+
+	public int getMaCTDichVu() {
+		return maCTDichVu;
+	}
+
+	public void setMaCTDichVu(int maCTDichVu) {
+		this.maCTDichVu = maCTDichVu;
 	}
 
 	public void setSoLuongDat(int soLuongDat) {
@@ -46,7 +57,8 @@ public class CTDichVu {
 		this.dichVu = dichVu;
 	}
 
-	public CTDichVu(int soLuongDat, Date ngayGioDat, HoaDon hoaDon, DichVu dichVu) {
+	public CTDichVu(int maCTDichVu, int soLuongDat, Date ngayGioDat, HoaDon hoaDon, DichVu dichVu) {
+		this.maCTDichVu = maCTDichVu;
 		this.soLuongDat = soLuongDat;
 		this.ngayGioDat = ngayGioDat;
 		this.hoaDon = hoaDon;
@@ -54,12 +66,15 @@ public class CTDichVu {
 		this.tienDichVu = tinhTienDichVu();
 	}
 
-	public CTDichVu(HoaDon hoaDon, DichVu dichVu) {
-		this.hoaDon = hoaDon;
-		this.dichVu = dichVu;
+	public CTDichVu(int maCTDichVu) {
+		this.maCTDichVu = maCTDichVu;
 	}
 
 	public CTDichVu() {
+	}
+
+	public CTDichVu(ResultSet rs) throws SQLException {
+		this(rs.getInt("maCTPhong"), rs.getInt("soLuongDat"), rs.getDate("ngayGioDat"), new HoaDon(), new DichVu(rs));
 	}
 
 	@Override

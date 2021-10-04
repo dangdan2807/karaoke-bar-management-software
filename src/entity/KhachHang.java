@@ -1,6 +1,8 @@
 package entity;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class KhachHang {
 	private String maKH;
@@ -72,6 +74,11 @@ public class KhachHang {
 	}
 
 	public KhachHang() {
+	}
+
+	public KhachHang(ResultSet rs) throws SQLException {
+		this(rs.getString("maKH"), rs.getString("cmnd"), rs.getString("hoTen"), rs.getString("soDienThoai"),
+				rs.getDate("ngaySinh"), rs.getBoolean("gioiTinh"));
 	}
 
 	@Override

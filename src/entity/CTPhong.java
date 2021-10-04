@@ -1,6 +1,8 @@
 package entity;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 public class CTPhong {
@@ -59,6 +61,10 @@ public class CTPhong {
 	}
 
 	public CTPhong() {
+	}
+
+	public CTPhong(ResultSet rs) throws SQLException {
+		this(rs.getInt("maCTPhong"), rs.getDate("ngayGioNhan"), rs.getDate("ngayGioTra"), new Phong(rs));
 	}
 
 	@Override

@@ -1,19 +1,11 @@
 package DAO;
 
-import com.mongodb.client.*;
-import com.mongodb.client.model.*;
-import com.mongodb.MongoClient;
-import org.bson.Document;
-import org.bson.types.*;
-
-import java.util.*;
-
-import connectDB.ConnectMongo;
+import java.sql.*;
+import connectDB.ConnectDB;
 
 public class DataProvider {
     private static DataProvider instance = new DataProvider();
-    private static ConnectMongo db = new ConnectMongo();
-    private static String databaseName = "QuanLyQuanCafe";
+    private static ConnectDB db = ConnectDB.getInstance();
 
     public static DataProvider getInstance() {
         if (instance == null)
@@ -21,162 +13,100 @@ public class DataProvider {
         return instance;
     }
 
-    /**
-     * Thêm 1 dòng vào Collection chỉ định
-     * <p>
-     * ví dụ json <code>String a = "{'UserName': 'nguyenVanA'}"</code>
-     * 
-     * @param Collection Collection cần truy vấn
-     * @param jsonData   Json dữ liệu cần truyền (viết dạng json)
-     * @return result trả về ObjectId nếu thành công | null nếu thất bại
-     */
-    public ObjectId insertDocument(String collection, String jsonData) {
-        MongoClient client = null;
-        ObjectId result = null;
-        if (jsonData.matches("^\\{.+\\}$")) {
-            try {
-                db.connect();
-                client = ConnectMongo.getConnection();
-
-                MongoDatabase db = client.getDatabase(databaseName);
-                MongoCollection<Document> collections = db.getCollection(collection);
-                Document doc = Document.parse(jsonData);
-                collections.insertOne(doc);
-                result = doc.getObjectId("_id");
-                client.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+    // dùng khi select trả về các bảng
+    public ResultSet ExecuteQuery(String query, Object[] parameter) {
+        PreparedStatement stmt = null;
+        ResultSet dataList = null;
+        Connection con = null;
+        try {
+            db.connect();
+            con = ConnectDB.getConnection();
+            stmt = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            if (parameter != null) {
+                String[] listParams = query.split(" ");
+                int i = 1;
+                for (String item : listParams) {
+                    if (item.contains("?")) {
+                        stmt.setObject(i, parameter[i - 1]);
+                        i++;
+                    }
+                }
             }
+            dataList = stmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return result;
+        return dataList;
     }
 
-    /**
-     * Đọc data từ csdl
-     * <p>
-     * ví dụ json <code>String a = "{'UserName': 'nguyenVanA'}"</code>
-     * <p>
-     * Nếu không có select hoặc query thì gán bằng <code>{}</code>. Ví dụ:
-     * <code>String a = "{}"</code>
-     * 
-     * @param Collection Collection cần truy vấn
-     * @param jsonData   json dùng để truy vấn (dạng json)
-     * @param limitRow   Giới hạn số lượng dòng được lấy ra (integer) mặc định = 0
-     * @param skipRow    Bỏ qua x dòng được lấy ra đầu tiên (integer) mặc định = 0
-     * @return <code>List</code> Account
-     */
-    public List<Document> readDocuments(String Collection, String[] jsonData, int limitRow, int skipRow) {
-        MongoClient client = null;
-        List<Document> resultDocs = new ArrayList<Document>();
-        List<Document> docs = new ArrayList<Document>();
-        for (String json : jsonData) {
-            if (json.matches("^\\{.+\\}$")) {
-                Document doc = Document.parse(json);
-                docs.add(doc);
-            }
-        }
-        if (limitRow >= 1) {
-            Document limitValue = Document.parse("{ $limit: " + limitRow + "}");
-            docs.add(limitValue);
-        }
-        if (skipRow >= 1) {
-            Document skipValue = Document.parse("{ $skip: " + skipRow + "}");
-            docs.add(skipValue);
-        }
-        if (docs.size() > 0) {
-            try {
-                db.connect();
-                client = ConnectMongo.getConnection();
-                MongoDatabase db = client.getDatabase(databaseName);
-                MongoCollection<Document> collection = db.getCollection(Collection);
-                AggregateIterable<Document> results = collection.aggregate(docs);
-                for (Document doc : results) {
-                    resultDocs.add(doc);
+    // dùng khi insert, delete, update hoặc các câu query trả về số lượng dòng thực
+    // thi
+    // có dòng nào thực thi => false
+    public int ExecuteNonQuery(String query, Object[] parameter) {
+        int data = 0;
+        PreparedStatement stmt = null;
+        Connection con = null;
+        try {
+            db.connect();
+            con = ConnectDB.getConnection();
+            stmt = con.prepareStatement(query);
+            if (parameter != null) {
+                String[] listParams = query.split(" ");
+                int i = 1;
+                for (String item : listParams) {
+                    if (item.contains("?")) {
+                        stmt.setObject(i, parameter[i - 1]);
+                        i++;
+                    }
                 }
-                client.close();
-            } catch (Exception e) {
+            }
+            data = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return resultDocs;
+        return data;
     }
 
-    /**
-     * cập nhật 1 dòng dữ liệu trong Collection chỉ định
-     * <p>
-     * ví dụ json <code>String a = "{'UserName': 'nguyenVanA'}"</code>
-     * <p>
-     * Nếu không có select hoặc query thì gán bằng <code>{}</code>. Ví dụ:
-     * <code>String a = "{}"</code>
-     * 
-     * @param Collection Collection cần truy vấn
-     * @param jsonData   Những điều kiện tìm đối tượng cần cập nhật (viết dạng json)
-     *                   <p>
-     *                   ví dụ: { < String tìm kiếm >, < String update > }
-     * @param options    các hàm hỗ trợ truy vấn
-     * @return Document
-     */
-    public Document updateDocument(String Collection, String[] jsonData, FindOneAndUpdateOptions options) {
-        Document result = null;
-        List<Document> filter = new ArrayList<Document>();
-        for (String json : jsonData) {
-            if (json.matches("^\\{.+\\}$")) {
-                Document doc = Document.parse(json);
-                filter.add(doc);
-            }
-        }
-        MongoClient client = null;
-        if (filter.size() >= 2) {
-            try {
-                db.connect();
-                client = ConnectMongo.getConnection();
-                MongoDatabase db = client.getDatabase(databaseName);
-                MongoCollection<Document> collection = db.getCollection(Collection);
-                if (options != null) {
-                    result = collection.findOneAndUpdate(filter.get(0), filter.get(1), options);
-                } else {
-                    result = collection.findOneAndUpdate(filter.get(0), filter.get(1));
+    // dùng để đếm, ...
+    // trả về cột đầu tiên của dùng đầu tiên của kết quả
+    public Object ExecuteScalar(String query, Object[] parameter) {
+        Object data = null;
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        Connection con = null;
+        try {
+            db.connect();
+            con = ConnectDB.getConnection();
+            stmt = con.prepareStatement(query);
+            if (parameter != null) {
+                String[] listParams = query.split(" ");
+                int i = 1;
+                for (String item : listParams) {
+                    if (item.contains("?")) {
+                        stmt.setObject(i, parameter[i - 1]);
+                        i++;
+                    }
                 }
-                client.close();
-            } catch (Exception e) {
+            }
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                data = rs.getObject(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return result;
-    }
-
-    /**
-     * Xóa 1 dòng dữ liệu trong Collection chỉ định
-     * <p>
-     * ví dụ json <code>String a = "{'UserName': 'nguyenVanA'}"</code>
-     * <p>
-     * Nếu không có select hoặc query thì gán bằng <code>{}</code>. Ví dụ:
-     * <code>String a = "{}"</code>
-     * 
-     * @param collection Collection cần truy vấn
-     * @param jsonFilter Những điều kiện tìm đối tượng (viết dạng json)
-     * @param options    các hàm hỗ trợ truy vấn
-     * @return Document
-     */
-    public Document deleteDocument(String collection, String jsonFilter, FindOneAndDeleteOptions options) {
-        MongoClient client = null;
-        Document resultDoc = null;
-        if (jsonFilter.matches("^\\{.+\\}$")) {
-            try {
-                db.connect();
-                client = ConnectMongo.getConnection();
-                MongoDatabase db = client.getDatabase(databaseName);
-                MongoCollection<Document> col = db.getCollection(collection);
-                Document filterDoc = Document.parse(jsonFilter);
-                if (options != null) {
-                    resultDoc = col.findOneAndDelete(filterDoc, options);
-                }
-                resultDoc = col.findOneAndDelete(filterDoc);
-                client.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return resultDoc;
+        return data;
     }
 }

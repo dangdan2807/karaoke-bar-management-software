@@ -1,5 +1,8 @@
 package entity;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Phong {
 	private String maPhong;
 	private int tinhTrang;
@@ -50,6 +53,10 @@ public class Phong {
 	}
 
 	public Phong() {
+	}
+
+	public Phong(ResultSet rs) throws SQLException {
+		this(rs.getString("maPhong"), rs.getInt("tinhTrang"), rs.getString("viTri"), new LoaiPhong(rs));
 	}
 
 	@Override

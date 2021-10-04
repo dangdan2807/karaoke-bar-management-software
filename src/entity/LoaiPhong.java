@@ -1,8 +1,11 @@
 package entity;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class LoaiPhong {
 	private String maLP;
-	private String tennLP;
+	private String tenLP;
 	private int sucChua;
 	private Double giaTien;
 
@@ -14,12 +17,12 @@ public class LoaiPhong {
 		this.maLP = maLP;
 	}
 
-	public String getTennLP() {
-		return tennLP;
+	public String getTenLP() {
+		return tenLP;
 	}
 
-	public void setTennLP(String tennLP) {
-		this.tennLP = tennLP;
+	public void setTenLP(String tenLP) {
+		this.tenLP = tenLP;
 	}
 
 	public int getSucChua() {
@@ -38,9 +41,9 @@ public class LoaiPhong {
 		this.giaTien = giaTien;
 	}
 
-	public LoaiPhong(String maLP, String tennLP, int sucChua, Double giaTien) {
+	public LoaiPhong(String maLP, String tenLP, int sucChua, Double giaTien) {
 		this.maLP = maLP;
-		this.tennLP = tennLP;
+		this.tenLP = tenLP;
 		this.sucChua = sucChua;
 		this.giaTien = giaTien;
 	}
@@ -52,9 +55,13 @@ public class LoaiPhong {
 	public LoaiPhong() {
 	}
 
+	public LoaiPhong(ResultSet rs) throws SQLException {
+		this(rs.getString("maLP"), rs.getString("tenLP"), rs.getInt("sucChua"), rs.getDouble("giaTien"));
+	}
+
 	@Override
 	public String toString() {
-		return "LoaiPhong [giaTien=" + giaTien + ", maLP=" + maLP + ", sucChua=" + sucChua + ", tennLP=" + tennLP + "]";
+		return "LoaiPhong [giaTien=" + giaTien + ", maLP=" + maLP + ", sucChua=" + sucChua + ", tenLP=" + tenLP + "]";
 	}
 
 }

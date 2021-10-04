@@ -111,12 +111,13 @@ GO
 
 CREATE TABLE CTDichVu
 (
+    maCTDichVu int IDENTITY(1, 1) PRIMARY key,
     maDichVu VARCHAR(5) NOT NULL,
     maHoaDon INT NOT NULL,
     soLuongDat INT NOT NULL DEFAULT(1),
     ngayGioDat DATETIME NOT NULL DEFAULT(getdate()),
     tienDichVu FLOAT NOT NULL DEFAULT(0),
-    PRIMARY KEY (maDichVu, maHoaDon),
+    -- PRIMARY KEY (maDichVu, maHoaDon),
     FOREIGN KEY
     (maDichVU) REFERENCES dbo.DichVu
     (maDichVu),
@@ -359,3 +360,19 @@ BEGIN
     RETURN @strInput
 END
 GO
+
+CREATE PROC USP_Login
+    @username NVARCHAR(100),
+    @password NVARCHAR(1000)
+AS
+BEGIN
+    SELECT *
+    FROM dbo.TaiKhoan
+    WHERE tenDangNhap = @username AND matKhau = @password
+END
+GO
+
+Select *
+from dbo.TaiKhoan tk join dbo.NhanVien nv
+on tk.tenDangNhap = nv.taiKhoan
+WHERE tk.tenDangNhap = 'phamdangdan'

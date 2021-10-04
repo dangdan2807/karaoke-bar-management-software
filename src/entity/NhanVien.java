@@ -1,6 +1,8 @@
 package entity;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class NhanVien {
 	private String maNhanVien;
@@ -11,7 +13,16 @@ public class NhanVien {
 	private String chucVu;
 	private Double mucLuong;
 	private Boolean gioiTinh;
-	public TaiKhoan taiKhoan;
+	private String trangThai;
+	private TaiKhoan taiKhoan;
+
+	public String getTrangThai() {
+		return trangThai;
+	}
+
+	public void setTrangThai(String trangThai) {
+		this.trangThai = trangThai;
+	}
 
 	public String getMaNhanVien() {
 		return maNhanVien;
@@ -86,7 +97,7 @@ public class NhanVien {
 	}
 
 	public NhanVien(String maNhanVien, String cmnd, String hoTen, Date ngaySinh, String soDienThoai, String chucVu,
-			Double mucLuong, Boolean gioiTinh, TaiKhoan taiKhoan) {
+			Double mucLuong, Boolean gioiTinh, String trangThai, TaiKhoan taiKhoan) {
 		this.maNhanVien = maNhanVien;
 		this.cmnd = cmnd;
 		this.hoTen = hoTen;
@@ -95,6 +106,7 @@ public class NhanVien {
 		this.chucVu = chucVu;
 		this.mucLuong = mucLuong;
 		this.gioiTinh = gioiTinh;
+		this.trangThai = trangThai;
 		this.taiKhoan = taiKhoan;
 	}
 
@@ -105,11 +117,17 @@ public class NhanVien {
 	public NhanVien() {
 	}
 
+	public NhanVien(ResultSet rs) throws SQLException {
+		this(rs.getString("maNhanVien"), rs.getString("cmnd"), rs.getString("hoTen"), rs.getDate("ngaySinh"),
+				rs.getString("soDienThoai"), rs.getString("chucVu"), rs.getDouble("mucLuong"),
+				rs.getBoolean("gioiTinh"), rs.getString("trangThai"), new TaiKhoan(rs));
+	}
+
 	@Override
 	public String toString() {
 		return "NhanVien [chucVu=" + chucVu + ", cmnd=" + cmnd + ", gioiTinh=" + gioiTinh + ", hoTen=" + hoTen
 				+ ", maNhanVien=" + maNhanVien + ", mucLuong=" + mucLuong + ", ngaySinh=" + ngaySinh + ", soDienThoai="
-				+ soDienThoai + ", taiKhoan=" + taiKhoan + "]";
+				+ soDienThoai + ", trangThai=" + trangThai + ", taiKhoan=" + taiKhoan + "]";
 	}
 
 }

@@ -1,5 +1,8 @@
 package entity;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class TaiKhoan {
 	private String tenDangNhap;
 	private String matKhau;
@@ -40,6 +43,10 @@ public class TaiKhoan {
 	}
 
 	public TaiKhoan() {
+	}
+
+	public TaiKhoan(ResultSet rs) throws SQLException {
+		this(rs.getString("tenDangNhap"), rs.getString("matKhau"), rs.getBoolean("tinhTrang"));
 	}
 
 	@Override

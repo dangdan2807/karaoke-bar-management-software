@@ -1,5 +1,8 @@
 package entity;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class DichVu {
 	private String maDichVu;
 	private String tenDichVu;
@@ -50,6 +53,10 @@ public class DichVu {
 	}
 
 	public DichVu() {
+	}
+
+	public DichVu(ResultSet rs) throws SQLException {
+		this(rs.getString("maDichVu"), rs.getString("tenDichVu"), rs.getDouble("giaBan"), rs.getInt("soLuongTon"));
 	}
 
 	@Override

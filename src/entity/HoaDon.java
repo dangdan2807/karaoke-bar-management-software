@@ -1,8 +1,6 @@
 package entity;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HoaDon {
 	private int maHoaDon;
@@ -10,7 +8,6 @@ public class HoaDon {
 	private int tinhTrang;
 	private Double tongTien;
 	public NhanVien nhanVien;
-	public List<CTDichVu> ctDichVu = new ArrayList<CTDichVu>();
 	public KhachHang khachHang;
 	public CTPhong ctPhong;
 
@@ -50,14 +47,6 @@ public class HoaDon {
 		this.nhanVien = nhanVien;
 	}
 
-	public List<CTDichVu> getCtDichVu() {
-		return ctDichVu;
-	}
-
-	public void setCtDichVu(List<CTDichVu> ctDichVu) {
-		this.ctDichVu = ctDichVu;
-	}
-
 	public KhachHang getKhachHang() {
 		return khachHang;
 	}
@@ -72,18 +61,6 @@ public class HoaDon {
 
 	public void setCtPhong(CTPhong ctPhong) {
 		this.ctPhong = ctPhong;
-	}
-
-	public HoaDon(int maHoaDon, Date ngayGioDat, int tinhTrang, NhanVien nhanVien, List<CTDichVu> ctDichVu,
-			KhachHang khachHang, CTPhong ctPhong) {
-		this.maHoaDon = maHoaDon;
-		this.ngayGioDat = ngayGioDat;
-		this.tinhTrang = tinhTrang;
-		this.nhanVien = nhanVien;
-		this.ctDichVu = ctDichVu;
-		this.khachHang = khachHang;
-		this.ctPhong = ctPhong;
-		this.tongTien = 0.0;
 	}
 
 	public HoaDon(int maHoaDon, Date ngayGioDat, int tinhTrang, NhanVien nhanVien, KhachHang khachHang,
@@ -108,16 +85,16 @@ public class HoaDon {
 
 	@Override
 	public String toString() {
-		return "HoaDon [ctDichVu=" + ctDichVu + ", ctPhong=" + ctPhong + ", khachHang=" + khachHang + ", maHoaDon="
+		return "HoaDon [ctPhong=" + ctPhong + ", khachHang=" + khachHang + ", maHoaDon="
 				+ maHoaDon + ", ngayGioDat=" + ngayGioDat + ", nhanVien=" + nhanVien + ", tinhTrang=" + tinhTrang
 				+ ", tongTien=" + tongTien + "]";
 	}
 
 	public Double tinhTienHoaDon() {
 		Double tongTienDV = 0.0;
-		for (CTDichVu item : ctDichVu) {
-			tongTienDV += item.getTienDichVu();
-		}
+		// for (CTDichVu item : ctDichVu) {
+		// 	tongTienDV += item.getTienDichVu();
+		// }
 		tongTien = tongTienDV + ctPhong.getTienPhong();
 		return tongTien;
 	}
