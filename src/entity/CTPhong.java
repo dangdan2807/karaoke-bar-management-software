@@ -4,77 +4,78 @@ import java.sql.Date;
 import java.util.concurrent.TimeUnit;
 
 public class CTPhong {
-    private int maCTPhong;
-    private Date ngayGioNhan;
-    private Date ngayGioTra;
+	private int maCTPhong;
+	private Date ngayGioNhan;
+	private Date ngayGioTra;
+	private Double tienPhong;
+	public Phong phong;
 
-    private HoaDon hoaDon;
-    private Phong phong;
+	public int getMaCTPhong() {
+		return maCTPhong;
+	}
 
-    public int getMaCTPhong() {
-        return maCTPhong;
-    }
+	public void setMaCTPhong(int maCTPhong) {
+		this.maCTPhong = maCTPhong;
+	}
 
-    public void setMaCTPhong(int maCTPhong) {
-        this.maCTPhong = maCTPhong;
-    }
+	public Date getNgayGioNhan() {
+		return ngayGioNhan;
+	}
 
-    public Date getNgayGioNhan() {
-        return ngayGioNhan;
-    }
+	public void setNgayGioNhan(Date ngayGioNhan) {
+		this.ngayGioNhan = ngayGioNhan;
+	}
 
-    public void setNgayGioNhan(Date ngayGioNhan) {
-        this.ngayGioNhan = ngayGioNhan;
-    }
+	public Date getNgayGioTra() {
+		return ngayGioTra;
+	}
 
-    public Date getNgayGioTra() {
-        return ngayGioTra;
-    }
+	public void setNgayGioTra(Date ngayGioTra) {
+		this.ngayGioTra = ngayGioTra;
+	}
 
-    public void setNgayGioTra(Date ngayGioTra) {
-        this.ngayGioTra = ngayGioTra;
-    }
+	public Double getTienPhong() {
+		return tienPhong;
+	}
 
-    public HoaDon getHoaDon() {
-        return hoaDon;
-    }
+	public Phong getPhong() {
+		return phong;
+	}
 
-    public void setHoaDon(HoaDon hoaDon) {
-        this.hoaDon = hoaDon;
-    }
+	public void setPhong(Phong phong) {
+		this.phong = phong;
+	}
 
-    public Phong getPhong() {
-        return phong;
-    }
+	public CTPhong(int maCTPhong, Date ngayGioNhan, Date ngayGioTra, Phong phong) {
+		this.maCTPhong = maCTPhong;
+		this.ngayGioNhan = ngayGioNhan;
+		this.ngayGioTra = ngayGioTra;
+		this.phong = phong;
+		this.tienPhong = 0.0;
+	}
 
-    public void setPhong(Phong phong) {
-        this.phong = phong;
-    }
+	public CTPhong(int maCTPhong) {
+		this.maCTPhong = maCTPhong;
+	}
 
-    public CTPhong(int maCTPhong, Date ngayGioNhan, Date ngayGioTra, HoaDon hoaDon, Phong phong) {
-        this.maCTPhong = maCTPhong;
-        this.ngayGioNhan = ngayGioNhan;
-        this.ngayGioTra = ngayGioTra;
-        this.hoaDon = hoaDon;
-        this.phong = phong;
-    }
+	public CTPhong() {
+	}
 
-    public Double tinhGioThue() {
-        long difference = ngayGioTra.getTime() - ngayGioNhan.getTime();
-        int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
-        return minutes * 1.0 / 60;
-    }
+	@Override
+	public String toString() {
+		return "CTPhong [maCTPhong=" + maCTPhong + ", ngayGioNhan=" + ngayGioNhan + ", ngayGioTra=" + ngayGioTra
+				+ ", phong=" + phong + ", tienPhong=" + tienPhong + "]";
+	}
 
-    public Double tinhTienPhong() {
-        Double soGio = tinhGioThue();
-        Double tienPhong = soGio * phong.getLoaiPhong().getGiaPhong();
-        return tienPhong;
-    }
+	public Double tinhGioThue() {
+		long difference = ngayGioTra.getTime() - ngayGioNhan.getTime();
+		int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
+		return minutes * 1.0 / 60;
+	}
 
-    @Override
-    public String toString() {
-        return "CTPhong [hoaDon=" + hoaDon + ", maCTPhong=" + maCTPhong + ", ngayGioNhan=" + ngayGioNhan
-                + ", ngayGioTra=" + ngayGioTra + ", phong=" + phong + "]";
-    }
-
+	public Double tinhTienPhong() {
+		Double soGio = tinhGioThue();
+		tienPhong = soGio * phong.getLoaiPhong().getGiaTien();
+		return tienPhong;
+	}
 }

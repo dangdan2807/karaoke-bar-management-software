@@ -1,52 +1,60 @@
 package entity;
 
 public class LoaiPhong {
-    private String maLP, tenLP;
-    private int sucChua;
-    private Double giaPhong;
+	private String maLP;
+	private String tennLP;
+	private int sucChua;
+	private Double giaTien;
 
-    public Double getGiaPhong() {
-        return giaPhong;
-    }
+	public String getMaLP() {
+		return maLP;
+	}
 
-    public void setGiaPhong(Double giaPhong) {
-        this.giaPhong = giaPhong;
-    }
+	public void setMaLP(String maLP) {
+		this.maLP = maLP;
+	}
 
-    public String getMaLP() {
-        return maLP;
-    }
+	public String getTennLP() {
+		return tennLP;
+	}
 
-    public void setMaLP(String maLP) {
-        this.maLP = maLP;
-    }
+	public void setTennLP(String tennLP) {
+		this.tennLP = tennLP;
+	}
 
-    public String getTenLP() {
-        return tenLP;
-    }
+	public int getSucChua() {
+		return sucChua;
+	}
 
-    public void setTenLP(String tenLP) {
-        this.tenLP = tenLP;
-    }
+	public void setSucChua(int sucChua) {
+		this.sucChua = sucChua;
+	}
 
-    public int getSucChua() {
-        return sucChua;
-    }
+	public Double getGiaTien() {
+		return giaTien;
+	}
 
-    public void setSucChua(int sucChua) {
-        this.sucChua = sucChua;
-    }
+	public void setGiaTien(Double giaTien) {
+		this.giaTien = giaTien;
+	}
 
-    public LoaiPhong(String maLP, String tenLP, int sucChua, Double giaPhong) {
-        this.maLP = maLP;
-        this.tenLP = tenLP;
-        this.sucChua = sucChua;
-        this.giaPhong = giaPhong;
-    }
+	public LoaiPhong(String maLP, String tennLP, int sucChua, Double giaTien) {
+		this.maLP = maLP;
+		this.tennLP = tennLP;
+		this.sucChua = sucChua;
+		this.giaTien = giaTien;
+	}
 
-    @Override
-    public String toString() {
-        return "LoaiPhong [giaPhong=" + giaPhong + ", maLP=" + maLP + ", sucChua=" + sucChua + ", tenLP=" + tenLP + "]";
-    }
+	public LoaiPhong(String maLP) {
+		this.maLP = maLP;
+	}
+
+	public LoaiPhong() {
+	}
+
+	@Override
+	public String toString() {
+		return "LoaiPhong [giaTien=" + giaTien + ", maLP=" + maLP + ", sucChua=" + sucChua + ", tennLP=" + tennLP + "]";
+	}
 
 }

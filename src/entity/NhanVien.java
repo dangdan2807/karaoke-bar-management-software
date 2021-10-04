@@ -3,103 +3,113 @@ package entity;
 import java.sql.Date;
 
 public class NhanVien {
-    private String maNhanVien, cmnd, hoTen, soDienThoai, chucVu;
-    private Date ngaySinh;
-    private Double mucLuong;
-    private boolean gioiTinh;
+	private String maNhanVien;
+	private String cmnd;
+	private String hoTen;
+	private Date ngaySinh;
+	private String soDienThoai;
+	private String chucVu;
+	private Double mucLuong;
+	private Boolean gioiTinh;
+	public TaiKhoan taiKhoan;
 
-    private TaiKhoan taiKhoan;
+	public String getMaNhanVien() {
+		return maNhanVien;
+	}
 
-    public String getMaNhanVien() {
-        return maNhanVien;
-    }
+	public void setMaNhanVien(String maNhanVien) {
+		this.maNhanVien = maNhanVien;
+	}
 
-    public void setMaNhanVien(String maNhanVien) {
-        this.maNhanVien = maNhanVien;
-    }
+	public String getCmnd() {
+		return cmnd;
+	}
 
-    public String getCmnd() {
-        return cmnd;
-    }
+	public void setCmnd(String cmnd) {
+		this.cmnd = cmnd;
+	}
 
-    public void setCmnd(String cmnd) {
-        this.cmnd = cmnd;
-    }
+	public String getHoTen() {
+		return hoTen;
+	}
 
-    public String getHoTen() {
-        return hoTen;
-    }
+	public void setHoTen(String hoTen) {
+		this.hoTen = hoTen;
+	}
 
-    public void setHoTen(String hoTen) {
-        this.hoTen = hoTen;
-    }
+	public Date getNgaySinh() {
+		return ngaySinh;
+	}
 
-    public String getSoDienThoai() {
-        return soDienThoai;
-    }
+	public void setNgaySinh(Date ngaySinh) {
+		this.ngaySinh = ngaySinh;
+	}
 
-    public void setSoDienThoai(String soDienThoai) {
-        this.soDienThoai = soDienThoai;
-    }
+	public String getSoDienThoai() {
+		return soDienThoai;
+	}
 
-    public String getChucVu() {
-        return chucVu;
-    }
+	public void setSoDienThoai(String soDienThoai) {
+		this.soDienThoai = soDienThoai;
+	}
 
-    public void setChucVu(String chucVu) {
-        this.chucVu = chucVu;
-    }
+	public String getChucVu() {
+		return chucVu;
+	}
 
-    public Date getNgaySinh() {
-        return ngaySinh;
-    }
+	public void setChucVu(String chucVu) {
+		this.chucVu = chucVu;
+	}
 
-    public void setNgaySinh(Date ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
+	public Double getMucLuong() {
+		return mucLuong;
+	}
 
-    public Double getMucLuong() {
-        return mucLuong;
-    }
+	public void setMucLuong(Double mucLuong) {
+		this.mucLuong = mucLuong;
+	}
 
-    public void setMucLuong(Double mucLuong) {
-        this.mucLuong = mucLuong;
-    }
+	public Boolean getGioiTinh() {
+		return gioiTinh;
+	}
 
-    public boolean isGioiTinh() {
-        return gioiTinh;
-    }
+	public void setGioiTinh(Boolean gioiTinh) {
+		this.gioiTinh = gioiTinh;
+	}
 
-    public void setGioiTinh(boolean gioiTinh) {
-        this.gioiTinh = gioiTinh;
-    }
+	public TaiKhoan getTaiKhoan() {
+		return taiKhoan;
+	}
 
-    public TaiKhoan getTaiKhoan() {
-        return taiKhoan;
-    }
+	public void setTaiKhoan(TaiKhoan taiKhoan) {
+		this.taiKhoan = taiKhoan;
+	}
 
-    public void setTaiKhoan(TaiKhoan taiKhoan) {
-        this.taiKhoan = taiKhoan;
-    }
+	public NhanVien(String maNhanVien, String cmnd, String hoTen, Date ngaySinh, String soDienThoai, String chucVu,
+			Double mucLuong, Boolean gioiTinh, TaiKhoan taiKhoan) {
+		this.maNhanVien = maNhanVien;
+		this.cmnd = cmnd;
+		this.hoTen = hoTen;
+		this.ngaySinh = ngaySinh;
+		this.soDienThoai = soDienThoai;
+		this.chucVu = chucVu;
+		this.mucLuong = mucLuong;
+		this.gioiTinh = gioiTinh;
+		this.taiKhoan = taiKhoan;
+	}
 
-    public NhanVien(String maNhanVien, String cmnd, String hoTen, String soDienThoai, String chucVu, Date ngaySinh,
-            Double mucLuong, boolean gioiTinh, TaiKhoan taiKhoan) {
-        this.maNhanVien = maNhanVien;
-        this.cmnd = cmnd;
-        this.hoTen = hoTen;
-        this.soDienThoai = soDienThoai;
-        this.chucVu = chucVu;
-        this.ngaySinh = ngaySinh;
-        this.mucLuong = mucLuong;
-        this.gioiTinh = gioiTinh;
-        this.taiKhoan = taiKhoan;
-    }
+	public NhanVien(String maNhanVien) {
+		this.maNhanVien = maNhanVien;
+	}
 
-    @Override
-    public String toString() {
-        return "NhanVien [chucVu=" + chucVu + ", cmnd=" + cmnd + ", gioiTinh=" + gioiTinh + ", hoTen=" + hoTen
-                + ", maNhanVien=" + maNhanVien + ", mucLuong=" + mucLuong + ", ngaySinh=" + ngaySinh + ", soDienThoai="
-                + soDienThoai + ", taiKhoan=" + taiKhoan + "]";
-    }
+	public NhanVien() {
+	}
+
+	@Override
+	public String toString() {
+		return "NhanVien [chucVu=" + chucVu + ", cmnd=" + cmnd + ", gioiTinh=" + gioiTinh + ", hoTen=" + hoTen
+				+ ", maNhanVien=" + maNhanVien + ", mucLuong=" + mucLuong + ", ngaySinh=" + ngaySinh + ", soDienThoai="
+				+ soDienThoai + ", taiKhoan=" + taiKhoan + "]";
+	}
 
 }

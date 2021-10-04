@@ -1,47 +1,50 @@
 package entity;
 
 public class TaiKhoan {
-    private String taiKhoan, matKhau;
-    private boolean tinhTrang;
+	private String tenDangNhap;
+	private String matKhau;
+	private Boolean tinhTrang;
 
-    public String getTaiKhoan() {
-        return taiKhoan;
-    }
+	public String getTenDangNhap() {
+		return tenDangNhap;
+	}
 
-    public void setTaiKhoan(String taiKhoan) {
-        this.taiKhoan = taiKhoan;
-    }
+	public void setTenDangNhap(String tenDangNhap) {
+		this.tenDangNhap = tenDangNhap;
+	}
 
-    public String getMatKhau() {
-        return matKhau;
-    }
+	public String getMatKhau() {
+		return matKhau;
+	}
 
-    public void setMatKhau(String matKhau) {
-        this.matKhau = matKhau;
-    }
+	public void setMatKhau(String matKhau) {
+		this.matKhau = matKhau;
+	}
 
-    public boolean isTinhTrang() {
-        return tinhTrang;
-    }
+	public Boolean getTinhTrang() {
+		return tinhTrang;
+	}
 
-    public void setTinhTrang(boolean tinhTrang) {
-        this.tinhTrang = tinhTrang;
-    }
+	public void setTinhTrang(Boolean tinhTrang) {
+		this.tinhTrang = tinhTrang;
+	}
 
-    public TaiKhoan(String taiKhoan, String matKhau, boolean tinhTrang) {
-        this.taiKhoan = taiKhoan;
-        this.matKhau = matKhau;
-        this.tinhTrang = tinhTrang;
-    }
+	public TaiKhoan(String tenDangNhap, String matKhau, Boolean tinhTrang) {
+		this.tenDangNhap = tenDangNhap;
+		this.matKhau = matKhau;
+		this.tinhTrang = tinhTrang;
+	}
 
-    public TaiKhoan(String taiKhoan, String matKhau) {
-        this.taiKhoan = taiKhoan;
-        this.matKhau = matKhau;
-    }
+	public TaiKhoan(String tenDangNhap) {
+		this.tenDangNhap = tenDangNhap;
+	}
 
-    @Override
-    public String toString() {
-        return "TaiKhoan [matKhau=" + matKhau + ", taiKhoan=" + taiKhoan + ", tinhTrang=" + tinhTrang + "]";
-    }
+	public TaiKhoan() {
+	}
+
+	@Override
+	public String toString() {
+		return "TaiKhoan [matKhau=" + matKhau + ", tenDangNhap=" + tenDangNhap + ", tinhTrang=" + tinhTrang + "]";
+	}
 
 }

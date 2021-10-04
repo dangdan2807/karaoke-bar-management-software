@@ -3,65 +3,72 @@ package entity;
 import java.sql.Date;
 
 public class CTDichVu {
-    private int maCTDichVu;
-    private int soLuongDat;
-    private Date ngayGioDat;
+	private int soLuongDat;
+	private Date ngayGioDat;
+	private Double tienDichVu;
 
-    private HoaDon hoaDon;
-    private DichVu dichVu;
+	private HoaDon hoaDon;
+	private DichVu dichVu;
 
-    public int getMaCTDichVu() {
-        return maCTDichVu;
-    }
+	public int getSoLuongDat() {
+		return soLuongDat;
+	}
 
-    public void setMaCTDichVu(int maCTDichVu) {
-        this.maCTDichVu = maCTDichVu;
-    }
+	public void setSoLuongDat(int soLuongDat) {
+		this.soLuongDat = soLuongDat;
+	}
 
-    public int getSoLuongDat() {
-        return soLuongDat;
-    }
+	public Date getNgayGioDat() {
+		return ngayGioDat;
+	}
 
-    public void setSoLuongDat(int soLuongDat) {
-        this.soLuongDat = soLuongDat;
-    }
+	public void setNgayGioDat(Date ngayGioDat) {
+		this.ngayGioDat = ngayGioDat;
+	}
 
-    public Date getNgayGioDat() {
-        return ngayGioDat;
-    }
+	public Double getTienDichVu() {
+		return tienDichVu;
+	}
 
-    public void setNgayGioDat(Date ngayGioDat) {
-        this.ngayGioDat = ngayGioDat;
-    }
+	public HoaDon getHoaDon() {
+		return hoaDon;
+	}
 
-    public HoaDon getHoaDon() {
-        return hoaDon;
-    }
+	public void setHoaDon(HoaDon hoaDon) {
+		this.hoaDon = hoaDon;
+	}
 
-    public void setHoaDon(HoaDon hoaDon) {
-        this.hoaDon = hoaDon;
-    }
+	public DichVu getDichVu() {
+		return dichVu;
+	}
 
-    public DichVu getDichVu() {
-        return dichVu;
-    }
+	public void setDichVu(DichVu dichVu) {
+		this.dichVu = dichVu;
+	}
 
-    public void setDichVu(DichVu dichVu) {
-        this.dichVu = dichVu;
-    }
+	public CTDichVu(int soLuongDat, Date ngayGioDat, HoaDon hoaDon, DichVu dichVu) {
+		this.soLuongDat = soLuongDat;
+		this.ngayGioDat = ngayGioDat;
+		this.hoaDon = hoaDon;
+		this.dichVu = dichVu;
+		this.tienDichVu = tinhTienDichVu();
+	}
 
-    public CTDichVu(int maCTDichVu, int soLuongDat, Date ngayGioDat, HoaDon hoaDon, DichVu dichVu) {
-        this.maCTDichVu = maCTDichVu;
-        this.soLuongDat = soLuongDat;
-        this.ngayGioDat = ngayGioDat;
-        this.hoaDon = hoaDon;
-        this.dichVu = dichVu;
-    }
+	public CTDichVu(HoaDon hoaDon, DichVu dichVu) {
+		this.hoaDon = hoaDon;
+		this.dichVu = dichVu;
+	}
 
-    @Override
-    public String toString() {
-        return "CTDichVu [dichVu=" + dichVu + ", hoaDon=" + hoaDon + ", maCTDichVu=" + maCTDichVu + ", ngayGioDat="
-                + ngayGioDat + ", soLuongDat=" + soLuongDat + "]";
-    }
+	public CTDichVu() {
+	}
 
+	@Override
+	public String toString() {
+		return "CTDichVu [dichVu=" + dichVu + ", hoaDon=" + hoaDon + ", ngayGioDat=" + ngayGioDat + ", soLuongDat="
+				+ soLuongDat + ", tienDichVu=" + tienDichVu + "]";
+	}
+
+	public Double tinhTienDichVu() {
+		return soLuongDat * dichVu.getGiaBan();
+	}
 }
