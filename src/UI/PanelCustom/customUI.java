@@ -2,6 +2,7 @@ package UI.PanelCustom;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.border.*;
 
 public class customUI {
     private static customUI instance;
@@ -15,11 +16,13 @@ public class customUI {
     public void setCustomBtn(JButton btn) {
         btn.setBackground(Color.decode("#d0e1fd"));
         btn.setForeground(Color.decode("#1a66e3"));
+        btn.setBorder(new LineBorder(Color.BLUE, 2));
     }
 
     public void setCustomBtnHover(JButton btn) {
         btn.setBackground(Color.decode("#73cdf5"));
         btn.setForeground(Color.WHITE);
+        btn.setBorder(new LineBorder(Color.decode("#FCA120"), 2));
     }
 
     public void setCustomLbTitle(JLabel lb) {

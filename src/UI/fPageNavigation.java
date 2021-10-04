@@ -3,6 +3,7 @@ package UI;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import DAO.NhanVienDAO;
 import UI.PanelCustom.customUI;
 import entity.NhanVien;
 
@@ -11,13 +12,19 @@ import java.awt.event.*;
 
 public class fPageNavigation extends JFrame implements ActionListener, MouseListener {
 
-    private JButton btnLogOut, btnQLBanHang, btnQLHeThong;
+    private JButton btnLogOut, btnQLBanHang, btnQLHeThong, btnQLThongTinCN;
     private NhanVien staff = null;
     private String STAFF = "Nhân viên", MANAGER = "Quản lý";
+    private ImageIcon profileIcon = new ImageIcon(
+            new ImageIcon("img/profile_512.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+    private ImageIcon sellIcon = new ImageIcon(
+            new ImageIcon("img/money_512.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+    private ImageIcon managerIcon = new ImageIcon(
+            new ImageIcon("img/manager_512.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
 
     public fPageNavigation(NhanVien staffLogin) {
         setTitle("Điều hướng quản lý");
-        setSize(600, 375);
+        setSize(793, 375);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -31,66 +38,81 @@ public class fPageNavigation extends JFrame implements ActionListener, MouseList
         JPanel pnMain = new JPanel();
         pnMain.setBackground(Color.WHITE);
         getContentPane().add(pnMain, BorderLayout.CENTER);
-        pnMain.setLayout(new BorderLayout(0, 0));
+        pnMain.setLayout(null);
 
         JPanel pnTitle = new JPanel();
+        pnTitle.setBounds(0, 0, 777, 32);
         pnTitle.setBackground(Color.decode("#d0e1fd"));
-        pnMain.add(pnTitle, BorderLayout.NORTH);
+        pnMain.add(pnTitle);
+        pnTitle.setLayout(null);
 
-        JLabel lbTitle = new JLabel("CHÀO MỪNG BẠN ĐẾN VỚI PHẦN MỀM QUẢN LÝ QUÁN CAFE ");
+        JLabel lbTitle = new JLabel("CHÀO MỪNG BẠN ĐẾN VỚI PHẦN MỀM QUẢN LÝ QUÁN KARAOKE");
+        lbTitle.setBounds(34, 5, 527, 22);
         lbTitle.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lbTitle.setForeground(Color.decode("#1a66e3"));
         pnTitle.add(lbTitle);
 
-        JPanel pnLeft = new JPanel();
-        pnLeft.setBackground(Color.WHITE);
-        pnLeft.setPreferredSize(new Dimension(295, 110));
-        pnMain.add(pnLeft, BorderLayout.WEST);
-
-        btnQLHeThong = new JButton("QUẢN TRỊ HỆ THỐNG");
-        btnQLHeThong.setFont(new Font("Dialog", Font.BOLD, 20));
-        btnQLHeThong.setPreferredSize(new Dimension(280, 250));
-        btnQLHeThong.setBorder(new LineBorder(Color.BLUE, 2));
-        customUI.getInstance().setCustomBtn(btnQLHeThong);
-        pnLeft.add(btnQLHeThong);
-
-        JPanel pnRight = new JPanel();
-        pnRight.setBackground(Color.WHITE);
-        pnRight.setPreferredSize(new Dimension(295, 110));
-        pnMain.add(pnRight, BorderLayout.EAST);
-
-        btnQLBanHang = new JButton("QUẢN LÝ BÁN HÀNG");
-        btnQLBanHang.setFont(new Font("Dialog", Font.BOLD, 20));
-        btnQLBanHang.setBorder(new LineBorder(new Color(255, 140, 0), 2));
-        btnQLBanHang.setPreferredSize(new Dimension(280, 250));
-        customUI.getInstance().setCustomBtn(btnQLBanHang);
-        btnQLBanHang.setForeground(new Color(255, 153, 0));
-        pnRight.add(btnQLBanHang);
-
         JPanel pnBottom = new JPanel();
+        pnBottom.setBounds(0, 304, 789, 32);
         pnBottom.setBackground(Color.WHITE);
-        pnBottom.setLayout(new BoxLayout(pnBottom, BoxLayout.X_AXIS));
         pnBottom.setPreferredSize(new Dimension(280, 40));
-        pnMain.add(pnBottom, BorderLayout.SOUTH);
-
-        Component horizontalGlue = Box.createHorizontalGlue();
-        pnBottom.add(horizontalGlue);
+        pnMain.add(pnBottom);
+        pnBottom.setLayout(null);
 
         btnLogOut = new JButton("Đăng xuất");
+        btnLogOut.setBounds(684, 0, 93, 26);
         customUI.getInstance().setCustomBtn(btnLogOut);
         pnBottom.add(btnLogOut);
 
-        Component horizontalStrut = Box.createHorizontalStrut(9);
-        pnBottom.add(horizontalStrut);
+        btnQLBanHang = new JButton("Quản lý bán hàng");
+        btnQLBanHang.setBounds(261, 44, 265, 248);
+        pnMain.add(btnQLBanHang);
+        btnQLBanHang.setFont(new Font("Dialog", Font.BOLD, 20));
+        btnQLBanHang.setBorder(new LineBorder(Color.decode("#3EA1EC"), 2));
+        btnQLBanHang.setPreferredSize(new Dimension(180, 150));
+        btnQLBanHang.setIcon(sellIcon);
+        btnQLBanHang.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnQLBanHang.setHorizontalTextPosition(SwingConstants.CENTER);
+        customUI.getInstance().setCustomBtn(btnQLBanHang);
+
+        btnQLHeThong = new JButton("Quản Trị");
+        btnQLHeThong.setBounds(10, 44, 239, 248);
+        pnMain.add(btnQLHeThong);
+        btnQLHeThong.setFont(new Font("Dialog", Font.BOLD, 20));
+        btnQLHeThong.setPreferredSize(new Dimension(180, 150));
+        btnQLHeThong.setBorder(new LineBorder(Color.decode("#3EA1EC"), 2));
+        btnQLHeThong.setIcon(managerIcon);
+        btnQLHeThong.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnQLHeThong.setHorizontalTextPosition(SwingConstants.CENTER);
+        customUI.getInstance().setCustomBtn(btnQLHeThong);
+
+        btnQLThongTinCN = new JButton("<html></br><p style='text-align: center;'>Thông Tin Cá Nhân</p></html>");
+        btnQLThongTinCN.setBounds(538, 44, 239, 248);
+        pnMain.add(btnQLThongTinCN);
+        btnQLThongTinCN.setPreferredSize(new Dimension(180, 150));
+        btnQLThongTinCN.setFont(new Font("Dialog", Font.BOLD, 20));
+        btnQLThongTinCN.setBorder(new LineBorder(Color.decode("#3EA1EC"), 2));
+        btnQLThongTinCN.setIcon(profileIcon);
+        btnQLThongTinCN.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnQLThongTinCN.setHorizontalTextPosition(SwingConstants.CENTER);
+        customUI.getInstance().setCustomBtn(btnQLThongTinCN);
+
+        btnQLHeThong.addActionListener(this);
+        btnQLHeThong.addMouseListener(this);
+        btnQLBanHang.addActionListener(this);
+        btnQLBanHang.addMouseListener(this);
+        btnQLThongTinCN.addActionListener(this);
+        btnQLThongTinCN.addMouseListener(this);
 
         btnLogOut.addActionListener(this);
-        btnQLBanHang.addActionListener(this);
-        btnQLHeThong.addActionListener(this);
 
         btnLogOut.addMouseListener(this);
-        btnQLBanHang.addMouseListener(this);
-        btnQLHeThong.addMouseListener(this);
         checkAccount(type);
+    }
+
+    public static void main(String[] args) {
+        NhanVien account = NhanVienDAO.getInstance().getNhanVienByUsername("phamdangdan");
+        new fPageNavigation(account).setVisible(true);
     }
 
     @Override
@@ -137,6 +159,8 @@ public class fPageNavigation extends JFrame implements ActionListener, MouseList
             if (staff.getChucVu().equalsIgnoreCase(MANAGER)) {
                 customUI.getInstance().setCustomBtnHover(btnQLHeThong);
             }
+        } else if (o.equals(btnQLThongTinCN)) {
+            customUI.getInstance().setCustomBtnHover(btnQLThongTinCN);
         }
     }
 
@@ -147,11 +171,12 @@ public class fPageNavigation extends JFrame implements ActionListener, MouseList
             customUI.getInstance().setCustomBtn(btnLogOut);
         } else if (o.equals(btnQLBanHang)) {
             customUI.getInstance().setCustomBtn(btnQLBanHang);
-            btnQLBanHang.setForeground(new Color(255, 153, 0));
         } else if (o.equals(btnQLHeThong)) {
             if (staff.getChucVu().equalsIgnoreCase(MANAGER)) {
                 customUI.getInstance().setCustomBtn(btnQLHeThong);
             }
+        } else if (o.equals(btnQLThongTinCN)) {
+            customUI.getInstance().setCustomBtn(btnQLThongTinCN);
         }
     }
 

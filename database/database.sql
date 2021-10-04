@@ -363,7 +363,7 @@ GO
 
 CREATE PROC USP_Login
     @username NVARCHAR(100),
-    @password NVARCHAR(1000)
+    @password NVARCHAR(100)
 AS
 BEGIN
     SELECT *
@@ -371,8 +371,6 @@ BEGIN
     WHERE tenDangNhap = @username AND matKhau = @password
 END
 GO
+SELECT * from dbo.TaiKhoan
 
-Select *
-from dbo.TaiKhoan tk join dbo.NhanVien nv
-on tk.tenDangNhap = nv.taiKhoan
-WHERE tk.tenDangNhap = 'phamdangdan'
+select * FROM dbo.Phong p WHERE p.maPhong = 'P0001'

@@ -4,3 +4,5 @@ src/test/*
 src/tesst/*
 src/test.*
 .gitignore
+/bin/
+.settings/**
