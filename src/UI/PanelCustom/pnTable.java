@@ -259,7 +259,7 @@ public class pnTable extends JPanel implements interfaceBtn, ActionListener, Mou
                 String tableIDStr = txtTableID.getText().trim();
                 if (row != -1 && !tableIDStr.equals("")) {
                     int tableID = Integer.parseInt(tableIDStr);
-                    String tableName = (TableDAO.getInstance().getTableByTableID(tableID)).getName();
+                    String tableName = (TableDAO.getInstance().getPhongByMaPhong(tableID)).getName();
                     int billInfoUnpaidCount = BillDAO.getInstance().getListBillUnpaidByTableID(tableID);
                     if (billInfoUnpaidCount > 0) {
                         String message = String.format("Để xóa %s \nBạn cần thanh toán hóa đơn của bàn này", tableName);
@@ -470,7 +470,7 @@ public class pnTable extends JPanel implements interfaceBtn, ActionListener, Mou
     }
 
     private void loadTableList() {
-        ArrayList<Table> dataList = TableDAO.getInstance().getListTable();
+        ArrayList<Table> dataList = TableDAO.getInstance().getDSPhong();
         loadDataIntoTable(dataList);
     }
 

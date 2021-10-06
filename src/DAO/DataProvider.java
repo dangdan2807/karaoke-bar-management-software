@@ -13,7 +13,12 @@ public class DataProvider {
         return instance;
     }
 
-    // dùng khi select trả về các bảng
+    /**
+     * Dùng để truy vấn select
+     * @param query câu truy vấn
+     * @param parameter các giá trị được truyền vào dấu truy vấn tại các dấu ?
+     * @return trả về 1 ResultSet chứa thông tin của câu truy vấn truyền vào
+     */
     public ResultSet ExecuteQuery(String query, Object[] parameter) {
         PreparedStatement stmt = null;
         ResultSet dataList = null;
@@ -39,9 +44,12 @@ public class DataProvider {
         return dataList;
     }
 
-    // dùng khi insert, delete, update hoặc các câu query trả về số lượng dòng thực
-    // thi
-    // có dòng nào thực thi => false
+    /**
+     * Dùng khi insert, delete, update hoặc các câu query trả về số lượng dòng thực
+     * @param query câu truy vấn
+     * @param parameter các giá trị được truyền vào dấu truy vấn tại các dấu ?
+     * @return trả về true hoặc false
+     */
     public int ExecuteNonQuery(String query, Object[] parameter) {
         int data = 0;
         PreparedStatement stmt = null;
@@ -73,8 +81,12 @@ public class DataProvider {
         return data;
     }
 
-    // dùng để đếm, ...
-    // trả về cột đầu tiên của dùng đầu tiên của kết quả
+    /**
+     * Dùng để đếm, ... hoặc lấy giá trị của hàng đầu của cột đầu tiên của kế quả câu truy vấn
+     * @param query câu truy vấn
+     * @param parameter các giá trị được truyền vào dấu truy vấn tại các dấu ?
+     * @return trả về 1 Object
+     */
     public Object ExecuteScalar(String query, Object[] parameter) {
         Object data = null;
         ResultSet rs = null;

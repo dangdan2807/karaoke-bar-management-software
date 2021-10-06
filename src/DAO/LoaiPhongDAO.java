@@ -14,7 +14,7 @@ public class LoaiPhongDAO {
         return instance;
     }
 
-    public ArrayList<LoaiPhong> getListLoaiPhong() {
+    public ArrayList<LoaiPhong> getDSLoaiPhong() {
         ArrayList<LoaiPhong> dataList = new ArrayList<LoaiPhong>();
         String query = "SELECT * FROM dbo.LoaiPhong";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);

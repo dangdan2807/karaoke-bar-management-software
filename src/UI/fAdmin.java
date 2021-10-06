@@ -26,7 +26,7 @@ public class fAdmin extends JFrame implements ActionListener, ChangeListener {
     private pnProduct pProduct;
     private pnCategory pCategory;
     private pnTable pTable;
-    private pnAccount pAccount;
+    private pnKhachHang pAccount;
 
     public fAdmin(NhanVien staff) {
         setTitle("Quản Lý Hệ Thống");
@@ -45,7 +45,7 @@ public class fAdmin extends JFrame implements ActionListener, ChangeListener {
         pProduct = new pnProduct(staffLogin);
         pCategory = new pnCategory(staffLogin);
         pTable = new pnTable(staffLogin);
-        pAccount = new pnAccount(staffLogin);
+        pAccount = new pnKhachHang(staffLogin);
         tpTabMain.addTab("Doanh thu", null, pRevenue, "Quản lý doanh thu");
         tpTabMain.addTab("Sản phẩm", null, pProduct, "Quản lý sản phẩm");
         tpTabMain.addTab("Loại sản phẩm", null, pCategory, "Quản lý loại sản phẩm");
@@ -67,7 +67,7 @@ public class fAdmin extends JFrame implements ActionListener, ChangeListener {
     }
 
     public static void main(String[] args) {
-        NhanVien staffLogin = NhanVienDAO.getInstance().getNhanVienByUsername("phamdangdan");
+        NhanVien staffLogin = NhanVienDAO.getInstance().getNhanVienByTenDangNhap("phamdangdan");
         new fAdmin(staffLogin).setVisible(true);
     }
 

@@ -13,15 +13,15 @@ public class NhanVien {
 	private String chucVu;
 	private Double mucLuong;
 	private Boolean gioiTinh;
-	private String trangThai;
+	private String trangThaiNV;
 	private TaiKhoan taiKhoan;
 
-	public String getTrangThai() {
-		return trangThai;
+	public String getTrangThaiNV() {
+		return trangThaiNV;
 	}
 
-	public void setTrangThai(String trangThai) {
-		this.trangThai = trangThai;
+	public void setTrangThaiNV(String trangThaiNV) {
+		this.trangThaiNV = trangThaiNV;
 	}
 
 	public String getMaNhanVien() {
@@ -97,7 +97,7 @@ public class NhanVien {
 	}
 
 	public NhanVien(String maNhanVien, String cmnd, String hoTen, Date ngaySinh, String soDienThoai, String chucVu,
-			Double mucLuong, Boolean gioiTinh, String trangThai, TaiKhoan taiKhoan) {
+			Double mucLuong, Boolean gioiTinh, String trangThaiNV, TaiKhoan taiKhoan) {
 		this.maNhanVien = maNhanVien;
 		this.cmnd = cmnd;
 		this.hoTen = hoTen;
@@ -106,7 +106,7 @@ public class NhanVien {
 		this.chucVu = chucVu;
 		this.mucLuong = mucLuong;
 		this.gioiTinh = gioiTinh;
-		this.trangThai = trangThai;
+		this.trangThaiNV = trangThaiNV;
 		this.taiKhoan = taiKhoan;
 	}
 
@@ -120,14 +120,14 @@ public class NhanVien {
 	public NhanVien(ResultSet rs) throws SQLException {
 		this(rs.getString("maNhanVien"), rs.getString("cmnd"), rs.getString("hoTen"), rs.getDate("ngaySinh"),
 				rs.getString("soDienThoai"), rs.getString("chucVu"), rs.getDouble("mucLuong"),
-				rs.getBoolean("gioiTinh"), rs.getString("trangThai"), new TaiKhoan(rs));
+				rs.getBoolean("gioiTinh"), rs.getString("trangThaiNV"), new TaiKhoan(rs));
 	}
 
 	@Override
 	public String toString() {
 		return "NhanVien [chucVu=" + chucVu + ", cmnd=" + cmnd + ", gioiTinh=" + gioiTinh + ", hoTen=" + hoTen
 				+ ", maNhanVien=" + maNhanVien + ", mucLuong=" + mucLuong + ", ngaySinh=" + ngaySinh + ", soDienThoai="
-				+ soDienThoai + ", trangThai=" + trangThai + ", taiKhoan=" + taiKhoan + "]";
+				+ soDienThoai + ", trangThaiNV=" + trangThaiNV + ", taiKhoan=" + taiKhoan + "]";
 	}
 
 }

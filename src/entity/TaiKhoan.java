@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class TaiKhoan {
 	private String tenDangNhap;
 	private String matKhau;
-	private Boolean tinhTrang;
+	private Boolean tinhTrangTK;
 
 	public String getTenDangNhap() {
 		return tenDangNhap;
@@ -24,18 +24,18 @@ public class TaiKhoan {
 		this.matKhau = matKhau;
 	}
 
-	public Boolean getTinhTrang() {
-		return tinhTrang;
+	public Boolean getTinhTrangTK() {
+		return tinhTrangTK;
 	}
 
-	public void setTinhTrang(Boolean tinhTrang) {
-		this.tinhTrang = tinhTrang;
+	public void setTinhTrangTK(Boolean tinhTrangTK) {
+		this.tinhTrangTK = tinhTrangTK;
 	}
 
-	public TaiKhoan(String tenDangNhap, String matKhau, Boolean tinhTrang) {
+	public TaiKhoan(String tenDangNhap, String matKhau, Boolean tinhTrangTK) {
 		this.tenDangNhap = tenDangNhap;
 		this.matKhau = matKhau;
-		this.tinhTrang = tinhTrang;
+		this.tinhTrangTK = tinhTrangTK;
 	}
 
 	public TaiKhoan(String tenDangNhap) {
@@ -46,12 +46,12 @@ public class TaiKhoan {
 	}
 
 	public TaiKhoan(ResultSet rs) throws SQLException {
-		this(rs.getString("tenDangNhap"), rs.getString("matKhau"), rs.getBoolean("tinhTrang"));
+		this(rs.getString("tenDangNhap"), rs.getString("matKhau"), rs.getBoolean("tinhTrangTK"));
 	}
 
 	@Override
 	public String toString() {
-		return "TaiKhoan [matKhau=" + matKhau + ", tenDangNhap=" + tenDangNhap + ", tinhTrang=" + tinhTrang + "]";
+		return "TaiKhoan [matKhau=" + matKhau + ", tenDangNhap=" + tenDangNhap + ", tinhTrangTK=" + tinhTrangTK + "]";
 	}
 
 }

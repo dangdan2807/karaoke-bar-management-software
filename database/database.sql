@@ -15,7 +15,7 @@ CREATE TABLE TaiKhoan
     tenDangNhap VARCHAR(100) NOT NULL PRIMARY KEY,
     matKhau VARCHAR(100) NOT NULL DEFAULT(N'123456'),
     -- 1. kích hoạt || 0. vô hiệu hóa
-    tinhTrang BIT NOT NULL DEFAULT(1)
+    tinhTrangTK BIT NOT NULL DEFAULT(1)
 )
 GO
 
@@ -30,8 +30,8 @@ CREATE TABLE NhanVien
     chucVu NVARCHAR(100) NOT NULL,
     mucLuong FLOAT NOT NULL,
     gioiTinh BIT NOT NULL,
-    trangThai NVARCHAR(100) NULL,
-    
+    trangThaiNV NVARCHAR(100) NULL,
+
     taiKhoan VARCHAR(100) NOT NULL,
 
     FOREIGN KEY (taiKhoan) REFERENCES dbo.TaiKhoan(tenDangNhap)
@@ -71,8 +71,8 @@ GO
 CREATE TABLE Phong
 (
     maPhong VARCHAR(5) NOT NULL PRIMARY KEY,
-    -- 0 là đã cho thuê | 1 là là còn trống | 2 là phòng tạm không dùng
-    tinhTrang INT NOT NULL DEFAULT(0),
+    -- 0 là đã cho thuê | 1 là là còn trống | 2 là đặt trước
+    tinhTrangP INT NOT NULL DEFAULT(0),
     viTri NVARCHAR(100) NOT NULL DEFAULT(N''),
     maLP VARCHAR(5) NOT NULL,
 
@@ -97,7 +97,7 @@ CREATE TABLE HoaDon
     maHoaDon INT IDENTITY(1, 1) PRIMARY KEY,
     ngayGioDat DATETIME NOT NULL DEFAULT(getdate()),
     -- 0. chưa thanh toán | 1. đã thanh toán | 2. đặt phòng
-    tinhTrang INT NOT NULL DEFAULT(0),
+    tinhTrangHD INT NOT NULL DEFAULT(0),
     TongTien FLOAT NOT NULL DEFAULT(0),
     maNhanVien VARCHAR(10) NOT NULL,
     maKH VARCHAR(10) NOT NULL,
@@ -111,7 +111,7 @@ GO
 
 CREATE TABLE CTDichVu
 (
-    maCTDichVu int IDENTITY(1, 1) PRIMARY key,
+    maCTDichVu INT IDENTITY(1, 1) PRIMARY KEY,
     maDichVu VARCHAR(5) NOT NULL,
     maHoaDon INT NOT NULL,
     soLuongDat INT NOT NULL DEFAULT(1),
@@ -211,7 +211,7 @@ VALUES
 GO
 
 INSERT INTO dbo.TaiKhoan
-    (tenDangNhap, matKhau, tinhTrang)
+    (tenDangNhap, matKhau, tinhTrangTK)
 VALUES
     ('phamdangdan', '123456', 1),
     ('huynhtuananh', '123456', 1),
@@ -225,7 +225,7 @@ VALUES
 GO
 
 INSERT INTO dbo.NhanVien
-    (maNhanVien, cmnd, hoTen, ngaySinh, gioiTinh, soDienThoai, chucVu, mucLuong, taiKhoan, trangThai)
+    (maNhanVien, cmnd, hoTen, ngaySinh, gioiTinh, soDienThoai, chucVu, mucLuong, taiKhoan, trangThaiNV)
 VALUES
     ('NV00000001', '111111111', N'Phạm Đăng Đan', '2001-01-01', 1, '0312345678', N'Quản lý', 6000000, 'phamdangdan', N''),
     ('NV00000002', '111111113', N'Huỳnh Tuấn Anh', '2001-01-01', 1, '0312345671', N'Quản lý', 6000000, 'huynhtuananh', N''),
@@ -267,12 +267,12 @@ INSERT INTO dbo.LoaiPhong
     (maLP, tenLP, sucChua, giaTien)
 VALUES
     ('LP001', N'Phòng 5 người', 5, 80000),
-    ('LP002', N'Phòng 10 người', 10, 100000),
-    ('LP003', N'Phòng 15 người', 15, 150000)
+    ('LP002', N'Phòng 10 người', 10, 120000),
+    ('LP003', N'Phòng 20 người', 20, 180000)
 GO
 
 INSERT INTO dbo.Phong
-    (maPhong, tinhTrang, viTri, maLP)
+    (maPhong, tinhTrangP, viTri, maLP)
 VALUES
     ('P0001', 1, N'Tầng 1', 'LP001'),
     ('P0002', 1, N'Tầng 1', 'LP001'),
@@ -298,16 +298,18 @@ VALUES
     ('2021-10-01 10:00:00', '2021-10-01 12:00:00', 'P0001', 160000),
     ('2021-10-01 15:00:00', '2021-10-01 17:00:00', 'P0003', 160000),
     ('2021-10-01 15:30:00', '2021-10-01 18:10:00', 'P0004', 213280),
-    ('2021-10-02 12:00:00', '2021-10-02 13:00:00', 'P0002', 80000)
+    ('2021-10-02 12:00:00', '2021-10-02 13:00:00', 'P0002', 80000),
+    ('2021-10-02 12:00:00', '2021-10-02 13:00:00', 'P0001', 80000)
 GO
 
 INSERT INTO dbo.HoaDon
-    (ngayGioDat, tinhTrang, TongTien, maNhanVien, maKH, maCTPhong)
+    (ngayGioDat, tinhTrangHD, TongTien, maNhanVien, maKH, maCTPhong)
 VALUES
     ('2021-10-01 10:00:00', 1, 0.0, 'NV00000001', 'KH00000001', 1),
     ('2021-10-01 15:00:00', 1, 0.0, 'NV00000003', 'KH00000003', 2),
     ('2021-10-01 15:30:00', 1, 0.0, 'NV00000004', 'KH00000004', 3),
-    ('2021-10-02 12:00:00', 1, 0.0, 'NV00000002', 'KH00000002', 4)
+    ('2021-10-02 12:00:00', 1, 0.0, 'NV00000002', 'KH00000002', 4),
+    ('2021-10-02 12:00:00', 0, 0.0, 'NV00000002', 'KH00000002', 5)
 GO
 
 INSERT INTO dbo.CTDichVu
@@ -327,7 +329,11 @@ VALUES
 
     ('DV002', 4, 2, '2021-10-02 12:10:00', 70000),
     ('DV001', 4, 4, '2021-10-02 12:10:00', 120000),
-    ('DV005', 4, 1, '2021-10-02 12:10:00', 30000)
+    ('DV005', 4, 1, '2021-10-02 12:10:00', 30000),
+
+    ('DV002', 5, 2, '2021-10-02 12:10:00', 70000),
+    ('DV001', 5, 4, '2021-10-02 12:10:00', 120000),
+    ('DV005', 5, 1, '2021-10-02 12:10:00', 30000)
 GO
 
 -- chuyển đổi kí tự có dấu thành không dấu và ngược lại
@@ -366,11 +372,64 @@ CREATE PROC USP_Login
     @password NVARCHAR(100)
 AS
 BEGIN
-    SELECT *
-    FROM dbo.TaiKhoan
+    SELECT tk.matKhau, tk.tenDangNhap, tk.tinhTrangTK
+    FROM dbo.TaiKhoan tk
     WHERE tenDangNhap = @username AND matKhau = @password
 END
 GO
-SELECT * from dbo.TaiKhoan
 
-select * FROM dbo.Phong p WHERE p.maPhong = 'P0001'
+CREATE PROC USP_getDSDichVuByTenDichVu
+    @tenDichVu NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @name NVARCHAR(102) = N'%' + @tenDichVu + N'%'
+    SELECT dv.maDichVu, dv.tenDichVu, dv.giaBan, dv.soLuongTon
+    FROM dbo.DichVu dv
+    WHERE dv.tenDichVu LIKE @name
+END
+GO
+
+CREATE PROC USP_getUncheckHoaDonByMaPhong
+    @maPhong VARCHAR(5)
+AS
+BEGIN
+    SELECT hd.maHoaDon, hd.maKH, hd.maNhanVien, hd.ngayGioDat as ngayGioDatHD, hd.tinhTrangHD,
+    ctp.maCTPhong, ctp.ngayGioNhan, ctp.ngayGioTra,
+    p.maLP, p.maPhong, p.tinhTrangP, p.viTri
+    FROM dbo.HoaDon hd, dbo.CTPhong ctp, dbo.Phong p
+    WHERE 
+    hd.maCTPhong = ctp.maCTPhong
+    AND ctp.maPhong = p.maPhong
+    AND p.maPhong = @maPhong
+    AND hd.tinhTrangHD = 0
+END
+GO
+
+Create PROC USP_getCTDichVuListByMaPhong
+    @maPhong VARCHAR(5)
+AS
+BEGIN
+    SELECT ctdv.maCTDichVu, ctdv.ngayGioDat as ngayGioDatCTDV, ctdv.soLuongDat,
+    dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
+    hd.maHoaDon, hd.maKH, hd.maNhanVien, hd.ngayGioDat as ngayGioDatHD, hd.tinhTrangHD, 
+    ctp.maCTPhong, ctp.ngayGioNhan, ctp.ngayGioTra,
+    p.maLP, p.maPhong, p.tinhTrangP, p.viTri
+    FROM dbo.CTDichVu ctdv,
+        dbo.HoaDon hd,
+        dbo.DichVu dv,
+        dbo.CTPhong ctp,
+        dbo.Phong p
+    WHERE ctdv.maHoaDon = hd.maHoaDon
+        AND ctdv.maDichVu = dv.maDichVu
+        AND hd.maCTPhong = ctp.maCTPhong
+        AND ctp.maPhong = p.maPhong
+        AND p.maPhong = @maPhong
+        AND hd.tinhTrangHD = 0
+END
+GO
+
+exec USP_getUncheckHoaDonByMaPhong 'P0001'
+
+update dbo.Phong
+set tinhTrangP = 0
+where maPhong = 'P0001'

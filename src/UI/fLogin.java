@@ -118,7 +118,7 @@ public class fLogin extends JFrame implements ActionListener, KeyListener, Focus
             String password = txtPassword.getText().trim();
             if (validData()) {
                 if (login(username, password)) {
-                    NhanVien staff = NhanVienDAO.getInstance().getNhanVienByUsername(username);
+                    NhanVien staff = NhanVienDAO.getInstance().getNhanVienByTenDangNhap(username);
                     fPageNavigation f = new fPageNavigation(staff);
                     this.setVisible(false);
                     f.setVisible(true);

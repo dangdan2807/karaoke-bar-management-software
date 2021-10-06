@@ -1,14 +1,14 @@
 package entity;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 public class CTPhong {
 	private int maCTPhong;
-	private Date ngayGioNhan;
-	private Date ngayGioTra;
+	private Timestamp ngayGioNhan;
+	private Timestamp ngayGioTra;
 	private Double tienPhong;
 	public Phong phong;
 
@@ -20,19 +20,19 @@ public class CTPhong {
 		this.maCTPhong = maCTPhong;
 	}
 
-	public Date getNgayGioNhan() {
+	public Timestamp getNgayGioNhan() {
 		return ngayGioNhan;
 	}
 
-	public void setNgayGioNhan(Date ngayGioNhan) {
+	public void setNgayGioNhan(Timestamp ngayGioNhan) {
 		this.ngayGioNhan = ngayGioNhan;
 	}
 
-	public Date getNgayGioTra() {
+	public Timestamp getNgayGioTra() {
 		return ngayGioTra;
 	}
 
-	public void setNgayGioTra(Date ngayGioTra) {
+	public void setNgayGioTra(Timestamp ngayGioTra) {
 		this.ngayGioTra = ngayGioTra;
 	}
 
@@ -48,7 +48,7 @@ public class CTPhong {
 		this.phong = phong;
 	}
 
-	public CTPhong(int maCTPhong, Date ngayGioNhan, Date ngayGioTra, Phong phong) {
+	public CTPhong(int maCTPhong, Timestamp ngayGioNhan, Timestamp ngayGioTra, Phong phong) {
 		this.maCTPhong = maCTPhong;
 		this.ngayGioNhan = ngayGioNhan;
 		this.ngayGioTra = ngayGioTra;
@@ -64,7 +64,11 @@ public class CTPhong {
 	}
 
 	public CTPhong(ResultSet rs) throws SQLException {
-		this(rs.getInt("maCTPhong"), rs.getDate("ngayGioNhan"), rs.getDate("ngayGioTra"), new Phong(rs));
+		this(rs.getInt("maCTPhong"), rs.getTimestamp("ngayGioNhan"), rs.getTimestamp("ngayGioTra"), new Phong(rs));
+	}
+
+	public CTPhong(ResultSet rs, int type) throws SQLException {
+		this(rs.getInt("maCTPhong"), rs.getTimestamp("ngayGioNhan"), rs.getTimestamp("ngayGioTra"), new Phong(rs, type));
 	}
 
 	@Override

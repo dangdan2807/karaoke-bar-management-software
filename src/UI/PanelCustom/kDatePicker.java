@@ -19,7 +19,7 @@ public class kDatePicker extends JPanel implements ActionListener {
 
     public kDatePicker() {
         setLayout(null);
-        // setSize(200, 200);
+//         setSize(200, 200);
         // setResizable(false);
         // setLocationRelativeTo(null);
         // setDefaultCloseOperation(EXIT_ON_CLOSE);

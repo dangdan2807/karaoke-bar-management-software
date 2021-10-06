@@ -7,8 +7,8 @@ import entity.Phong;
 
 public class PhongDAO {
     private static PhongDAO instance = new PhongDAO();
-    public static int TABLE_WIDTH = 90;
-    public static int TABLE_HEIGHT = 90;
+    public static int ROOM_WIDTH = 90;
+    public static int ROOM_HEIGHT = 90;
 
     public static PhongDAO getInstance() {
         if (instance == null)
@@ -16,9 +16,23 @@ public class PhongDAO {
         return instance;
     }
 
-    public Phong getTableByTableID(String roomID) {
-        String query = "select * FROM dbo.Phong p WHERE p.maPhong = ?";
-        Object[] parameter = new Object[] { roomID };
+    public ArrayList<Phong> getDSPhong() {
+        String query = "SELECT * FROM dbo.Phong p, dbo.LoaiPhong lp where p.maLP = lp.maLP";
+        ArrayList<Phong> dataList = new ArrayList<Phong>();
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
+        try {
+            while (rs.next()) {
+                dataList.add(new Phong(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    public Phong getPhongByMaPhong(String maPhong) {
+        String query = "select * FROM dbo.Phong p, dbo.LoaiPhong lp WHERE p.maLP = lp.maLP and p.maPhong = ?";
+        Object[] parameter = new Object[] { maPhong };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         Phong phong = null;
         try {
@@ -31,17 +45,18 @@ public class PhongDAO {
         return phong;
     }
 
-    public ArrayList<Phong> getRoomList() {
-        String query = "SELECT * FROM dbo.Phong";
-        ArrayList<Phong> dataList = new ArrayList<Phong>();
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
+    public ArrayList<Phong> getDSPhongByTenLoaiPhong(String tenLP) {
+        String query = "select * FROM dbo.Phong p, dbo.LoaiPhong lp WHERE p.maLP = lp.maLP and lp.tenLP = ?";
+        Object[] parameter = new Object[] { tenLP };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        ArrayList<Phong> dsPhong = new ArrayList<Phong>();
         try {
             while (rs.next()) {
-                dataList.add(new Phong(rs));
+                dsPhong.add(new Phong(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return dataList;
+        return dsPhong;
     }
 }

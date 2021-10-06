@@ -24,7 +24,7 @@ public class fPageNavigation extends JFrame implements ActionListener, MouseList
 
     public fPageNavigation(NhanVien staffLogin) {
         setTitle("Điều hướng quản lý");
-        setSize(793, 375);
+        setSize(800, 375);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -41,7 +41,7 @@ public class fPageNavigation extends JFrame implements ActionListener, MouseList
         pnMain.setLayout(null);
 
         JPanel pnTitle = new JPanel();
-        pnTitle.setBounds(0, 0, 777, 32);
+        pnTitle.setBounds(0, 0, 789, 32);
         pnTitle.setBackground(Color.decode("#d0e1fd"));
         pnMain.add(pnTitle);
         pnTitle.setLayout(null);
@@ -64,7 +64,7 @@ public class fPageNavigation extends JFrame implements ActionListener, MouseList
         customUI.getInstance().setCustomBtn(btnLogOut);
         pnBottom.add(btnLogOut);
 
-        btnQLBanHang = new JButton("Quản lý bán hàng");
+        btnQLBanHang = new JButton("Quản lý đặt phòng");
         btnQLBanHang.setBounds(261, 44, 265, 248);
         pnMain.add(btnQLBanHang);
         btnQLBanHang.setFont(new Font("Dialog", Font.BOLD, 20));
@@ -111,7 +111,7 @@ public class fPageNavigation extends JFrame implements ActionListener, MouseList
     }
 
     public static void main(String[] args) {
-        NhanVien account = NhanVienDAO.getInstance().getNhanVienByUsername("phamdangdan");
+        NhanVien account = NhanVienDAO.getInstance().getNhanVienByTenDangNhap("phamdangdan");
         new fPageNavigation(account).setVisible(true);
     }
 

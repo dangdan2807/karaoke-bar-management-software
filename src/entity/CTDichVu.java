@@ -1,13 +1,13 @@
 package entity;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class CTDichVu {
 	private int maCTDichVu;
 	private int soLuongDat;
-	private Date ngayGioDat;
+	private Timestamp ngayGioDat;
 	private Double tienDichVu;
 
 	private HoaDon hoaDon;
@@ -29,11 +29,11 @@ public class CTDichVu {
 		this.soLuongDat = soLuongDat;
 	}
 
-	public Date getNgayGioDat() {
+	public Timestamp getNgayGioDat() {
 		return ngayGioDat;
 	}
 
-	public void setNgayGioDat(Date ngayGioDat) {
+	public void setNgayGioDat(Timestamp ngayGioDat) {
 		this.ngayGioDat = ngayGioDat;
 	}
 
@@ -57,7 +57,7 @@ public class CTDichVu {
 		this.dichVu = dichVu;
 	}
 
-	public CTDichVu(int maCTDichVu, int soLuongDat, Date ngayGioDat, HoaDon hoaDon, DichVu dichVu) {
+	public CTDichVu(int maCTDichVu, int soLuongDat, Timestamp ngayGioDat, HoaDon hoaDon, DichVu dichVu) {
 		this.maCTDichVu = maCTDichVu;
 		this.soLuongDat = soLuongDat;
 		this.ngayGioDat = ngayGioDat;
@@ -74,7 +74,11 @@ public class CTDichVu {
 	}
 
 	public CTDichVu(ResultSet rs) throws SQLException {
-		this(rs.getInt("maCTPhong"), rs.getInt("soLuongDat"), rs.getDate("ngayGioDat"), new HoaDon(), new DichVu(rs));
+		this(rs.getInt("maCTDichVu"), rs.getInt("soLuongDat"), rs.getTimestamp("ngayGioDatCTDV"), new HoaDon(rs), new DichVu(rs));
+	}
+
+	public CTDichVu(ResultSet rs, int type) throws SQLException {
+		this(rs.getInt("maCTDichVu"), rs.getInt("soLuongDat"), rs.getTimestamp("ngayGioDatCTDV"), new HoaDon(rs, type), new DichVu(rs));
 	}
 
 	@Override

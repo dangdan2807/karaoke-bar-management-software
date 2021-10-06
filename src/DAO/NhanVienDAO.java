@@ -14,17 +14,31 @@ public class NhanVienDAO {
         return instance;
     }
 
-    public NhanVien getNhanVienByUsername(String username) {
-        String query = "Select * from dbo.TaiKhoan tk join dbo.NhanVien nv on tk.tenDangNhap = nv.taiKhoan WHERE tk.tenDangNhap = ? ";
+    public NhanVien getNhanVienByTenDangNhap(String username) {
+        String query = "Select * from dbo.TaiKhoan tk join dbo.NhanVien nv on tk.tenDangNhap = nv.taiKhoan WHERE tk.tenDangNhap = ?";
         Object[] parameter = new Object[] { username };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        NhanVien staff = null;
+        NhanVien nhanVien = null;
         try {
             rs.next();
-            staff = new NhanVien(rs);
+            nhanVien = new NhanVien(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return staff;
+        return nhanVien;
+    }
+
+    public NhanVien getNhanVienByMaNV(String maNhanVien) {
+        String query = "Select * from dbo.TaiKhoan tk join dbo.NhanVien nv on tk.tenDangNhap = nv.taiKhoan WHERE nv.maNhanVien = ?";
+        Object[] parameter = new Object[] { maNhanVien };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        NhanVien nhanVien = null;
+        try {
+            rs.next();
+            nhanVien = new NhanVien(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nhanVien;
     }
 }

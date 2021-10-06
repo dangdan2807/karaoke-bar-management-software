@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class Phong {
 	private String maPhong;
-	private int tinhTrang;
+	private int tinhTrangP;
 	private String viTri;
 	public LoaiPhong loaiPhong;
 
@@ -17,12 +17,12 @@ public class Phong {
 		this.maPhong = maPhong;
 	}
 
-	public int getTinhTrang() {
-		return tinhTrang;
+	public int getTinhTrangP() {
+		return tinhTrangP;
 	}
 
-	public void setTinhTrang(int tinhTrang) {
-		this.tinhTrang = tinhTrang;
+	public void setTinhTrangP(int tinhTrangP) {
+		this.tinhTrangP = tinhTrangP;
 	}
 
 	public String getViTri() {
@@ -41,9 +41,9 @@ public class Phong {
 		this.loaiPhong = loaiPhong;
 	}
 
-	public Phong(String maPhong, int tinhTrang, String viTri, LoaiPhong loaiPhong) {
+	public Phong(String maPhong, int tinhTrangP, String viTri, LoaiPhong loaiPhong) {
 		this.maPhong = maPhong;
-		this.tinhTrang = tinhTrang;
+		this.tinhTrangP = tinhTrangP;
 		this.viTri = viTri;
 		this.loaiPhong = loaiPhong;
 	}
@@ -56,12 +56,16 @@ public class Phong {
 	}
 
 	public Phong(ResultSet rs) throws SQLException {
-		this(rs.getString("maPhong"), rs.getInt("tinhTrang"), rs.getString("viTri"), new LoaiPhong(rs));
+		this(rs.getString("maPhong"), rs.getInt("tinhTrangP"), rs.getString("viTri"), new LoaiPhong(rs));
+	}
+
+	public Phong(ResultSet rs, int type) throws SQLException {
+		this(rs.getString("maPhong"), rs.getInt("tinhTrangP"), rs.getString("viTri"), new LoaiPhong(rs.getString("maLP")));
 	}
 
 	@Override
 	public String toString() {
-		return "Phong [loaiPhong=" + loaiPhong + ", maPhong=" + maPhong + ", tinhTrang=" + tinhTrang + ", viTri="
+		return "Phong [loaiPhong=" + loaiPhong + ", maPhong=" + maPhong + ", tinhTrangP=" + tinhTrangP + ", viTri="
 				+ viTri + "]";
 	}
 

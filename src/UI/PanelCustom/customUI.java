@@ -16,13 +16,15 @@ public class customUI {
     public void setCustomBtn(JButton btn) {
         btn.setBackground(Color.decode("#d0e1fd"));
         btn.setForeground(Color.decode("#1a66e3"));
-        btn.setBorder(new LineBorder(Color.BLUE, 2));
+        btn.setBorder(new LineBorder(Color.BLUE, 1));
     }
 
     public void setCustomBtnHover(JButton btn) {
-        btn.setBackground(Color.decode("#73cdf5"));
-        btn.setForeground(Color.WHITE);
-        btn.setBorder(new LineBorder(Color.decode("#FCA120"), 2));
+        if (btn.isEnabled()) {
+            btn.setBackground(Color.decode("#73cdf5"));
+            btn.setForeground(Color.WHITE);
+            btn.setBorder(new LineBorder(Color.decode("#FCA120"), 1));
+        }
     }
 
     public void setCustomLbTitle(JLabel lb) {

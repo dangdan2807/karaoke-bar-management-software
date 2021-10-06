@@ -221,7 +221,7 @@ public class pnAccount extends JPanel
         if (o.equals(btnAdd)) {
             if (validData()) {
                 Account accountData = getDataInFrom();
-                boolean result = AccountDAO.getInstance().insertAccount(accountData);
+                boolean result = AccountDAO.getInstance().insertKhachHang(accountData);
                 DecimalFormat df = new DecimalFormat("#,###.##");
                 if (result == true) {
                     String stt = df.format(index++);

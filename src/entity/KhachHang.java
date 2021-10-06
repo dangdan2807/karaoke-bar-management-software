@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 public class KhachHang {
 	private String maKH;
 	private String cmnd;
