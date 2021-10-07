@@ -1,0 +1,249 @@
+package UI;
+
+import javax.swing.*;
+import javax.swing.border.*;
+
+import java.awt.*;
+import java.awt.event.*;
+
+import DAO.NhanVienDAO;
+import DAO.TaiKhoanDAO;
+import UI.PanelCustom.customUI;
+import entity.NhanVien;
+
+public class fDangNhap extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener {
+	private JTextField txtUsername, txtPassword;
+	private JButton btnLogin;
+	private ImageIcon logoIcon = new ImageIcon(
+			new ImageIcon("img/user_512.png").getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
+	private ImageIcon anhChen = new ImageIcon(
+			new ImageIcon("img/anhChen_400.png").getImage().getScaledInstance(700, 300, Image.SCALE_SMOOTH));
+	Border borderBottomFocus = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#1a66e3"));
+	Border borderBottomUnFocus = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#d0e1fd"));
+	Border borderBottomError = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.RED);
+	int w1 = 110, w2 = 170, h = 20;
+	TaiKhoanDAO taiKhoanDAO = TaiKhoanDAO.getInstance();
+
+	public fDangNhap() {
+		setTitle("Đăng nhập");
+		setSize(460, 650);
+		setResizable(false);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		createFormLogin();
+	}
+
+	public void createFormLogin() {
+		JPanel pnMain = new JPanel();
+		pnMain.setBackground(Color.decode("#ffffff"));
+
+		JLabel lbUsername, lbPassword;
+		pnMain.setLayout(null);
+
+		getContentPane().add(pnMain);
+
+		JPanel pnMau = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				Graphics2D g2 = (Graphics2D) g;
+				GradientPaint gra = new GradientPaint(90, 0, Color.decode("#900a9c"), 180, getHeight(),
+						Color.decode("#00cccb"));
+				g2.setPaint(gra);
+				g2.fillRect(0, 0, getWidth(), getHeight());
+			}
+		};
+		pnMau.setBounds(0, 0, 455, 323);
+		pnMain.add(pnMau);
+		pnMau.setLayout(null);
+		JLabel lbAnhChen = new JLabel(anhChen);
+		lbAnhChen.setBounds(-18, 143, 473, 281);
+		pnMau.add(lbAnhChen);
+
+		JLabel lbLogo = new JLabel(logoIcon);
+		lbLogo.setBounds(0, 39, 455, 82);
+		pnMau.add(lbLogo);
+		lbLogo.setText("");
+		lbLogo.setHorizontalAlignment(SwingConstants.CENTER);
+
+		JLabel lbWelcome = new JLabel("Đăng nhập!");
+		lbWelcome.setForeground(Color.WHITE);
+		lbWelcome.setFont(new Font("Dialog", Font.BOLD, 28));
+		lbWelcome.setBounds(0, 120, 455, 35);
+		pnMau.add(lbWelcome);
+		lbWelcome.setHorizontalAlignment(SwingConstants.CENTER);
+
+		JPanel pnLogin = new JPanel();
+		pnLogin.setBackground(Color.WHITE);
+
+		pnLogin.setLayout(null);
+		pnLogin.setBounds(0, 325, 455, 273);
+		pnMain.add(pnLogin);
+		lbUsername = new JLabel("Tên đăng nhập: ");
+		lbUsername.setBounds(83, 12, 285, 25);
+		pnLogin.add(lbUsername);
+		lbUsername.setFont(new Font("Dialog", Font.BOLD, 14));
+		lbUsername.setForeground(Color.decode("#1a66e3"));
+
+		txtUsername = new JTextField();
+		txtUsername.setBounds(83, 49, 285, 25);
+		pnLogin.add(txtUsername);
+		txtUsername.setFont(new Font("Dialog", Font.PLAIN, 14));
+		txtUsername.setBorder(borderBottomFocus);
+
+		lbPassword = new JLabel("Mật khẩu: ");
+		lbPassword.setBounds(83, 86, 285, 25);
+		pnLogin.add(lbPassword);
+		lbPassword.setFont(new Font("Dialog", Font.BOLD, 14));
+		lbPassword.setForeground(Color.decode("#1a66e3"));
+
+		txtPassword = new JPasswordField();
+		txtPassword.setBounds(83, 123, 285, 25);
+		pnLogin.add(txtPassword);
+		txtPassword.setFont(new Font("Dialog", Font.PLAIN, 14));
+		txtPassword.setBorder(borderBottomUnFocus);
+
+		btnLogin = new JButton("Đăng nhập");
+		btnLogin.setBounds(83, 177, 285, 40);
+		pnLogin.add(btnLogin);
+		btnLogin.setFont(new Font("Dialog", Font.BOLD, 14));
+		btnLogin.setBorder(new LineBorder(Color.decode("#1a66e3")));
+		customUI.getInstance().setCustomBtn(btnLogin);
+
+		btnLogin.addActionListener(this);
+
+		btnLogin.addMouseListener(this);
+		txtPassword.addKeyListener(this);
+		txtPassword.addFocusListener(this);
+		txtUsername.addKeyListener(this);
+
+		txtUsername.addFocusListener(this);
+	}
+
+	public static void main(String[] args) {
+		new fDangNhap().setVisible(true);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		if (o.equals(btnLogin)) {
+			String username = txtUsername.getText().trim();
+			String password = txtPassword.getText().trim();
+			if (validData()) {
+				if (login(username, password)) {
+					NhanVien staff = NhanVienDAO.getInstance().getNhanVienByTenDangNhap(username);
+					fDieuHuong f = new fDieuHuong(staff);
+					this.setVisible(false);
+					f.setVisible(true);
+				} else {
+					showMessage("Sai tài khoản hoặc mật khẩu");
+				}
+			}
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		Object o = e.getSource();
+		// bắt sự kiện nhấn phím enter tự nhấn btnLogin
+		if (o.equals(txtUsername) || o.equals(txtPassword)) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				btnLogin.doClick();
+			}
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		Object o = e.getSource();
+		if (o.equals(txtUsername)) {
+			txtUsername.setBorder(borderBottomFocus);
+		} else if (o.equals(txtPassword)) {
+			txtPassword.setBorder(borderBottomFocus);
+		}
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		Object o = e.getSource();
+		if (o.equals(txtUsername)) {
+			txtUsername.setBorder(borderBottomUnFocus);
+		} else if (o.equals(txtPassword)) {
+			txtPassword.setBorder(borderBottomUnFocus);
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		Object o = e.getSource();
+		if (o.equals(btnLogin)) {
+			customUI.getInstance().setCustomBtnHover(btnLogin);
+		}
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		Object o = e.getSource();
+		if (o.equals(btnLogin)) {
+			customUI.getInstance().setCustomBtn(btnLogin);
+		}
+	}
+
+	private void showMessage(String message) {
+		JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.OK_OPTION);
+	}
+
+	private boolean validData() {
+		String username = txtUsername.getText().trim();
+		String password = txtPassword.getText().trim();
+		if (!(username.length() >= 6 && username.matches("^[a-zA-Z0-9_@#]{6,}$"))) {
+			if (username.length() < 6)
+				showMessage("Tên đăng nhập phải tối thiểu 6 ký tự");
+			else
+				showMessage("Tên đăng nhập chỉ có thể chứa các kỳ tự, số, @, #, _");
+			txtUsername.setBorder(borderBottomError);
+			return false;
+		}
+		if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9_@#]{6,}$"))) {
+			if (password.length() < 6)
+				showMessage("Mật khẩu phải tối thiểu 6 ký tự");
+			else
+				showMessage("Mật khẩu chỉ có thể chứa các kỳ tự, số, @, #, _");
+			txtPassword.setBorder(borderBottomError);
+			return false;
+		}
+		return true;
+	}
+
+	private boolean login(String username, String password) {
+		boolean result = TaiKhoanDAO.getInstance().login(username, password);
+		return result;
+	}
+}

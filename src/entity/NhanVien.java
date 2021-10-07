@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 public class NhanVien {
 	private String maNhanVien;
-	private String cmnd;
 	private String hoTen;
+	private String cmnd;
 	private Date ngaySinh;
 	private String soDienThoai;
 	private String chucVu;

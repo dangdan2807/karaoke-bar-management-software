@@ -1,6 +1,6 @@
-// Author : Pham Dang Dan
-// Date   : April 23, 2021
-// Last update date: May 23, 2021
+// Author : Pham Dang Dan - KayJuno
+// Date created   : April 23, 2021
+// Last update date: Oct 7, 2021
 package UI.PanelCustom;
 
 import javax.swing.*;
@@ -108,6 +108,7 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
 
         spinYearModel = new SpinnerNumberModel(year, 1900, null, 1);
         spinYear = new JSpinner(spinYearModel);
+        spinYear.setFont(new Font("Dialog", Font.BOLD, 13));
         lbMonth = new JLabel("tháng");
         lbMonth.setHorizontalAlignment(SwingConstants.CENTER);
         lbMonth.setFont(new Font("Dialog", Font.BOLD, 14));

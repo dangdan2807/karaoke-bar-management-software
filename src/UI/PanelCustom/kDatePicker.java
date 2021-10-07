@@ -1,8 +1,9 @@
-// Author : Pham Dang Dan
+// Author : Pham Dang Dan - KayJuno
 // Date created   : April 23, 2021
-// Last update date: May 23, 2021
+// Last update date: Oct 7, 2021
 
 package UI.PanelCustom;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -19,7 +20,7 @@ public class kDatePicker extends JPanel implements ActionListener {
 
     public kDatePicker() {
         setLayout(null);
-//         setSize(200, 200);
+        // setSize(200, 200);
         // setResizable(false);
         // setLocationRelativeTo(null);
         // setDefaultCloseOperation(EXIT_ON_CLOSE);

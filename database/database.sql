@@ -427,9 +427,3 @@ BEGIN
         AND hd.tinhTrangHD = 0
 END
 GO
-
-exec USP_getUncheckHoaDonByMaPhong 'P0001'
-
-update dbo.Phong
-set tinhTrangP = 0
-where maPhong = 'P0001'

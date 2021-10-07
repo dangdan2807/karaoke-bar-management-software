@@ -4,14 +4,15 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.*;
-import UI.fManagerSale;
 import entity.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Date;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.border.*;
@@ -23,7 +24,6 @@ public class pnKhachHang extends JFrame
 	private JTextField txtMaKH, txtTenKH, txtKeyWord, txtCmnd, txtSdt;
 	private JButton btnThem, btnSua, btnLamMoi, btnLogOut, btnBack, btnTim, btnViewAll;
 	private ImageIcon addIcon = new ImageIcon("img/blueAdd_16.png");
-	private ImageIcon trashIcon = new ImageIcon("img/trash_16.png");
 	private ImageIcon refreshIcon = new ImageIcon("img/refresh_16.png");
 	private ImageIcon searchIcon = new ImageIcon("img/search_16.png");
 	private ImageIcon logOutIcon = new ImageIcon("img/logout_16.png");
@@ -57,7 +57,7 @@ public class pnKhachHang extends JFrame
 
 		JPanel pnInfo = new JPanel();
 		pnInfo.setBorder(
-				new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Th\u00F4ng tin kh\u00E1ch h\u00E0ng",
+				new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Thông tin khách hàng",
 						TitledBorder.LEADING, TitledBorder.TOP, null, new Color(51, 51, 51)));
 		pnInfo.setBackground(Color.WHITE);
 		pnInfo.setLayout(null);
@@ -252,24 +252,26 @@ public class pnKhachHang extends JFrame
 			if (validData()) {
 				String maKH = taoMaKHTuDong();
 				KhachHang khachHangData = getDataInFrom();
+				khachHangData.setMaKH(maKH);
 				boolean result = KhachHangDAO.getInstance().insertKhachHang(khachHangData);
 				DecimalFormat df = new DecimalFormat("#,###.##");
+				DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 				if (result == true) {
 					String stt = df.format(index++);
 					String type = "Nam";
 					if (khachHangData.getGioiTinh() == false)
 						type = "Nữ";
 					modelTable.addRow(new Object[] { stt, khachHangData.getMaKH(), khachHangData.getHoTen(),
-							khachHangData.getCmnd(), khachHangData.getNgaySinh(), khachHangData.getGioiTinh(),
+							khachHangData.getCmnd(), sdf.format(khachHangData.getNgaySinh()), type,
 							khachHangData.getSoDienThoai() });
 					modelTable.fireTableDataChanged();
 					// di chuyển và bô đen dòng vừa thêm vào
 					int lastIndex = table.getRowCount() - 1;
 					table.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
 					table.scrollRectToVisible(table.getCellRect(lastIndex, lastIndex, true));
-					JOptionPane.showMessageDialog(this, "Thêm khách hàng thành công.");
+					JOptionPane.showMessageDialog(this, "Thêm khách hàng mới thành công.");
 				} else {
-					JOptionPane.showMessageDialog(this, "Thêm khách hàng thất bại");
+					JOptionPane.showMessageDialog(this, "Thêm khách hàng mới thất bại");
 				}
 			}
 		} else if (o.equals(btnSua)) {
@@ -277,20 +279,24 @@ public class pnKhachHang extends JFrame
 				if (validData()) {
 					int row = table.getSelectedRow();
 					if (row != -1) {
-						// Account accountData = getDataInFrom();
-						// boolean result = AccountDAO.getInstance().updateAccount(accountData);
-						// if (result == true) {
-						// String type = "Nhân viên";
-						// if (accountData.getType() == 1)
-						// type = "Quản lý";
-						// modelTable.setValueAt(accountData.getDisplayName(), row, 2);
-						// modelTable.setValueAt(type, row, 3);
-						// JOptionPane.showMessageDialog(this, "cập nhật tài khoản thành công");
-						// } else {
-						// JOptionPane.showMessageDialog(this, "cập nhật tài khoản thất bại");
-						// }
+						KhachHang khachHangData = getDataInFrom();
+						boolean result = KhachHangDAO.getInstance().updateKhachHang(khachHangData);
+						if (result == true) {
+							String type = "Nam";
+							if (khachHangData.getGioiTinh() == false)
+								type = "Nữ";
+							modelTable.setValueAt(khachHangData.getHoTen(), row, 2);
+							modelTable.setValueAt(khachHangData.getCmnd(), row, 3);
+							DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+							modelTable.setValueAt(sdf.format(khachHangData.getNgaySinh()), row, 4);
+							modelTable.setValueAt(type, row, 5);
+							modelTable.setValueAt(khachHangData.getSoDienThoai(), row, 6);
+							JOptionPane.showMessageDialog(this, "cập nhật thông tin khách hàng thành công");
+						} else {
+							JOptionPane.showMessageDialog(this, "cập nhật thông tin khách hàng thất bại");
+						}
 					} else {
-						JOptionPane.showMessageDialog(this, "Chọn 1 tài khoản cần cập nhật");
+						JOptionPane.showMessageDialog(this, "Chọn 1 khách hàng cần cập nhật");
 					}
 				}
 			} else {
@@ -437,7 +443,16 @@ public class pnKhachHang extends JFrame
 
 	private String taoMaKHTuDong() {
 		String maKHCuoi = KhachHangDAO.getInstance().getMaKHCuoiCung();
-		return "";
+		int idKHCu = Integer.parseInt(maKHCuoi.replace("KH", ""));
+		int idKHMoi = idKHCu + 1;
+		int lenIdCu = String.valueOf(idKHCu).length();
+		int lenIdMoi = String.valueOf(idKHMoi).length();
+		String maKHMoi = "";
+		if (lenIdCu < lenIdMoi) {
+			maKHMoi = maKHCuoi.replace("0" + String.valueOf(idKHCu), String.valueOf(idKHMoi));
+		} else
+			maKHMoi = maKHCuoi.replace(String.valueOf(idKHCu), String.valueOf(idKHMoi));
+		return maKHMoi;
 	}
 
 	private boolean authentication() {

@@ -2,7 +2,7 @@ package UI;
 
 public class Starting {
     public static void main(String[] args) {
-        fLogin login = new fLogin();
+        fDangNhap login = new fDangNhap();
         login.setVisible(true);
     }
 }
