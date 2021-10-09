@@ -2,29 +2,46 @@ package UI.PanelCustom;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
+import DAO.KhachHangDAO;
 import entity.KhachHang;
 
-public class pnChonKhachHang extends JFrame implements ActionListener, MouseListener, FocusListener, KeyListener {
+public class PnChonKhachHang extends JPanel
+		implements ActionListener, MouseListener, FocusListener, KeyListener, ItemListener {
+	private JButton[] btnDSKHang;
+	private int pnShowTableWidth = 310;
+	private int heightTable = 300;
+	private int viTri = -1;
 
 	private JTextField txtMaKH, txtTenKH, txtCMND, txtSDT, txtNgaySinh, txtGioiTinh, txtTimKiem;
 	private JComboBox<String> cboTimKiem;
 	private JButton btnTimKiem, btnChonKH;
 
 	private ImageIcon searchIcon = new ImageIcon(
-			CustomUI.getInstance().SEARCH_ICON.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+			CustomUI.SEARCH_ICON.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+	private ImageIcon manIcon = new ImageIcon(
+			CustomUI.MAN_ICON.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
+	private ImageIcon womanIcon = new ImageIcon(
+			CustomUI.WOMAN_ICON.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 
-	public pnChonKhachHang() {
-		setTitle("Chọn khách hàng");
+	private JPanel pnShowKH;
+
+	private String maKHDcChon = null;
+
+	public PnChonKhachHang() {
+		// setTitle("Chọn khách hàng");
 		setSize(800, 400);
-		setResizable(false);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		// setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setLayout(null);
+        setLayout(new BorderLayout(0, 0));
+
+		// setResizable(false);
+		// setLocationRelativeTo(null);
+		// setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		createUI();
 	}
@@ -33,7 +50,7 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		JPanel pnMain = new JPanel();
 		pnMain.setBounds(0, 0, 800, 400);
 		pnMain.setBackground(Color.WHITE);
-		getContentPane().add(pnMain);
+		this.add(pnMain);
 		pnMain.setLayout(null);
 
 		JPanel pnDSKhachHang = new JPanel();
@@ -42,7 +59,21 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		pnDSKhachHang.setBackground(Color.WHITE);
 		pnDSKhachHang.setBounds(0, 0, 500, 350);
 		pnMain.add(pnDSKhachHang);
-		pnDSKhachHang.setLayout(null);
+		pnDSKhachHang.setLayout(new BorderLayout(0, 0));
+
+		pnShowKH = new JPanel();
+		pnShowKH.setBackground(Color.WHITE);
+		FlowLayout flShowTable = new FlowLayout(FlowLayout.LEFT);
+		flShowTable.setHgap(6);
+		flShowTable.setVgap(6);
+		pnShowKH.setLayout(flShowTable);
+		pnShowKH.setPreferredSize(new Dimension(pnShowTableWidth, heightTable));
+
+		JScrollPane scpShowKH = new JScrollPane(pnShowKH, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scpShowKH.setBackground(Color.WHITE);
+		scpShowKH.getVerticalScrollBar().setUnitIncrement(10);
+		pnDSKhachHang.add(scpShowKH, BorderLayout.CENTER);
 
 		JPanel pnTTKhachHang = new JPanel();
 		pnTTKhachHang.setBorder(new TitledBorder(
@@ -61,7 +92,7 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		txtMaKH.setEditable(false);
 		txtMaKH.setBounds(97, 21, 167, 20);
 		txtMaKH.setFont(new Font("Dialog", Font.PLAIN, 14));
-		txtMaKH.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+		txtMaKH.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		pnTTKhachHang.add(txtMaKH);
 		txtMaKH.setColumns(10);
 
@@ -74,7 +105,7 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		txtTenKH.setColumns(10);
 		txtTenKH.setBounds(97, 49, 167, 20);
 		txtTenKH.setFont(new Font("Dialog", Font.PLAIN, 14));
-		txtTenKH.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+		txtTenKH.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		pnTTKhachHang.add(txtTenKH);
 
 		JLabel lbCMND = new JLabel("CMNN/CCCD: ");
@@ -86,7 +117,7 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		txtCMND.setColumns(10);
 		txtCMND.setBounds(97, 77, 167, 20);
 		txtCMND.setFont(new Font("Dialog", Font.PLAIN, 14));
-		txtCMND.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+		txtCMND.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		pnTTKhachHang.add(txtCMND);
 
 		JLabel lbSDT = new JLabel("SDT: ");
@@ -98,7 +129,7 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		txtSDT.setColumns(10);
 		txtSDT.setBounds(97, 105, 167, 20);
 		txtSDT.setFont(new Font("Dialog", Font.PLAIN, 14));
-		txtSDT.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+		txtSDT.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		pnTTKhachHang.add(txtSDT);
 
 		JLabel lbNgaySinh = new JLabel("Ngày sinh: ");
@@ -110,7 +141,7 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		txtNgaySinh.setColumns(10);
 		txtNgaySinh.setBounds(97, 133, 167, 20);
 		txtNgaySinh.setFont(new Font("Dialog", Font.PLAIN, 14));
-		txtNgaySinh.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+		txtNgaySinh.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		pnTTKhachHang.add(txtNgaySinh);
 
 		JLabel lbGioiTinh = new JLabel("Giới tính: ");
@@ -122,7 +153,7 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		txtGioiTinh.setColumns(10);
 		txtGioiTinh.setBounds(97, 161, 167, 20);
 		txtGioiTinh.setFont(new Font("Dialog", Font.PLAIN, 14));
-		txtGioiTinh.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+		txtGioiTinh.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		pnTTKhachHang.add(txtGioiTinh);
 
 		JPanel pnTimKiem = new JPanel();
@@ -136,23 +167,25 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		cboTimKiem = new JComboBox<String>();
 		cboTimKiem.setUI(new BasicComboBoxUI());
 		cboTimKiem.setBounds(10, 21, 254, 22);
+		cboTimKiem.addItem("Tất cả");
 		cboTimKiem.addItem("Tìm theo tên Khách hàng");
-		cboTimKiem.addItem("Tìm theo số điện thoại");
 		cboTimKiem.addItem("Tìm theo mã khách hàng");
+		cboTimKiem.addItem("Tìm theo số điện thoại");
 		cboTimKiem.setFont(new Font("Dialog", Font.BOLD, 12));
 		cboTimKiem.setBackground(Color.WHITE);
 		cboTimKiem.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#1a66e3")));
 		pnTimKiem.add(cboTimKiem);
-		
+
 		JLabel lbTimKiem = new JLabel("Từ khóa: ");
 		lbTimKiem.setBounds(10, 57, 77, 14);
 		pnTimKiem.add(lbTimKiem);
 
 		txtTimKiem = new JTextField();
 		txtTimKiem.setColumns(10);
-		txtTimKiem.setBounds(86, 54, 178, 20);
+		txtTimKiem.setBounds(97, 54, 167, 20);
 		txtTimKiem.setFont(new Font("Dialog", Font.PLAIN, 14));
-		txtTimKiem.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+		txtTimKiem.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		txtTimKiem.setEditable(false);
 		pnTimKiem.add(txtTimKiem);
 
 		btnTimKiem = new JButton("Tìm khách hàng", searchIcon);
@@ -165,22 +198,36 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		pnMain.add(btnChonKH);
 		CustomUI.getInstance().setCustomBtn(btnChonKH);
 
-		txtTimKiem.addFocusListener(this);
+		btnChonKH.addActionListener(this);
+		btnTimKiem.addActionListener(this);
 
 		btnChonKH.addMouseListener(this);
 		btnTimKiem.addMouseListener(this);
 
-		btnChonKH.addActionListener(this);
-		btnTimKiem.addActionListener(this);
+		txtTimKiem.addFocusListener(this);
+
+		txtTimKiem.addKeyListener(this);
+
+		cboTimKiem.addItemListener(this);
+
+		LoadDSPhong(KhachHangDAO.getInstance().getDSKhachHang());
 	}
 
 	public static void main(String[] args) {
-		new pnChonKhachHang().setVisible(true);
+		new PnChonKhachHang().setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		Object o = e.getSource();
+		if (o.equals(btnChonKH)) {
+			if (txtMaKH.getText().equalsIgnoreCase("")) {
+				JOptionPane.showMessageDialog(this, "Bạn phải chọn một khách hàng", "Thông báo", JOptionPane.OK_OPTION);
+			}
+			maKHDcChon = txtMaKH.getText();
+		} else if (o.equals(btnTimKiem)) {
+			timKiemKH();
+		}
 	}
 
 	@Override
@@ -194,7 +241,7 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		// bắt sự kiện nhấn phím enter tự nhấn btnLogin
 		if (o.equals(txtTimKiem)) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				btnTimKiem.doClick();
+				timKiemKH();
 			}
 		}
 	}
@@ -216,7 +263,7 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 	public void focusLost(FocusEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtTimKiem)) {
-			txtTimKiem.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+			txtTimKiem.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		}
 	}
 
@@ -255,6 +302,18 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 		}
 	}
 
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		Object o = e.getSource();
+		if (o.equals(cboTimKiem)) {
+			if (cboTimKiem.getSelectedIndex() == 0) {
+				txtTimKiem.setEditable(false);
+			} else {
+				txtTimKiem.setEditable(true);
+			}
+		}
+	}
+
 	private void loadDataLenForm(KhachHang khachHang) {
 		txtMaKH.setText(khachHang.getMaKH());
 		txtTenKH.setText(khachHang.getHoTen());
@@ -269,4 +328,122 @@ public class pnChonKhachHang extends JFrame implements ActionListener, MouseList
 			txtGioiTinh.setText("Nữ");
 		}
 	}
+
+	private void loadBtnKH(String maKH) {
+		KhachHang khachHang = KhachHangDAO.getInstance().getKhachHangByMaKH(maKH);
+		String tenBtn = "<html>" + "<p style='text-align: left; width:116px'>Mã KH: " + khachHang.getMaKH() + " </p>"
+				+ "<p style='text-align: left; width:116px'>Tên: " + khachHang.getHoTen() + " </p>"
+				+ "<p style='text-align: left; width:116px'>CMND: " + khachHang.getCmnd() + "</p>"
+				+ "<p style='text-align: left; width:116px'>SDT: " + khachHang.getSoDienThoai() + "</p></html>";
+		int index = 0;
+		for (int i = 0; i < btnDSKHang.length; i++) {
+			if (btnDSKHang[i].getText().contains(tenBtn))
+				index = i;
+			else if (btnDSKHang[i].getText().equals("")) {
+				index = i;
+				break;
+			}
+		}
+		boolean gioiTinh = khachHang.getGioiTinh();
+		if (gioiTinh) {
+			btnDSKHang[index].setIcon(manIcon);
+		} else {
+			btnDSKHang[index].setIcon(womanIcon);
+		}
+		btnDSKHang[index].setText(tenBtn);
+		btnDSKHang[index].setForeground(Color.WHITE);
+		btnDSKHang[index].setFont(new Font("Dialog", Font.BOLD, 11));
+		btnDSKHang[index].setBackground(Color.decode("#3c8dbc"));
+		btnDSKHang[index].setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnDSKHang[index].setHorizontalTextPosition(SwingConstants.RIGHT);
+		btnDSKHang[index].setPreferredSize(new Dimension(KhachHangDAO.TABLE_WIDTH, KhachHangDAO.TABLE_HEIGHT));
+		pnShowKH.revalidate();
+		pnShowKH.repaint();
+	}
+
+	private void LoadDSPhong(ArrayList<KhachHang> dsKhachHang) {
+		heightTable = KhachHangDAO.TABLE_HEIGHT;
+		pnShowKH.removeAll();
+		pnShowKH.revalidate();
+		pnShowKH.repaint();
+		Border lineRed = new LineBorder(Color.RED, 2);
+		Border lineGray = new LineBorder(Color.GRAY, 1);
+		int sizeDSPhong = dsKhachHang.size();
+		btnDSKHang = new JButton[sizeDSPhong];
+		for (int i = 0; i < sizeDSPhong; i++) {
+			final int selection = i;
+			KhachHang khachHang = dsKhachHang.get(i);
+			String maKH = khachHang.getMaKH();
+			btnDSKHang[selection] = new JButton("");
+			loadBtnKH(maKH);
+			btnDSKHang[selection].setBorder(lineGray);
+			if ((i + 1) % 2 == 0) {
+				heightTable += KhachHangDAO.TABLE_HEIGHT;
+				pnShowKH.setPreferredSize(new Dimension(pnShowTableWidth, heightTable));
+			}
+			btnDSKHang[selection].addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (viTri != -1) {
+						btnDSKHang[viTri].setBorder(lineGray);
+					}
+					viTri = selection;
+					btnDSKHang[selection].setBorder(lineRed);
+					KhachHang khActiveE = KhachHangDAO.getInstance().getKhachHangByMaKH(maKH);
+					loadDataLenForm(khActiveE);
+				}
+			});
+			// sự kiện hover chuột
+			btnDSKHang[selection].addMouseListener(new MouseAdapter() {
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					btnDSKHang[selection].setBackground(Color.decode("#605ca8"));
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					btnDSKHang[selection].setBackground(Color.decode("#3c8dbc"));
+				}
+			});
+			pnShowKH.add(btnDSKHang[selection]);
+		}
+	}
+
+	public String getMaKHDaChon() {
+		return maKHDcChon;
+	}
+
+	public JButton getBtnChonKH() {
+		return btnChonKH;
+	}
+
+	private void timKiemKH() {
+		int loaiTimKiem = cboTimKiem.getSelectedIndex();
+		ArrayList<KhachHang> dsKhachHang = new ArrayList<KhachHang>();
+		String tuKhoa = txtTimKiem.getText();
+		if (loaiTimKiem != 0 && tuKhoa.equalsIgnoreCase("")) {
+			JOptionPane.showMessageDialog(this, "Bạn phải nhập từ khoá cần tìm kiếm");
+		} else {
+			switch (loaiTimKiem) {
+				case 0:
+					txtTimKiem.setText("");
+					dsKhachHang = KhachHangDAO.getInstance().getDSKhachHang();
+					break;
+				case 1:
+					dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangByTenKH(tuKhoa);
+					break;
+				case 2:
+					dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangByMaKH(tuKhoa);
+					break;
+				case 3:
+					dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangBySDT(tuKhoa);
+					break;
+				default:
+					break;
+			}
+			LoadDSPhong(dsKhachHang);
+		}
+	}
+
 }

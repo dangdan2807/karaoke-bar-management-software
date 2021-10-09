@@ -12,25 +12,25 @@ import java.util.ArrayList;
 
 import DAO.*;
 import UI.PanelCustom.CustomUI;
+import UI.PanelCustom.DialogChonKhachHang;
 import entity.*;
 
 public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseListener, ItemListener, ChangeListener {
 	private JButton[] btnDSPhong;
 	private int pnShowTableWidth = 310;
-	private int heightRoom = 140;
+	private int heightTable = 140;
 
 	private JPanel pnMain, pnShowRoom;
 	private DefaultTableModel modelTableBill, modelTableDichVu;
 	private JTable tableBill, tableDichVu;
 	private JLabel lbTenNV;
-	private JButton btnChuyenPhong, btnLamMoiPhong, btnBack, btnTimDichVu, btnThanhToan, btnThem, btnXoa, btnThueNgay,
-			btnLamMoiDV, btnDatTruoc, btnHuyDatPhong, btnChonKH;
-	private JTextField txtMaHoaDon, txtMaPhong, txtTotalPrice, txtTenDichVu, txtViTriP, txtTenLP, txtSLCon, txtGiaBan,
-			txtTGBatDau, txtGTKetThuc;
+	private JButton btnChuyenPhong, btnLamMoiPhong, btnBack, btnTimDichVu, btnThanhToan, btnThem;
+	private JButton btnXoa, btnThueNgay, btnLamMoiDV, btnDatTruoc, btnHuyDatPhong, btnChonKH;
+	private JTextField txtMaHoaDon, txtMaPhong, txtTotalPrice, txtTenDichVu, txtViTriP, txtTenLP;
+	private JTextField txtSLCon, txtGiaBan, txtTGBatDau, txtGTKetThuc, txtTenKH;
 	private JComboBox<String> cboLoaiPhong, cboMaPhong;
 	private JSpinner spinSLDat;
 	private JMenuBar menuBar;
-	private JMenuItem itemDangXuat;
 
 	private ImageIcon transferIcon = new ImageIcon("img/transfer_16.png");
 	private ImageIcon refreshIcon = new ImageIcon("img/refresh_16.png");
@@ -43,7 +43,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 
 	private int viTri = -1;
 	private NhanVien staffLogin = null;
-	private JTextField txtTenKH;
+	private KhachHang khachHangDcChon = null;
 
 	public fQuanLyDatPhong(NhanVien staff) {
 		setTitle("Phần Mềm Quản Lý Quán Karaoke");
@@ -62,12 +62,8 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 		this.setJMenuBar(menuBar);
 
 		JMenu menuTK = new JMenu("Tài khoản");
-		itemDangXuat = new JMenuItem("Đăng xuất");
-		menuTK.add(itemDangXuat);
 
 		menuBar.add(menuTK);
-
-		itemDangXuat.addActionListener(this);
 	}
 
 	public void createFromQLKS() {
@@ -170,7 +166,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 		flShowTable.setHgap(6);
 		flShowTable.setVgap(6);
 		pnShowRoom.setLayout(flShowTable);
-		pnShowRoom.setPreferredSize(new Dimension(pnShowTableWidth, heightRoom));
+		pnShowRoom.setPreferredSize(new Dimension(pnShowTableWidth, heightTable));
 
 		JScrollPane scpShowTable = new JScrollPane(pnShowRoom, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -459,7 +455,6 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 		btnLamMoiPhong.addMouseListener(this);
 		btnDatTruoc.addMouseListener(this);
 		btnChonKH.addMouseListener(this);
-
 		tableDichVu.addMouseListener(this);
 		tableBill.addMouseListener(this);
 
@@ -592,10 +587,11 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 		} else if (o.equals(btnHuyDatPhong)) {
 		} else if (o.equals(btnDatTruoc)) {
 		} else if (o.equals(btnChonKH)) {
-		} else if (o.equals(itemDangXuat)) {
-			fDangNhap f = new fDangNhap();
-			this.setVisible(false);
-			f.setVisible(true);
+			DialogChonKhachHang chonKH = new DialogChonKhachHang();
+			chonKH.setModal(true);
+			chonKH.setVisible(true);
+			khachHangDcChon = chonKH.getKHDuocChon();
+			System.out.println(khachHangDcChon.toString());
 		}
 	}
 
@@ -744,7 +740,6 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 		String tenPhong = phong.getMaPhong();
 		String tenBtn = "<html><p style='text-align: center;'> " + tenPhong
 				+ " </p></br><p style='text-align: center;'> " + status + " </p></html>";
-		// warning - tương lai sẽ lỗi nếu xóa và thêm bàn (vì id tự tăng)
 		int index = 0;
 		for (int i = 0; i < btnDSPhong.length; i++) {
 			if (btnDSPhong[i].getText().contains(tenPhong))
@@ -778,7 +773,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 	}
 
 	private void LoadDSPhong(ArrayList<Phong> dsPhong) {
-		heightRoom = 140;
+		heightTable = 140;
 		pnShowRoom.removeAll();
 		pnShowRoom.revalidate();
 		pnShowRoom.repaint();
@@ -794,8 +789,8 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 			loadPhong(maPhong);
 			btnDSPhong[selection].setBorder(lineGray);
 			if ((i + 1) % 3 == 0) {
-				heightRoom += PhongDAO.ROOM_HEIGHT;
-				pnShowRoom.setPreferredSize(new Dimension(pnShowTableWidth, heightRoom));
+				heightTable += PhongDAO.ROOM_HEIGHT;
+				pnShowRoom.setPreferredSize(new Dimension(pnShowTableWidth, heightTable));
 			}
 			btnDSPhong[selection].addActionListener(new ActionListener() {
 				@Override
@@ -941,10 +936,6 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 
 	private void changeAccount(NhanVien staff) {
 		lbTenNV.setText(staff.getHoTen());
-	}
-
-	public void setEmpName(String empName) {
-		lbTenNV.setText(empName);
 	}
 
 	private void reSizeColumnTableBillInfo() {

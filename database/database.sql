@@ -385,7 +385,7 @@ BEGIN
     DECLARE @name NVARCHAR(102) = N'%' + @tenDichVu + N'%'
     SELECT dv.maDichVu, dv.tenDichVu, dv.giaBan, dv.soLuongTon
     FROM dbo.DichVu dv
-    WHERE dv.tenDichVu LIKE @name
+    WHERE dbo.fuConvertToUnsign(dv.tenDichVu) LIKE dbo.fuConvertToUnsign(@name)
 END
 GO
 
@@ -427,3 +427,38 @@ BEGIN
         AND hd.tinhTrangHD = 0
 END
 GO
+
+CREATE PROC USP_getDSKhachHangByMaKH
+    @maKH VARCHAR(10)
+AS
+BEGIN
+    DECLARE @name NVARCHAR(12) = N'%' + @maKH + N'%'
+    SELECT kh.maKH, kh.hoTen, kh.cmnd, kh.gioiTinh, kh.ngaySinh, kh.soDienThoai
+    FROM dbo.KhachHang kh
+    WHERE kh.maKH LIKE @name
+END
+GO
+
+CREATE PROC USP_getDSKhachHangByTenKH
+    @tenKH NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @name NVARCHAR(102) = N'%' + @tenKH + N'%'
+    SELECT kh.maKH, kh.hoTen, kh.cmnd, kh.gioiTinh, kh.ngaySinh, kh.soDienThoai
+    FROM dbo.KhachHang kh
+    WHERE dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@name)
+END
+GO
+
+CREATE PROC USP_getDSKhachHangBySDT
+    @sdt VARCHAR(10)
+AS
+BEGIN
+    DECLARE @name NVARCHAR(12) = N'%' + @sdt + N'%'
+    SELECT kh.maKH, kh.hoTen, kh.cmnd, kh.gioiTinh, kh.ngaySinh, kh.soDienThoai
+    FROM dbo.KhachHang kh
+    WHERE kh.soDienThoai LIKE @name
+END
+GO
+
+SELECT * FROM dbo.KhachHang kh WHERE kh.maKH = 'KH00000001'

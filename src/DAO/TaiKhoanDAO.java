@@ -16,7 +16,7 @@ public class TaiKhoanDAO {
     }
 
     public ArrayList<TaiKhoan> getDSTaiKhoan() {
-        String query = "SELECT username , displayName , type FROM dbo.Account";
+        String query = "SELECT * FROM dbo.TaiKhoan";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         ArrayList<TaiKhoan> dataList = new ArrayList<TaiKhoan>();
         try {

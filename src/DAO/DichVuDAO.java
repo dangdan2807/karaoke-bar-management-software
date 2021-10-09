@@ -17,8 +17,7 @@ public class DichVuDAO {
     public ArrayList<DichVu> getDSDichVu() {
         ArrayList<DichVu> dataList = new ArrayList<DichVu>();
         String query = "SELECT * FROM dbo.DichVu";
-        Object[] parameter = new Object[] {};
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {
                 dataList.add(new DichVu(rs));

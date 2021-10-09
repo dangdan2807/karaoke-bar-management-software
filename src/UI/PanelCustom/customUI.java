@@ -10,23 +10,25 @@ import java.text.SimpleDateFormat;
 import javax.swing.border.*;
 
 public class CustomUI {
-    private static CustomUI instance;
-    public Border BORDER_BOTTOM_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#1a66e3"));
-    public Border BORDER_BOTTOM_UN_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#d0e1fd"));
-    public Border BORDER_BOTTOM_ERROR = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED);
+    private static CustomUI instance = new CustomUI();
+    public static Border BORDER_BOTTOM_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#1a66e3"));
+    public static Border BORDER_BOTTOM_UN_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#d0e1fd"));
+    public static Border BORDER_BOTTOM_ERROR = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED);
 
-    public ImageIcon ADD_ICON = new ImageIcon("img/blueAdd_16.png");
-    public ImageIcon TRASH_ICON = new ImageIcon("img/trash_16.png");
-    public ImageIcon REFRESH_ICON = new ImageIcon("img/refresh_16.png");
-    public ImageIcon ANALYTICS_ICON = new ImageIcon("img/analytics_16.png");
-    public ImageIcon BACK_ICON = new ImageIcon("img/back_16.png");
-    public ImageIcon SEARCH_ICON = new ImageIcon("img/search_512.png");
-    public ImageIcon LOGOUT_ICON = new ImageIcon("img/logout_16.png");
-    public ImageIcon UPDATE_ICON = new ImageIcon("img/update_16.png");
-    public ImageIcon TRANSFER_ICON = new ImageIcon("img/transfer_16.png");
-    public ImageIcon PAYMENT_ICON = new ImageIcon("img/payment_16.png");
-    public ImageIcon ERROR_ICON = new ImageIcon("img/cancel_16.png");
-    public ImageIcon USER_ICON = new ImageIcon("img/user_16.png");
+    public static ImageIcon ADD_ICON = new ImageIcon("img/blueAdd_16.png");
+    public static ImageIcon TRASH_ICON = new ImageIcon("img/trash_16.png");
+    public static ImageIcon REFRESH_ICON = new ImageIcon("img/refresh_16.png");
+    public static ImageIcon ANALYTICS_ICON = new ImageIcon("img/analytics_16.png");
+    public static ImageIcon BACK_ICON = new ImageIcon("img/back_16.png");
+    public static ImageIcon SEARCH_ICON = new ImageIcon("img/search_512.png");
+    public static ImageIcon LOGOUT_ICON = new ImageIcon("img/logout_16.png");
+    public static ImageIcon UPDATE_ICON = new ImageIcon("img/update_16.png");
+    public static ImageIcon TRANSFER_ICON = new ImageIcon("img/transfer_16.png");
+    public static ImageIcon PAYMENT_ICON = new ImageIcon("img/payment_16.png");
+    public static ImageIcon ERROR_ICON = new ImageIcon("img/cancel_16.png");
+    public static ImageIcon USER_ICON = new ImageIcon("img/user_16.png");
+    public static ImageIcon MAN_ICON = new ImageIcon("img/man_512.png");
+    public static ImageIcon WOMAN_ICON = new ImageIcon("img/woman_512.png");
 
     public static CustomUI getInstance() {
         if (instance == null)

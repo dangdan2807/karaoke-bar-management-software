@@ -73,7 +73,7 @@ public class fThongTinCaNhan extends JDialog
         txtHoTen.setBounds(130, 16, 250, 25);
         pnTTCN.add(txtHoTen);
         txtHoTen.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtHoTen.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        txtHoTen.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
         JLabel lbCMND = new JLabel("CMND/CCCD: ");
         lbCMND.setBounds(10, 52, 120, 25);
@@ -83,10 +83,10 @@ public class fThongTinCaNhan extends JDialog
         txtCMND.setBounds(130, 52, 250, 25);
         pnTTCN.add(txtCMND);
         txtCMND.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtCMND.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        txtCMND.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
         dpNgaySinh = new kDatePicker(250, 25);
-        dpNgaySinh.setBorderCustom(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        dpNgaySinh.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         dpNgaySinh.setBackgroundColor(Color.WHITE);
         dpNgaySinh.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
         dpNgaySinh.setBounds(130, 88, 250, 25);
@@ -104,14 +104,14 @@ public class fThongTinCaNhan extends JDialog
         txtSDT.setBounds(130, 124, 250, 25);
         pnTTCN.add(txtSDT);
         txtSDT.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtSDT.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        txtSDT.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
         txtChucVu = new JTextField();
         txtChucVu.setBounds(130, 160, 250, 25);
         pnTTCN.add(txtChucVu);
         txtChucVu.setEditable(false);
         txtChucVu.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtChucVu.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        txtChucVu.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
         JLabel lbChucVu = new JLabel("Chức vụ: ");
         lbChucVu.setBounds(10, 160, 120, 25);
@@ -136,7 +136,7 @@ public class fThongTinCaNhan extends JDialog
         pnTTCN.add(txtMucLuong);
         txtMucLuong.setEditable(false);
         txtMucLuong.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtMucLuong.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        txtMucLuong.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
         lbMucLuong = new JLabel("Mức Lương: ");
         lbMucLuong.setBounds(10, 232, 120, 25);
@@ -160,7 +160,7 @@ public class fThongTinCaNhan extends JDialog
         txtTenDangNhap.setBackground(Color.decode("#f9f9f9"));
         pnTTTaiKhoan.add(txtTenDangNhap);
         txtTenDangNhap.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtTenDangNhap.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        txtTenDangNhap.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
         lbMatKhau = new JLabel("Mật khẩu: ");
         lbMatKhau.setBounds(10, 52, 120, 25);
@@ -170,7 +170,7 @@ public class fThongTinCaNhan extends JDialog
         txtMatKhau.setBounds(130, 52, 250, 25);
         pnTTTaiKhoan.add(txtMatKhau);
         txtMatKhau.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtMatKhau.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        txtMatKhau.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
         JPanel pnTTMatKhau = new JPanel();
         pnTTMatKhau.setLayout(null);
@@ -187,7 +187,7 @@ public class fThongTinCaNhan extends JDialog
         txtMatKhauMoi = new JPasswordField();
         txtMatKhauMoi.setBounds(130, 46, 250, 25);
         txtMatKhauMoi.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtMatKhauMoi.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        txtMatKhauMoi.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         txtMatKhauMoi.setEditable(false);
         pnTTMatKhau.add(txtMatKhauMoi);
 
@@ -205,7 +205,7 @@ public class fThongTinCaNhan extends JDialog
         txtNLMatKhauMoi.setBounds(130, 82, 250, 25);
         txtNLMatKhauMoi.setEditable(false);
         txtNLMatKhauMoi.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtNLMatKhauMoi.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        txtNLMatKhauMoi.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         pnTTMatKhau.add(txtNLMatKhauMoi);
 
         txtHoTen.addKeyListener(this);
@@ -324,17 +324,17 @@ public class fThongTinCaNhan extends JDialog
     public void focusLost(FocusEvent e) {
         Object o = e.getSource();
         if (o.equals(txtHoTen)) {
-            txtHoTen.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+            txtHoTen.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         } else if (o.equals(txtCMND)) {
-            txtCMND.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+            txtCMND.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         } else if (o.equals(txtSDT)) {
-            txtSDT.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+            txtSDT.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         } else if (o.equals(txtMatKhau)) {
-            txtMatKhau.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+            txtMatKhau.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         } else if (o.equals(txtMatKhauMoi)) {
-            txtMatKhauMoi.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+            txtMatKhauMoi.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         } else if (o.equals(txtNLMatKhauMoi)) {
-            txtNLMatKhauMoi.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+            txtNLMatKhauMoi.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         }
     }
 
