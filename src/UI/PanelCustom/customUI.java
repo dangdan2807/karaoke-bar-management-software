@@ -2,14 +2,35 @@ package UI.PanelCustom;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javax.swing.border.*;
 
-public class customUI {
-    private static customUI instance;
+public class CustomUI {
+    private static CustomUI instance;
+    public Border BORDER_BOTTOM_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#1a66e3"));
+    public Border BORDER_BOTTOM_UN_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#d0e1fd"));
+    public Border BORDER_BOTTOM_ERROR = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED);
 
-    public static customUI getInstance() {
+    public ImageIcon ADD_ICON = new ImageIcon("img/blueAdd_16.png");
+    public ImageIcon TRASH_ICON = new ImageIcon("img/trash_16.png");
+    public ImageIcon REFRESH_ICON = new ImageIcon("img/refresh_16.png");
+    public ImageIcon ANALYTICS_ICON = new ImageIcon("img/analytics_16.png");
+    public ImageIcon BACK_ICON = new ImageIcon("img/back_16.png");
+    public ImageIcon SEARCH_ICON = new ImageIcon("img/search_512.png");
+    public ImageIcon LOGOUT_ICON = new ImageIcon("img/logout_16.png");
+    public ImageIcon UPDATE_ICON = new ImageIcon("img/update_16.png");
+    public ImageIcon TRANSFER_ICON = new ImageIcon("img/transfer_16.png");
+    public ImageIcon PAYMENT_ICON = new ImageIcon("img/payment_16.png");
+    public ImageIcon ERROR_ICON = new ImageIcon("img/cancel_16.png");
+    public ImageIcon USER_ICON = new ImageIcon("img/user_16.png");
+
+    public static CustomUI getInstance() {
         if (instance == null)
-            instance = new customUI();
+            instance = new CustomUI();
         return instance;
     }
 
@@ -30,5 +51,28 @@ public class customUI {
     public void setCustomLbTitle(JLabel lb) {
         lb.setFont(new Font("Dialog", Font.BOLD, 24));
         lb.setForeground(Color.decode("#1a66e3"));
+    }
+
+    public void setCustomTextFieldFocus(JTextField txt) {
+        if (txt.isEditable()) {
+            txt.setBorder(BORDER_BOTTOM_FOCUS);
+        }
+    }
+
+    public java.util.Date convertSqlDateToUtilDate(Date date) {
+        java.util.Date utilDate = new java.util.Date(date.getTime());
+        return utilDate;
+    }
+
+    public String convertSqlDateToUtilDateFormatString(Date date, String format) {
+        java.util.Date utilDate = new java.util.Date(date.getTime());
+        DateFormat df = new SimpleDateFormat(format);
+        return df.format(utilDate);
+    }
+
+    public String convertSqlTimestampToUtilDateFormatString(Timestamp date, String format) {
+        java.util.Date utilDate = new java.util.Date(date.getTime());
+        DateFormat df = new SimpleDateFormat(format);
+        return df.format(utilDate);
     }
 }

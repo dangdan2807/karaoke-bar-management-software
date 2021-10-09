@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import DAO.NhanVienDAO;
-import UI.PanelCustom.customUI;
+import UI.PanelCustom.CustomUI;
 import UI.xuLy.CheckPassword;
 import entity.NhanVien;
 
@@ -13,7 +13,7 @@ import java.awt.event.*;
 
 public class fDieuHuong extends JFrame implements ActionListener, MouseListener {
 
-    protected JButton btnLogOut, btnQLBanHang, btnQLHeThong, btnQLThongTinCN;
+    protected JButton btnLogOut, btnQLDatPhong, btnQLHeThong, btnQLThongTinCN;
     private NhanVien staff = null;
     private String STAFF = "Nhân viên", MANAGER = "Quản lý";
     private ImageIcon profileIcon = new ImageIcon(
@@ -72,19 +72,19 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
 
         btnLogOut = new JButton("Đăng xuất");
         btnLogOut.setBounds(645, 0, 108, 26);
-        customUI.getInstance().setCustomBtn(btnLogOut);
+        CustomUI.getInstance().setCustomBtn(btnLogOut);
         pnBottom.add(btnLogOut);
 
-        btnQLBanHang = new JButton("Quản lý đặt phòng");
-        btnQLBanHang.setBounds(261, 44, 240, 240);
-        pnMain.add(btnQLBanHang);
-        btnQLBanHang.setFont(new Font("Dialog", Font.BOLD, 20));
-        btnQLBanHang.setBorder(new LineBorder(Color.decode("#3EA1EC"), 2));
-        btnQLBanHang.setPreferredSize(new Dimension(180, 150));
-        btnQLBanHang.setIcon(sellIcon);
-        btnQLBanHang.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btnQLBanHang.setHorizontalTextPosition(SwingConstants.CENTER);
-        customUI.getInstance().setCustomBtn(btnQLBanHang);
+        btnQLDatPhong = new JButton("Quản lý đặt phòng");
+        btnQLDatPhong.setBounds(261, 44, 240, 240);
+        pnMain.add(btnQLDatPhong);
+        btnQLDatPhong.setFont(new Font("Dialog", Font.BOLD, 20));
+        btnQLDatPhong.setBorder(new LineBorder(Color.decode("#3EA1EC"), 2));
+        btnQLDatPhong.setPreferredSize(new Dimension(180, 150));
+        btnQLDatPhong.setIcon(sellIcon);
+        btnQLDatPhong.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnQLDatPhong.setHorizontalTextPosition(SwingConstants.CENTER);
+        CustomUI.getInstance().setCustomBtn(btnQLDatPhong);
 
         btnQLHeThong = new JButton("Quản Trị");
         btnQLHeThong.setBounds(10, 44, 240, 240);
@@ -95,7 +95,7 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
         btnQLHeThong.setIcon(managerIcon);
         btnQLHeThong.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnQLHeThong.setHorizontalTextPosition(SwingConstants.CENTER);
-        customUI.getInstance().setCustomBtn(btnQLHeThong);
+        CustomUI.getInstance().setCustomBtn(btnQLHeThong);
 
         btnQLThongTinCN = new JButton("Thông Tin Cá Nhân");
         btnQLThongTinCN.setBounds(513, 44, 240, 240);
@@ -106,12 +106,12 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
         btnQLThongTinCN.setIcon(profileIcon);
         btnQLThongTinCN.setVerticalTextPosition(SwingConstants.BOTTOM);
         btnQLThongTinCN.setHorizontalTextPosition(SwingConstants.CENTER);
-        customUI.getInstance().setCustomBtn(btnQLThongTinCN);
+        CustomUI.getInstance().setCustomBtn(btnQLThongTinCN);
 
         btnQLHeThong.addActionListener(this);
         btnQLHeThong.addMouseListener(this);
-        btnQLBanHang.addActionListener(this);
-        btnQLBanHang.addMouseListener(this);
+        btnQLDatPhong.addActionListener(this);
+        btnQLDatPhong.addMouseListener(this);
         btnQLThongTinCN.addActionListener(this);
         btnQLThongTinCN.addMouseListener(this);
 
@@ -119,7 +119,7 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
 
         btnLogOut.addMouseListener(this);
         checkAccount(type);
-        CheckPassword t = new CheckPassword(staff.getTaiKhoan().getMatKhau(), btnQLBanHang, btnQLHeThong, this);
+        CheckPassword t = new CheckPassword(staff.getTaiKhoan().getMatKhau(), btnQLDatPhong, btnQLHeThong, this);
         t.start();
     }
 
@@ -135,13 +135,17 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
             fDangNhap f = new fDangNhap();
             this.setVisible(false);
             f.setVisible(true);
-        } else if (o.equals(btnQLBanHang)) {
+        } else if (o.equals(btnQLDatPhong)) {
             fQuanLyDatPhong f = new fQuanLyDatPhong(staff);
             this.setVisible(false);
             f.setVisible(true);
         } else if (o.equals(btnQLHeThong)) {
             fQuanTri f = new fQuanTri(staff);
             this.setVisible(false);
+            f.setVisible(true);
+        } else if (o.equals(btnQLThongTinCN)) {
+            fThongTinCaNhan f = new fThongTinCaNhan(staff);
+            f.setModal(true);
             f.setVisible(true);
         }
     }
@@ -165,15 +169,15 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
     public void mouseEntered(MouseEvent e) {
         Object o = e.getSource();
         if (o.equals(btnLogOut)) {
-            customUI.getInstance().setCustomBtnHover(btnLogOut);
-        } else if (o.equals(btnQLBanHang)) {
-            customUI.getInstance().setCustomBtnHover(btnQLBanHang);
+            CustomUI.getInstance().setCustomBtnHover(btnLogOut);
+        } else if (o.equals(btnQLDatPhong)) {
+            CustomUI.getInstance().setCustomBtnHover(btnQLDatPhong);
         } else if (o.equals(btnQLHeThong)) {
             if (staff.getChucVu().equalsIgnoreCase(MANAGER)) {
-                customUI.getInstance().setCustomBtnHover(btnQLHeThong);
+                CustomUI.getInstance().setCustomBtnHover(btnQLHeThong);
             }
         } else if (o.equals(btnQLThongTinCN)) {
-            customUI.getInstance().setCustomBtnHover(btnQLThongTinCN);
+            CustomUI.getInstance().setCustomBtnHover(btnQLThongTinCN);
         }
     }
 
@@ -181,15 +185,15 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
     public void mouseExited(MouseEvent e) {
         Object o = e.getSource();
         if (o.equals(btnLogOut)) {
-            customUI.getInstance().setCustomBtn(btnLogOut);
-        } else if (o.equals(btnQLBanHang)) {
-            customUI.getInstance().setCustomBtn(btnQLBanHang);
+            CustomUI.getInstance().setCustomBtn(btnLogOut);
+        } else if (o.equals(btnQLDatPhong)) {
+            CustomUI.getInstance().setCustomBtn(btnQLDatPhong);
         } else if (o.equals(btnQLHeThong)) {
             if (staff.getChucVu().equalsIgnoreCase(MANAGER)) {
-                customUI.getInstance().setCustomBtn(btnQLHeThong);
+                CustomUI.getInstance().setCustomBtn(btnQLHeThong);
             }
         } else if (o.equals(btnQLThongTinCN)) {
-            customUI.getInstance().setCustomBtn(btnQLThongTinCN);
+            CustomUI.getInstance().setCustomBtn(btnQLThongTinCN);
         }
     }
 
@@ -205,20 +209,6 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
             }
         });
     }
-
-    // private boolean checkPassword() {
-    // String password = staff.getTaiKhoan().getMatKhau();
-    // if (password.equalsIgnoreCase("123456")) {
-    // JOptionPane.showMessageDialog(this,
-    // "<html><p>Bạn đang dùng mật khẩu mặc đinh nên sẽ bị khóa các tính năng
-    // khác.<p> Hãy vào phần thông tin cá nhân để đổi mật khẩu và tiếp tục sử dụng
-    // hệ thống</html> ",
-    // "Cảnh báo", JOptionPane.OK_OPTION);
-    // return true;
-    // }
-
-    // return false;
-    // }
 
     private void checkAccount(String type) {
         if (type.equalsIgnoreCase(STAFF)) {

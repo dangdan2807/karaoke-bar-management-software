@@ -41,11 +41,7 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
 
     public void createTabControl() {
         tpTabMain = new JTabbedPane();
-        pRevenue = new pnRevenue();
-        pProduct = new pnProduct(staffLogin);
-        pCategory = new pnCategory(staffLogin);
-        pTable = new pnTable(staffLogin);
-        pAccount = new pnKhachHang(staffLogin);
+        
         tpTabMain.addTab("Doanh thu", null, pRevenue, "Quản lý doanh thu");
         tpTabMain.addTab("Sản phẩm", null, pProduct, "Quản lý sản phẩm");
         tpTabMain.addTab("Loại sản phẩm", null, pCategory, "Quản lý loại sản phẩm");

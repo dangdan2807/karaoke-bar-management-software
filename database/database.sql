@@ -213,13 +213,13 @@ GO
 INSERT INTO dbo.TaiKhoan
     (tenDangNhap, matKhau, tinhTrangTK)
 VALUES
-    ('phamdangdan', '123456', 1),
-    ('huynhtuananh', '123456', 1),
-    ('langnhapsang', '123456', 1),
-    ('vominhhieu', '123456', 1),
-    ('nhanvien1', '123456', 1),
-    ('nhanvien2', '123456', 1),
-    ('nhanvien3', '123456', 1),
+    ('phamdangdan', '1234567', 1),
+    ('huynhtuananh', '1234567', 1),
+    ('langnhapsang', '1234567', 1),
+    ('vominhhieu', '1234567', 1),
+    ('nhanvien1', '1234567', 1),
+    ('nhanvien2', '1234567', 1),
+    ('nhanvien3', '1234567', 1),
     ('nhanvien4', '123456', 1),
     ('nhanvien5', '123456', 0)
 GO

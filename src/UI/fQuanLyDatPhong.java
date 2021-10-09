@@ -6,15 +6,13 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.DateFormat;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import DAO.*;
-import UI.PanelCustom.customUI;
+import UI.PanelCustom.CustomUI;
 import entity.*;
-// import entity.Menu;
 
 public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseListener, ItemListener, ChangeListener {
 	private JButton[] btnDSPhong;
@@ -117,7 +115,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 		btnBack = new JButton("Quay lại", backIcon);
 		btnBack.setBounds(209, 4, 96, 26);
 		pnControlPhong_1.add(btnBack);
-		customUI.getInstance().setCustomBtn(btnBack);
+		CustomUI.getInstance().setCustomBtn(btnBack);
 		btnBack.addActionListener(this);
 		btnBack.addMouseListener(this);
 
@@ -138,12 +136,12 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 
 		btnChuyenPhong = new JButton("Đổi phòng", transferIcon);
 		btnChuyenPhong.setBounds(210, 0, 96, 27);
-		customUI.getInstance().setCustomBtn(btnChuyenPhong);
+		CustomUI.getInstance().setCustomBtn(btnChuyenPhong);
 		pnControlPhong.add(btnChuyenPhong);
 
 		btnLamMoiPhong = new JButton("Làm mới", refreshIcon);
 		btnLamMoiPhong.setBounds(210, 33, 96, 27);
-		customUI.getInstance().setCustomBtn(btnLamMoiPhong);
+		CustomUI.getInstance().setCustomBtn(btnLamMoiPhong);
 		pnControlPhong.add(btnLamMoiPhong);
 
 		cboMaPhong = new JComboBox<String>();
@@ -258,22 +256,22 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 
 		btnThanhToan = new JButton("Thanh toán", paymentIcon);
 		btnThanhToan.setBounds(368, 172, 110, 26);
-		customUI.getInstance().setCustomBtn(btnThanhToan);
+		CustomUI.getInstance().setCustomBtn(btnThanhToan);
 		pnBillInfo.add(btnThanhToan);
 
 		btnDatTruoc = new JButton("Đặt trước", null);
 		btnDatTruoc.setBounds(12, 172, 110, 26);
-		customUI.getInstance().setCustomBtn(btnDatTruoc);
+		CustomUI.getInstance().setCustomBtn(btnDatTruoc);
 		pnBillInfo.add(btnDatTruoc);
 
 		btnThueNgay = new JButton("Thuê ngay", null);
 		btnThueNgay.setBounds(132, 172, 110, 26);
-		customUI.getInstance().setCustomBtn(btnThueNgay);
+		CustomUI.getInstance().setCustomBtn(btnThueNgay);
 		pnBillInfo.add(btnThueNgay);
 
 		btnHuyDatPhong = new JButton("Hủy đặt", null);
 		btnHuyDatPhong.setBounds(248, 172, 110, 26);
-		customUI.getInstance().setCustomBtn(btnHuyDatPhong);
+		CustomUI.getInstance().setCustomBtn(btnHuyDatPhong);
 		pnBillInfo.add(btnHuyDatPhong);
 
 		JLabel lblTongTien = new JLabel("Tổng tiền: ");
@@ -330,7 +328,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 
 		btnChonKH = new JButton("Chọn KH", null);
 		btnChonKH.setBounds(248, 133, 230, 26);
-		customUI.getInstance().setCustomBtn(btnChonKH);
+		CustomUI.getInstance().setCustomBtn(btnChonKH);
 		pnBillInfo.add(btnChonKH);
 
 		txtTenKH = new JTextField();
@@ -370,7 +368,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 
 		btnTimDichVu = new JButton("Tìm", searchIcon);
 		btnTimDichVu.setBounds(292, 7, 131, 26);
-		customUI.getInstance().setCustomBtn(btnTimDichVu);
+		CustomUI.getInstance().setCustomBtn(btnTimDichVu);
 		pnControlProduct.add(btnTimDichVu);
 
 		JLabel lbSLDVDat = new JLabel("Số lượng đặt: ");
@@ -384,12 +382,12 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 
 		btnThem = new JButton("Thêm", addIcon);
 		btnThem.setBounds(292, 40, 131, 26);
-		customUI.getInstance().setCustomBtn(btnThem);
+		CustomUI.getInstance().setCustomBtn(btnThem);
 		pnControlProduct.add(btnThem);
 
 		btnXoa = new JButton("Hủy", trashIcon);
 		btnXoa.setBounds(292, 76, 131, 26);
-		customUI.getInstance().setCustomBtn(btnXoa);
+		CustomUI.getInstance().setCustomBtn(btnXoa);
 		pnControlProduct.add(btnXoa);
 
 		JLabel lbSLDVCon = new JLabel("Số lượng còn: ");
@@ -414,7 +412,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 
 		btnLamMoiDV = new JButton("Làm mới", refreshIcon);
 		btnLamMoiDV.setBounds(292, 113, 131, 26);
-		customUI.getInstance().setCustomBtn(btnLamMoiDV);
+		CustomUI.getInstance().setCustomBtn(btnLamMoiDV);
 		pnControlProduct.add(btnLamMoiDV);
 
 		JPanel pnProductList = new JPanel();
@@ -639,29 +637,29 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnChuyenPhong)) {
-			customUI.getInstance().setCustomBtnHover(btnChuyenPhong);
+			CustomUI.getInstance().setCustomBtnHover(btnChuyenPhong);
 		} else if (o.equals(btnLamMoiPhong)) {
-			customUI.getInstance().setCustomBtnHover(btnLamMoiPhong);
+			CustomUI.getInstance().setCustomBtnHover(btnLamMoiPhong);
 		} else if (o.equals(btnTimDichVu)) {
-			customUI.getInstance().setCustomBtnHover(btnTimDichVu);
+			CustomUI.getInstance().setCustomBtnHover(btnTimDichVu);
 		} else if (o.equals(btnThanhToan)) {
-			customUI.getInstance().setCustomBtnHover(btnThanhToan);
+			CustomUI.getInstance().setCustomBtnHover(btnThanhToan);
 		} else if (o.equals(btnThem)) {
-			customUI.getInstance().setCustomBtnHover(btnThem);
+			CustomUI.getInstance().setCustomBtnHover(btnThem);
 		} else if (o.equals(btnXoa)) {
-			customUI.getInstance().setCustomBtnHover(btnXoa);
+			CustomUI.getInstance().setCustomBtnHover(btnXoa);
 		} else if (o.equals(btnBack)) {
-			customUI.getInstance().setCustomBtnHover(btnBack);
+			CustomUI.getInstance().setCustomBtnHover(btnBack);
 		} else if (o.equals(btnLamMoiDV)) {
-			customUI.getInstance().setCustomBtnHover(btnLamMoiDV);
+			CustomUI.getInstance().setCustomBtnHover(btnLamMoiDV);
 		} else if (o.equals(btnThueNgay)) {
-			customUI.getInstance().setCustomBtnHover(btnThueNgay);
+			CustomUI.getInstance().setCustomBtnHover(btnThueNgay);
 		} else if (o.equals(btnDatTruoc)) {
-			customUI.getInstance().setCustomBtnHover(btnDatTruoc);
+			CustomUI.getInstance().setCustomBtnHover(btnDatTruoc);
 		} else if (o.equals(btnHuyDatPhong)) {
-			customUI.getInstance().setCustomBtnHover(btnHuyDatPhong);
+			CustomUI.getInstance().setCustomBtnHover(btnHuyDatPhong);
 		} else if (o.equals(btnChonKH)) {
-			customUI.getInstance().setCustomBtnHover(btnChonKH);
+			CustomUI.getInstance().setCustomBtnHover(btnChonKH);
 		}
 	}
 
@@ -669,29 +667,29 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 	public void mouseExited(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnChuyenPhong)) {
-			customUI.getInstance().setCustomBtn(btnChuyenPhong);
+			CustomUI.getInstance().setCustomBtn(btnChuyenPhong);
 		} else if (o.equals(btnLamMoiPhong)) {
-			customUI.getInstance().setCustomBtn(btnLamMoiPhong);
+			CustomUI.getInstance().setCustomBtn(btnLamMoiPhong);
 		} else if (o.equals(btnTimDichVu)) {
-			customUI.getInstance().setCustomBtn(btnTimDichVu);
+			CustomUI.getInstance().setCustomBtn(btnTimDichVu);
 		} else if (o.equals(btnThanhToan)) {
-			customUI.getInstance().setCustomBtn(btnThanhToan);
+			CustomUI.getInstance().setCustomBtn(btnThanhToan);
 		} else if (o.equals(btnThem)) {
-			customUI.getInstance().setCustomBtn(btnThem);
+			CustomUI.getInstance().setCustomBtn(btnThem);
 		} else if (o.equals(btnXoa)) {
-			customUI.getInstance().setCustomBtn(btnXoa);
+			CustomUI.getInstance().setCustomBtn(btnXoa);
 		} else if (o.equals(btnBack)) {
-			customUI.getInstance().setCustomBtn(btnBack);
+			CustomUI.getInstance().setCustomBtn(btnBack);
 		} else if (o.equals(btnLamMoiDV)) {
-			customUI.getInstance().setCustomBtn(btnLamMoiDV);
+			CustomUI.getInstance().setCustomBtn(btnLamMoiDV);
 		} else if (o.equals(btnThueNgay)) {
-			customUI.getInstance().setCustomBtn(btnThueNgay);
+			CustomUI.getInstance().setCustomBtn(btnThueNgay);
 		} else if (o.equals(btnDatTruoc)) {
-			customUI.getInstance().setCustomBtn(btnDatTruoc);
+			CustomUI.getInstance().setCustomBtn(btnDatTruoc);
 		} else if (o.equals(btnHuyDatPhong)) {
-			customUI.getInstance().setCustomBtn(btnHuyDatPhong);
+			CustomUI.getInstance().setCustomBtn(btnHuyDatPhong);
 		} else if (o.equals(btnChonKH)) {
-			customUI.getInstance().setCustomBtn(btnChonKH);
+			CustomUI.getInstance().setCustomBtn(btnChonKH);
 		}
 	}
 
@@ -802,7 +800,6 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 			btnDSPhong[selection].addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 					if (viTri != -1) {
 						btnDSPhong[viTri].setBorder(lineGray);
 					}
@@ -814,10 +811,15 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, MouseList
 					if (hoaDon != null) {
 						txtMaHoaDon.setText(String.valueOf(hoaDon.getMaHoaDon()));
 						CTPhong ctPhong = hoaDon.getCtPhong();
-						java.util.Date utilDate = new java.util.Date(ctPhong.getNgayGioNhan().getTime());
-						txtTGBatDau.setText(df.format(utilDate));
-						utilDate = new java.util.Date(ctPhong.getNgayGioTra().getTime());
-						txtGTKetThuc.setText(df.format(utilDate));
+						String format = "dd-MM-yyyy HH:mm:ss";
+						Timestamp ngayGioNhan = ctPhong.getNgayGioNhan();
+						Timestamp ngayGioTra = ctPhong.getNgayGioTra();
+						String ngayGioNhanStr = CustomUI.getInstance()
+								.convertSqlTimestampToUtilDateFormatString(ngayGioNhan, format);
+						String ngayGioTraStr = CustomUI.getInstance()
+								.convertSqlTimestampToUtilDateFormatString(ngayGioTra, format);
+						txtTGBatDau.setText(ngayGioNhanStr);
+						txtGTKetThuc.setText(ngayGioTraStr);
 					} else
 						txtMaHoaDon.setText("");
 					spinSLDat.setValue(1);

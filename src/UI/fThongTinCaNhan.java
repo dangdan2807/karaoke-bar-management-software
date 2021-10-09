@@ -3,18 +3,20 @@ package UI;
 import javax.swing.*;
 
 import DAO.NhanVienDAO;
-import UI.PanelCustom.customUI;
+import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.kDatePicker;
 import entity.NhanVien;
-import entity.TaiKhoan;
 
 import java.awt.Color;
-// import javax.swing.event.*;
-// import java.awt.*;
+import java.awt.Font;
 import java.awt.event.*;
-import javax.swing.border.TitledBorder;
+import java.text.DecimalFormat;
 
-public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListener, MouseListener {
+import javax.swing.border.TitledBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+
+public class fThongTinCaNhan extends JDialog
+        implements ActionListener, KeyListener, MouseListener, FocusListener, ItemListener {
     private JLabel lbTenDangNhap, lbHoTen, lbMatKhau, lbMatKhauMoi, lbNLMatKhauMoi, lbGioiTinh;
     private JLabel lbMucLuong;
     private JTextField txtTenDangNhap, txtHoTen, txtMatKhau, txtMatKhauMoi, txtNLMatKhauMoi;
@@ -25,14 +27,14 @@ public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListen
 
     private int withPn = 400, heightPn = 315;
     private NhanVien nhanVienLogin = null;
-    private fQuanLyDatPhong fManagerSale = null;
+    private JCheckBox chkDoiMatKhau;
 
     public fThongTinCaNhan(NhanVien nhanVien) {
-        setTitle("Thông tin tài khoản");
-        setSize(824, 352);
+        setTitle("Quản Lý Thông Tin Tài Khoản");
+        setSize(824, 348);
         setResizable(false);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.nhanVienLogin = nhanVien;
         createFormAccountProfile();
     }
@@ -44,9 +46,9 @@ public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListen
         pnMain.setBackground(Color.WHITE);
 
         btnUpdate = new JButton("Cập nhật");
-        customUI.getInstance().setCustomBtn(btnUpdate);
+        CustomUI.getInstance().setCustomBtn(btnUpdate);
         btnClose = new JButton("Thoát");
-        customUI.getInstance().setCustomBtn(btnClose);
+        CustomUI.getInstance().setCustomBtn(btnClose);
         pnMain.add(btnUpdate);
         pnMain.add(btnClose);
 
@@ -59,15 +61,19 @@ public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListen
         pnTTCN.setBorder(
                 new TitledBorder(null, "Thông tin cá nhân ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         pnTTCN.setBackground(Color.WHITE);
-        pnTTCN.setBounds(10, 0, 390, 271);
+        pnTTCN.setBounds(10, 0, 390, 269);
         pnMain.add(pnTTCN);
         pnTTCN.setLayout(null);
+
         lbHoTen = new JLabel("Tên nhân viên: ");
         lbHoTen.setBounds(10, 16, 120, 25);
         pnTTCN.add(lbHoTen);
+
         txtHoTen = new JTextField();
         txtHoTen.setBounds(130, 16, 250, 25);
         pnTTCN.add(txtHoTen);
+        txtHoTen.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtHoTen.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
 
         JLabel lbCMND = new JLabel("CMND/CCCD: ");
         lbCMND.setBounds(10, 52, 120, 25);
@@ -76,8 +82,13 @@ public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListen
         txtCMND = new JTextField();
         txtCMND.setBounds(130, 52, 250, 25);
         pnTTCN.add(txtCMND);
+        txtCMND.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtCMND.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
 
         dpNgaySinh = new kDatePicker(250, 25);
+        dpNgaySinh.setBorderCustom(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        dpNgaySinh.setBackgroundColor(Color.WHITE);
+        dpNgaySinh.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
         dpNgaySinh.setBounds(130, 88, 250, 25);
         pnTTCN.add(dpNgaySinh);
 
@@ -92,11 +103,15 @@ public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListen
         txtSDT = new JTextField();
         txtSDT.setBounds(130, 124, 250, 25);
         pnTTCN.add(txtSDT);
+        txtSDT.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtSDT.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
 
         txtChucVu = new JTextField();
         txtChucVu.setBounds(130, 160, 250, 25);
         pnTTCN.add(txtChucVu);
         txtChucVu.setEditable(false);
+        txtChucVu.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtChucVu.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
 
         JLabel lbChucVu = new JLabel("Chức vụ: ");
         lbChucVu.setBounds(10, 160, 120, 25);
@@ -107,67 +122,113 @@ public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListen
         pnTTCN.add(lbGioiTinh);
 
         cboGioiTinh = new JComboBox<String>();
+        cboGioiTinh.setUI(new BasicComboBoxUI());
         cboGioiTinh.addItem("Nam");
         cboGioiTinh.addItem("Nữ");
         cboGioiTinh.setBounds(130, 196, 250, 25);
         pnTTCN.add(cboGioiTinh);
+        cboGioiTinh.setFont(new Font("Dialog", Font.PLAIN, 14));
+        cboGioiTinh.setBackground(Color.WHITE);
+        cboGioiTinh.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#1a66e3")));
 
         txtMucLuong = new JTextField();
         txtMucLuong.setBounds(130, 232, 250, 25);
         pnTTCN.add(txtMucLuong);
         txtMucLuong.setEditable(false);
+        txtMucLuong.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtMucLuong.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
 
         lbMucLuong = new JLabel("Mức Lương: ");
         lbMucLuong.setBounds(10, 232, 120, 25);
         pnTTCN.add(lbMucLuong);
 
-        JPanel pnTTTK = new JPanel();
-        pnTTTK.setLayout(null);
-        pnTTTK.setBorder(
+        JPanel pnTTTaiKhoan = new JPanel();
+        pnTTTaiKhoan.setLayout(null);
+        pnTTTaiKhoan.setBorder(
                 new TitledBorder(null, "Thông tin tài khoản ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnTTTK.setBackground(Color.WHITE);
-        pnTTTK.setBounds(410, 0, 390, 271);
-        pnMain.add(pnTTTK);
+        pnTTTaiKhoan.setBackground(Color.WHITE);
+        pnTTTaiKhoan.setBounds(410, 0, 390, 90);
+        pnMain.add(pnTTTaiKhoan);
 
         lbTenDangNhap = new JLabel("Tên đăng nhập: ");
         lbTenDangNhap.setBounds(10, 16, 120, 25);
-        pnTTTK.add(lbTenDangNhap);
-
+        pnTTTaiKhoan.add(lbTenDangNhap);
         txtTenDangNhap = new JTextField();
         txtTenDangNhap.setBounds(130, 16, 250, 25);
-        pnTTTK.add(txtTenDangNhap);
+
         txtTenDangNhap.setEditable(false);
         txtTenDangNhap.setBackground(Color.decode("#f9f9f9"));
+        pnTTTaiKhoan.add(txtTenDangNhap);
+        txtTenDangNhap.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtTenDangNhap.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+
         lbMatKhau = new JLabel("Mật khẩu: ");
         lbMatKhau.setBounds(10, 52, 120, 25);
-        pnTTTK.add(lbMatKhau);
+        pnTTTaiKhoan.add(lbMatKhau);
+
         txtMatKhau = new JPasswordField();
         txtMatKhau.setBounds(130, 52, 250, 25);
-        pnTTTK.add(txtMatKhau);
-        txtMatKhauMoi = new JPasswordField();
-        txtMatKhauMoi.setBounds(130, 88, 250, 25);
-        pnTTTK.add(txtMatKhauMoi);
+        pnTTTaiKhoan.add(txtMatKhau);
+        txtMatKhau.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtMatKhau.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+
+        JPanel pnTTMatKhau = new JPanel();
+        pnTTMatKhau.setLayout(null);
+        pnTTMatKhau
+                .setBorder(new TitledBorder(null, "Đổi mật khẩu ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        pnTTMatKhau.setBackground(Color.WHITE);
+        pnTTMatKhau.setBounds(410, 100, 390, 169);
+        pnMain.add(pnTTMatKhau);
+
         lbMatKhauMoi = new JLabel("Mật khẩu mới: ");
-        lbMatKhauMoi.setBounds(10, 88, 120, 25);
-        pnTTTK.add(lbMatKhauMoi);
+        lbMatKhauMoi.setBounds(10, 46, 120, 25);
+        pnTTMatKhau.add(lbMatKhauMoi);
+
+        txtMatKhauMoi = new JPasswordField();
+        txtMatKhauMoi.setBounds(130, 46, 250, 25);
+        txtMatKhauMoi.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtMatKhauMoi.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        txtMatKhauMoi.setEditable(false);
+        pnTTMatKhau.add(txtMatKhauMoi);
+
+        chkDoiMatKhau = new JCheckBox("Đổi mật khẩu");
+        chkDoiMatKhau.setBounds(10, 16, 370, 23);
+        chkDoiMatKhau.setFont(new Font("Dialog", Font.BOLD, 12));
+        chkDoiMatKhau.setBackground(Color.WHITE);
+        pnTTMatKhau.add(chkDoiMatKhau);
+
         lbNLMatKhauMoi = new JLabel("Nhập lại: ");
-        lbNLMatKhauMoi.setBounds(10, 124, 120, 25);
-        pnTTTK.add(lbNLMatKhauMoi);
+        lbNLMatKhauMoi.setBounds(10, 82, 120, 25);
+        pnTTMatKhau.add(lbNLMatKhauMoi);
+
         txtNLMatKhauMoi = new JPasswordField();
-        txtNLMatKhauMoi.setBounds(130, 124, 250, 25);
-        pnTTTK.add(txtNLMatKhauMoi);
-        txtNLMatKhauMoi.addKeyListener(this);
-        txtMatKhauMoi.addKeyListener(this);
-        txtMatKhau.addKeyListener(this);
+        txtNLMatKhauMoi.setBounds(130, 82, 250, 25);
+        txtNLMatKhauMoi.setEditable(false);
+        txtNLMatKhauMoi.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtNLMatKhauMoi.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        pnTTMatKhau.add(txtNLMatKhauMoi);
 
         txtHoTen.addKeyListener(this);
-        changeAccount(nhanVienLogin);
-
+        txtMatKhau.addKeyListener(this);
+        txtMatKhauMoi.addKeyListener(this);
+        txtNLMatKhauMoi.addKeyListener(this);
+        
         btnUpdate.addActionListener(this);
         btnClose.addActionListener(this);
 
         btnUpdate.addMouseListener(this);
         btnClose.addMouseListener(this);
+
+        txtHoTen.addFocusListener(this);
+        txtMatKhau.addFocusListener(this);
+        txtCMND.addFocusListener(this);
+        txtSDT.addFocusListener(this);
+        txtMatKhauMoi.addFocusListener(this);
+        txtNLMatKhauMoi.addFocusListener(this);
+
+        chkDoiMatKhau.addItemListener(this);
+
+        changeAccount(nhanVienLogin);
     }
 
     public static void main(String[] args) {
@@ -179,7 +240,7 @@ public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListen
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if (o.equals(btnUpdate)) {
-            updateAccount();
+            capNhatThongTin();
         } else if (o.equals(btnClose)) {
             this.dispose();
         }
@@ -225,9 +286,9 @@ public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListen
     public void mouseEntered(MouseEvent e) {
         Object o = e.getSource();
         if (o.equals(btnUpdate)) {
-            customUI.getInstance().setCustomBtnHover(btnUpdate);
+            CustomUI.getInstance().setCustomBtnHover(btnUpdate);
         } else if (o.equals(btnClose)) {
-            customUI.getInstance().setCustomBtnHover(btnClose);
+            CustomUI.getInstance().setCustomBtnHover(btnClose);
         }
     }
 
@@ -235,18 +296,78 @@ public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListen
     public void mouseExited(MouseEvent e) {
         Object o = e.getSource();
         if (o.equals(btnUpdate)) {
-            customUI.getInstance().setCustomBtn(btnUpdate);
+            CustomUI.getInstance().setCustomBtn(btnUpdate);
         } else if (o.equals(btnClose)) {
-            customUI.getInstance().setCustomBtn(btnClose);
+            CustomUI.getInstance().setCustomBtn(btnClose);
+        }
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        Object o = e.getSource();
+        if (o.equals(txtHoTen)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtHoTen);
+        } else if (o.equals(txtCMND)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtCMND);
+        } else if (o.equals(txtSDT)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtSDT);
+        } else if (o.equals(txtMatKhau)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtMatKhau);
+        } else if (o.equals(txtMatKhauMoi)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtMatKhauMoi);
+        } else if (o.equals(txtNLMatKhauMoi)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtNLMatKhauMoi);
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        Object o = e.getSource();
+        if (o.equals(txtHoTen)) {
+            txtHoTen.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        } else if (o.equals(txtCMND)) {
+            txtCMND.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        } else if (o.equals(txtSDT)) {
+            txtSDT.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        } else if (o.equals(txtMatKhau)) {
+            txtMatKhau.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        } else if (o.equals(txtMatKhauMoi)) {
+            txtMatKhauMoi.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        } else if (o.equals(txtNLMatKhauMoi)) {
+            txtNLMatKhauMoi.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+        }
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        Object o = e.getSource();
+        if (o.equals(chkDoiMatKhau)) {
+            txtMatKhauMoi.setEditable(chkDoiMatKhau.isSelected());
+            txtNLMatKhauMoi.setEditable(chkDoiMatKhau.isSelected());
         }
     }
 
     private void changeAccount(NhanVien nhanVien) {
-        TaiKhoan taiKhoan = nhanVien.getTaiKhoan();
-        txtTenDangNhap.setText(taiKhoan.getTenDangNhap());
+        this.nhanVienLogin = nhanVien;
+        txtHoTen.setText(nhanVien.getHoTen());
+        txtCMND.setText(nhanVien.getCmnd());
+        dpNgaySinh.setValue(nhanVien.getNgaySinh());
+        txtSDT.setText(nhanVien.getSoDienThoai());
+        txtChucVu.setText(nhanVien.getChucVu());
+        boolean gioiTinh = nhanVien.getGioiTinh();
+        cboGioiTinh.setSelectedIndex(0);
+        if (gioiTinh == false) {
+            cboGioiTinh.setSelectedIndex(1);
+        }
+        DecimalFormat df = new DecimalFormat("#,###.##");
+        txtMucLuong.setText(df.format(nhanVien.getMucLuong()));
+        txtTenDangNhap.setText(nhanVien.getTaiKhoan().getTenDangNhap());
+        txtMatKhau.setText("");
+        txtMatKhauMoi.setText("");
+        txtNLMatKhauMoi.setText("");
     }
 
-    private void updateAccount() {
+    private void capNhatThongTin() {
         String username = txtTenDangNhap.getText().trim();
         String displayName = txtHoTen.getText().trim();
         String password = txtMatKhau.getText().trim();
@@ -270,4 +391,5 @@ public class fThongTinCaNhan extends JFrame implements ActionListener, KeyListen
             // }
         }
     }
+
 }

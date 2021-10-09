@@ -3,8 +3,6 @@ package UI.PanelCustom;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import DAO.BillDAO;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -41,7 +39,7 @@ public class pnRevenue extends JPanel implements interfaceBtn, ActionListener, M
         dpTuNgay = new kDatePicker();
         dpDenNgay = new kDatePicker();
         btnStatistic = new JButton("Thống kê", analyticsIcon);
-        customUI.getInstance().setCustomBtn(btnStatistic);
+        CustomUI.getInstance().setCustomBtn(btnStatistic);
 
         String[] cols = { "STT", "Mã HD", "Tên bàn", "Ngày checkIn", "Ngày checkOut", "Giảm giá", "Thành tiền" };
         modelTable = new DefaultTableModel(cols, 0) {
@@ -84,12 +82,12 @@ public class pnRevenue extends JPanel implements interfaceBtn, ActionListener, M
         btnStatistic.setBounds(477, 18, 120, 26);
 
         btnBack = new JButton("Thoát", backIcon);
-        customUI.getInstance().setCustomBtn(btnBack);
+        CustomUI.getInstance().setCustomBtn(btnBack);
         btnBack.setBounds(609, 18, 120, 26);
         pnStatistic.add(btnBack);
 
         btnLogOut = new JButton("Đăng xuất", logOutIcon);
-        customUI.getInstance().setCustomBtn(btnLogOut);
+        CustomUI.getInstance().setCustomBtn(btnLogOut);
         btnLogOut.setBounds(741, 18, 120, 26);
         pnStatistic.add(btnLogOut);
 
@@ -100,7 +98,7 @@ public class pnRevenue extends JPanel implements interfaceBtn, ActionListener, M
         pnTop.add(pnTitle);
 
         JLabel lbTitle = new JLabel("Quản lý Doanh Thu");
-        customUI.getInstance().setCustomLbTitle(lbTitle);
+        CustomUI.getInstance().setCustomLbTitle(lbTitle);
         pnTitle.add(lbTitle);
         pnTable.setBounds(10, 25, 1250, 600);
 
@@ -119,11 +117,11 @@ public class pnRevenue extends JPanel implements interfaceBtn, ActionListener, M
         add(pnSouth, BorderLayout.SOUTH);
 
         btnFirst = new JButton("Trang đầu");
-        customUI.getInstance().setCustomBtn(btnFirst);
+        CustomUI.getInstance().setCustomBtn(btnFirst);
         pnSouth.add(btnFirst);
 
         btnPrevious = new JButton("Trang trước");
-        customUI.getInstance().setCustomBtn(btnPrevious);
+        CustomUI.getInstance().setCustomBtn(btnPrevious);
         pnSouth.add(btnPrevious);
 
         JLabel lbSpace = new JLabel("");
@@ -141,11 +139,11 @@ public class pnRevenue extends JPanel implements interfaceBtn, ActionListener, M
         pnSouth.add(lbLastPageNum);
 
         btnNext = new JButton("Trang sau");
-        customUI.getInstance().setCustomBtn(btnNext);
+        CustomUI.getInstance().setCustomBtn(btnNext);
         pnSouth.add(btnNext);
 
         btnLast = new JButton("Trang cuối");
-        customUI.getInstance().setCustomBtn(btnLast);
+        CustomUI.getInstance().setCustomBtn(btnLast);
         pnSouth.add(btnLast);
 
         loadListBillByDate(dateCheckIn, dateCheckOut, 1);
@@ -214,19 +212,19 @@ public class pnRevenue extends JPanel implements interfaceBtn, ActionListener, M
     public void mouseEntered(MouseEvent e) {
         Object o = e.getSource();
         if (o.equals(btnStatistic)) {
-            customUI.getInstance().setCustomBtnHover(btnStatistic);
+            CustomUI.getInstance().setCustomBtnHover(btnStatistic);
         } else if (o.equals(btnLogOut)) {
-            customUI.getInstance().setCustomBtnHover(btnLogOut);
+            CustomUI.getInstance().setCustomBtnHover(btnLogOut);
         } else if (o.equals(btnBack)) {
-            customUI.getInstance().setCustomBtnHover(btnBack);
+            CustomUI.getInstance().setCustomBtnHover(btnBack);
         } else if (o.equals(btnFirst)) {
-            customUI.getInstance().setCustomBtnHover(btnFirst);
+            CustomUI.getInstance().setCustomBtnHover(btnFirst);
         } else if (o.equals(btnPrevious)) {
-            customUI.getInstance().setCustomBtnHover(btnPrevious);
+            CustomUI.getInstance().setCustomBtnHover(btnPrevious);
         } else if (o.equals(btnNext)) {
-            customUI.getInstance().setCustomBtnHover(btnNext);
+            CustomUI.getInstance().setCustomBtnHover(btnNext);
         } else if (o.equals(btnLast)) {
-            customUI.getInstance().setCustomBtnHover(btnLast);
+            CustomUI.getInstance().setCustomBtnHover(btnLast);
         }
     }
 
@@ -234,19 +232,19 @@ public class pnRevenue extends JPanel implements interfaceBtn, ActionListener, M
     public void mouseExited(MouseEvent e) {
         Object o = e.getSource();
         if (o.equals(btnStatistic)) {
-            customUI.getInstance().setCustomBtn(btnStatistic);
+            CustomUI.getInstance().setCustomBtn(btnStatistic);
         } else if (o.equals(btnLogOut)) {
-            customUI.getInstance().setCustomBtn(btnLogOut);
+            CustomUI.getInstance().setCustomBtn(btnLogOut);
         } else if (o.equals(btnBack)) {
-            customUI.getInstance().setCustomBtn(btnBack);
+            CustomUI.getInstance().setCustomBtn(btnBack);
         } else if (o.equals(btnFirst)) {
-            customUI.getInstance().setCustomBtn(btnFirst);
+            CustomUI.getInstance().setCustomBtn(btnFirst);
         } else if (o.equals(btnPrevious)) {
-            customUI.getInstance().setCustomBtn(btnPrevious);
+            CustomUI.getInstance().setCustomBtn(btnPrevious);
         } else if (o.equals(btnNext)) {
-            customUI.getInstance().setCustomBtn(btnNext);
+            CustomUI.getInstance().setCustomBtn(btnNext);
         } else if (o.equals(btnLast)) {
-            customUI.getInstance().setCustomBtn(btnLast);
+            CustomUI.getInstance().setCustomBtn(btnLast);
         }
     }
 

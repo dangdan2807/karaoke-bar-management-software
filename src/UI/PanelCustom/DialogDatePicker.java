@@ -27,7 +27,7 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
 
     public DialogDatePicker() {
         setTitle("Chọn ngày");
-        setSize(447, 260);
+        setSize(447, 240);
         setResizable(false);
         setLocationRelativeTo(null);
 

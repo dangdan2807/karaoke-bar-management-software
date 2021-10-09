@@ -52,7 +52,7 @@ public class pnKhachHang extends JFrame
 		pnTop.add(pnTitle);
 
 		JLabel lbTitle = new JLabel("Quán Lý Khách Hàng");
-		customUI.getInstance().setCustomLbTitle(lbTitle);
+		CustomUI.getInstance().setCustomLbTitle(lbTitle);
 		pnTitle.add(lbTitle);
 
 		JPanel pnInfo = new JPanel();
@@ -87,27 +87,27 @@ public class pnKhachHang extends JFrame
 
 		btnThem = new JButton("Thêm", addIcon);
 		btnThem.setBounds(10, 77, 101, 26);
-		customUI.getInstance().setCustomBtn(btnThem);
+		CustomUI.getInstance().setCustomBtn(btnThem);
 		pnInfo.add(btnThem);
 
 		btnSua = new JButton("Sửa", updateIcon);
 		btnSua.setBounds(123, 78, 101, 26);
-		customUI.getInstance().setCustomBtn(btnSua);
+		CustomUI.getInstance().setCustomBtn(btnSua);
 		pnInfo.add(btnSua);
 
 		btnLamMoi = new JButton("Làm mới", refreshIcon);
 		btnLamMoi.setBounds(236, 78, 110, 26);
-		customUI.getInstance().setCustomBtn(btnLamMoi);
+		CustomUI.getInstance().setCustomBtn(btnLamMoi);
 		pnInfo.add(btnLamMoi);
 
 		btnLogOut = new JButton("Đăng xuất", logOutIcon);
 		btnLogOut.setBounds(471, 78, 120, 26);
-		customUI.getInstance().setCustomBtn(btnLogOut);
+		CustomUI.getInstance().setCustomBtn(btnLogOut);
 		pnInfo.add(btnLogOut);
 
 		btnBack = new JButton("Quay lại", backIcon);
 		btnBack.setBounds(358, 79, 101, 26);
-		customUI.getInstance().setCustomBtn(btnBack);
+		CustomUI.getInstance().setCustomBtn(btnBack);
 		pnInfo.add(btnBack);
 
 		JLabel lbCmnd = new JLabel("CMND/CCCD:");
@@ -187,12 +187,12 @@ public class pnKhachHang extends JFrame
 
 		btnTim = new JButton("Tìm kiếm", searchIcon);
 		btnTim.setBounds(518, 7, 120, 26);
-		customUI.getInstance().setCustomBtn(btnTim);
+		CustomUI.getInstance().setCustomBtn(btnTim);
 		pnSearch.add(btnTim);
 
 		btnViewAll = new JButton("Xem tất cả", null);
 		btnViewAll.setBounds(650, 7, 120, 26);
-		customUI.getInstance().setCustomBtn(btnViewAll);
+		CustomUI.getInstance().setCustomBtn(btnViewAll);
 		pnSearch.add(btnViewAll);
 
 		String[] cols = { "STT", "Mã khách hàng", "Tên khách hàng", "CMND/CCCD", "Ngày sinh", "Giới tính",
@@ -375,19 +375,19 @@ public class pnKhachHang extends JFrame
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			customUI.getInstance().setCustomBtnHover(btnThem);
+			CustomUI.getInstance().setCustomBtnHover(btnThem);
 		} else if (o.equals(btnSua)) {
-			customUI.getInstance().setCustomBtnHover(btnSua);
+			CustomUI.getInstance().setCustomBtnHover(btnSua);
 		} else if (o.equals(btnLamMoi)) {
-			customUI.getInstance().setCustomBtnHover(btnLamMoi);
+			CustomUI.getInstance().setCustomBtnHover(btnLamMoi);
 		} else if (o.equals(btnBack)) {
-			customUI.getInstance().setCustomBtnHover(btnBack);
+			CustomUI.getInstance().setCustomBtnHover(btnBack);
 		} else if (o.equals(btnLogOut)) {
-			customUI.getInstance().setCustomBtnHover(btnLogOut);
+			CustomUI.getInstance().setCustomBtnHover(btnLogOut);
 		} else if (o.equals(btnTim)) {
-			customUI.getInstance().setCustomBtnHover(btnTim);
+			CustomUI.getInstance().setCustomBtnHover(btnTim);
 		} else if (o.equals(btnViewAll)) {
-			customUI.getInstance().setCustomBtnHover(btnViewAll);
+			CustomUI.getInstance().setCustomBtnHover(btnViewAll);
 		}
 	}
 
@@ -395,19 +395,19 @@ public class pnKhachHang extends JFrame
 	public void mouseExited(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			customUI.getInstance().setCustomBtn(btnThem);
+			CustomUI.getInstance().setCustomBtn(btnThem);
 		} else if (o.equals(btnSua)) {
-			customUI.getInstance().setCustomBtn(btnSua);
+			CustomUI.getInstance().setCustomBtn(btnSua);
 		} else if (o.equals(btnLamMoi)) {
-			customUI.getInstance().setCustomBtn(btnLamMoi);
+			CustomUI.getInstance().setCustomBtn(btnLamMoi);
 		} else if (o.equals(btnBack)) {
-			customUI.getInstance().setCustomBtn(btnBack);
+			CustomUI.getInstance().setCustomBtn(btnBack);
 		} else if (o.equals(btnLogOut)) {
-			customUI.getInstance().setCustomBtn(btnLogOut);
+			CustomUI.getInstance().setCustomBtn(btnLogOut);
 		} else if (o.equals(btnTim)) {
-			customUI.getInstance().setCustomBtn(btnTim);
+			CustomUI.getInstance().setCustomBtn(btnTim);
 		} else if (o.equals(btnViewAll)) {
-			customUI.getInstance().setCustomBtn(btnViewAll);
+			CustomUI.getInstance().setCustomBtn(btnViewAll);
 		}
 	}
 

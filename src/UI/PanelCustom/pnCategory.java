@@ -46,7 +46,7 @@ public class pnCategory extends JPanel implements interfaceBtn, ActionListener, 
         pnTop.add(pnTitle);
 
         JLabel lbTitle = new JLabel("Quản Lý Loại Sản Phẩm");
-        customUI.getInstance().setCustomLbTitle(lbTitle);
+        CustomUI.getInstance().setCustomLbTitle(lbTitle);
         pnTitle.add(lbTitle);
 
         JPanel pnInfo = new JPanel();
@@ -79,32 +79,32 @@ public class pnCategory extends JPanel implements interfaceBtn, ActionListener, 
 
         btnAdd = new JButton("Thêm", addIcon);
         btnAdd.setBounds(10, 77, 101, 26);
-        customUI.getInstance().setCustomBtn(btnAdd);
+        CustomUI.getInstance().setCustomBtn(btnAdd);
         pnInfo.add(btnAdd);
 
         btnDelete = new JButton("Xóa", trashIcon);
         btnDelete.setBounds(123, 77, 101, 26);
-        customUI.getInstance().setCustomBtn(btnDelete);
+        CustomUI.getInstance().setCustomBtn(btnDelete);
         pnInfo.add(btnDelete);
 
         btnUpdate = new JButton("Sửa", updateIcon);
         btnUpdate.setBounds(236, 77, 101, 26);
-        customUI.getInstance().setCustomBtn(btnUpdate);
+        CustomUI.getInstance().setCustomBtn(btnUpdate);
         pnInfo.add(btnUpdate);
 
         btnRefresh = new JButton("Làm mới", refreshIcon);
         btnRefresh.setBounds(349, 77, 110, 26);
-        customUI.getInstance().setCustomBtn(btnRefresh);
+        CustomUI.getInstance().setCustomBtn(btnRefresh);
         pnInfo.add(btnRefresh);
 
         btnLogOut = new JButton("Đăng xuất", logOutIcon);
         btnLogOut.setBounds(584, 77, 120, 26);
-        customUI.getInstance().setCustomBtn(btnLogOut);
+        CustomUI.getInstance().setCustomBtn(btnLogOut);
         pnInfo.add(btnLogOut);
 
         btnBack = new JButton("Thoát", backIcon);
         btnBack.setBounds(471, 78, 101, 26);
-        customUI.getInstance().setCustomBtn(btnBack);
+        CustomUI.getInstance().setCustomBtn(btnBack);
         pnInfo.add(btnBack);
 
         JPanel pnSearch = new JPanel();
@@ -124,12 +124,12 @@ public class pnCategory extends JPanel implements interfaceBtn, ActionListener, 
 
         btnSearch = new JButton("Tìm kiếm", searchIcon);
         btnSearch.setBounds(257, 7, 120, 26);
-        customUI.getInstance().setCustomBtn(btnSearch);
+        CustomUI.getInstance().setCustomBtn(btnSearch);
         pnSearch.add(btnSearch);
 
         btnViewAll = new JButton("Xem tất cả", null);
         btnViewAll.setBounds(389, 7, 120, 26);
-        customUI.getInstance().setCustomBtn(btnViewAll);
+        CustomUI.getInstance().setCustomBtn(btnViewAll);
         pnSearch.add(btnViewAll);
 
         String[] cols = { "STT", "Mã loại sản phẩm", "Tên loại sản phẩm " };
@@ -293,21 +293,21 @@ public class pnCategory extends JPanel implements interfaceBtn, ActionListener, 
     public void mouseEntered(MouseEvent e) {
         Object o = e.getSource();
         if (o.equals(btnAdd)) {
-            customUI.getInstance().setCustomBtnHover(btnAdd);
+            CustomUI.getInstance().setCustomBtnHover(btnAdd);
         } else if (o.equals(btnDelete)) {
-            customUI.getInstance().setCustomBtnHover(btnDelete);
+            CustomUI.getInstance().setCustomBtnHover(btnDelete);
         } else if (o.equals(btnUpdate)) {
-            customUI.getInstance().setCustomBtnHover(btnUpdate);
+            CustomUI.getInstance().setCustomBtnHover(btnUpdate);
         } else if (o.equals(btnRefresh)) {
-            customUI.getInstance().setCustomBtnHover(btnRefresh);
+            CustomUI.getInstance().setCustomBtnHover(btnRefresh);
         } else if (o.equals(btnBack)) {
-            customUI.getInstance().setCustomBtnHover(btnBack);
+            CustomUI.getInstance().setCustomBtnHover(btnBack);
         } else if (o.equals(btnLogOut)) {
-            customUI.getInstance().setCustomBtnHover(btnLogOut);
+            CustomUI.getInstance().setCustomBtnHover(btnLogOut);
         } else if (o.equals(btnSearch)) {
-            customUI.getInstance().setCustomBtnHover(btnSearch);
+            CustomUI.getInstance().setCustomBtnHover(btnSearch);
         } else if (o.equals(btnViewAll)) {
-            customUI.getInstance().setCustomBtnHover(btnViewAll);
+            CustomUI.getInstance().setCustomBtnHover(btnViewAll);
         }
     }
 
@@ -315,21 +315,21 @@ public class pnCategory extends JPanel implements interfaceBtn, ActionListener, 
     public void mouseExited(MouseEvent e) {
         Object o = e.getSource();
         if (o.equals(btnAdd)) {
-            customUI.getInstance().setCustomBtn(btnAdd);
+            CustomUI.getInstance().setCustomBtn(btnAdd);
         } else if (o.equals(btnDelete)) {
-            customUI.getInstance().setCustomBtn(btnDelete);
+            CustomUI.getInstance().setCustomBtn(btnDelete);
         } else if (o.equals(btnUpdate)) {
-            customUI.getInstance().setCustomBtn(btnUpdate);
+            CustomUI.getInstance().setCustomBtn(btnUpdate);
         } else if (o.equals(btnRefresh)) {
-            customUI.getInstance().setCustomBtn(btnRefresh);
+            CustomUI.getInstance().setCustomBtn(btnRefresh);
         } else if (o.equals(btnBack)) {
-            customUI.getInstance().setCustomBtn(btnBack);
+            CustomUI.getInstance().setCustomBtn(btnBack);
         } else if (o.equals(btnLogOut)) {
-            customUI.getInstance().setCustomBtn(btnLogOut);
+            CustomUI.getInstance().setCustomBtn(btnLogOut);
         } else if (o.equals(btnSearch)) {
-            customUI.getInstance().setCustomBtn(btnSearch);
+            CustomUI.getInstance().setCustomBtn(btnSearch);
         } else if (o.equals(btnViewAll)) {
-            customUI.getInstance().setCustomBtn(btnViewAll);
+            CustomUI.getInstance().setCustomBtn(btnViewAll);
         }
     }
 
