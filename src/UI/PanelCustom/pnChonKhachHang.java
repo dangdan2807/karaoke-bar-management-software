@@ -31,17 +31,10 @@ public class PnChonKhachHang extends JPanel
 
 	private JPanel pnShowKH;
 
-	private String maKHDcChon = null;
-
 	public PnChonKhachHang() {
-		// setTitle("Chọn khách hàng");
 		setSize(800, 400);
-        setLayout(null);
-        setLayout(new BorderLayout(0, 0));
-
-		// setResizable(false);
-		// setLocationRelativeTo(null);
-		// setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLayout(null);
+		setLayout(new BorderLayout(0, 0));
 
 		createUI();
 	}
@@ -210,7 +203,7 @@ public class PnChonKhachHang extends JPanel
 
 		cboTimKiem.addItemListener(this);
 
-		LoadDSPhong(KhachHangDAO.getInstance().getDSKhachHang());
+		LoadDSPhong(KhachHangDAO.getInstance().getDSKhachHangChuaDatPhong());
 	}
 
 	public static void main(String[] args) {
@@ -220,12 +213,7 @@ public class PnChonKhachHang extends JPanel
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if (o.equals(btnChonKH)) {
-			if (txtMaKH.getText().equalsIgnoreCase("")) {
-				JOptionPane.showMessageDialog(this, "Bạn phải chọn một khách hàng", "Thông báo", JOptionPane.OK_OPTION);
-			}
-			maKHDcChon = txtMaKH.getText();
-		} else if (o.equals(btnTimKiem)) {
+		if (o.equals(btnTimKiem)) {
 			timKiemKH();
 		}
 	}
@@ -323,9 +311,9 @@ public class PnChonKhachHang extends JPanel
 				"dd-MM-yyyy");
 		txtNgaySinh.setText(ngaySinhStr);
 		boolean gioiTinh = khachHang.getGioiTinh();
-		txtGioiTinh.setText("Nam");
+		txtGioiTinh.setText("Nữ");
 		if (gioiTinh == false) {
-			txtGioiTinh.setText("Nữ");
+			txtGioiTinh.setText("Nam");
 		}
 	}
 
@@ -346,9 +334,9 @@ public class PnChonKhachHang extends JPanel
 		}
 		boolean gioiTinh = khachHang.getGioiTinh();
 		if (gioiTinh) {
-			btnDSKHang[index].setIcon(manIcon);
-		} else {
 			btnDSKHang[index].setIcon(womanIcon);
+		} else {
+			btnDSKHang[index].setIcon(manIcon);
 		}
 		btnDSKHang[index].setText(tenBtn);
 		btnDSKHang[index].setForeground(Color.WHITE);
@@ -410,8 +398,8 @@ public class PnChonKhachHang extends JPanel
 		}
 	}
 
-	public String getMaKHDaChon() {
-		return maKHDcChon;
+	public String getValueTxtMaKH() {
+		return txtMaKH.getText();
 	}
 
 	public JButton getBtnChonKH() {

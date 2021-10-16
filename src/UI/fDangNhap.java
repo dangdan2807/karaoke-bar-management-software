@@ -1,14 +1,13 @@
 package UI;
 
 import javax.swing.*;
-import javax.swing.border.*;
-
 import java.awt.*;
 import java.awt.event.*;
 
 import DAO.NhanVienDAO;
 import DAO.TaiKhoanDAO;
 import UI.PanelCustom.CustomUI;
+import UI.PanelCustom.MyButton;
 import entity.NhanVien;
 
 public class fDangNhap extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener {
@@ -18,7 +17,10 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 			new ImageIcon("img/user_512.png").getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
 	private ImageIcon anhChen = new ImageIcon(
 			new ImageIcon("img/anhChen_400.png").getImage().getScaledInstance(700, 300, Image.SCALE_SMOOTH));
-	int w1 = 110, w2 = 170, h = 20;
+	private ImageIcon loginIcon = new ImageIcon(
+			new ImageIcon("img/login_16.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+
+	private GradientPaint gra = new GradientPaint(0, 0, Color.decode("#c22ed0"), 255, 0, Color.decode("#5ffae0"));
 	TaiKhoanDAO taiKhoanDAO = TaiKhoanDAO.getInstance();
 
 	public fDangNhap() {
@@ -87,7 +89,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		txtUsername.setBounds(83, 49, 285, 25);
 		pnLogin.add(txtUsername);
 		txtUsername.setFont(new Font("Dialog", Font.PLAIN, 14));
-		txtUsername.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+		txtUsername.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
 		lbPassword = new JLabel("Mật khẩu: ");
 		lbPassword.setBounds(83, 86, 285, 25);
@@ -99,14 +101,15 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		txtPassword.setBounds(83, 123, 285, 25);
 		pnLogin.add(txtPassword);
 		txtPassword.setFont(new Font("Dialog", Font.PLAIN, 14));
-		txtPassword.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+		txtPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
-		btnLogin = new JButton("Đăng nhập");
+		Color colorShadowDefault = Color.decode("#d2eef5");
+		Color colorFontDefault = Color.WHITE;
+		btnLogin = new MyButton(285, 40, "Đăng nhập", gra, loginIcon.getImage(), 120, 22, 96, 7, colorShadowDefault, colorFontDefault);
+		((MyButton) btnLogin).setFontCustom(new Font("Dialog", Font.BOLD, 14));
+		((MyButton) btnLogin).setColorHover(Color.WHITE);
 		btnLogin.setBounds(83, 177, 285, 40);
 		pnLogin.add(btnLogin);
-		btnLogin.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnLogin.setBorder(new LineBorder(Color.decode("#1a66e3")));
-		CustomUI.getInstance().setCustomBtn(btnLogin);
 
 		btnLogin.addActionListener(this);
 
@@ -135,8 +138,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 						fDieuHuong f = new fDieuHuong(staff);
 						this.setVisible(false);
 						f.setVisible(true);
-					}
-					else {
+					} else {
 						showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
 					}
 				} else {
@@ -171,9 +173,9 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	public void focusGained(FocusEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtUsername)) {
-			txtUsername.setBorder(CustomUI.getInstance().BORDER_BOTTOM_FOCUS);
+			txtUsername.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtPassword)) {
-			txtPassword.setBorder(CustomUI.getInstance().BORDER_BOTTOM_FOCUS);
+			txtPassword.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
 
@@ -181,9 +183,9 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	public void focusLost(FocusEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtUsername)) {
-			txtUsername.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+			txtUsername.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		} else if (o.equals(txtPassword)) {
-			txtPassword.setBorder(CustomUI.getInstance().BORDER_BOTTOM_UN_FOCUS);
+			txtPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		}
 	}
 
@@ -206,7 +208,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnLogin)) {
-			CustomUI.getInstance().setCustomBtnHover(btnLogin);
+			// CustomUI.getInstance().setCustomBtnHover(btnLogin);
 		}
 	}
 
@@ -214,7 +216,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	public void mouseExited(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnLogin)) {
-			CustomUI.getInstance().setCustomBtn(btnLogin);
+			// CustomUI.getInstance().setCustomBtn(btnLogin);
 		}
 	}
 
@@ -230,7 +232,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 				showMessage("Tên đăng nhập phải tối thiểu 6 ký tự");
 			else
 				showMessage("Tên đăng nhập chỉ có thể chứa các kỳ tự, số, @, #, _");
-			txtUsername.setBorder(CustomUI.getInstance().BORDER_BOTTOM_ERROR);
+			txtUsername.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
 			return false;
 		}
 		if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9_@#]{6,}$"))) {
@@ -238,14 +240,14 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 				showMessage("Mật khẩu phải tối thiểu 6 ký tự");
 			else
 				showMessage("Mật khẩu chỉ có thể chứa các kỳ tự, số, @, #, _");
-			txtPassword.setBorder(CustomUI.getInstance().BORDER_BOTTOM_ERROR);
+			txtPassword.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
 			return false;
 		}
 		return true;
 	}
 
 	private boolean login(String username, String password) {
-		boolean result = TaiKhoanDAO.getInstance().login(username, password);
+		boolean result = TaiKhoanDAO.getInstance().dangNhap(username, password);
 		return result;
 	}
 }

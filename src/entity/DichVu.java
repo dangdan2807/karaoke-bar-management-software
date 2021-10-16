@@ -8,6 +8,16 @@ public class DichVu {
 	private String tenDichVu;
 	private Double giaBan;
 	private int soLuongTon;
+	
+	private LoaiDichVu loaiDV;
+
+	public LoaiDichVu getLoaiDV() {
+		return loaiDV;
+	}
+
+	public void setLoaiDV(LoaiDichVu loaiDV) {
+		this.loaiDV = loaiDV;
+	}
 
 	public String getMaDichVu() {
 		return maDichVu;
@@ -41,11 +51,12 @@ public class DichVu {
 		this.soLuongTon = soLuongTon;
 	}
 
-	public DichVu(String maDichVu, String tenDichVu, Double giaBan, int soLuongTon) {
+	public DichVu(String maDichVu, String tenDichVu, Double giaBan, int soLuongTon, LoaiDichVu loaiDV) {
 		this.maDichVu = maDichVu;
 		this.tenDichVu = tenDichVu;
 		this.giaBan = giaBan;
 		this.soLuongTon = soLuongTon;
+		this.loaiDV = loaiDV;
 	}
 
 	public DichVu(String maDichVu) {
@@ -56,7 +67,13 @@ public class DichVu {
 	}
 
 	public DichVu(ResultSet rs) throws SQLException {
-		this(rs.getString("maDichVu"), rs.getString("tenDichVu"), rs.getDouble("giaBan"), rs.getInt("soLuongTon"));
+		this(rs.getString("maDichVu"), rs.getString("tenDichVu"), rs.getDouble("giaBan"), rs.getInt("soLuongTon"),
+				new LoaiDichVu(rs));
+	}
+
+	public DichVu(ResultSet rs, int type) throws SQLException {
+		this(rs.getString("maDichVu"), rs.getString("tenDichVu"), rs.getDouble("giaBan"), rs.getInt("soLuongTon"),
+				new LoaiDichVu(rs.getString("maLDV")));
 	}
 
 	@Override

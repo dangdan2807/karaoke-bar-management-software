@@ -15,7 +15,7 @@ public class NhanVienDAO {
     }
 
     public NhanVien getNhanVienByTenDangNhap(String username) {
-        String query = "Select * from dbo.TaiKhoan tk join dbo.NhanVien nv on tk.tenDangNhap = nv.taiKhoan WHERE tk.tenDangNhap = ?";
+        String query = "{CALL getNhanVienByTenDangNhap( ? )}";
         Object[] parameter = new Object[] { username };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         NhanVien nhanVien = null;
@@ -29,7 +29,7 @@ public class NhanVienDAO {
     }
 
     public NhanVien getNhanVienByMaNV(String maNhanVien) {
-        String query = "Select * from dbo.TaiKhoan tk join dbo.NhanVien nv on tk.tenDangNhap = nv.taiKhoan WHERE nv.maNhanVien = ?";
+        String query = "{CALL getNhanVienByMaNV( ? )}";
         Object[] parameter = new Object[] { maNhanVien };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         NhanVien nhanVien = null;
@@ -41,4 +41,12 @@ public class NhanVienDAO {
         }
         return nhanVien;
     }
+
+    public boolean updateTTNhanVien(NhanVien nhanVien) {
+        String query = "{CALL UPS_updateAccount ( ? , ? , ? , ? )}";
+        Object[] parameter = new Object[] {  };
+        int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        return result > 0;
+    }
+
 }

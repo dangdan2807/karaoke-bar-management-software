@@ -1,43 +1,50 @@
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-class test1 extends JFrame implements ActionListener {
+/** @see http://stackoverflow.com/q/9882845/230513 */
+public class test1 {
 
-	public static void main(String[] arr) throws Exception {
-		JFrame jf = new JFrame("Chữ chạy");
-		JPanel jp = new JPanel();
-		jf.setSize(500, 600);
-		jp.setSize(500, 600);
-		JLabel lb = new JLabel("Chữ Chạy");
-		jp.setLayout(null);
-		Insets in = jp.getInsets();
-		Dimension size = lb.getPreferredSize();
-		int x = 0;
-		boolean y = false;
-		lb.setBounds(jp.getHeight() / 2, x, size.width, size.height);
-		jp.add(lb);
-		jf.getContentPane().add(jp);
-		jf.setVisible(true);
-		while (true) {
-			if (x == jp.getWidth() - 60 && !y) {
-				y = true;
-			} else if (x == 0 && y) {
-				y = false;
-			} else {
-				if (y) {
-					x--;
-				} else {
-					x++;
-				}
-				lb.setBounds(x, jp.getHeight() / 2, size.width, size.height);
-				Thread.sleep(10);
-			}
-		}
-	}
+    private void display() {
+        JFrame f = new JFrame("Listeners");
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JCheckBox b = new JCheckBox("JCheckBox");
+        b.addActionListener(new ActionListener() {
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-	}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(e.getID() == ActionEvent.ACTION_PERFORMED
+                    ? "ACTION_PERFORMED" : e.getID());
+            }
+        });
+        b.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println(e.getStateChange() == ItemEvent.SELECTED
+                    ? "SELECTED" : "DESELECTED");
+            }
+        });
+        JPanel p = new JPanel();
+        p.add(b);
+        f.add(p);
+        f.pack();
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                new test1().display();
+            }
+        });
+    }
 }

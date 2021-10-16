@@ -14,9 +14,9 @@ public class DichVuDAO {
         return instance;
     }
 
-    public ArrayList<DichVu> getDSDichVu() {
+    public ArrayList<DichVu> getDSachDichVu() {
         ArrayList<DichVu> dataList = new ArrayList<DichVu>();
-        String query = "SELECT * FROM dbo.DichVu";
+        String query = "{CALL USP_getDSDichVu}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {
@@ -30,7 +30,7 @@ public class DichVuDAO {
 
     public DichVu getDichVuByTenDichVu(String tenDichVu) {
         DichVu data = null;
-        String query = "SELECT * FROM dbo.DichVu dv WHERE dv.tenDichVu = ?";
+        String query = "{CALL USP_getDichVuByTenDichVu( ? )}";
         Object[] parameter = new Object[] { tenDichVu };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
@@ -42,10 +42,51 @@ public class DichVuDAO {
         return data;
     }
 
+    public int getSLDVuConByTenDichVu(String tenDichVu) {
+        int data = 0;
+        String query = "{CALL USP_getSLDVuConByTenDichVu( ? )}";
+        Object[] parameter = new Object[] { tenDichVu };
+        int rs = (int) DataProvider.getInstance().ExecuteScalar(query, parameter);
+        if (rs > 0) {
+            data = rs;
+        }
+        return data;
+    }
+
     public ArrayList<DichVu> getDSDichVuByTenDichVu(String tenDichVu) {
         ArrayList<DichVu> dataList = new ArrayList<DichVu>();
         String query = "{CALL USP_getDSDichVuByTenDichVu( ? )}";
         Object[] parameter = new Object[] { tenDichVu };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new DichVu(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    public ArrayList<DichVu> getDSDichVuByTenLoaiDV(String tenLoaiDV) {
+        ArrayList<DichVu> dataList = new ArrayList<DichVu>();
+        String query = "{CALL USP_getDSDichVuByTenLoaiDV( ? )}";
+        Object[] parameter = new Object[] { tenLoaiDV };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new DichVu(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    public ArrayList<DichVu> getDSDichVuByTenDVvaTenLoaiDV(String tenDV, String tenLoaiDV) {
+        ArrayList<DichVu> dataList = new ArrayList<DichVu>();
+        String query = "{CALL USP_getDSDichVuByTenDVvaTenLoaiDV( ? , ? )}";
+        Object[] parameter = new Object[] { tenDV, tenLoaiDV };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {

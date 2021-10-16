@@ -6,7 +6,6 @@ import javax.swing.event.*;
 import java.awt.event.*;
 
 import DAO.NhanVienDAO;
-import UI.PanelCustom.*;
 import entity.NhanVien;
 
 public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
@@ -22,12 +21,6 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
     private ImageIcon userIcon = new ImageIcon("img/user_16.png");
     private NhanVien staffLogin = null;
 
-    private pnRevenue pRevenue;
-    private pnProduct pProduct;
-    private pnCategory pCategory;
-    private pnTable pTable;
-    private pnKhachHang pAccount;
-
     public fQuanTri(NhanVien staff) {
         setTitle("Quản Lý Hệ Thống");
         setSize(1280, 700);
@@ -42,24 +35,14 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
     public void createTabControl() {
         tpTabMain = new JTabbedPane();
         
-        tpTabMain.addTab("Doanh thu", null, pRevenue, "Quản lý doanh thu");
-        tpTabMain.addTab("Sản phẩm", null, pProduct, "Quản lý sản phẩm");
-        tpTabMain.addTab("Loại sản phẩm", null, pCategory, "Quản lý loại sản phẩm");
-        tpTabMain.addTab("Bàn", null, pTable, "Quản lý bàn");
-        tpTabMain.addTab("Tài Khoản", userIcon, pAccount, "Quản lý tài khoản");
+        tpTabMain.addTab("Doanh thu", null, null, "Quản lý doanh thu");
+        tpTabMain.addTab("Sản phẩm", null, null, "Quản lý sản phẩm");
+        tpTabMain.addTab("Loại sản phẩm", null, null, "Quản lý loại sản phẩm");
+        tpTabMain.addTab("Bàn", null, null, "Quản lý bàn");
+        tpTabMain.addTab("Tài Khoản", userIcon, null, "Quản lý tài khoản");
         this.add(tpTabMain);
 
         tpTabMain.addChangeListener(this);
-        pRevenue.getBtnLogOut().addActionListener(this);
-        pRevenue.getBtnBack().addActionListener(this);
-        pProduct.getBtnLogOut().addActionListener(this);
-        pProduct.getBtnBack().addActionListener(this);
-        pCategory.getBtnLogOut().addActionListener(this);
-        pCategory.getBtnBack().addActionListener(this);
-        pTable.getBtnLogOut().addActionListener(this);
-        pTable.getBtnBack().addActionListener(this);
-        pAccount.getBtnLogOut().addActionListener(this);
-        pAccount.getBtnBack().addActionListener(this);
     }
 
     public static void main(String[] args) {
@@ -69,23 +52,11 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object o = e.getSource();
-        if (o.equals(pRevenue.getBtnLogOut()) || o.equals(pProduct.getBtnLogOut()) || o.equals(pAccount.getBtnLogOut())
-                || o.equals(pTable.getBtnLogOut()) || o.equals(pAccount.getBtnLogOut())) {
-            EventLogOut();
-        } else if (o.equals(pRevenue.getBtnBack()) || o.equals(pProduct.getBtnBack())
-                || o.equals(pCategory.getBtnBack()) || o.equals(pTable.getBtnBack())
-                || o.equals(pAccount.getBtnBack())) {
-            EventExit();
-        }
+        
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        Object o = e.getSource();
-        if (o.equals(tpTabMain)) {
-            pProduct.allLoaded();
-        }
     }
 
     public void EventLogOut() {

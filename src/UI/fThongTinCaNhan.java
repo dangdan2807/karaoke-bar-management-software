@@ -10,19 +10,21 @@ import entity.NhanVien;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
+import java.sql.Date;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
 public class fThongTinCaNhan extends JDialog
         implements ActionListener, KeyListener, MouseListener, FocusListener, ItemListener {
-    private JLabel lbTenDangNhap, lbHoTen, lbMatKhau, lbMatKhauMoi, lbNLMatKhauMoi, lbGioiTinh;
-    private JLabel lbMucLuong;
-    private JTextField txtTenDangNhap, txtHoTen, txtMatKhau, txtMatKhauMoi, txtNLMatKhauMoi;
-    private JTextField txtCMND, txtSDT, txtChucVu, txtMucLuong;
+    private JLabel lbUsername, lbFullName, lbPassword, lbNewPassword, lbReNewPassword, lbGender;
+    private JLabel lbSalary;
+    private JTextField txtUsername, txtFullName, txtPassword, txtNewPassword, txtReNewPassword;
+    private JTextField txtCMND, txtPhoneNumber, txtPosition, txtSalary, txtEmpID;
     private JButton btnUpdate, btnClose;
-    private JComboBox<String> cboGioiTinh;
+    private JComboBox<String> cboGender;
     private kDatePicker dpNgaySinh;
 
     private int withPn = 400, heightPn = 315;
@@ -31,7 +33,7 @@ public class fThongTinCaNhan extends JDialog
 
     public fThongTinCaNhan(NhanVien nhanVien) {
         setTitle("Quản Lý Thông Tin Tài Khoản");
-        setSize(824, 348);
+        setSize(824, 350);
         setResizable(false);
         setLocationRelativeTo(null);
         // setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -52,36 +54,48 @@ public class fThongTinCaNhan extends JDialog
         pnMain.add(btnUpdate);
         pnMain.add(btnClose);
 
-        btnUpdate.setBounds(539, 275, 120, 25);
-        btnClose.setBounds(670, 275, 120, 25);
+        btnUpdate.setBounds(540, 281, 120, 25);
+        btnClose.setBounds(670, 281, 120, 25);
 
         getContentPane().add(pnMain);
 
-        JPanel pnTTCN = new JPanel();
-        pnTTCN.setBorder(
+        JPanel pnPersonalInfo = new JPanel();
+        pnPersonalInfo.setBorder(
                 new TitledBorder(null, "Thông tin cá nhân ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnTTCN.setBackground(Color.WHITE);
-        pnTTCN.setBounds(10, 0, 390, 269);
-        pnMain.add(pnTTCN);
-        pnTTCN.setLayout(null);
+        pnPersonalInfo.setBackground(Color.WHITE);
+        pnPersonalInfo.setBounds(10, 0, 390, 306);
+        pnMain.add(pnPersonalInfo);
+        pnPersonalInfo.setLayout(null);
 
-        lbHoTen = new JLabel("Tên nhân viên: ");
-        lbHoTen.setBounds(10, 16, 120, 25);
-        pnTTCN.add(lbHoTen);
+        JLabel lbMaNV = new JLabel("Mã nhân viên: ");
+        lbMaNV.setBounds(10, 16, 120, 25);
+        pnPersonalInfo.add(lbMaNV);
 
-        txtHoTen = new JTextField();
-        txtHoTen.setBounds(130, 16, 250, 25);
-        pnTTCN.add(txtHoTen);
-        txtHoTen.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtHoTen.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        txtEmpID = new JTextField();
+        txtEmpID.setEditable(false);
+        txtEmpID.setText((String) null);
+        txtEmpID.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtEmpID.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        txtEmpID.setBounds(130, 16, 250, 25);
+        pnPersonalInfo.add(txtEmpID);
+
+        lbFullName = new JLabel("Tên nhân viên: ");
+        lbFullName.setBounds(10, 53, 120, 25);
+        pnPersonalInfo.add(lbFullName);
+
+        txtFullName = new JTextField();
+        txtFullName.setBounds(130, 52, 250, 25);
+        pnPersonalInfo.add(txtFullName);
+        txtFullName.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtFullName.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
         JLabel lbCMND = new JLabel("CMND/CCCD: ");
-        lbCMND.setBounds(10, 52, 120, 25);
-        pnTTCN.add(lbCMND);
+        lbCMND.setBounds(10, 88, 120, 25);
+        pnPersonalInfo.add(lbCMND);
 
         txtCMND = new JTextField();
-        txtCMND.setBounds(130, 52, 250, 25);
-        pnTTCN.add(txtCMND);
+        txtCMND.setBounds(130, 88, 250, 25);
+        pnPersonalInfo.add(txtCMND);
         txtCMND.setFont(new Font("Dialog", Font.PLAIN, 14));
         txtCMND.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
@@ -89,142 +103,142 @@ public class fThongTinCaNhan extends JDialog
         dpNgaySinh.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         dpNgaySinh.setBackgroundColor(Color.WHITE);
         dpNgaySinh.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
-        dpNgaySinh.setBounds(130, 88, 250, 25);
-        pnTTCN.add(dpNgaySinh);
+        dpNgaySinh.setBounds(130, 124, 250, 25);
+        pnPersonalInfo.add(dpNgaySinh);
 
-        JLabel lbNgaySinh = new JLabel("Ngày sinh: ");
-        lbNgaySinh.setBounds(10, 88, 120, 25);
-        pnTTCN.add(lbNgaySinh);
+        JLabel lbBirthDay = new JLabel("Ngày sinh: ");
+        lbBirthDay.setBounds(10, 124, 120, 25);
+        pnPersonalInfo.add(lbBirthDay);
 
-        JLabel lbSDT = new JLabel("Số điện thoại: ");
-        lbSDT.setBounds(10, 124, 120, 25);
-        pnTTCN.add(lbSDT);
+        JLabel lbPhoneNumber = new JLabel("Số điện thoại: ");
+        lbPhoneNumber.setBounds(10, 160, 120, 25);
+        pnPersonalInfo.add(lbPhoneNumber);
 
-        txtSDT = new JTextField();
-        txtSDT.setBounds(130, 124, 250, 25);
-        pnTTCN.add(txtSDT);
-        txtSDT.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtSDT.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        txtPhoneNumber = new JTextField();
+        txtPhoneNumber.setBounds(130, 160, 250, 25);
+        pnPersonalInfo.add(txtPhoneNumber);
+        txtPhoneNumber.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtPhoneNumber.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
-        txtChucVu = new JTextField();
-        txtChucVu.setBounds(130, 160, 250, 25);
-        pnTTCN.add(txtChucVu);
-        txtChucVu.setEditable(false);
-        txtChucVu.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtChucVu.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        txtPosition = new JTextField();
+        txtPosition.setBounds(130, 196, 250, 25);
+        pnPersonalInfo.add(txtPosition);
+        txtPosition.setEditable(false);
+        txtPosition.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtPosition.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
-        JLabel lbChucVu = new JLabel("Chức vụ: ");
-        lbChucVu.setBounds(10, 160, 120, 25);
-        pnTTCN.add(lbChucVu);
+        JLabel lbPosition = new JLabel("Chức vụ: ");
+        lbPosition.setBounds(10, 196, 120, 25);
+        pnPersonalInfo.add(lbPosition);
 
-        lbGioiTinh = new JLabel("Giới tính: ");
-        lbGioiTinh.setBounds(10, 196, 120, 25);
-        pnTTCN.add(lbGioiTinh);
+        lbGender = new JLabel("Giới tính: ");
+        lbGender.setBounds(10, 232, 120, 25);
+        pnPersonalInfo.add(lbGender);
 
-        cboGioiTinh = new JComboBox<String>();
-        cboGioiTinh.setUI(new BasicComboBoxUI());
-        cboGioiTinh.addItem("Nam");
-        cboGioiTinh.addItem("Nữ");
-        cboGioiTinh.setBounds(130, 196, 250, 25);
-        pnTTCN.add(cboGioiTinh);
-        cboGioiTinh.setFont(new Font("Dialog", Font.PLAIN, 14));
-        cboGioiTinh.setBackground(Color.WHITE);
-        cboGioiTinh.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#1a66e3")));
+        cboGender = new JComboBox<String>();
+        cboGender.setUI(new BasicComboBoxUI());
+        cboGender.addItem("Nam");
+        cboGender.addItem("Nữ");
+        cboGender.setBounds(130, 232, 250, 25);
+        pnPersonalInfo.add(cboGender);
+        cboGender.setFont(new Font("Dialog", Font.PLAIN, 14));
+        cboGender.setBackground(Color.WHITE);
+        cboGender.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.decode("#1a66e3")));
 
-        txtMucLuong = new JTextField();
-        txtMucLuong.setBounds(130, 232, 250, 25);
-        pnTTCN.add(txtMucLuong);
-        txtMucLuong.setEditable(false);
-        txtMucLuong.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtMucLuong.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        txtSalary = new JTextField();
+        txtSalary.setBounds(130, 268, 250, 25);
+        pnPersonalInfo.add(txtSalary);
+        txtSalary.setEditable(false);
+        txtSalary.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtSalary.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
-        lbMucLuong = new JLabel("Mức Lương: ");
-        lbMucLuong.setBounds(10, 232, 120, 25);
-        pnTTCN.add(lbMucLuong);
+        lbSalary = new JLabel("Mức Lương: ");
+        lbSalary.setBounds(10, 268, 120, 25);
+        pnPersonalInfo.add(lbSalary);
 
-        JPanel pnTTTaiKhoan = new JPanel();
-        pnTTTaiKhoan.setLayout(null);
-        pnTTTaiKhoan.setBorder(
+        JPanel pnAccountInfo = new JPanel();
+        pnAccountInfo.setLayout(null);
+        pnAccountInfo.setBorder(
                 new TitledBorder(null, "Thông tin tài khoản ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnTTTaiKhoan.setBackground(Color.WHITE);
-        pnTTTaiKhoan.setBounds(410, 0, 390, 90);
-        pnMain.add(pnTTTaiKhoan);
+        pnAccountInfo.setBackground(Color.WHITE);
+        pnAccountInfo.setBounds(410, 0, 390, 90);
+        pnMain.add(pnAccountInfo);
 
-        lbTenDangNhap = new JLabel("Tên đăng nhập: ");
-        lbTenDangNhap.setBounds(10, 16, 120, 25);
-        pnTTTaiKhoan.add(lbTenDangNhap);
-        txtTenDangNhap = new JTextField();
-        txtTenDangNhap.setBounds(130, 16, 250, 25);
+        lbUsername = new JLabel("Tên đăng nhập: ");
+        lbUsername.setBounds(10, 16, 120, 25);
+        pnAccountInfo.add(lbUsername);
+        txtUsername = new JTextField();
+        txtUsername.setBounds(130, 16, 250, 25);
 
-        txtTenDangNhap.setEditable(false);
-        txtTenDangNhap.setBackground(Color.decode("#f9f9f9"));
-        pnTTTaiKhoan.add(txtTenDangNhap);
-        txtTenDangNhap.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtTenDangNhap.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        txtUsername.setEditable(false);
+        txtUsername.setBackground(Color.decode("#f9f9f9"));
+        pnAccountInfo.add(txtUsername);
+        txtUsername.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtUsername.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
-        lbMatKhau = new JLabel("Mật khẩu: ");
-        lbMatKhau.setBounds(10, 52, 120, 25);
-        pnTTTaiKhoan.add(lbMatKhau);
+        lbPassword = new JLabel("Mật khẩu: ");
+        lbPassword.setBounds(10, 52, 120, 25);
+        pnAccountInfo.add(lbPassword);
 
-        txtMatKhau = new JPasswordField();
-        txtMatKhau.setBounds(130, 52, 250, 25);
-        pnTTTaiKhoan.add(txtMatKhau);
-        txtMatKhau.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtMatKhau.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        txtPassword = new JPasswordField();
+        txtPassword.setBounds(130, 52, 250, 25);
+        pnAccountInfo.add(txtPassword);
+        txtPassword.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
-        JPanel pnTTMatKhau = new JPanel();
-        pnTTMatKhau.setLayout(null);
-        pnTTMatKhau
+        JPanel pnPasswordInfo = new JPanel();
+        pnPasswordInfo.setLayout(null);
+        pnPasswordInfo
                 .setBorder(new TitledBorder(null, "Đổi mật khẩu ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        pnTTMatKhau.setBackground(Color.WHITE);
-        pnTTMatKhau.setBounds(410, 100, 390, 169);
-        pnMain.add(pnTTMatKhau);
+        pnPasswordInfo.setBackground(Color.WHITE);
+        pnPasswordInfo.setBounds(410, 100, 390, 175);
+        pnMain.add(pnPasswordInfo);
 
-        lbMatKhauMoi = new JLabel("Mật khẩu mới: ");
-        lbMatKhauMoi.setBounds(10, 46, 120, 25);
-        pnTTMatKhau.add(lbMatKhauMoi);
+        lbNewPassword = new JLabel("Mật khẩu mới: ");
+        lbNewPassword.setBounds(10, 46, 120, 25);
+        pnPasswordInfo.add(lbNewPassword);
 
-        txtMatKhauMoi = new JPasswordField();
-        txtMatKhauMoi.setBounds(130, 46, 250, 25);
-        txtMatKhauMoi.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtMatKhauMoi.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-        txtMatKhauMoi.setEditable(false);
-        pnTTMatKhau.add(txtMatKhauMoi);
+        txtNewPassword = new JPasswordField();
+        txtNewPassword.setBounds(130, 46, 250, 25);
+        txtNewPassword.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtNewPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        txtNewPassword.setEditable(false);
+        pnPasswordInfo.add(txtNewPassword);
 
         chkDoiMatKhau = new JCheckBox("Đổi mật khẩu");
         chkDoiMatKhau.setBounds(10, 16, 370, 23);
         chkDoiMatKhau.setFont(new Font("Dialog", Font.BOLD, 12));
         chkDoiMatKhau.setBackground(Color.WHITE);
-        pnTTMatKhau.add(chkDoiMatKhau);
+        pnPasswordInfo.add(chkDoiMatKhau);
 
-        lbNLMatKhauMoi = new JLabel("Nhập lại: ");
-        lbNLMatKhauMoi.setBounds(10, 82, 120, 25);
-        pnTTMatKhau.add(lbNLMatKhauMoi);
+        lbReNewPassword = new JLabel("Nhập lại: ");
+        lbReNewPassword.setBounds(10, 82, 120, 25);
+        pnPasswordInfo.add(lbReNewPassword);
 
-        txtNLMatKhauMoi = new JPasswordField();
-        txtNLMatKhauMoi.setBounds(130, 82, 250, 25);
-        txtNLMatKhauMoi.setEditable(false);
-        txtNLMatKhauMoi.setFont(new Font("Dialog", Font.PLAIN, 14));
-        txtNLMatKhauMoi.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-        pnTTMatKhau.add(txtNLMatKhauMoi);
+        txtReNewPassword = new JPasswordField();
+        txtReNewPassword.setBounds(130, 82, 250, 25);
+        txtReNewPassword.setEditable(false);
+        txtReNewPassword.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txtReNewPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        pnPasswordInfo.add(txtReNewPassword);
 
-        txtHoTen.addKeyListener(this);
-        txtMatKhau.addKeyListener(this);
-        txtMatKhauMoi.addKeyListener(this);
-        txtNLMatKhauMoi.addKeyListener(this);
-        
+        txtFullName.addKeyListener(this);
+        txtPassword.addKeyListener(this);
+        txtNewPassword.addKeyListener(this);
+        txtReNewPassword.addKeyListener(this);
+
         btnUpdate.addActionListener(this);
         btnClose.addActionListener(this);
 
         btnUpdate.addMouseListener(this);
         btnClose.addMouseListener(this);
 
-        txtHoTen.addFocusListener(this);
-        txtMatKhau.addFocusListener(this);
+        txtFullName.addFocusListener(this);
+        txtPassword.addFocusListener(this);
         txtCMND.addFocusListener(this);
-        txtSDT.addFocusListener(this);
-        txtMatKhauMoi.addFocusListener(this);
-        txtNLMatKhauMoi.addFocusListener(this);
+        txtPhoneNumber.addFocusListener(this);
+        txtNewPassword.addFocusListener(this);
+        txtReNewPassword.addFocusListener(this);
 
         chkDoiMatKhau.addItemListener(this);
 
@@ -240,7 +254,8 @@ public class fThongTinCaNhan extends JDialog
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if (o.equals(btnUpdate)) {
-            capNhatThongTin();
+            if (validData())
+                capNhatThongTin();
         } else if (o.equals(btnClose)) {
             this.dispose();
         }
@@ -255,7 +270,7 @@ public class fThongTinCaNhan extends JDialog
     public void keyPressed(KeyEvent e) {
         Object o = e.getSource();
         // bắt sự kiện nhấn phím enter tự nhấn btnLogin
-        if (o.equals(txtMatKhau) || o.equals(txtHoTen) || o.equals(txtMatKhauMoi) || o.equals(txtNLMatKhauMoi)) {
+        if (o.equals(txtPassword) || o.equals(txtFullName) || o.equals(txtNewPassword) || o.equals(txtReNewPassword)) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 btnUpdate.doClick();
             }
@@ -305,36 +320,36 @@ public class fThongTinCaNhan extends JDialog
     @Override
     public void focusGained(FocusEvent e) {
         Object o = e.getSource();
-        if (o.equals(txtHoTen)) {
-            CustomUI.getInstance().setCustomTextFieldFocus(txtHoTen);
+        if (o.equals(txtFullName)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtFullName);
         } else if (o.equals(txtCMND)) {
             CustomUI.getInstance().setCustomTextFieldFocus(txtCMND);
-        } else if (o.equals(txtSDT)) {
-            CustomUI.getInstance().setCustomTextFieldFocus(txtSDT);
-        } else if (o.equals(txtMatKhau)) {
-            CustomUI.getInstance().setCustomTextFieldFocus(txtMatKhau);
-        } else if (o.equals(txtMatKhauMoi)) {
-            CustomUI.getInstance().setCustomTextFieldFocus(txtMatKhauMoi);
-        } else if (o.equals(txtNLMatKhauMoi)) {
-            CustomUI.getInstance().setCustomTextFieldFocus(txtNLMatKhauMoi);
+        } else if (o.equals(txtPhoneNumber)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtPhoneNumber);
+        } else if (o.equals(txtPassword)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtPassword);
+        } else if (o.equals(txtNewPassword)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtNewPassword);
+        } else if (o.equals(txtReNewPassword)) {
+            CustomUI.getInstance().setCustomTextFieldFocus(txtReNewPassword);
         }
     }
 
     @Override
     public void focusLost(FocusEvent e) {
         Object o = e.getSource();
-        if (o.equals(txtHoTen)) {
-            txtHoTen.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        if (o.equals(txtFullName)) {
+            txtFullName.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         } else if (o.equals(txtCMND)) {
             txtCMND.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-        } else if (o.equals(txtSDT)) {
-            txtSDT.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-        } else if (o.equals(txtMatKhau)) {
-            txtMatKhau.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-        } else if (o.equals(txtMatKhauMoi)) {
-            txtMatKhauMoi.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-        } else if (o.equals(txtNLMatKhauMoi)) {
-            txtNLMatKhauMoi.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        } else if (o.equals(txtPhoneNumber)) {
+            txtPhoneNumber.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        } else if (o.equals(txtPassword)) {
+            txtPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        } else if (o.equals(txtNewPassword)) {
+            txtNewPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        } else if (o.equals(txtReNewPassword)) {
+            txtReNewPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
         }
     }
 
@@ -342,54 +357,180 @@ public class fThongTinCaNhan extends JDialog
     public void itemStateChanged(ItemEvent e) {
         Object o = e.getSource();
         if (o.equals(chkDoiMatKhau)) {
-            txtMatKhauMoi.setEditable(chkDoiMatKhau.isSelected());
-            txtNLMatKhauMoi.setEditable(chkDoiMatKhau.isSelected());
+            txtNewPassword.setEditable(chkDoiMatKhau.isSelected());
+            txtReNewPassword.setEditable(chkDoiMatKhau.isSelected());
         }
     }
 
     private void changeAccount(NhanVien nhanVien) {
         this.nhanVienLogin = nhanVien;
-        txtHoTen.setText(nhanVien.getHoTen());
+        txtEmpID.setText(nhanVien.getMaNhanVien());
+        txtFullName.setText(nhanVien.getHoTen());
         txtCMND.setText(nhanVien.getCmnd());
         dpNgaySinh.setValue(nhanVien.getNgaySinh());
-        txtSDT.setText(nhanVien.getSoDienThoai());
-        txtChucVu.setText(nhanVien.getChucVu());
+        txtPhoneNumber.setText(nhanVien.getSoDienThoai());
+        txtPosition.setText(nhanVien.getChucVu());
         boolean gioiTinh = nhanVien.getGioiTinh();
-        cboGioiTinh.setSelectedIndex(0);
-        if (gioiTinh == false) {
-            cboGioiTinh.setSelectedIndex(1);
+        cboGender.setSelectedIndex(0);
+        if (gioiTinh) {
+            cboGender.setSelectedIndex(1);
         }
         DecimalFormat df = new DecimalFormat("#,###.##");
-        txtMucLuong.setText(df.format(nhanVien.getMucLuong()));
-        txtTenDangNhap.setText(nhanVien.getTaiKhoan().getTenDangNhap());
-        txtMatKhau.setText("");
-        txtMatKhauMoi.setText("");
-        txtNLMatKhauMoi.setText("");
+        txtSalary.setText(df.format(nhanVien.getMucLuong()));
+        txtUsername.setText(nhanVien.getTaiKhoan().getTenDangNhap());
+        txtPassword.setText("");
+        txtNewPassword.setText("");
+        txtReNewPassword.setText("");
+    }
+
+    private NhanVien getDataInForm() {
+        String maNhanVien = txtEmpID.getText().trim();
+        String hoTen = txtFullName.getText().trim();
+        String cmnd = txtCMND.getText().trim();
+        Date ngaySinh = null;
+        try {
+            ngaySinh = dpNgaySinh.getFullDate();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String soDienThoai = txtPhoneNumber.getText();
+        String chucVu = txtPosition.getText();
+        boolean gioiTinh = (boolean) cboGender.getSelectedItem();
+        Double mucLuong = Double.parseDouble(txtSalary.getText().trim().replace(",", ""));
+
+        return new NhanVien(maNhanVien, cmnd, hoTen, ngaySinh, soDienThoai, chucVu, mucLuong, gioiTinh,
+                nhanVienLogin.getTrangThaiNV(), nhanVienLogin.getTaiKhoan());
+    }
+
+    private void showMessage(JTextField txt, int type, String message, String title, int option) {
+        if (type == 1) {
+            txt.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
+        }
+        JOptionPane.showMessageDialog(this, message, title, option);
+    }
+
+    private void checkPassword(String matKhau, String mes) {
+        String message = mes;
+        if (matKhau.length() < 6) {
+            message = mes + " phải tối thiểu 6 ký tự";
+            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.OK_OPTION);
+        } else {
+            message = mes + " chỉ có thể chứa các kỳ tự, số, @, #, _";
+            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.OK_OPTION);
+        }
+    }
+
+    private void showMessage(String message, String title, int option) {
+        JOptionPane.showMessageDialog(this, message, title, option);
+    }
+
+    private boolean validData() {
+        String message = "";
+        String hoTen = txtFullName.getText().trim();
+        if (hoTen.equalsIgnoreCase("")) {
+            message = "Họ tên không được rỗng";
+            showMessage(txtFullName, 1, message, "Thông báo", JOptionPane.OK_OPTION);
+            return false;
+        }
+
+        String cmnd = txtCMND.getText().trim();
+        if (!cmnd.matches("^[\\d]{9}$|^[\\d]{12}$")) {
+            message = "CMND phải là số và gồm 9 số hoặc nếu là CCCD phải là số và gồm 12 số";
+            showMessage(txtCMND, 1, message, "Thông báo", JOptionPane.OK_OPTION);
+            return false;
+        }
+
+        Date ngaySinh = null;
+        try {
+            ngaySinh = dpNgaySinh.getFullDate();
+            if (ngaySinh.after(dpNgaySinh.getValueToDay())) {
+                message = "Ngày sinh phải bé hơn ngày hiện tại";
+                showMessage(message, "Thông báo", JOptionPane.OK_OPTION);
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String soDienThoai = txtPhoneNumber.getText();
+        if (!soDienThoai.matches("^0[35789][\\d]{8}$")) {
+            message = "Số điện thoại phải là số và gồm 10 số bắt đầu bằng 03, 05, 07, 08, 09";
+            showMessage(txtCMND, 1, message, "Thông báo", JOptionPane.OK_OPTION);
+            return false;
+        }
+
+        NhanVien nhanVienLoginMoi = getDataInForm();
+        String matKhau = txtPassword.getText().trim();
+        if (matKhau.equalsIgnoreCase("")) {
+            message = "Vui lòng nhập mật khẩu để xác nhận bạn là chủ tài khoản";
+            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return false;
+
+        } else if (matKhau.equals("123456")) {
+            message = "Mật khẩu quá đơn giản. Vui lòng đổi mật khẩu khác";
+            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.OK_OPTION);
+            return false;
+
+        } else if (matKhau.length() >= 6 && matKhau.matches("^[a-zA-Z0-9_@#]{6,}$")) {
+            checkPassword(matKhau, "Mật khẩu");
+            return false;
+
+        } else if (!matKhau.equals(nhanVienLoginMoi.getTaiKhoan().getMatKhau())) {
+            message = "Mật khẩu sai. Vui lòng nhập lại";
+            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (chkDoiMatKhau.isSelected()) {
+            String matKhauMoi = txtNewPassword.getText().trim();
+            String nlMatKhau = txtReNewPassword.getText().trim();
+
+            if (!(nlMatKhau.equals(matKhauMoi))) {
+                message = "Mật khẩu mới không khớp";
+                showMessage(txtReNewPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+                return false;
+
+            } else if (matKhauMoi.equals("")) {
+                message = "Mật khẩu mới không được rỗng";
+                showMessage(txtNewPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+                return false;
+
+            } else if (nlMatKhau.equals("")) {
+                message = "Mật khẩu nhập lại không được rỗng";
+                showMessage(txtReNewPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+                return false;
+
+            } else if (nlMatKhau.length() >= 6 && nlMatKhau.matches("^[a-zA-Z0-9_@#]{6,}$")) {
+                checkPassword(nlMatKhau, "Mật khẩu nhập lại");
+                return false;
+
+            } else if (matKhauMoi.length() >= 6 && matKhauMoi.matches("^[a-zA-Z0-9_@#]{6,}$")) {
+                checkPassword(matKhauMoi, "Mật khẩu mới");
+                return false;
+
+            }
+        }
+        return true;
     }
 
     private void capNhatThongTin() {
-        String username = txtTenDangNhap.getText().trim();
-        String displayName = txtHoTen.getText().trim();
-        String password = txtMatKhau.getText().trim();
-        String reNewPassWord = txtNLMatKhauMoi.getText().trim();
-        String newPassword = txtMatKhauMoi.getText().trim();
-        if (!(newPassword.equals(reNewPassWord))) {
-            JOptionPane.showMessageDialog(this, "Mật khẩu mới không khớp", "Thông báo", JOptionPane.ERROR_MESSAGE);
+        String message = "";
+        NhanVien nhanVienLoginMoi = getDataInForm();
+        String matKhauMoi = txtNewPassword.getText().trim();
+
+        if (chkDoiMatKhau.isSelected()) {
+            nhanVienLoginMoi.getTaiKhoan().setMatKhau(matKhauMoi);
+        }
+
+        boolean ketQua = NhanVienDAO.getInstance().updateTTNhanVien(nhanVienLoginMoi);
+        if (ketQua) {
+            message = "Cập nhật thông tin thành công";
+            JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            changeAccount(nhanVienLoginMoi);
+            nhanVienLogin = nhanVienLoginMoi;
         } else {
-            // if (NhanVienDAO.getInstance().updateAccountInfo(username, displayName,
-            // password, newPassword)) {
-            // JOptionPane.showMessageDialog(this, "Cập nhật thành công", "Thông báo",
-            // JOptionPane.INFORMATION_MESSAGE);
-            // fManagerSale.setEmpName(displayName);
-            // } else if (password.equals("")) {
-            // JOptionPane.showMessageDialog(this, "Vui lòng nhập mật khẩu để cập nhật",
-            // "Thông báo",
-            // JOptionPane.ERROR_MESSAGE);
-            // } else {
-            // JOptionPane.showMessageDialog(this, "Mật khẩu sai !!!", "Thông báo",
-            // JOptionPane.ERROR_MESSAGE);
-            // }
+            message = "Cập nhật thông tin thất bại";
+            JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
 }

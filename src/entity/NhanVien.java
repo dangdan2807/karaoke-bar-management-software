@@ -6,15 +6,25 @@ import java.sql.SQLException;
 
 public class NhanVien {
 	private String maNhanVien;
-	private String hoTen;
 	private String cmnd;
+	private String hoTen;
 	private Date ngaySinh;
 	private String soDienThoai;
 	private String chucVu;
 	private Double mucLuong;
 	private Boolean gioiTinh;
 	private String trangThaiNV;
+
 	private TaiKhoan taiKhoan;
+	private NhanVien ChuQuan;
+
+	public NhanVien getChuQuan() {
+		return ChuQuan;
+	}
+
+	public void setChuQuan(NhanVien chuQuan) {
+		ChuQuan = chuQuan;
+	}
 
 	public String getTrangThaiNV() {
 		return trangThaiNV;

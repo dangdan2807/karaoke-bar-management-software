@@ -37,10 +37,10 @@ public class KhachHangDAO {
     }
 
     /**
-     * Lấy ra danh sách tất cả khách hàng có mã khách hàng phù hợp
+     * Lấy ra danh sách tất cả khách hàng có mã khách hàng phù hợp điều kiện
      * 
-     * @param maKH
-     * @return
+     * @param maKH mã khách hàng
+     * @return ArrayList<KhachHang> danh sách khách hàng
      */
     public ArrayList<KhachHang> getDSKhachHangByMaKH(String maKH) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
@@ -58,10 +58,10 @@ public class KhachHangDAO {
     }
 
     /**
-     * chưa xong
+     * Lấy ra danh sách tất cả khách hàng có tên khách hàng phù hợp điều kiện
      * 
-     * @param tenKH
-     * @return
+     * @param tenKH tên khách hàng
+     * @return ArrayList<KhachHang> danh sách khách hàng
      */
     public ArrayList<KhachHang> getDSKhachHangByTenKH(String tenKH) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
@@ -79,16 +79,36 @@ public class KhachHangDAO {
     }
 
     /**
-     * chưa xong
+     * Lấy ra danh sách tất cả khách hàng có số điện thoại của khách hàng phù hợp
+     * điều kiện
      * 
-     * @param sdtKH
-     * @return
+     * @param sdtKH số điện thoại của khách hàng
+     * @return ArrayList<KhachHang> danh sách khách hàng
      */
     public ArrayList<KhachHang> getDSKhachHangBySDT(String sdtKH) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getDSKhachHangBySDT( ? )}";
         Object[] parameter = new Object[] { sdtKH };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new KhachHang(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy ra danh sách tất cả khách hàng chưa đặt phòng
+     * 
+     * @return ArrayList<KhachHang> danh sách khách hàng chưa đặt phòng
+     */
+    public ArrayList<KhachHang> getDSKhachHangChuaDatPhong() {
+        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
+        String query = "{CALL USP_getDSKhachHangChuaDatPhong()}";
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {
                 dataList.add(new KhachHang(rs));
@@ -113,7 +133,7 @@ public class KhachHangDAO {
         return data;
     }
 
-    public boolean insertKhachHang(KhachHang khachHang) {
+    public boolean themKhachHang(KhachHang khachHang) {
         String query = "INSERT INTO dbo.KhachHang (maKH, cmnd, hoTen, gioiTinh, soDienThoai, ngaySinh) VALUES ( ? , ? , ? , ? , ? , ? )";
         Object[] parameter = new Object[] { khachHang.getMaKH(), khachHang.getCmnd(), khachHang.getHoTen(),
                 khachHang.getGioiTinh(), khachHang.getSoDienThoai(), khachHang.getNgaySinh() };
@@ -128,7 +148,7 @@ public class KhachHangDAO {
         return maKH;
     }
 
-    public boolean updateKhachHang(KhachHang khachHang) {
+    public boolean capNhatTTKhachHang(KhachHang khachHang) {
         String query = "Update dbo.KhachHang set cmnd = ? , hoTen = ? , gioiTinh = ? , soDienThoai = ? , ngaySinh = ? , Where maKH = ?";
         Object[] parameter = new Object[] { khachHang.getCmnd(), khachHang.getHoTen(), khachHang.getGioiTinh(),
                 khachHang.getSoDienThoai(), khachHang.getNgaySinh(), khachHang.getMaKH() };

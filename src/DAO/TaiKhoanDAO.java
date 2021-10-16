@@ -29,7 +29,7 @@ public class TaiKhoanDAO {
         return dataList;
     }
 
-    public boolean login(String username, String password) {
+    public boolean dangNhap(String username, String password) {
         int count = 0;
         String query = "{CALL USP_Login ( ?, ? )}";
         Object[] parameter = new Object[] { username, password };

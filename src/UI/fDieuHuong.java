@@ -21,7 +21,7 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
     private ImageIcon sellIcon = new ImageIcon(
             new ImageIcon("img/money_512.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
     private ImageIcon managerIcon = new ImageIcon(
-            new ImageIcon("img/manager_512.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+            new ImageIcon("img/administration_512.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
 
     public fDieuHuong(NhanVien nhanVienLogin) {
         setTitle("Điều hướng quản lý");

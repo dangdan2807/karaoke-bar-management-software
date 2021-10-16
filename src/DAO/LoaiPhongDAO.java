@@ -16,7 +16,7 @@ public class LoaiPhongDAO {
 
     public ArrayList<LoaiPhong> getDSLoaiPhong() {
         ArrayList<LoaiPhong> dataList = new ArrayList<LoaiPhong>();
-        String query = "SELECT * FROM dbo.LoaiPhong";
+        String query = "{CALL USP_getDSLoaiPhong}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {
@@ -26,5 +26,12 @@ public class LoaiPhongDAO {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    public String getTenLPbyMaPhong(String maPhong) {
+        String query = "{CALL USP_getTenLPbyMaPhong( ? )}";
+        Object[] parameter = new Object[] { maPhong };
+        String data = DataProvider.getInstance().ExecuteScalar(query, parameter).toString();
+        return data;
     }
 }

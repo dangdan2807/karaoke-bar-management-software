@@ -2,51 +2,23 @@ package entity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 public class CTDichVu {
-	private int maCTDichVu;
 	private int soLuongDat;
-	private Timestamp ngayGioDat;
 	private Double tienDichVu;
 
-	private HoaDon hoaDon;
 	private DichVu dichVu;
 
 	public int getSoLuongDat() {
 		return soLuongDat;
 	}
 
-	public int getMaCTDichVu() {
-		return maCTDichVu;
-	}
-
-	public void setMaCTDichVu(int maCTDichVu) {
-		this.maCTDichVu = maCTDichVu;
-	}
-
 	public void setSoLuongDat(int soLuongDat) {
 		this.soLuongDat = soLuongDat;
 	}
 
-	public Timestamp getNgayGioDat() {
-		return ngayGioDat;
-	}
-
-	public void setNgayGioDat(Timestamp ngayGioDat) {
-		this.ngayGioDat = ngayGioDat;
-	}
-
 	public Double getTienDichVu() {
 		return tienDichVu;
-	}
-
-	public HoaDon getHoaDon() {
-		return hoaDon;
-	}
-
-	public void setHoaDon(HoaDon hoaDon) {
-		this.hoaDon = hoaDon;
 	}
 
 	public DichVu getDichVu() {
@@ -57,34 +29,59 @@ public class CTDichVu {
 		this.dichVu = dichVu;
 	}
 
-	public CTDichVu(int maCTDichVu, int soLuongDat, Timestamp ngayGioDat, HoaDon hoaDon, DichVu dichVu) {
-		this.maCTDichVu = maCTDichVu;
+	public CTDichVu(int soLuongDat, DichVu dichVu) {
 		this.soLuongDat = soLuongDat;
-		this.ngayGioDat = ngayGioDat;
-		this.hoaDon = hoaDon;
 		this.dichVu = dichVu;
 		this.tienDichVu = tinhTienDichVu();
-	}
-
-	public CTDichVu(int maCTDichVu) {
-		this.maCTDichVu = maCTDichVu;
 	}
 
 	public CTDichVu() {
 	}
 
 	public CTDichVu(ResultSet rs) throws SQLException {
-		this(rs.getInt("maCTDichVu"), rs.getInt("soLuongDat"), rs.getTimestamp("ngayGioDatCTDV"), new HoaDon(rs), new DichVu(rs));
+		this(rs.getInt("soLuongDat"), new DichVu(rs));
 	}
 
 	public CTDichVu(ResultSet rs, int type) throws SQLException {
-		this(rs.getInt("maCTDichVu"), rs.getInt("soLuongDat"), rs.getTimestamp("ngayGioDatCTDV"), new HoaDon(rs, type), new DichVu(rs));
+		this(rs.getInt("soLuongDat"), new DichVu(rs, type));
+	}
+
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dichVu == null) ? 0 : dichVu.hashCode());
+		// result = prime * result + ((hoaDon == null) ? 0 : hoaDon.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CTDichVu other = (CTDichVu) obj;
+		if (dichVu == null) {
+			if (other.dichVu != null)
+				return false;
+		} else if (!dichVu.equals(other.dichVu))
+			return false;
+		// if (hoaDon == null) {
+		// 	if (other.hoaDon != null)
+		// 		return false;
+		// } else if (!hoaDon.equals(other.hoaDon))
+		// 	return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "CTDichVu [dichVu=" + dichVu + ", hoaDon=" + hoaDon + ", ngayGioDat=" + ngayGioDat + ", soLuongDat="
-				+ soLuongDat + ", tienDichVu=" + tienDichVu + "]";
+		return "CTDichVu [dichVu=" + dichVu + ", soLuongDat=" + soLuongDat + "]";
 	}
 
 	public Double tinhTienDichVu() {

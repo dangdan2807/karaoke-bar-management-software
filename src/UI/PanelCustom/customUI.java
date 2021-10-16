@@ -6,12 +6,13 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 
 import javax.swing.border.*;
 
 public class CustomUI {
     private static CustomUI instance = new CustomUI();
-    public static Border BORDER_BOTTOM_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#1a66e3"));
+    public static Border BORDER_BOTTOM_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#FCA120"));
     public static Border BORDER_BOTTOM_UN_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#d0e1fd"));
     public static Border BORDER_BOTTOM_ERROR = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED);
 
@@ -55,10 +56,53 @@ public class CustomUI {
         lb.setForeground(Color.decode("#1a66e3"));
     }
 
+    public void setCustomTxt(JTextField txt) {
+        txt.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 1, Color.decode("#FCA120")));
+        txt.setBackground(new Color(246, 210, 255, 50));
+    }
+
+    public void setCustomTextField(JTextField txt) {
+        txt.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 1, Color.decode("#FCA120")));
+        txt.setBackground(new Color(246, 210, 255, 50));
+    }
+
     public void setCustomTextFieldFocus(JTextField txt) {
         if (txt.isEditable()) {
             txt.setBorder(BORDER_BOTTOM_FOCUS);
         }
+    }
+
+    public void setCustomTextFieldOn(JTextField txt) {
+        txt.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
+    }
+
+    public void setCustomTextFieldOff(JTextField txt) {
+        txt.setEditable(false);
+        txt.setFont(new Font("Dialog", Font.PLAIN, 14));
+        txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
+        txt.setBackground(Color.decode("#f9f9f9"));
+    }
+
+    public void setCustomComboBox(JComboBox<?> cbo) {
+        cbo.setUI(new BasicComboBoxUI());
+        cbo.setFont(new Font("Dialog", Font.BOLD, 12));
+        cbo.setBackground(Color.WHITE);
+        cbo.setBorder(BORDER_BOTTOM_UN_FOCUS);
+    }
+
+    public JTextField setCustomCBoxField(JComboBox<?> cbo) {
+        JTextField boxField = (JTextField) cbo.getEditor().getEditorComponent();
+        boxField.setBackground(Color.WHITE);
+        boxField.setBorder(BORDER_BOTTOM_UN_FOCUS);
+        boxField.setEditable(false);
+        return boxField;
+    }
+
+    public void setCustomSpinner(JSpinner spin) {
+        spin.setFont(new Font("Dialog", Font.PLAIN, 14));
+        spin.setBackground(Color.WHITE);
+        spin.setBorder(BORDER_BOTTOM_UN_FOCUS);
     }
 
     public java.util.Date convertSqlDateToUtilDate(Date date) {

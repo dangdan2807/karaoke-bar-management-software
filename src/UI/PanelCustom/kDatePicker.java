@@ -104,14 +104,42 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
 
     }
 
+    public void setOpaqueCustom(Boolean opaque) {
+        this.setOpaque(opaque);
+    };
+
+    /**
+     * Thay đổi màu chữ
+     * 
+     * @param color truyền vào 1 Color
+     */
+    public void setForegroundCustom(Color color) {
+        txt.setForeground(color);
+    };
+
+    /**
+     * Thay đổi màu nền
+     * 
+     * @param color truyền vào 1 Color
+     */
     public void setBackgroundColor(Color color) {
         txt.setBackground(color);
     }
 
+    /**
+     * Thay đổi viền
+     * 
+     * @param border truyền vào 1 Border
+     */
     public void setBorderCustom(Border border) {
         txt.setBorder(border);
     }
 
+    /**
+     * Thay đổi font chữ
+     * 
+     * @param font truyền vào 1 Font
+     */
     public void setFontCustom(Font font) {
         txt.setFont(font);
     }
@@ -119,7 +147,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * lấy giá trị từ được hiển thị
      * 
-     * @return
+     * @return String giá trị được hiển thị
      */
     public String getValue() {
         return txt.getText();
@@ -148,6 +176,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
 
     /**
      * Cập nhật giá trị với giá trị đầu vào là một java.sql.Date
+     * 
      * @param date java.sql.Date
      */
     public void setValue(Date date) {
@@ -166,6 +195,8 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
 
     /**
      * Lấy ra giá trị ngày dưới dạng java.sql.Date
+     * 
+     * @param date sql.Date
      */
     public Date getFullDate() throws ParseException {
         String strDate = txt.getText();
@@ -177,7 +208,8 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
 
     /**
      * lấy ra ngày được hiển thị
-     *  @return Int 
+     * 
+     * @return Int
      */
     public int getDay() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
@@ -187,6 +219,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
 
     /**
      * lấy ra tháng được hiển thị
+     * 
      * @return int
      */
     public int getMonth() {
@@ -197,6 +230,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
 
     /**
      * lấy ra năm được hiển thị
+     * 
      * @return int
      */
     public int getYear() {

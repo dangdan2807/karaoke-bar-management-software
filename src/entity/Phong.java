@@ -7,7 +7,8 @@ public class Phong {
 	private String maPhong;
 	private int tinhTrangP;
 	private String viTri;
-	public LoaiPhong loaiPhong;
+	
+	private LoaiPhong loaiPhong;
 
 	public String getMaPhong() {
 		return maPhong;

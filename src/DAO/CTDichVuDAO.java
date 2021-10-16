@@ -14,7 +14,7 @@ public class CTDichVuDAO {
         return instance;
     }
 
-    public ArrayList<CTDichVu> getCTDichVuListByMaPhong(String maPhong) {
+    public ArrayList<CTDichVu> getDSachCTDichVuByMaPhong(String maPhong) {
         ArrayList<CTDichVu> dataList = new ArrayList<CTDichVu>();
         String query = "{CALL USP_getCTDichVuListByMaPhong ( ? )}";
         Object[] parameter = new Object[] { maPhong };
@@ -27,5 +27,29 @@ public class CTDichVuDAO {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    public CTDichVu getCTDichVuByMaHDvaMaDV(int maHD, String maDV) {
+        CTDichVu data = null;
+        String query = "{CALL USP_getCTDichVuByMaHDvaMaDV ( ? , ? )}";
+        Object[] parameter = new Object[] { maHD, maDV };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                data = new CTDichVu(rs, 1);
+                break;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public boolean themCTDichVu(CTDichVu ctDichVu, int soLuongDatMoi, int maHoaDon) {
+        String query = "{CALL USP_themCTDichVu ( ? , ? , ? , ? )}";
+        Object[] parameter = new Object[] { ctDichVu.getDichVu().getMaDichVu(), maHoaDon, soLuongDatMoi,
+                ctDichVu.getDichVu().getGiaBan() };
+        int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        return result > 0;
     }
 }
