@@ -3,7 +3,7 @@ package entity;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CTDichVu {
+public class CTHoaDon {
 	private int soLuongDat;
 	private Double tienDichVu;
 
@@ -29,20 +29,20 @@ public class CTDichVu {
 		this.dichVu = dichVu;
 	}
 
-	public CTDichVu(int soLuongDat, DichVu dichVu) {
+	public CTHoaDon(int soLuongDat, DichVu dichVu) {
 		this.soLuongDat = soLuongDat;
 		this.dichVu = dichVu;
 		this.tienDichVu = tinhTienDichVu();
 	}
 
-	public CTDichVu() {
+	public CTHoaDon() {
 	}
 
-	public CTDichVu(ResultSet rs) throws SQLException {
+	public CTHoaDon(ResultSet rs) throws SQLException {
 		this(rs.getInt("soLuongDat"), new DichVu(rs));
 	}
 
-	public CTDichVu(ResultSet rs, int type) throws SQLException {
+	public CTHoaDon(ResultSet rs, int type) throws SQLException {
 		this(rs.getInt("soLuongDat"), new DichVu(rs, type));
 	}
 
@@ -65,7 +65,7 @@ public class CTDichVu {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CTDichVu other = (CTDichVu) obj;
+		CTHoaDon other = (CTHoaDon) obj;
 		if (dichVu == null) {
 			if (other.dichVu != null)
 				return false;

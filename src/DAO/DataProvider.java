@@ -85,7 +85,7 @@ public class DataProvider {
      * Dùng để đếm, ... hoặc lấy giá trị của hàng đầu của cột đầu tiên của kế quả câu truy vấn
      * @param query câu truy vấn
      * @param parameter các giá trị được truyền vào dấu truy vấn tại các dấu ?
-     * @return trả về 1 Object
+     * @return trả về 1 Object chứa giá trị cần lấy
      */
     public Object ExecuteScalar(String query, Object[] parameter) {
         Object data = null;
@@ -109,6 +109,7 @@ public class DataProvider {
             rs = stmt.executeQuery();
             while (rs.next()) {
                 data = rs.getObject(1);
+                break;
             }
         } catch (SQLException e) {
             e.printStackTrace();

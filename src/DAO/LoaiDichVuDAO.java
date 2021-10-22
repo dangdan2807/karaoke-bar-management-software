@@ -22,7 +22,7 @@ public class LoaiDichVuDAO {
      */
     public ArrayList<LoaiDichVu> getDSLoaiDV() {
         ArrayList<LoaiDichVu> dataList = new ArrayList<LoaiDichVu>();
-        String query = "SELECT * FROM dbo.LoaiDichVu";
+        String query = "{CALL USP_getLoaiDichVuList()}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {

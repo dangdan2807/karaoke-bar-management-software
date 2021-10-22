@@ -18,7 +18,7 @@ public class HoaDon {
 	private KhachHang khachHang;
 	private Phong phong;
 
-	private List<CTDichVu> ctDSDichVu;
+	private List<CTHoaDon> ctDSDichVu;
 
 	public int getMaHoaDon() {
 		return maHoaDon;
@@ -80,11 +80,11 @@ public class HoaDon {
 		this.phong = phong;
 	}
 
-	public List<CTDichVu> getCtDSDichVu() {
+	public List<CTHoaDon> getCtDSDichVu() {
 		return ctDSDichVu;
 	}
 
-	public void setCtDSDichVu(List<CTDichVu> ctDSDichVu) {
+	public void setCtDSDichVu(List<CTHoaDon> ctDSDichVu) {
 		this.ctDSDichVu = ctDSDichVu;
 	}
 
@@ -99,7 +99,7 @@ public class HoaDon {
 		this.phong = phong;
 		this.tongTien = 0.0;
 
-		ctDSDichVu = new ArrayList<CTDichVu>();
+		ctDSDichVu = new ArrayList<CTHoaDon>();
 
 	}
 
@@ -111,20 +111,20 @@ public class HoaDon {
 		this.phong = phong;
 		this.tongTien = 0.0;
 
-		ctDSDichVu = new ArrayList<CTDichVu>();
+		ctDSDichVu = new ArrayList<CTHoaDon>();
 	}
 
 	public HoaDon(int maHoaDon) {
 		this.maHoaDon = maHoaDon;
 		this.tongTien = 0.0;
 
-		ctDSDichVu = new ArrayList<CTDichVu>();
+		ctDSDichVu = new ArrayList<CTHoaDon>();
 	}
 
 	public HoaDon() {
 		this.tongTien = 0.0;
 
-		ctDSDichVu = new ArrayList<CTDichVu>();
+		ctDSDichVu = new ArrayList<CTHoaDon>();
 	}
 
 	public HoaDon(ResultSet rs) throws SQLException {
@@ -147,7 +147,7 @@ public class HoaDon {
 
 	public Double tinhTienHoaDon() {
 		Double tongTienDV = 0.0;
-		for (CTDichVu item : ctDSDichVu) {
+		for (CTHoaDon item : ctDSDichVu) {
 			tongTienDV += item.getTienDichVu();
 		}
 		tongTien = tongTienDV;
@@ -155,7 +155,7 @@ public class HoaDon {
 	}
 
 	public boolean themCTDichVu(DichVu dichVu, int soLuongDat) {
-		CTDichVu ctDV = new CTDichVu(soLuongDat, dichVu);
+		CTHoaDon ctDV = new CTHoaDon(soLuongDat, dichVu);
 		if (ctDSDichVu.contains(ctDV)) {
 			return false;
 		}

@@ -21,9 +21,8 @@ public class HoaDonDAO {
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         HoaDon data = null;
         try {
-            while (rs.next()) {
+            if (rs.next()) {
                 data = new HoaDon(rs, 1);
-                break;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -37,9 +36,8 @@ public class HoaDonDAO {
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         HoaDon data = null;
         try {
-            while (rs.next()) {
+            if (rs.next()) {
                 data = new HoaDon(rs, 1);
-                break;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,8 +50,9 @@ public class HoaDonDAO {
 
     public int getMaHDCuoiCung() {
         String query = "{CALL USP_getMaHDCuoiCung}";
-        int maHoaDon = (int) DataProvider.getInstance().ExecuteScalar(query, null);
-        return maHoaDon;
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, null);
+        int billID = obj != null ? billID = (int) obj : 0;
+        return billID;
     }
 
     public boolean themHoaDon(HoaDon hoaDon) {
@@ -64,9 +63,10 @@ public class HoaDonDAO {
         return result > 0;
     }
 
-    public void thanhToan(int maHoaDon, double tongTien) {
-        String query = "{CALL USP_thanhToanHD( ? , ? )}";
-        Object[] param = new Object[] { tongTien, maHoaDon };
-        DataProvider.getInstance().ExecuteNonQuery(query, param);
+    public boolean thanhToan(int maHoaDon, Timestamp ngayGioTra, double tongTien) {
+        String query = "{CALL USP_thanhToanHD( ? , ? , ? )}";
+        Object[] param = new Object[] { tongTien, ngayGioTra, maHoaDon };
+        int result = DataProvider.getInstance().ExecuteNonQuery(query, param);
+        return result > 0;
     }
 }

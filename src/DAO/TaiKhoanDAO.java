@@ -16,7 +16,7 @@ public class TaiKhoanDAO {
     }
 
     public ArrayList<TaiKhoan> getDSTaiKhoan() {
-        String query = "SELECT * FROM dbo.TaiKhoan";
+        String query = "{CALL USP_getAccountList()}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         ArrayList<TaiKhoan> dataList = new ArrayList<TaiKhoan>();
         try {
@@ -35,8 +35,9 @@ public class TaiKhoanDAO {
         Object[] parameter = new Object[] { username, password };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
-            rs.next();
-            count = rs.getRow();
+            if (rs.next()) {
+                count = rs.getRow();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -44,13 +45,15 @@ public class TaiKhoanDAO {
     }
 
     public TaiKhoan getAccountByUsername(String username) {
-        String query = "Select * from dbo.TaiKhoan where username = ?";
+        String query = "{CALL USP_getAccountByUsername( ? )}";
         Object[] parameter = new Object[] { username };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         TaiKhoan account = null;
         try {
-            rs.next();
-            account = new TaiKhoan(rs);
+            while (rs.next()) {
+                account = new TaiKhoan(rs);
+                break;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

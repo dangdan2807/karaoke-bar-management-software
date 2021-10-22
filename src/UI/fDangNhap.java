@@ -23,6 +23,9 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	private GradientPaint gra = new GradientPaint(0, 0, Color.decode("#c22ed0"), 255, 0, Color.decode("#5ffae0"));
 	TaiKhoanDAO taiKhoanDAO = TaiKhoanDAO.getInstance();
 
+	/**
+	 * Constructor form đăng nhập
+	 */
 	public fDangNhap() {
 		setTitle("Đăng nhập");
 		setSize(460, 650);
@@ -33,6 +36,9 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		createFormLogin();
 	}
 
+	/**
+	 * Khởi tạo giao diện đăng nhập
+	 */
 	public void createFormLogin() {
 		JPanel pnMain = new JPanel();
 		pnMain.setBackground(Color.decode("#ffffff"));
@@ -105,9 +111,11 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 
 		Color colorShadowDefault = Color.decode("#d2eef5");
 		Color colorFontDefault = Color.WHITE;
-		btnLogin = new MyButton(285, 40, "Đăng nhập", gra, loginIcon.getImage(), 120, 22, 96, 7, colorShadowDefault, colorFontDefault);
+		btnLogin = new MyButton(285, 40, "Đăng nhập", gra, loginIcon.getImage(), 120, 22, 96, 7, colorShadowDefault,
+				colorFontDefault);
 		((MyButton) btnLogin).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		((MyButton) btnLogin).setColorHover(Color.WHITE);
+		((MyButton) btnLogin).setColorExit(Color.WHITE);
 		btnLogin.setBounds(83, 177, 285, 40);
 		pnLogin.add(btnLogin);
 
@@ -133,7 +141,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 			String password = txtPassword.getText().trim();
 			if (validData()) {
 				if (login(username, password)) {
-					NhanVien staff = NhanVienDAO.getInstance().getNhanVienByTenDangNhap(username);
+					NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername(username);
 					if (staff.getTaiKhoan().getTinhTrangTK() == true) {
 						fDieuHuong f = new fDieuHuong(staff);
 						this.setVisible(false);
@@ -201,29 +209,30 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		Object o = e.getSource();
-		if (o.equals(btnLogin)) {
-			// CustomUI.getInstance().setCustomBtnHover(btnLogin);
-		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		Object o = e.getSource();
-		if (o.equals(btnLogin)) {
-			// CustomUI.getInstance().setCustomBtn(btnLogin);
-		}
 	}
 
+	/**
+	 * Hiển thị popup thông báo
+	 * 
+	 * @param message <code>String</code>: nội dung thông báo
+	 */
 	private void showMessage(String message) {
 		JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.OK_OPTION);
 	}
 
+	/**
+	 * Kiểm tra thông tin trước khi đăng nhập
+	 * 
+	 * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+	 */
 	private boolean validData() {
 		String username = txtUsername.getText().trim();
 		String password = txtPassword.getText().trim();
@@ -246,6 +255,13 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		return true;
 	}
 
+	/**
+	 * Đăng nhập tài khoản
+	 * 
+	 * @param username <code>String</code>: tên đăng nhập
+	 * @param password <code>String</code>: mật khẩu
+	 * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+	 */
 	private boolean login(String username, String password) {
 		boolean result = TaiKhoanDAO.getInstance().dangNhap(username, password);
 		return result;

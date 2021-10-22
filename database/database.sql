@@ -17,7 +17,7 @@ CREATE TABLE TaiKhoan
 (
     tenDangNhap VARCHAR(100) NOT NULL PRIMARY KEY,
     matKhau VARCHAR(100) NOT NULL DEFAULT(N'123456'),
-    -- 1. kích hoạt || 0. vô hiệu hóa
+    -- 0. vô hiệu hóa || 1. kích hoạt
     tinhTrangTK BIT NOT NULL DEFAULT(1)
 )
 GO
@@ -25,15 +25,15 @@ GO
 CREATE TABLE NhanVien
 (
     maNhanVien VARCHAR(10) NOT NULL PRIMARY KEY,
-    cmnd VARCHAR(12) NOT NULL,
     hoTen NVARCHAR(100) NOT NULL DEFAULT(N''),
+    cmnd VARCHAR(12) NOT NULL,
+    gioiTinh BIT NOT NULL,
     ngaySinh DATE,
     soDienThoai VARCHAR(10),
     chucVu NVARCHAR(100) NOT NULL,
     mucLuong FLOAT NOT NULL,
     trangThaiNV NVARCHAR(100) NULL,
     -- 0. nam | 1. nữ
-    gioiTinh BIT NOT NULL,
 
     taiKhoan VARCHAR(100) NOT NULL,
 
@@ -98,7 +98,7 @@ CREATE TABLE HoaDon
 (
     maHoaDon INT IDENTITY(1, 1) PRIMARY KEY,
     ngayGioDat DATETIME NOT NULL DEFAULT(getdate()),
-    ngayGioTra DATETIME NULL ,
+    ngayGioTra DATETIME,
     -- 0. chưa thanh toán | 1. đã thanh toán
     tinhTrangHD INT NOT NULL DEFAULT(0),
     TongTien FLOAT NOT NULL DEFAULT(0) CHECK(TongTien >= 0),
@@ -112,7 +112,7 @@ CREATE TABLE HoaDon
 )
 GO
 
-CREATE TABLE CTDichVu
+CREATE TABLE CTHoaDon
 (
     maDichVu VARCHAR(5) NOT NULL,
     maHoaDon INT NOT NULL,
@@ -129,18 +129,18 @@ GO
 INSERT INTO dbo.LoaiDichVu
     (maLDV, tenLDV)
 VALUES
-    ('LDV001', N'Thạch Dừa'),
-    ('LDV002', N'Đồ uống có cồn'),
-    ('LDV003', N'Sinh tố'),
-    ('LDV004', N'Nước đóng chai'),
-    ('LDV005', N'Gỏi'),
-    ('LDV006', N'Soup'),
-    ('LDV007', N'Salad'),
-    ('LDV008', N'Hải sản'),
-    ('LDV009', N'Lẫu'),
-    ('LDV010', N'Hải sản'),
-    ('LDV011', N'Mì'),
-    ('LDV012', N'Thịt heo, bò, gà')
+    ('LDV001', N'Thức ăn'),
+    ('LDV002', N'Đồ uống')
+    -- ('LDV003', N'Sinh tố'),
+    -- ('LDV004', N'Nước đóng chai'),
+    -- ('LDV005', N'Gỏi'),
+    -- ('LDV006', N'Soup'),
+    -- ('LDV007', N'Salad'),
+    -- ('LDV008', N'Hải sản'),
+    -- ('LDV009', N'Lẫu'),
+    -- ('LDV010', N'Hải sản'),
+    -- ('LDV011', N'Mì'),
+    -- ('LDV012', N'Thịt heo, bò, gà')
 GO
 
 INSERT INTO dbo.DichVu
@@ -153,77 +153,77 @@ VALUES
     ('DV005', N'Thạch Dừa Xoài', 30000, 15, 'LDV001'),
     ('DV006', N'Thạch Dừa Yaourt', 42000, 10, 'LDV001'),
 
-    ('DV007', N'Iron man', 32000, 26, 'LDV002'),
-    ('DV008', N'Moscow Beer', 32000, 84, 'LDV002'),
-    ('DV009', N'Long Island iced Tea', 32000, 2, 'LDV002'),
+    ('DV007', N'Iron man', 32000, 26, 'LDV001'),
+    ('DV008', N'Moscow Beer', 32000, 84, 'LDV001'),
+    ('DV009', N'Long Island iced Tea', 32000, 2, 'LDV001'),
 
-    ('DV010', N'Heineken (Pháp)', 50000, 84, 'LDV002'),
-    ('DV011', N'Heineken (Lon)', 30000, 85, 'LDV002'),
-    ('DV012', N'Heineken (Chai)', 27000, 72, 'LDV002'),
-    ('DV013', N'Spy', 65000, 83, 'LDV002'),
-    ('DV014', N'Budweiser (Lon/Chai)', 33000, 62, 'LDV002'),
-    ('DV015', N'Tiger (Chai)', 24000, 82, 'LDV002'),
-    ('DV016', N'Tiger Crystal (Chai)', 27000, 75, 'LDV002'),
+    ('DV010', N'Heineken (Pháp)', 50000, 84, 'LDV001'),
+    ('DV011', N'Heineken (Lon)', 30000, 85, 'LDV001'),
+    ('DV012', N'Heineken (Chai)', 27000, 72, 'LDV001'),
+    ('DV013', N'Spy', 65000, 83, 'LDV001'),
+    ('DV014', N'Budweiser (Lon/Chai)', 33000, 62, 'LDV001'),
+    ('DV015', N'Tiger (Chai)', 24000, 82, 'LDV001'),
+    ('DV016', N'Tiger Crystal (Chai)', 27000, 75, 'LDV001'),
 
-    ('DV017', N'Sinh tố Yaourt Đá', 35000, 72, 'LDV003'),
-    ('DV018', N'Sinh tố Yaourt Lô Hội Cam', 60000, 63, 'LDV003'),
+    ('DV017', N'Sinh tố Yaourt Đá', 35000, 72, 'LDV001'),
+    ('DV018', N'Sinh tố Yaourt Lô Hội Cam', 60000, 63, 'LDV001'),
 
-    ('DV019', N'SoDa', 30000, 28, 'LDV004'),
-    ('DV020', N'SoDa Xí Muội', 45000, 100, 'LDV004'),
-    ('DV021', N'SoDa Chanh Đường', 45000, 100, 'LDV004'),
-    ('DV022', N'Pepsi', 30000, 100, 'LDV004'),
-    ('DV023', N'7 Up', 30000, 83, 'LDV004'),
-    ('DV024', N'Mirinda(Sarsi)', 30000, 83, 'LDV004'),
-    ('DV025', N'Sting', 30000, 83, 'LDV004'),
-    ('DV026', N'Red Bull', 25000, 83, 'LDV004'),
-    ('DV027', N'Red Bull', 25000, 83, 'LDV004'),
+    ('DV019', N'SoDa', 30000, 28, 'LDV001'),
+    ('DV020', N'SoDa Xí Muội', 45000, 100, 'LDV001'),
+    ('DV021', N'SoDa Chanh Đường', 45000, 100, 'LDV001'),
+    ('DV022', N'Pepsi', 30000, 100, 'LDV001'),
+    ('DV023', N'7 Up', 30000, 83, 'LDV001'),
+    ('DV024', N'Mirinda(Sarsi)', 30000, 83, 'LDV001'),
+    ('DV025', N'Sting', 30000, 83, 'LDV001'),
+    ('DV026', N'Red Bull', 25000, 83, 'LDV001'),
+    ('DV027', N'Red Bull', 25000, 83, 'LDV001'),
 
-    ('DV028', N'Gỏi Bưởi Hải Sản', 130000, 46, 'LDV005'),
-    ('DV029', N'Gỏi Miến Thái Lan', 130000, 35, 'LDV005'),
-    ('DV030', N'Gỏi Sứa Tôm Thịt', 130000, 28, 'LDV005'),
+    ('DV028', N'Gỏi Bưởi Hải Sản', 130000, 46, 'LDV002'),
+    ('DV029', N'Gỏi Miến Thái Lan', 130000, 35, 'LDV002'),
+    ('DV030', N'Gỏi Sứa Tôm Thịt', 130000, 28, 'LDV002'),
 
-    ('DV031', N'Soup Bắp Cua Gà Xé', 40000, 28, 'LDV006'),
-    ('DV032', N'Soup Hải Sản Thái Lan', 40000, 92, 'LDV006'),
+    ('DV031', N'Soup Bắp Cua Gà Xé', 40000, 28, 'LDV002'),
+    ('DV032', N'Soup Hải Sản Thái Lan', 40000, 92, 'LDV002'),
 
-    ('DV033', N'Salad Thập cẩm', 110000, 18, 'LDV007'),
-    ('DV034', N'Salad Cá Ngừ', 130000, 29, 'LDV007'),
-    ('DV035', N'Salad Trộn Thịt Bò', 130000, 83, 'LDV007'),
+    ('DV033', N'Salad Thập cẩm', 110000, 18, 'LDV002'),
+    ('DV034', N'Salad Cá Ngừ', 130000, 29, 'LDV002'),
+    ('DV035', N'Salad Trộn Thịt Bò', 130000, 83, 'LDV002'),
 
-    ('DV036', N'Cà Ri Tôm', 260000, 28, 'LDV008'),
-    ('DV037', N'Tôm Rang Me', 260000, 28, 'LDV008'),
-    ('DV038', N'Tôm Sú Hấp Bia / Nước Dừa', 260000, 88, 'LDV008'),
+    ('DV036', N'Cà Ri Tôm', 260000, 28, 'LDV002'),
+    ('DV037', N'Tôm Rang Me', 260000, 28, 'LDV002'),
+    ('DV038', N'Tôm Sú Hấp Bia / Nước Dừa', 260000, 88, 'LDV002'),
 
-    ('DV039', N'Cua Hấp Bia / Nước Dừa', 300000, 83, 'LDV008'),
-    ('DV040', N'Cua Lột Chiên Giòn', 250000, 15, 'LDV008'),
-    ('DV041', N'Cua Rang Me', 310000, 18, 'LDV008'),
+    ('DV039', N'Cua Hấp Bia / Nước Dừa', 300000, 83, 'LDV002'),
+    ('DV040', N'Cua Lột Chiên Giòn', 250000, 15, 'LDV002'),
+    ('DV041', N'Cua Rang Me', 310000, 18, 'LDV002'),
 
-    ('DV042', N'Bò Cuộn Phô Mai', 160000, 18, 'LDV012'),
-    ('DV043', N'Bò Lúc Lắc', 190000, 93, 'LDV012'),
+    ('DV042', N'Bò Cuộn Phô Mai', 160000, 18, 'LDV002'),
+    ('DV043', N'Bò Lúc Lắc', 190000, 93, 'LDV002'),
 
-    ('DV044', N'Heo Rừng Nướng Muối Ớt', 140000, 26, 'LDV012'),
+    ('DV044', N'Heo Rừng Nướng Muối Ớt', 140000, 26, 'LDV002'),
 
-    ('DV045', N'Lẫu Cá Diêu Hồng', 275000, 26, 'LDV009'),
-    ('DV046', N'Lẫu Hải Sản', 330000, 26, 'LDV009'),
-    ('DV047', N'Lẫu Thái Lan', 330000, 73, 'LDV009'),
+    ('DV045', N'Lẫu Cá Diêu Hồng', 275000, 26, 'LDV002'),
+    ('DV046', N'Lẫu Hải Sản', 330000, 26, 'LDV002'),
+    ('DV047', N'Lẫu Thái Lan', 330000, 73, 'LDV002'),
 
-    ('DV048', N'Cánh Gà Chiên Nước Mắm', 120000, 24, 'LDV012'),
-    ('DV049', N'Gà Hấp Thái Lan', 350000, 47, 'LDV012'),
-    ('DV050', N'Gà Quay Tứ Xuyên', 350000, 23, 'LDV012'),
+    ('DV048', N'Cánh Gà Chiên Nước Mắm', 120000, 24, 'LDV002'),
+    ('DV049', N'Gà Hấp Thái Lan', 350000, 47, 'LDV002'),
+    ('DV050', N'Gà Quay Tứ Xuyên', 350000, 23, 'LDV002'),
 
-    ('DV051', N'Mì Xào Bò', 150000, 29, 'LDV011'),
-    ('DV052', N'Hũ Tiếu Xào Bò', 150000, 38, 'LDV011'),
-    ('DV053', N'Miến Xào Tôm', 150000, 34, 'LDV011'),
+    ('DV051', N'Mì Xào Bò', 150000, 29, 'LDV001'),
+    ('DV052', N'Hũ Tiếu Xào Bò', 150000, 38, 'LDV001'),
+    ('DV053', N'Miến Xào Tôm', 150000, 34, 'LDV001'),
 
-    ('DV054', N'Mực Nướng Muối Ớt', 160000, 34, 'LDV008'),
-    ('DV055', N'Khô Mực Nướng', 130000, 47, 'LDV008'),
-    ('DV056', N'Mực Xào Sa Tế', 160000, 8, 'LDV008'),
-    ('DV057', N'Mực Chiên Xù', 160000, 6, 'LDV008'),
-    ('DV058', N'Khô Chiên Giòn', 160000, 76, 'LDV008'),
+    ('DV054', N'Mực Nướng Muối Ớt', 160000, 34, 'LDV002'),
+    ('DV055', N'Khô Mực Nướng', 130000, 47, 'LDV002'),
+    ('DV056', N'Mực Xào Sa Tế', 160000, 8, 'LDV002'),
+    ('DV057', N'Mực Chiên Xù', 160000, 6, 'LDV002'),
+    ('DV058', N'Khô Chiên Giòn', 160000, 76, 'LDV002'),
 
-    ('DV059', N'Cháo Hải Sản', 250000, 65, 'LDV006'),
-    ('DV060', N'Cháo Mực', 250000, 89, 'LDV006'),
-    ('DV061', N'Cháo Tôm Tươi', 200000, 67, 'LDV006'),
-    ('DV062', N'Cháo Cá', 220000, 8, 'LDV006')
+    ('DV059', N'Cháo Hải Sản', 250000, 65, 'LDV002'),
+    ('DV060', N'Cháo Mực', 250000, 89, 'LDV002'),
+    ('DV061', N'Cháo Tôm Tươi', 200000, 67, 'LDV002'),
+    ('DV062', N'Cháo Cá', 220000, 8, 'LDV002')
 GO
 
 INSERT INTO dbo.TaiKhoan
@@ -243,15 +243,15 @@ GO
 INSERT INTO dbo.NhanVien
     (maNhanVien, cmnd, hoTen, ngaySinh, gioiTinh, soDienThoai, chucVu, mucLuong, taiKhoan, trangThaiNV)
 VALUES
-    ('NV00000001', '111111111', N'Phạm Đăng Đan', '2001-01-01', 1, '0312345678', N'Quản lý', 6000000, 'phamdangdan', N''),
-    ('NV00000002', '111111113', N'Huỳnh Tuấn Anh', '2001-01-01', 1, '0312345671', N'Quản lý', 6000000, 'huynhtuananh', N''),
-    ('NV00000003', '111111112', N'Lăng Nhật Sang', '2001-01-01', 1, '0312345679', N'Quản lý', 6000000, 'langnhapsang', N''),
-    ('NV00000004', '111111114', N'Võ Minh Hiếu', '2001-01-01', 1, '0312345672', N'Quản lý', 6000000, 'vominhhieu', N''),
-    ('NV00000005', '111111115', N'Nguyễn Xuân Anh', '1999-06-14', 0, '0312345673', N'Nhân Viên', 3000000, 'nhanvien1', N''),
-    ('NV00000006', '111111116', N'Trần Thị Ngọc Vân', '1998-07-17', 0, '0812144673', N'Nhân Viên', 2800000, 'nhanvien2', N''),
-    ('NV00000007', '111111117', N'Trần Vinh Can', '1993-08-27', 1, '0715344673', N'Nhân Viên', 3100000, 'nhanvien3', N''),
-    ('NV00000008', '111111118', N'Bùi Ngọc Văn', '1996-12-23', 1, '0532344647', N'Nhân Viên', 2700000, 'nhanvien4', N''),
-    ('NV00000009', '111111119', N'Bùi Văn Xuân', '1996-06-23', 1, '0532234647', N'Nhân Viên', 2700000, 'nhanvien5', N'Nghỉ việc')
+    ('NV00000001', '111111111', N'Phạm Đăng Đan', '2001-01-01', 1, '0312345678', N'Chủ quán', 6000000, 'phamdangdan', N'Đang làm'),
+    ('NV00000002', '111111113', N'Huỳnh Tuấn Anh', '2001-01-01', 1, '0312345671', N'Chủ quán', 6000000, 'huynhtuananh', N'Đang làm'),
+    ('NV00000003', '111111112', N'Lăng Nhật Sang', '2001-01-01', 1, '0312345679', N'Chủ quán', 6000000, 'langnhapsang', N'Đang làm'),
+    ('NV00000004', '111111114', N'Võ Minh Hiếu', '2001-01-01', 1, '0312345672', N'Chủ quán', 6000000, 'vominhhieu', N'Đang làm'),
+    ('NV00000005', '111111115', N'Nguyễn Xuân Anh', '1999-06-14', 0, '0312345673', N'Nhân Viên', 3000000, 'nhanvien1', N'Đang làm'),
+    ('NV00000006', '111111116', N'Trần Thị Ngọc Vân', '1998-07-17', 0, '0812144673', N'Nhân Viên', 2800000, 'nhanvien2', N'Đang làm'),
+    ('NV00000007', '111111117', N'Trần Vinh Can', '1993-08-27', 1, '0715344673', N'Nhân Viên', 3100000, 'nhanvien3', N'Đang làm'),
+    ('NV00000008', '111111118', N'Bùi Ngọc Văn', '1996-12-23', 1, '0532344647', N'Nhân Viên', 2700000, 'nhanvien4', N'Đang làm'),
+    ('NV00000009', '111111119', N'Bùi Văn Xuân', '1996-06-23', 1, '0532234647', N'Nhân Viên', 2700000, 'nhanvien5', N'Đã nghỉ')
 GO
 
 INSERT INTO dbo.KhachHang
@@ -317,7 +317,7 @@ VALUES
     ('2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 0.0, 'NV00000002', 'KH00000002', 'P0005')
 GO
 
-INSERT INTO dbo.CTDichVu
+INSERT INTO dbo.CTHoaDon
     (maDichVu, maHoaDon, soLuongDat, tienDichVu)
 VALUES
     ('DV001', 1, 1, 30000),
@@ -388,6 +388,31 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_getAccountByUsername
+    @username VARCHAR(100)
+AS
+BEGIN
+    SELECT tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
+    FROM dbo.TaiKhoan tk
+    WHERE tk.tenDangNhap = @username
+END
+GO
+
+CREATE PROC USP_getAccountList
+AS
+BEGIN
+    SELECT tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
+    FROM dbo.TaiKhoan tk
+END
+GO
+-- loại dịch vụ
+CREATE PROC USP_getLoaiDichVuList
+AS
+BEGIN
+    SELECT ldv.tenLDV, ldv.maLDV
+    FROM dbo.LoaiDichVu ldv
+END
+GO
 
 -- dịch vụ
 CREATE PROC USP_getDSDichVuByTenDichVu
@@ -395,8 +420,8 @@ CREATE PROC USP_getDSDichVuByTenDichVu
 AS
 BEGIN
     DECLARE @name NVARCHAR(102) = N'%' + @tenDichVu + N'%'
-    SELECT dv.maDichVu, dv.tenDichVu, dv.giaBan, dv.
-    soLuongTon, ldv.maLDV, ldv.tenLDV
+    SELECT dv.maDichVu, dv.tenDichVu, dv.giaBan, dv.soLuongTon,
+        ldv.maLDV, ldv.tenLDV
     FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
     WHERE dv.maLDV = ldv.maLDV
         AND dbo.fuConvertToUnsign(dv.tenDichVu) LIKE dbo.fuConvertToUnsign(@name)
@@ -421,12 +446,12 @@ CREATE PROC USP_getDSDichVuByTenDVvaTenLoaiDV
 AS
 BEGIN
     DECLARE @name NVARCHAR(102) = N'%' + @tenDichVu + N'%'
-    SELECT dv.maDichVu, dv.tenDichVu, dv.giaBan,
-        dv.soLuongTon, ldv.maLDV, ldv.tenLDV
+    SELECT dv.maDichVu, dv.tenDichVu, dv.giaBan, dv.soLuongTon,
+        ldv.maLDV, ldv.tenLDV
     FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
     WHERE dv.maLDV = ldv.maLDV
         AND dbo.fuConvertToUnsign(dv.tenDichVu) LIKE dbo.fuConvertToUnsign(@name)
-        AND dbo.fuConvertToUnsign(ldv.tenLDV) LIKE dbo.fuConvertToUnsign(@tenLDV)
+        AND ldv.tenLDV = @tenLDV
 END
 GO
 
@@ -448,7 +473,7 @@ BEGIN
         ldv.tenLDV, ldv.maLDV
     FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
     WHERE dv.maLDV = ldv.maLDV
-        AND dbo.fuConvertToUnsign(dv.tenDichVu) = dbo.fuConvertToUnsign(@tenDichVu)
+        AND dv.tenDichVu = @tenDichVu
 END
 GO
 
@@ -471,9 +496,10 @@ BEGIN
     SELECT hd.maHoaDon, hd.maKH, hd.maNhanVien, hd.
     ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
         p.maLP, p.maPhong, p.tinhTrangP, p.viTri
-    FROM dbo.HoaDon hd, dbo.Phong p
+    FROM dbo.HoaDon hd, dbo.Phong p, dbo.LoaiPhong lp
     WHERE hd.maPhong = p.maPhong
         AND p.maPhong = @maPhong
+        AND p.maLP = lp.maLP
         AND hd.tinhTrangHD = 0
 END
 GO
@@ -482,18 +508,19 @@ CREATE PROC USP_getHoaDonByMaHD
     @maHD INT
 AS
 BEGIN
-    SELECT hd.maHoaDon, hd.maKH, hd.maNhanVien, hd.
-    ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+    SELECT hd.maHoaDon, hd.maKH, hd.maNhanVien, hd.ngayGioDat,
+        hd.ngayGioTra, hd.tinhTrangHD,
         p.maPhong, p.maLP, p.tinhTrangP, p.viTri
-    FROM dbo.HoaDon hd, dbo.Phong p
+    FROM dbo.HoaDon hd, dbo.Phong p, dbo.LoaiPhong lp
     WHERE hd.maPhong = p.maPhong
+        AND p.maLP = lp.maLP
         AND hd.maHoaDon = @maHD
 END
 GO
 
 CREATE PROC USP_themHoaDon
     @ngayGioDat DATETIME,
-    @maNhanVien VARCHAR(10),
+    @maNhanVien VARCHAR(12),
     @maKH VARCHAR(10),
     @maPhong VARCHAR(5)
 AS
@@ -516,60 +543,63 @@ END
 GO
 
 CREATE PROC USP_thanhToanHD
-    @maHD int,
-    @tongTien float
+    @maHD INT,
+    @ngayGioTra DATETIME,
+    @tongTien FLOAT
 AS
 BEGIN
     UPDATE dbo.HoaDon 
-    SET tinhTrangHD = 1 , ngayGioTra = GETDATE() , TongTien = @tongTien
+    SET tinhTrangHD = 1 , TongTien = @tongTien, ngayGioTra = @ngayGioTra
     WHERE maHoaDon = @maHD
 END
 GO
 
 
 -- chi tiết dịch vụ
-CREATE PROC USP_getCTDichVuListByMaPhong
+CREATE PROC USP_getCTHoaDonListByMaPhong
     @maPhong VARCHAR(5)
 AS
 BEGIN
-    SELECT ctdv.soLuongDat,
+    SELECT cthd.soLuongDat,
         dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
         hd.maHoaDon, hd.maKH, hd.maNhanVien, hd.ngayGioDat,
         hd.ngayGioTra, hd.tinhTrangHD,
         ldv.maLDV, ldv.tenLDV,
         p.maLP, p.maPhong, p.tinhTrangP, p.viTri
-    FROM dbo.CTDichVu ctdv,
+    FROM dbo.CTHoaDon cthd,
         dbo.HoaDon hd,
         dbo.DichVu dv,
         dbo.LoaiDichVu ldv,
-        dbo.Phong p
-    WHERE ctdv.maHoaDon = hd.maHoaDon
+        dbo.Phong p,
+        dbo.LoaiPhong lp
+    WHERE cthd.maHoaDon = hd.maHoaDon
         AND hd.maPhong = p.maPhong
-        AND ctdv.maDichVu = dv.maDichVu
+        AND cthd.maDichVu = dv.maDichVu
         AND dv.maLDV = ldv.maLDV
         AND p.maPhong = @maPhong
+        AND p.maLP = lp.maLP
         AND hd.tinhTrangHD = 0
 END
 GO
 
-CREATE PROC USP_getCTDichVuByMaHDvaMaDV
+CREATE PROC USP_getCTHoaDonByMaHDvaMaDV
     @maHD INT,
     @maDV VARCHAR(5)
 AS
 BEGIN
-    SELECT ctdv.soLuongDat,
+    SELECT cthd.soLuongDat,
         dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
         hd.maHoaDon, hd.maKH, hd.maNhanVien, hd.ngayGioDat,
         hd.ngayGioTra, hd.tinhTrangHD,
         ldv.maLDV, ldv.tenLDV,
         p.maLP, p.maPhong, p.tinhTrangP, p.viTri
-    FROM dbo.CTDichVu ctdv,
+    FROM dbo.CTHoaDon cthd,
         dbo.HoaDon hd,
         dbo.DichVu dv,
         dbo.LoaiDichVu ldv,
         dbo.Phong p
-    WHERE ctdv.maHoaDon = hd.maHoaDon
-        AND ctdv.maDichVu = dv.maDichVu
+    WHERE cthd.maHoaDon = hd.maHoaDon
+        AND cthd.maDichVu = dv.maDichVu
         AND dv.maLDV = ldv.maLDV
         AND hd.maPhong = p.maPhong
         AND hd.maHoaDon = @maHD
@@ -578,7 +608,7 @@ END
 GO
 
 
-CREATE PROC USP_themCTDichVu
+CREATE PROC USP_themCTHoaDon
     @maDichVu VARCHAR(5),
     @maHoaDon VARCHAR(5),
     @soLuongDat INT,
@@ -595,7 +625,7 @@ BEGIN
     WHERE dv.maDichVu = @maDichVu
 
     SELECT @isExitsCTDichVu = ctdv.maHoaDon , @soLuongCu = ctdv.soLuongDat
-    FROM dbo.CTDichVu ctdv, dbo.DichVu dv
+    FROM dbo.CTHoaDon ctdv, dbo.DichVu dv
     WHERE ctdv.maDichVu = dv.maDichVu
         AND ctdv.maHoaDon = @maHoaDon
         AND ctdv.maDichVu = @maDichVu
@@ -607,7 +637,7 @@ BEGIN
         IF(@soLuongMoi > 0)
             BEGIN
             SET @tienDichVu = @soLuongMoi * @giaBan
-            UPDATE dbo.CTDichVu
+            UPDATE dbo.CTHoaDon
                 SET soLuongDat = @soLuongMoi,
                     tienDichVu = @tienDichVu
                 WHERE maHoaDon = @maHoaDon
@@ -615,7 +645,7 @@ BEGIN
         END
         ELSE
             BEGIN
-            DELETE FROM dbo.CTDichVu
+            DELETE FROM dbo.CTHoaDon
                 WHERE maHoaDon = @maHoaDon
                 AND maDichVu = @maDichVu
         END
@@ -627,7 +657,7 @@ BEGIN
     ELSE
         BEGIN
         SET @tienDichVu = @soLuongDat * @giaBan
-        INSERT INTO dbo.CTDichVu
+        INSERT INTO dbo.CTHoaDon
             (maHoaDon, maDichVu, soLuongDat, tienDichVu)
         VALUES
             (@maHoaDon, @maDichVu, @soLuongDat, @tienDichVu)
@@ -801,28 +831,161 @@ END
 GO
 
 -- nhân viên
-CREATE PROC getNhanVienByTenDangNhap
+CREATE PROC USP_getNhanVienByTenDangNhap
     @tenDangNhap VARCHAR(100)
 AS
 BEGIN
-    SELECT tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK, nv.maNhanVien, nv.cmnd, 
-    nv.hoTen, nv.ngaySinh, nv.soDienThoai, nv.chucVu, nv.mucLuong, 
-    nv.trangThaiNV, nv.gioiTinh
+    SELECT tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK, nv.maNhanVien, nv.cmnd,
+        nv.hoTen, nv.ngaySinh, nv.soDienThoai, nv.chucVu, nv.mucLuong,
+        nv.trangThaiNV, nv.gioiTinh
     FROM dbo.TaiKhoan tk, dbo.NhanVien nv
     WHERE tk.tenDangNhap = nv.taiKhoan
         AND tk.tenDangNhap = @tenDangNhap
 END
 GO
 
-CREATE PROC getNhanVienByMaNV
-    @maNV VARCHAR(10)
+CREATE PROC USP_getStaffByStaffID
+    @maNV VARCHAR(12)
 AS
 BEGIN
-    SELECT tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK, nv.maNhanVien, nv.cmnd, 
-    nv.hoTen, nv.ngaySinh, nv.soDienThoai, nv.chucVu, nv.mucLuong, 
-    nv.trangThaiNV, nv.gioiTinh
+    SELECT tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK, nv.maNhanVien, nv.cmnd,
+        nv.hoTen, nv.ngaySinh, nv.soDienThoai, nv.chucVu, nv.mucLuong,
+        nv.trangThaiNV, nv.gioiTinh
     FROM dbo.TaiKhoan tk, dbo.NhanVien nv
     WHERE tk.tenDangNhap = nv.taiKhoan
         AND nv.maNhanVien = @maNV
+END
+GO
+
+CREATE PROC USP_getStaffList
+AS
+BEGIN
+    SELECT nv.maNhanVien, nv.cmnd, nv.hoTen, nv.ngaySinh, nv.soDienThoai,
+        nv.chucVu, nv.mucLuong, nv.gioiTinh, nv.trangThaiNV,
+        tk.tinhTrangTK, tk.tenDangNhap, tk.matKhau
+    FROM dbo.NhanVien nv, dbo.TaiKhoan tk
+    WHERE nv.taiKhoan = tk.tenDangNhap
+END
+GO
+
+CREATE PROC USP_getLastStaffID
+AS
+BEGIN
+    SELECT TOP 1
+        nv.maNhanVien
+    FROM dbo.NhanVien nv
+    ORDER BY nv.maNhanVien DESC
+END
+GO
+
+CREATE PROC USP_insertStaff
+    @staffID VARCHAR(12),
+    @cmnd VARCHAR(12),
+    @fullName NVARCHAR(100),
+    @birthDay DATE,
+    @phoneNumber VARCHAR(10),
+    @position NVARCHAR(100),
+    @salary FLOAT,
+    @status NVARCHAR(100),
+    @gender INT,
+    @username VARCHAR(100)
+AS
+BEGIN
+    DECLARE @maNV VARCHAR(12)
+    BEGIN TRANSACTION
+    INSERT INTO dbo.TaiKhoan
+        (tenDangNhap, matKhau, tinhTrangTK)
+    VALUES
+        (@username, '123456', 1)
+
+    INSERT INTO dbo.NhanVien
+        (maNhanVien, cmnd, hoTen, ngaySinh, soDienThoai,
+        chucVu, mucLuong, trangThaiNV, gioiTinh, taiKhoan )
+    VALUES
+        (@staffID, @cmnd, @fullName, @birthDay, @phoneNumber,
+            @position, @salary, @status, @gender, @username)
+
+    SELECT @maNV = maNhanVien
+    FROM NhanVien
+    WHERE maNhanVien = @staffID
+    IF @maNV IS NULL
+    BEGIN
+        ROLLBACK
+    END
+    ELSE 
+    BEGIN
+        COMMIT
+    END
+END
+GO
+
+CREATE PROC USP_updateInfoStaff
+    @staffID VARCHAR(12),
+    @cmnd VARCHAR(12),
+    @fullName NVARCHAR(100),
+    @birthDay DATE,
+    @phoneNumber VARCHAR(10),
+    @position NVARCHAR(100),
+    @salary FLOAT,
+    @status NVARCHAR(100),
+    @gender INT
+AS
+BEGIN
+    UPDATE dbo.NhanVien
+        SET cmnd = @cmnd, hoTen = @fullName, ngaySinh = @birthDay, 
+        soDienThoai = @phoneNumber, chucVu = @position, mucLuong = @salary,
+        trangThaiNV = @status, gioiTinh = @gender
+        WHERE maNhanVien = @staffID
+END
+GO
+
+CREATE PROC USP_getStaffListByPosition
+    @position NVARCHAR(100)
+AS
+BEGIN
+    SELECT nv.maNhanVien, nv.hoTen, nv.cmnd, nv.gioiTinh, nv.chucVu, nv.mucLuong,
+        nv.ngaySinh, nv.soDienThoai, nv.taiKhoan, nv.trangThaiNV,
+        tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
+    FROM dbo.NhanVien nv, dbo.TaiKhoan tk
+    WHERE nv.taiKhoan = tk.tenDangNhap
+        AND nv.chucVu = @position
+END
+GO
+
+CREATE PROC USP_getStaffListByStaffName
+    @fullName NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @name NVARCHAR(102) = N'%'+ @fullName + N'%'
+    SELECT nv.maNhanVien, nv.hoTen, nv.cmnd, nv.gioiTinh, nv.chucVu, nv.mucLuong,
+        nv.ngaySinh, nv.soDienThoai, nv.taiKhoan, nv.trangThaiNV,
+        tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
+    FROM dbo.NhanVien nv, dbo.TaiKhoan tk
+    WHERE nv.taiKhoan = tk.tenDangNhap
+        AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@name)
+END
+GO
+
+CREATE PROC USP_getStaffListByPhoneNumber
+    @phoneNumber VARCHAR(10)
+AS
+BEGIN
+    DECLARE @rePhoneNumber VARCHAR(12) = '%'+ @phoneNumber + '%'
+    SELECT nv.maNhanVien, nv.hoTen, nv.cmnd, nv.gioiTinh, nv.chucVu, nv.mucLuong,
+        nv.ngaySinh, nv.soDienThoai, nv.taiKhoan, nv.trangThaiNV,
+        tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
+    FROM dbo.NhanVien nv, dbo.TaiKhoan tk
+    WHERE nv.taiKhoan = tk.tenDangNhap
+        AND nv.soDienThoai LIKE @rePhoneNumber
+END
+GO
+
+CREATE PROC USP_getStaffNameById
+    @staffID VARCHAR(12)
+AS
+BEGIN
+    SELECT nv.hoTen
+    FROM dbo.NhanVien nv
+    WHERE nv.maNhanVien = @staffID
 END
 GO

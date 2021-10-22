@@ -12,6 +12,10 @@ public class ConnectDB {
         return instance;
     }
 
+    /**
+     * Kết nối database
+     * @throws SQLException
+     */
     public void connect() throws SQLException {
         String severName = "localhost";
         String databaseName = "QuanLyQuanKaraoke";
@@ -21,6 +25,9 @@ public class ConnectDB {
         con = DriverManager.getConnection(url, username, password);
     }
 
+    /**
+     * Ngắt kết nối database
+     */
     public void disconnect() {
         if (con != null)
             try {
@@ -30,6 +37,10 @@ public class ConnectDB {
             }
     }
 
+    /**
+     * Lấy ra Connection đang kết nối đến database
+     * @return Connection
+     */
     public static Connection getConnection() {
         return con;
     }

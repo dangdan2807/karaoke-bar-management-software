@@ -34,8 +34,8 @@ public class DichVuDAO {
         Object[] parameter = new Object[] { tenDichVu };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
-            rs.next();
-            data = new DichVu(rs);
+            if (rs.next())
+                data = new DichVu(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,14 +43,11 @@ public class DichVuDAO {
     }
 
     public int getSLDVuConByTenDichVu(String tenDichVu) {
-        int data = 0;
         String query = "{CALL USP_getSLDVuConByTenDichVu( ? )}";
         Object[] parameter = new Object[] { tenDichVu };
-        int rs = (int) DataProvider.getInstance().ExecuteScalar(query, parameter);
-        if (rs > 0) {
-            data = rs;
-        }
-        return data;
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? result = (int) obj : 0;
+        return result;
     }
 
     public ArrayList<DichVu> getDSDichVuByTenDichVu(String tenDichVu) {

@@ -2,6 +2,7 @@ package UI.PanelCustom;
 
 import javax.swing.*;
 
+import DAO.ConvertTime;
 import DAO.KhachHangDAO;
 import entity.KhachHang;
 
@@ -36,6 +37,9 @@ public class DialogChonKhachHang extends JDialog
 
     private KhachHang khachHang = null;
 
+    /**
+     * Constructor mặc định không tham số
+     */
     public DialogChonKhachHang() {
         setTitle("Chọn khách hàng");
         setSize(810, 400);
@@ -45,6 +49,9 @@ public class DialogChonKhachHang extends JDialog
         createUI();
     }
 
+    /**
+     * Khởi tạo giao diện
+     */
     public void createUI() {
         JPanel pnMain = new JPanel();
         pnMain.setBounds(0, 0, 800, 400);
@@ -316,12 +323,17 @@ public class DialogChonKhachHang extends JDialog
         }
     }
 
+    /**
+     * Hiển thị thông tin khách hàng lên form thông tin khách hàng
+     * 
+     * @param khachHang <code>KhachHang</code>: khách hàng cần hiển thị
+     */
     private void loadDataLenForm(KhachHang khachHang) {
         txtMaKH.setText(khachHang.getMaKH());
         txtTenKH.setText(khachHang.getHoTen());
         txtCMND.setText(khachHang.getCmnd());
         txtSDT.setText(khachHang.getSoDienThoai());
-        String ngaySinhStr = CustomUI.getInstance().convertSqlDateToUtilDateFormatString(khachHang.getNgaySinh(),
+        String ngaySinhStr = ConvertTime.getInstance().convertSqlDateToUtilDateFormatString(khachHang.getNgaySinh(),
                 "dd-MM-yyyy");
         txtNgaySinh.setText(ngaySinhStr);
         boolean gioiTinh = khachHang.getGioiTinh();
@@ -331,6 +343,11 @@ public class DialogChonKhachHang extends JDialog
         }
     }
 
+    /**
+     * Hiển thị thông tin khách hàng hàng
+     * 
+     * @param maKH mã khách hàng
+     */
     private void loadBtnKH(String maKH) {
         KhachHang khachHang = KhachHangDAO.getInstance().getKhachHangByMaKH(maKH);
         String tenBtn = "<html>" + "<p style='text-align: left; width:116px'>Mã KH: " + khachHang.getMaKH() + " </p>"
@@ -363,6 +380,11 @@ public class DialogChonKhachHang extends JDialog
         pnShowKH.repaint();
     }
 
+    /**
+     * Hiển thị danh sách khách hàng
+     * 
+     * @param dsKhachHang <code>ArrayList KhachHang</code>
+     */
     private void LoadDSPhong(ArrayList<KhachHang> dsKhachHang) {
         heightTable = KhachHangDAO.TABLE_HEIGHT;
         pnShowKH.removeAll();
@@ -412,14 +434,27 @@ public class DialogChonKhachHang extends JDialog
         }
     }
 
+    /**
+     * Lấy giá trị trong text filed mã khách hàng
+     * 
+     * @return <code>String</code>: mã khách hàng
+     */
     public String getValueTxtMaKH() {
         return txtMaKH.getText();
     }
 
+    /**
+     * Lấy ra JButton chọn khách hàng
+     * 
+     * @return <code>JButton</code>: button chọn khách hàng
+     */
     public JButton getBtnChonKH() {
         return btnChonKH;
     }
 
+    /**
+     * Tìm kiếm thông tin của khách hàng
+     */
     private void timKiemKH() {
         int loaiTimKiem = cboTimKiem.getSelectedIndex();
         ArrayList<KhachHang> dsKhachHang = new ArrayList<KhachHang>();
@@ -428,26 +463,31 @@ public class DialogChonKhachHang extends JDialog
             JOptionPane.showMessageDialog(this, "Bạn phải nhập từ khoá cần tìm kiếm");
         } else {
             switch (loaiTimKiem) {
-                case 0:
-                    txtTimKiem.setText("");
-                    dsKhachHang = KhachHangDAO.getInstance().getDSKhachHang();
-                    break;
-                case 1:
-                    dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangByTenKH(tuKhoa);
-                    break;
-                case 2:
-                    dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangByMaKH(tuKhoa);
-                    break;
-                case 3:
-                    dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangBySDT(tuKhoa);
-                    break;
-                default:
-                    break;
+            case 0:
+                txtTimKiem.setText("");
+                dsKhachHang = KhachHangDAO.getInstance().getDSKhachHang();
+                break;
+            case 1:
+                dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangByTenKH(tuKhoa);
+                break;
+            case 2:
+                dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangByMaKH(tuKhoa);
+                break;
+            case 3:
+                dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangBySDT(tuKhoa);
+                break;
+            default:
+                break;
             }
             LoadDSPhong(dsKhachHang);
         }
     }
 
+    /**
+     * Lấy thông tin khách hàng được chọn
+     * 
+     * @return <code>KhachHang</code>: khách hàng được chọn
+     */
     public KhachHang getKHDuocChon() {
         return khachHang;
     }

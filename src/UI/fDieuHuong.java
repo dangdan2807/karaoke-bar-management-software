@@ -23,6 +23,11 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
     private ImageIcon managerIcon = new ImageIcon(
             new ImageIcon("img/administration_512.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
 
+    /**
+     * Constructor form điều hướng
+     * 
+     * @param staff <code>NhanVien</code>: nhân viên truy cập
+     */
     public fDieuHuong(NhanVien nhanVienLogin) {
         setTitle("Điều hướng quản lý");
         setSize(776, 370);
@@ -35,6 +40,11 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
         setCloseAction(this);
     }
 
+    /**
+     * Khởi tạo giao diện
+     * 
+     * @param type <code>String</code>: chức vụ của nhân viên
+     */
     public void createFormManage(String type) {
         JPanel pnMain = new JPanel();
         pnMain.setBackground(Color.WHITE);
@@ -118,14 +128,14 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
         btnLogOut.addActionListener(this);
 
         btnLogOut.addMouseListener(this);
-        checkAccount(type);
+        checkPermission(type);
         CheckPassword t = new CheckPassword(staff.getTaiKhoan().getMatKhau(), btnQLDatPhong, btnQLHeThong, this);
         t.start();
     }
 
     public static void main(String[] args) {
-        NhanVien account = NhanVienDAO.getInstance().getNhanVienByTenDangNhap("phamdangdan");
-        new fDieuHuong(account).setVisible(true);
+        NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+        new fDieuHuong(staff).setVisible(true);
     }
 
     @Override
@@ -197,8 +207,12 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
         }
     }
 
-    // mô tả: Bắt sự kiện khi click btn close(x), sẽ show 1 form xác nhận đăng xuất
-    // hay thoát chương trình
+    /**
+     * Bắt sự kiện khi click btn close(x), sẽ show 1 form xác nhận đăng xuất hay
+     * thoát chương trình
+     * 
+     * @param jframe sẽ nhận sự kiện
+     */
     public void setCloseAction(JFrame jframe) {
         jframe.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -210,7 +224,12 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
         });
     }
 
-    private void checkAccount(String type) {
+    /**
+     * Kiểm tra quyền của nhân viên
+     * 
+     * @param type <code>String</code>:
+     */
+    private void checkPermission(String type) {
         if (type.equalsIgnoreCase(STAFF)) {
             btnQLHeThong.setEnabled(false);
         } else {

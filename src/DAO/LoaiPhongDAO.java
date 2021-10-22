@@ -31,7 +31,8 @@ public class LoaiPhongDAO {
     public String getTenLPbyMaPhong(String maPhong) {
         String query = "{CALL USP_getTenLPbyMaPhong( ? )}";
         Object[] parameter = new Object[] { maPhong };
-        String data = DataProvider.getInstance().ExecuteScalar(query, parameter).toString();
-        return data;
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter).toString();
+        String roomTypeName = obj != null ? roomTypeName = obj.toString() : "";
+        return roomTypeName;
     }
 }

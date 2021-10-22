@@ -125,8 +125,9 @@ public class KhachHangDAO {
         Object[] parameter = new Object[] { maKH };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
-            rs.next();
-            data = new KhachHang(rs);
+            if (rs.next()) {
+                data = new KhachHang(rs);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -134,25 +135,30 @@ public class KhachHangDAO {
     }
 
     public boolean themKhachHang(KhachHang khachHang) {
-        String query = "INSERT INTO dbo.KhachHang (maKH, cmnd, hoTen, gioiTinh, soDienThoai, ngaySinh) VALUES ( ? , ? , ? , ? , ? , ? )";
+        String query = "INSERT INTO dbo.KhachHang (maKH, cmnd, hoTen, gioiTinh, soDienThoai, ngaySinh) "
+                + "VALUES ( ? , ? , ? , ? , ? , ? )";
         Object[] parameter = new Object[] { khachHang.getMaKH(), khachHang.getCmnd(), khachHang.getHoTen(),
                 khachHang.getGioiTinh(), khachHang.getSoDienThoai(), khachHang.getNgaySinh() };
-        int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        int result = obj != null ? result = (int) obj : 0;
         return result > 0;
     }
 
     public String getMaKHCuoiCung() {
         String query = "SELECT TOP 1 * FROM dbo.KhachHang ORDER BY maKH DESC";
         Object[] parameter = new Object[] {};
-        String maKH = (String) DataProvider.getInstance().ExecuteScalar(query, parameter);
-        return maKH;
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        String result = obj != null ? result = obj.toString() : "";
+        return result;
     }
 
     public boolean capNhatTTKhachHang(KhachHang khachHang) {
-        String query = "Update dbo.KhachHang set cmnd = ? , hoTen = ? , gioiTinh = ? , soDienThoai = ? , ngaySinh = ? , Where maKH = ?";
+        String query = "Update dbo.KhachHang set cmnd = ? , hoTen = ? , gioiTinh = ? , soDienThoai = ? , "
+                + "ngaySinh = ? , Where maKH = ?";
         Object[] parameter = new Object[] { khachHang.getCmnd(), khachHang.getHoTen(), khachHang.getGioiTinh(),
                 khachHang.getSoDienThoai(), khachHang.getNgaySinh(), khachHang.getMaKH() };
-        int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        int result = obj != null ? result = (int) obj : 0;
         return result > 0;
     }
 }

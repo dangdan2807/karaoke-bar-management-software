@@ -12,7 +12,6 @@ import java.awt.Font;
 import java.awt.event.*;
 import java.sql.Date;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
@@ -28,19 +27,27 @@ public class fThongTinCaNhan extends JDialog
     private kDatePicker dpNgaySinh;
 
     private int withPn = 400, heightPn = 315;
-    private NhanVien nhanVienLogin = null;
+    private NhanVien staffLogin = null;
     private JCheckBox chkDoiMatKhau;
 
-    public fThongTinCaNhan(NhanVien nhanVien) {
+    /**
+     * Constructor form thông tin cá nhân
+     * 
+     * @param staff <code>NhanVien</code>: nhân viên truy cập
+     */
+    public fThongTinCaNhan(NhanVien staff) {
         setTitle("Quản Lý Thông Tin Tài Khoản");
         setSize(824, 350);
         setResizable(false);
         setLocationRelativeTo(null);
         // setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.nhanVienLogin = nhanVien;
+        this.staffLogin = staff;
         createFormAccountProfile();
     }
 
+    /**
+     * Khởi tạo giao diện
+     */
     public void createFormAccountProfile() {
         JPanel pnMain = new JPanel();
         pnMain.setBounds(0, 0, withPn, heightPn);
@@ -242,11 +249,11 @@ public class fThongTinCaNhan extends JDialog
 
         chkDoiMatKhau.addItemListener(this);
 
-        changeAccount(nhanVienLogin);
+        showInfoStaff(staffLogin);
     }
 
     public static void main(String[] args) {
-        new fThongTinCaNhan(NhanVienDAO.getInstance().getNhanVienByTenDangNhap("phamdangdan")).setVisible(true);
+        new fThongTinCaNhan(NhanVienDAO.getInstance().getStaffByUsername("phamdangdan")).setVisible(true);
         ;
     }
 
@@ -272,7 +279,8 @@ public class fThongTinCaNhan extends JDialog
         // bắt sự kiện nhấn phím enter tự nhấn btnLogin
         if (o.equals(txtPassword) || o.equals(txtFullName) || o.equals(txtNewPassword) || o.equals(txtReNewPassword)) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                btnUpdate.doClick();
+                if (validData())
+                    capNhatThongTin();
             }
         }
     }
@@ -362,46 +370,60 @@ public class fThongTinCaNhan extends JDialog
         }
     }
 
-    private void changeAccount(NhanVien nhanVien) {
-        this.nhanVienLogin = nhanVien;
-        txtEmpID.setText(nhanVien.getMaNhanVien());
-        txtFullName.setText(nhanVien.getHoTen());
-        txtCMND.setText(nhanVien.getCmnd());
-        dpNgaySinh.setValue(nhanVien.getNgaySinh());
-        txtPhoneNumber.setText(nhanVien.getSoDienThoai());
-        txtPosition.setText(nhanVien.getChucVu());
-        boolean gioiTinh = nhanVien.getGioiTinh();
+    /**
+     * Hiển thị thông tin nhân viên được truyền vào lên màn hình
+     * 
+     * @param staff Nhân viên cần hiển thị thông tin
+     */
+    private void showInfoStaff(NhanVien staff) {
+        this.staffLogin = staff;
+        txtEmpID.setText(staff.getMaNhanVien());
+        txtFullName.setText(staff.getHoTen());
+        txtCMND.setText(staff.getCmnd());
+        dpNgaySinh.setValue(staff.getNgaySinh());
+        txtPhoneNumber.setText(staff.getSoDienThoai());
+        txtPosition.setText(staff.getChucVu());
+        boolean gioiTinh = staff.getGioiTinh();
         cboGender.setSelectedIndex(0);
         if (gioiTinh) {
             cboGender.setSelectedIndex(1);
         }
         DecimalFormat df = new DecimalFormat("#,###.##");
-        txtSalary.setText(df.format(nhanVien.getMucLuong()));
-        txtUsername.setText(nhanVien.getTaiKhoan().getTenDangNhap());
+        txtSalary.setText(df.format(staff.getMucLuong()));
+        txtUsername.setText(staff.getTaiKhoan().getTenDangNhap());
         txtPassword.setText("");
         txtNewPassword.setText("");
         txtReNewPassword.setText("");
     }
 
+    /**
+     * Lấy thông tin trên form và trả về 1 NhanVien
+     * 
+     * @return NhanVien
+     */
     private NhanVien getDataInForm() {
         String maNhanVien = txtEmpID.getText().trim();
         String hoTen = txtFullName.getText().trim();
         String cmnd = txtCMND.getText().trim();
-        Date ngaySinh = null;
-        try {
-            ngaySinh = dpNgaySinh.getFullDate();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Date ngaySinh = dpNgaySinh.getFullDate();
         String soDienThoai = txtPhoneNumber.getText();
         String chucVu = txtPosition.getText();
         boolean gioiTinh = (boolean) cboGender.getSelectedItem();
         Double mucLuong = Double.parseDouble(txtSalary.getText().trim().replace(",", ""));
 
         return new NhanVien(maNhanVien, cmnd, hoTen, ngaySinh, soDienThoai, chucVu, mucLuong, gioiTinh,
-                nhanVienLogin.getTrangThaiNV(), nhanVienLogin.getTaiKhoan());
+                staffLogin.getTrangThaiNV(), staffLogin.getTaiKhoan());
     }
 
+    /**
+     * Hiển thị popup thông báo của 1 JTextField
+     * 
+     * @param txt     JTextField: được trỏ đến khi cần thông báo
+     * @param type    int: mã dạng thông báo (Nếu 1. là lỗi)
+     * @param message String: Tin nhắn được hiển thị
+     * @param title   String: Tiêu đề thông báo
+     * @param option  int: loại thông báo (icon)
+     */
     private void showMessage(JTextField txt, int type, String message, String title, int option) {
         if (type == 1) {
             txt.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
@@ -409,53 +431,67 @@ public class fThongTinCaNhan extends JDialog
         JOptionPane.showMessageDialog(this, message, title, option);
     }
 
-    private void checkPassword(String matKhau, String mes) {
-        String message = mes;
-        if (matKhau.length() < 6) {
-            message = mes + " phải tối thiểu 6 ký tự";
-            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.OK_OPTION);
-        } else {
-            message = mes + " chỉ có thể chứa các kỳ tự, số, @, #, _";
-            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.OK_OPTION);
-        }
-    }
-
+    /**
+     * Hiển thị popup thông báo
+     * 
+     * @param message <code>String</code>: Tin nhắn được hiển thị
+     * @param title   <code>String</code>: Tiêu đề thông báo
+     * @param option  <code>int</code>: loại thông báo (icon)
+     */
     private void showMessage(String message, String title, int option) {
         JOptionPane.showMessageDialog(this, message, title, option);
     }
 
+    /**
+     * Kiểm tra mât khẩu
+     * 
+     * @param matKhau <code>String</code>: mật khẩu
+     * @param mess    <code>String</code>: tên loại mật khẩu (mật khẩu, mật khẩu
+     *                mới, nhập lại mật khẩu, ...)
+     */
+    private void checkPassword(String matKhau, String mess) {
+        String message = mess;
+        if (matKhau.length() < 6) {
+            message = mess + " phải tối thiểu 6 ký tự";
+            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+        } else {
+            message = mess + " chỉ có thể chứa các kỳ tự, số, @, #, _, !, $";
+            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Kiểm tra thông tin trong form
+     * 
+     * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+     */
     private boolean validData() {
         String message = "";
         String hoTen = txtFullName.getText().trim();
         if (hoTen.equalsIgnoreCase("")) {
             message = "Họ tên không được rỗng";
-            showMessage(txtFullName, 1, message, "Thông báo", JOptionPane.OK_OPTION);
+            showMessage(txtFullName, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
         String cmnd = txtCMND.getText().trim();
         if (!cmnd.matches("^[\\d]{9}$|^[\\d]{12}$")) {
             message = "CMND phải là số và gồm 9 số hoặc nếu là CCCD phải là số và gồm 12 số";
-            showMessage(txtCMND, 1, message, "Thông báo", JOptionPane.OK_OPTION);
+            showMessage(txtCMND, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        Date ngaySinh = null;
-        try {
-            ngaySinh = dpNgaySinh.getFullDate();
-            if (ngaySinh.after(dpNgaySinh.getValueToDay())) {
-                message = "Ngày sinh phải bé hơn ngày hiện tại";
-                showMessage(message, "Thông báo", JOptionPane.OK_OPTION);
-                return false;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        Date ngaySinh = dpNgaySinh.getFullDate();
+        if (ngaySinh.after(dpNgaySinh.getValueToDay())) {
+            message = "Ngày sinh phải bé hơn ngày hiện tại";
+            showMessage(message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
 
         String soDienThoai = txtPhoneNumber.getText();
         if (!soDienThoai.matches("^0[35789][\\d]{8}$")) {
             message = "Số điện thoại phải là số và gồm 10 số bắt đầu bằng 03, 05, 07, 08, 09";
-            showMessage(txtCMND, 1, message, "Thông báo", JOptionPane.OK_OPTION);
+            showMessage(txtCMND, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -468,10 +504,10 @@ public class fThongTinCaNhan extends JDialog
 
         } else if (matKhau.equals("123456")) {
             message = "Mật khẩu quá đơn giản. Vui lòng đổi mật khẩu khác";
-            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.OK_OPTION);
+            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
             return false;
 
-        } else if (matKhau.length() >= 6 && matKhau.matches("^[a-zA-Z0-9_@#]{6,}$")) {
+        } else if (matKhau.length() >= 6 && matKhau.matches("^[a-zA-Z0-9@!#$_]{6,}$")) {
             checkPassword(matKhau, "Mật khẩu");
             return false;
 
@@ -513,6 +549,9 @@ public class fThongTinCaNhan extends JDialog
         return true;
     }
 
+    /**
+     * Cập nhật thông tin nhân viên
+     */
     private void capNhatThongTin() {
         String message = "";
         NhanVien nhanVienLoginMoi = getDataInForm();
@@ -526,8 +565,8 @@ public class fThongTinCaNhan extends JDialog
         if (ketQua) {
             message = "Cập nhật thông tin thành công";
             JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            changeAccount(nhanVienLoginMoi);
-            nhanVienLogin = nhanVienLoginMoi;
+            showInfoStaff(nhanVienLoginMoi);
+            staffLogin = nhanVienLoginMoi;
         } else {
             message = "Cập nhật thông tin thất bại";
             JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);

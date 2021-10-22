@@ -11,6 +11,9 @@ import java.text.*;
 import java.util.Calendar;
 import java.sql.*;
 
+/**
+ * Dialog dùng để chọn ngày giờ
+ */
 public class DialogDatePicker extends JDialog implements ActionListener, ChangeListener {
     private int width = 450, heightPn = 210, widthPn = width - 20;
     private JButton[] button = new JButton[49];
@@ -25,6 +28,9 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
     private String blueColor = "#3f51b5";
     private String whiteColor = "#fafafa";
 
+    /**
+     * Constructor mặc định không tham số
+     */
     public DialogDatePicker() {
         setTitle("Chọn ngày");
         setSize(447, 240);
@@ -34,6 +40,9 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
         createFormDatePicker();
     }
 
+    /**
+     * Khởi tạo giao diện
+     */
     public void createFormDatePicker() {
         JPanel pnMain = new JPanel();
         pnMain.setBounds(0, 0, widthPn, heightPn);
@@ -201,7 +210,9 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
         }
     }
 
-    // thay đổi lịch theo tháng năm
+    /**
+     * thay đổi lịch theo tháng năm
+     */
     public void displayDate() {
         for (int i = 7; i < button.length; i++)
             button[i].setText("");
@@ -230,7 +241,9 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
         }
     }
 
-    // hiện ngày hiện tại
+    /**
+     * Hiển thị ngày hiện tại
+     */
     public void showToDay() {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
@@ -245,7 +258,11 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
         lbToDay.setText("Today: " + sdf.format(cal.getTime()));
     }
 
-    // hiện ngày đã chọn
+    /**
+     * Hiển thị ngày được chọn
+     * 
+     * @param day
+     */
     public void displayShowDate(int day) {
         Calendar cal = Calendar.getInstance();
         int y = (int) spinYear.getValue();
@@ -262,7 +279,11 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
         lbYear.setText(sdf.format(cal.getTime()));
     }
 
-    // lấy ngày chọn từ lịch
+    /**
+     * Lấy ngày chọn từ lịch và trả về ngày dạng chuỗi
+     * 
+     * @return <code>String</code>: ngày được chọn
+     */
     private String getPickedDate() {
         if (day.equals(""))
             return day;
@@ -272,7 +293,11 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
         return sdf.format(cal.getTime());
     }
 
-    // lấy ngày chọn từ lịch
+    /**
+     * Lấy ngày chọn từ lịch và trả về ngày dạng java.sql.Date
+     * 
+     * @return <code>java.sql.Date</code>: ngày được chọn
+     */
     public Date getDate() {
         if (day.equals(""))
             day = "0";
@@ -282,14 +307,22 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
         return (Date) cal.getTime();
     }
 
-    // lấy ngày hiện tại dạng string
+    /**
+     * Lấy ngày hiện tại và trả về ngày dạng chuỗi
+     * 
+     * @return <code>String</code>: ngày hiện tại
+     */
     public static String getToDay() {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         return sdf.format(cal.getTimeInMillis());
     }
 
-    // trả về ngày được chọn
+    /**
+     * Lấy ra ngày đã chọn ở dạng chuỗi
+     * 
+     * @return <code>String</code>: ngày được chọn
+     */
     public String getValueString() {
         String re = "";
         if (check == 1)

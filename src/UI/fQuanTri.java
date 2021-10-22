@@ -6,6 +6,8 @@ import javax.swing.event.*;
 import java.awt.event.*;
 
 import DAO.NhanVienDAO;
+import UI.PanelCustom.CustomUI;
+import UI.PanelCustom.PnNhanVien;
 import entity.NhanVien;
 
 public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
@@ -18,12 +20,15 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
     }
 
     private JTabbedPane tpTabMain;
-    private ImageIcon userIcon = new ImageIcon("img/user_16.png");
     private NhanVien staffLogin = null;
 
+    /**
+     * Constructor form quản trị
+     * @param staff <code>NhanVien</code> : nhân viên truy cập
+     */
     public fQuanTri(NhanVien staff) {
         setTitle("Quản Lý Hệ Thống");
-        setSize(1280, 700);
+        setSize(1275, 655);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -32,47 +37,44 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         setCloseAction(this);
     }
 
+    /**
+     * Khởi tạo giao diện và Tab menu
+     */
     public void createTabControl() {
         tpTabMain = new JTabbedPane();
-        
-        tpTabMain.addTab("Doanh thu", null, null, "Quản lý doanh thu");
-        tpTabMain.addTab("Sản phẩm", null, null, "Quản lý sản phẩm");
-        tpTabMain.addTab("Loại sản phẩm", null, null, "Quản lý loại sản phẩm");
-        tpTabMain.addTab("Bàn", null, null, "Quản lý bàn");
-        tpTabMain.addTab("Tài Khoản", userIcon, null, "Quản lý tài khoản");
+        PnNhanVien pnNhanVien = new PnNhanVien(staffLogin);
+        tpTabMain.addTab("Nhân viên", CustomUI.USER_ICON, pnNhanVien, "Quản lý Nhân viên");
+        tpTabMain.addTab("Khách hàng", null, null, "Quản lý Khách hàng");
+        tpTabMain.addTab("Loại phòng", null, null, "Quản lý loại phòng");
+        tpTabMain.addTab("Phòng", null, null, "Quản lý Phòng");
+        tpTabMain.addTab("Loại dịch vụ", null, null, "Quản lý loại dịch vụ");
+        tpTabMain.addTab("Dịch vụ", null, null, "Quản lý dịch vụ");
+        tpTabMain.addTab("Hóa đơn", null, null, "Quản lý Hóa đơn");
         this.add(tpTabMain);
 
         tpTabMain.addChangeListener(this);
     }
 
     public static void main(String[] args) {
-        NhanVien staffLogin = NhanVienDAO.getInstance().getNhanVienByTenDangNhap("phamdangdan");
+        NhanVien staffLogin = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
         new fQuanTri(staffLogin).setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
     }
 
-    public void EventLogOut() {
-        fDangNhap f = new fDangNhap();
-        setVisible(false);
-        f.setVisible(true);
-    }
-
-    public void EventExit() {
-        fDieuHuong f = new fDieuHuong(staffLogin);
-        setVisible(false);
-        f.setVisible(true);
-    }
-
-    // mô tả: Bắt sự kiện khi click btn close(x), sẽ show 1 form xác nhận đăng xuất
-    // hay thoát chương trình
+    /**
+     * Bắt sự kiện khi click btn close(x), sẽ show 1 form xác nhận đăng xuất hay
+     * thoát chương trình
+     * 
+     * @param jframe sẽ nhận sự kiện
+     */
     public void setCloseAction(JFrame jframe) {
         jframe.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override

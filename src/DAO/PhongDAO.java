@@ -39,7 +39,7 @@ public class PhongDAO {
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         Phong phong = null;
         try {
-            while (rs.next()) {
+            if (rs.next()) {
                 phong = new Phong(rs);
             }
         } catch (SQLException e) {
@@ -96,13 +96,16 @@ public class PhongDAO {
     public boolean capNhatTinhTrangPhong(String maPhong, int tinhTrang) {
         String query = "{CALL USP_updateTinhTrangPhong( ? , ? )}";
         Object[] parameter = new Object[] { tinhTrang, maPhong };
-        int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        int result = obj != null ? result = (int) obj : 0;
         return result > 0;
     }
 
-    public void chuyenPhong(String maPhongCu, String maPhongMoi) {
+    public boolean chuyenPhong(String maPhongCu, String maPhongMoi) {
         String query = "{CALL USP_chuyenPhong( ? , ? )}";
         Object[] parameter = new Object[] { maPhongCu, maPhongMoi };
-        DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        int result = obj != null ? result = (int) obj : 0;
+        return result > 0;
     }
 }
