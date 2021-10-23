@@ -13,20 +13,21 @@ public class CustomUI {
             new Color(255, 161, 32, 100));
     public static Border BORDER_BOTTOM_ERROR = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED);
 
-    public static ImageIcon ADD_ICON = new ImageIcon("img/blueAdd_16.png");
-    public static ImageIcon TRASH_ICON = new ImageIcon("img/trash_16.png");
-    public static ImageIcon REFRESH_ICON = new ImageIcon("img/refresh_16.png");
-    public static ImageIcon ANALYTICS_ICON = new ImageIcon("img/analytics_16.png");
-    public static ImageIcon BACK_ICON = new ImageIcon("img/back_16.png");
-    public static ImageIcon SEARCH_ICON = new ImageIcon("img/search_512.png");
-    public static ImageIcon LOGOUT_ICON = new ImageIcon("img/logout_16.png");
-    public static ImageIcon UPDATE_ICON = new ImageIcon("img/update_16.png");
-    public static ImageIcon TRANSFER_ICON = new ImageIcon("img/transfer_16.png");
-    public static ImageIcon PAYMENT_ICON = new ImageIcon("img/payment_16.png");
-    public static ImageIcon ERROR_ICON = new ImageIcon("img/cancel_16.png");
-    public static ImageIcon USER_ICON = new ImageIcon("img/user_16.png");
-    public static ImageIcon MAN_ICON = new ImageIcon("img/man_512.png");
-    public static ImageIcon WOMAN_ICON = new ImageIcon("img/woman_512.png");
+    public static ImageIcon ADD_ICON = new ImageIcon("src/main/java/img/blueAdd_16.png");
+    public static ImageIcon TRASH_ICON = new ImageIcon("src/main/java/img/trash_16.png");
+    public static ImageIcon REFRESH_ICON = new ImageIcon("src/main/java/img/refresh_16.png");
+    public static ImageIcon ANALYTICS_ICON = new ImageIcon("src/main/java/img/analytics_16.png");
+    public static ImageIcon BACK_ICON = new ImageIcon("src/main/java/img/back_16.png");
+    public static ImageIcon SEARCH_ICON = new ImageIcon("src/main/java/img/search_16.png");
+    public static ImageIcon LOGOUT_ICON = new ImageIcon("src/main/java/img/logout_16.png");
+    public static ImageIcon UPDATE_ICON = new ImageIcon("src/main/java/img/update_16.png");
+    public static ImageIcon TRANSFER_ICON = new ImageIcon("src/main/java/img/transfer_16.png");
+    public static ImageIcon PAYMENT_ICON = new ImageIcon("src/main/java/img/payment_16.png");
+    public static ImageIcon ERROR_ICON = new ImageIcon("src/main/java/img/cancel_16.png");
+    public static ImageIcon USER_ICON = new ImageIcon("src/main/java/img/user_16.png");
+    public static ImageIcon MAN_ICON = new ImageIcon("src/main/java/img/man_512.png");
+    public static ImageIcon WOMAN_ICON = new ImageIcon("src/main/java/img/woman_512.png");
+    public static ImageIcon BACKGROUND = new ImageIcon("src/main/java/img/bgBlue.jpg");
 
     /**
      * singleton <code>CustomUI</code>

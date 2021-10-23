@@ -32,12 +32,12 @@ public class PnNhanVien extends JFrame
 	private kDatePicker dpBirthDay;
 
 	private ImageIcon bg = new ImageIcon(
-			new ImageIcon("img/bgBlue.jpg").getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-	private ImageIcon addIcon = new ImageIcon("img/blueAdd_16.png");
-	private ImageIcon refreshIcon = new ImageIcon("img/refresh_16.png");
-	private ImageIcon searchIcon = new ImageIcon("img/search_16.png");
-	private ImageIcon backIcon = new ImageIcon("img/back_16.png");
-	private ImageIcon updateIcon = new ImageIcon("img/update_16.png");
+			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon addIcon = CustomUI.ADD_ICON;
+	private ImageIcon refreshIcon = CustomUI.REFRESH_ICON;
+	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
+	private ImageIcon backIcon = CustomUI.BACK_ICON;
+	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
