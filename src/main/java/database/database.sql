@@ -243,15 +243,15 @@ GO
 INSERT INTO dbo.NhanVien
     (maNhanVien, cmnd, hoTen, ngaySinh, gioiTinh, soDienThoai, chucVu, mucLuong, taiKhoan, trangThaiNV)
 VALUES
-    ('NV00000001', '111111111', N'Phạm Đăng Đan', '2001-01-01', 1, '0312345678', N'Chủ quán', 6000000, 'phamdangdan', N'Đang làm'),
-    ('NV00000002', '111111113', N'Huỳnh Tuấn Anh', '2001-01-01', 1, '0312345671', N'Chủ quán', 6000000, 'huynhtuananh', N'Đang làm'),
-    ('NV00000003', '111111112', N'Lăng Nhật Sang', '2001-01-01', 1, '0312345679', N'Chủ quán', 6000000, 'langnhapsang', N'Đang làm'),
-    ('NV00000004', '111111114', N'Võ Minh Hiếu', '2001-01-01', 1, '0312345672', N'Chủ quán', 6000000, 'vominhhieu', N'Đang làm'),
-    ('NV00000005', '111111115', N'Nguyễn Xuân Anh', '1999-06-14', 0, '0312345673', N'Nhân Viên', 3000000, 'nhanvien1', N'Đang làm'),
-    ('NV00000006', '111111116', N'Trần Thị Ngọc Vân', '1998-07-17', 0, '0812144673', N'Nhân Viên', 2800000, 'nhanvien2', N'Đang làm'),
-    ('NV00000007', '111111117', N'Trần Vinh Can', '1993-08-27', 1, '0715344673', N'Nhân Viên', 3100000, 'nhanvien3', N'Đang làm'),
-    ('NV00000008', '111111118', N'Bùi Ngọc Văn', '1996-12-23', 1, '0532344647', N'Nhân Viên', 2700000, 'nhanvien4', N'Đang làm'),
-    ('NV00000009', '111111119', N'Bùi Văn Xuân', '1996-06-23', 1, '0532234647', N'Nhân Viên', 2700000, 'nhanvien5', N'Đã nghỉ')
+    ('NV00000001', '111111111', N'Phạm Đăng Đan', '2001-01-01', 0, '0312345678', N'Chủ quán', 6000000, 'phamdangdan', N'Đang làm'),
+    ('NV00000002', '111111113', N'Huỳnh Tuấn Anh', '2001-01-01', 0, '0312345671', N'Chủ quán', 6000000, 'huynhtuananh', N'Đang làm'),
+    ('NV00000003', '111111112', N'Lăng Nhật Sang', '2001-01-01', 0, '0312345679', N'Chủ quán', 6000000, 'langnhapsang', N'Đang làm'),
+    ('NV00000004', '111111114', N'Võ Minh Hiếu', '2001-01-01', 0, '0312345672', N'Chủ quán', 6000000, 'vominhhieu', N'Đang làm'),
+    ('NV00000005', '111111115', N'Nguyễn Xuân Anh', '1999-06-14', 1, '0312345673', N'Nhân Viên', 3000000, 'nhanvien1', N'Đang làm'),
+    ('NV00000006', '111111116', N'Trần Thị Ngọc Vân', '1998-07-17', 1, '0812144673', N'Nhân Viên', 2800000, 'nhanvien2', N'Đang làm'),
+    ('NV00000007', '111111117', N'Trần Vinh Can', '1993-08-27', 0, '0715344673', N'Nhân Viên', 3100000, 'nhanvien3', N'Đang làm'),
+    ('NV00000008', '111111118', N'Bùi Ngọc Văn', '1996-12-23', 0, '0532344647', N'Nhân Viên', 2700000, 'nhanvien4', N'Đang làm'),
+    ('NV00000009', '111111119', N'Bùi Văn Xuân', '1996-06-23', 0, '0532234647', N'Nhân Viên', 2700000, 'nhanvien5', N'Đã nghỉ')
 GO
 
 INSERT INTO dbo.KhachHang
@@ -414,6 +414,17 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_getServiceTypeByName
+    @ServiceTypeName NVARCHAR(100)
+AS
+BEGIN
+    SELECT ldv.tenLDV, ldv.maLDV
+    FROM dbo.LoaiDichVu ldv
+    WHERE ldv.tenLDV = @ServiceTypeName
+END
+GO
+
+
 -- dịch vụ
 CREATE PROC USP_getDSDichVuByTenDichVu
     @tenDichVu NVARCHAR(100)
@@ -455,13 +466,38 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getDSDichVu
+CREATE PROC USP_getServiceList
 AS
 BEGIN
     SELECT dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
         ldv.tenLDV, ldv.maLDV
     FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
     WHERE dv.maLDV = ldv.maLDV;
+END
+GO
+
+CREATE PROC USP_getServiceListByServiceName
+    @ServiceName NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @name NVARCHAR(102) = N'%' + @ServiceName + N'%'
+    SELECT dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
+        ldv.tenLDV, ldv.maLDV
+    FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
+    WHERE dv.maLDV = ldv.maLDV
+        AND dbo.fuConvertToUnsign(dv.tenDichVu) LIKE dbo.fuConvertToUnsign(@name)
+END
+GO
+
+CREATE PROC USP_getServiceListByServiceTypeName
+    @ServiceTypeName NVARCHAR(100)
+AS
+BEGIN
+    SELECT dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
+        ldv.tenLDV, ldv.maLDV
+    FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
+    WHERE dv.maLDV = ldv.maLDV
+        AND ldv.tenLDV = @ServiceTypeName
 END
 GO
 
@@ -484,6 +520,86 @@ BEGIN
     SELECT dv.soLuongTon
     FROM dbo.DichVu dv
     WHERE dv.tenDichVu = @tenDichVu
+END
+GO
+
+CREATE PROC USP_getLastServiceID
+AS
+BEGIN
+    SELECT TOP 1
+        dv.maDichVu
+    FROM dbo.DichVu dv
+    ORDER BY dv.maDichVu DESC
+END
+GO
+
+CREATE PROC USP_getServiceById
+    @serviceId VARCHAR(5)
+AS
+BEGIN
+    SELECT dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
+        ldv.tenLDV, ldv.maLDV
+    FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
+    WHERE dv.maLDV = ldv.maLDV
+        AND dv.maDichVu = @serviceId
+END
+GO
+
+CREATE PROC USP_insertService
+    @servideId VARCHAR(5),
+    @serviceName NVARCHAR(100),
+    @price FLOAT,
+    @quantityInStock INT,
+    @serviceTypeId VARCHAR(6)
+AS
+BEGIN
+    DECLARE @isExitsServiceId VARCHAR(5)
+    BEGIN TRANSACTION
+    INSERT INTO dbo.DichVu
+        (maDichVu, tenDichVu, giaBan, soLuongTon, maLDV)
+    VALUES
+        (@servideId, @serviceName, @price, @quantityInStock, @serviceTypeId)
+
+    select @isExitsServiceId = dv.maDichVu
+    from dbo.DichVu dv
+    where dv.maDichVu = @servideId
+
+    IF @isExitsServiceId IS NULL
+    BEGIN
+        ROLLBACK
+        PRINT 0
+    END
+    ELSE 
+    BEGIN
+        COMMIT
+        PRINT 1
+    END
+
+END
+GO
+
+CREATE PROC USP_getServiceNameById
+    @servideId VARCHAR(5)
+AS
+BEGIN
+    SELECT dv.tenDichVu
+    FROM dbo.DichVu dv
+    WHERE dv.maDichVu = @servideId
+END
+GO
+
+CREATE PROC USP_updateInfoService
+    @servideId VARCHAR(5),
+    @serviceName NVARCHAR(100),
+    @price FLOAT,
+    @quantityInStock INT,
+    @serviceTypeId VARCHAR(6)
+AS
+BEGIN
+    UPDATE dbo.DichVu
+        SET giaBan = @price, tenDichVu = @serviceName, maLDV = @serviceTypeId, 
+        soLuongTon = @quantityInStock
+        WHERE maDichVu = @servideId
 END
 GO
 
@@ -908,13 +1024,16 @@ BEGIN
     SELECT @maNV = maNhanVien
     FROM NhanVien
     WHERE maNhanVien = @staffID
+
     IF @maNV IS NULL
     BEGIN
         ROLLBACK
+        PRINT 0
     END
     ELSE 
     BEGIN
         COMMIT
+        PRINT 1
     END
 END
 GO
@@ -981,7 +1100,7 @@ END
 GO
 
 CREATE PROC USP_getStaffNameById
-    @staffID VARCHAR(12)
+    @staffID VARCHAR(10)
 AS
 BEGIN
     SELECT nv.hoTen
@@ -989,3 +1108,6 @@ BEGIN
     WHERE nv.maNhanVien = @staffID
 END
 GO
+
+
+select * from dbo.DichVu

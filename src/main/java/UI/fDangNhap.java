@@ -14,11 +14,11 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	private JTextField txtUsername, txtPassword;
 	private JButton btnLogin;
 	private ImageIcon logoIcon = new ImageIcon(
-			new ImageIcon("img/user_512.png").getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
+			CustomUI.USER_ICON_512.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
 	private ImageIcon anhChen = new ImageIcon(
-			new ImageIcon("img/anhChen_400.png").getImage().getScaledInstance(700, 300, Image.SCALE_SMOOTH));
+			CustomUI.BACKGROUND_LOGIN.getImage().getScaledInstance(700, 300, Image.SCALE_SMOOTH));
 	private ImageIcon loginIcon = new ImageIcon(
-			new ImageIcon("img/login_16.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+			CustomUI.LOGIN_ICON.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 
 	private GradientPaint gra = new GradientPaint(0, 0, Color.decode("#c22ed0"), 255, 0, Color.decode("#5ffae0"));
 	TaiKhoanDAO taiKhoanDAO = TaiKhoanDAO.getInstance();
@@ -115,7 +115,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 				colorFontDefault);
 		((MyButton) btnLogin).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		((MyButton) btnLogin).setColorHover(Color.WHITE);
-		((MyButton) btnLogin).setColorExit(Color.WHITE);
+		// ((MyButton) btnLogin).setColorExit(Color.WHITE);
 		btnLogin.setBounds(83, 177, 285, 40);
 		pnLogin.add(btnLogin);
 

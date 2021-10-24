@@ -12,6 +12,7 @@ public class MyButton extends JButton implements MouseListener {
 	private String Label;
 	private Color colorShadow, colorFont;
 	private Image icon;
+	private boolean over = false;
 	private int xLabel, yLabel, xImage, yImage;
 	private Graphics2D g2;
 	private int x, y, w, h;
@@ -20,7 +21,7 @@ public class MyButton extends JButton implements MouseListener {
 	private Paint graEnabled = new GradientPaint(0, h, new Color(255, 255, 255, 200), w, 0,
 			new Color(255, 255, 255, 200));
 
-	private Font font = new Font("Dialog", Font.BOLD, 13);
+	private Font font = new Font("Dialog", Font.BOLD, 14);
 
 	private Color colorFontHover = new Color(252, 40, 205);
 	private Color colorFontExit = Color.decode("#673ab7");
@@ -57,7 +58,7 @@ public class MyButton extends JButton implements MouseListener {
 		this.icon = icon;
 		this.xLabel = xLabel;
 		this.yLabel = yLabel;
-		this.xImage = xLabel - 25;
+		this.xImage = xLabel - 21;
 		this.yImage = yLabel - 13;
 		colorFont = colorFontExit;
 
@@ -184,12 +185,14 @@ public class MyButton extends JButton implements MouseListener {
 			MyButton.this.xImage = xImage + 2;
 			MyButton.this.yImage = yImage + 3;
 			colorShadow = colorShadowPress;
+			over = true;
 		}
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (enabled) {
+		if (over) {
 			x = 0;
 			y = 0;
 			MyButton.this.yImage = yImage - 3;
@@ -197,6 +200,7 @@ public class MyButton extends JButton implements MouseListener {
 			MyButton.this.yLabel = yLabel - 3;
 			MyButton.this.xImage = xImage - 2;
 			colorShadow = colorShadowExit;
+			over = false;
 		}
 	}
 
@@ -209,9 +213,7 @@ public class MyButton extends JButton implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		if (enabled) {
-			colorFont = colorFontExit;
-		}
+		colorFont = colorFontExit;
 	}
 
 	/**
@@ -268,8 +270,5 @@ public class MyButton extends JButton implements MouseListener {
 	public void setEnabledCustom(boolean enabled) {
 		this.enabled = enabled;
 		setEnabled(enabled);
-		if (enabled) {
-		} else {
-		}
 	}
 }

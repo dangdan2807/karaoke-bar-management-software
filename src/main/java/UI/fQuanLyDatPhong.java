@@ -36,14 +36,14 @@ public class fQuanLyDatPhong extends JFrame
 	private JSpinner spinOrderQuantity;
 	private JMenuBar menuBar;
 
-	private ImageIcon transferIcon = new ImageIcon("img/transfer_16.png");
-	private ImageIcon refreshIcon = new ImageIcon("img/refresh_16.png");
-	private ImageIcon paymentIcon = new ImageIcon("img/payment_16.png");
-	private ImageIcon searchIcon = new ImageIcon("img/search_16.png");
-	private ImageIcon phongIcon = new ImageIcon("img/micro_32.png");
-	private ImageIcon addIcon = new ImageIcon("img/blueAdd_16.png");
-	private ImageIcon trashIcon = new ImageIcon("img/trash_16.png");
-	private ImageIcon backIcon = new ImageIcon("img/back_16.png");
+	private ImageIcon transferIcon = CustomUI.TRANSFER_ICON;
+	private ImageIcon refreshIcon = CustomUI.REFRESH_ICON;
+	private ImageIcon paymentIcon = CustomUI.PAYMENT_ICON;
+	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
+	private ImageIcon roomIcon = CustomUI.ROOM_ICON;
+	private ImageIcon addIcon = CustomUI.ADD_ICON;
+	private ImageIcon trashIcon = CustomUI.TRASH_ICON;
+	private ImageIcon backIcon = CustomUI.BACK_ICON;
 
 	private int location = -1;
 	private NhanVien staffLogin = null;
@@ -520,7 +520,7 @@ public class fQuanLyDatPhong extends JFrame
 		loadRoomTypeList();
 		loadCboRoom("Tất cả");
 		loadDSServiceType();
-		loadServiceList(DichVuDAO.getInstance().getDSachDichVu());
+		loadServiceList(DichVuDAO.getInstance().getServiceList());
 		reSizeColumnTableService();
 	}
 
@@ -646,7 +646,7 @@ public class fQuanLyDatPhong extends JFrame
 			ArrayList<DichVu> serviceList = null;
 			if (serviceName.equalsIgnoreCase("")) {
 				if (serviceTypeName.equalsIgnoreCase("tất cả")) {
-					serviceList = DichVuDAO.getInstance().getDSachDichVu();
+					serviceList = DichVuDAO.getInstance().getServiceList();
 				} else {
 					serviceList = DichVuDAO.getInstance().getDSDichVuByTenLoaiDV(serviceTypeName);
 				}
@@ -826,7 +826,7 @@ public class fQuanLyDatPhong extends JFrame
 		} else if (o.equals(cboServiceType)) {
 			String tenLoaiDV = cboServiceType.getSelectedItem().toString();
 			if (tenLoaiDV.equalsIgnoreCase("tất cả")) {
-				loadServiceList(DichVuDAO.getInstance().getDSachDichVu());
+				loadServiceList(DichVuDAO.getInstance().getServiceList());
 			} else {
 				loadServiceList(DichVuDAO.getInstance().getDSDichVuByTenLoaiDV(tenLoaiDV));
 			}
@@ -947,7 +947,7 @@ public class fQuanLyDatPhong extends JFrame
 		btnRoomList[index].setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnRoomList[index].setHorizontalTextPosition(SwingConstants.CENTER);
 		btnRoomList[index].setPreferredSize(new Dimension(PhongDAO.ROOM_WIDTH, PhongDAO.ROOM_HEIGHT));
-		btnRoomList[index].setIcon(phongIcon);
+		btnRoomList[index].setIcon(roomIcon);
 		btnRoomList[index].setCursor(new Cursor(Cursor.HAND_CURSOR));
 		switch (roomStatus) {
 		case "Trống":
@@ -1176,7 +1176,7 @@ public class fQuanLyDatPhong extends JFrame
 	 * Hiển thị danh sách loại dịch vụ
 	 */
 	private void loadDSServiceType() {
-		ArrayList<LoaiDichVu> serviceTypeList = LoaiDichVuDAO.getInstance().getDSLoaiDV();
+		ArrayList<LoaiDichVu> serviceTypeList = LoaiDichVuDAO.getInstance().getServiceTypeList();
 		cboServiceType.addItem("Tất cả");
 		for (LoaiDichVu item : serviceTypeList) {
 			cboServiceType.addItem(item.getTenLDV());

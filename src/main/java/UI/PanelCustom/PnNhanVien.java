@@ -65,7 +65,7 @@ public class PnNhanVien extends JFrame
 				Graphics2D g2 = (Graphics2D) g;
 				Image bgMain = bg.getImage();
 				g2.drawImage(bgMain, 0, 0, null);
-				setFont(new Font("Tahoma", Font.BOLD, 24));
+				setFont(new Font("Dialog", Font.BOLD, 24));
 				g2.setColor(Color.decode("#9B17EB"));
 				g2.drawRoundRect(10, 50, 1238, 530, 20, 20);
 				g2.drawRoundRect(9, 49, 1240, 530, 20, 20);
@@ -359,7 +359,7 @@ public class PnNhanVien extends JFrame
 		tableStaff.setBackground(new Color(255, 255, 255, 0));
 		tableStaff.setForeground(new Color(255, 255, 255));
 		tableStaff.setRowHeight(21);
-		tableStaff.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
+		tableStaff.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
 		tableStaff.getTableHeader().setForeground(Color.decode("#9B17EB"));
 		tableStaff.getTableHeader().setBackground(new Color(255, 255, 255));
 
@@ -440,22 +440,23 @@ public class PnNhanVien extends JFrame
 			CustomUI.getInstance().setCustomTextFieldOn(txtUsername);
 			btnUpdate.setEnabledCustom(false);
 			btnAdd.setEnabledCustom(true);
+			removeSelectionInterval();
 		} else if (o.equals(btnAdd)) {
 			String message = "";
 			if (validData()) {
-				NhanVien staff = getStaffDataSelectInForm();
+				NhanVien staff = getStaffDataInForm();
 				Boolean result = NhanVienDAO.getInstance().insertStaff(staff);
 				if (result) {
 					message = "Thêm nhân viên mới thành công";
 					txtStaffID.setText(staff.getMaNhanVien());
-					txtUsername.setEditable(false);
-					btnAdd.setEnabledCustom(false);
-					btnUpdate.setEnabledCustom(true);
 					int stt = tableStaff.getRowCount();
 					addRow(stt, staff);
 					int lastIndex = tableStaff.getRowCount() - 1;
 					tableStaff.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
 					tableStaff.scrollRectToVisible(tableStaff.getCellRect(lastIndex, lastIndex, true));
+					txtUsername.setEditable(false);
+					btnAdd.setEnabledCustom(false);
+					btnUpdate.setEnabledCustom(true);
 				} else {
 					message = "Thêm nhân viên thất bại";
 				}
@@ -467,7 +468,7 @@ public class PnNhanVien extends JFrame
 			f.setVisible(true);
 		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
-				NhanVien staff = getStaffDataSelectInForm();
+				NhanVien staff = getStaffDataInForm();
 				String staffName = NhanVienDAO.getInstance().getStaffNameById(staff.getMaNhanVien());
 				String message = "Xác nhận cập nhật thông tin nhân viên " + staffName;
 				int choose = JOptionPane.showConfirmDialog(this, message, "Xác nhận cập nhật",
@@ -476,11 +477,13 @@ public class PnNhanVien extends JFrame
 					Boolean result = NhanVienDAO.getInstance().updateInfoStaff(staff);
 					if (result) {
 						message = "Cập nhật thông tin nhân viên thành công";
+						int selectedRow = tableStaff.getSelectedRow();
+						updateRow(selectedRow, staff);
 						txtUsername.setEditable(false);
 						btnAdd.setEnabledCustom(false);
 						btnUpdate.setEnabledCustom(true);
-						int selectedRow = tableStaff.getSelectedRow();
-						updateRow(selectedRow, staff);
+						tableStaff.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+						tableStaff.scrollRectToVisible(tableStaff.getCellRect(selectedRow, selectedRow, true));
 					} else {
 						message = "Cập nhật thông tin nhân viên thất bại";
 					}
@@ -496,21 +499,15 @@ public class PnNhanVien extends JFrame
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
 		if (o.equals(cboSearch)) {
-			ArrayList<NhanVien> staffList = null;
 			String searchTypeName = cboSearch.getSelectedItem().toString();
+			txtKeyWord.setText("");
 			if (searchTypeName.equalsIgnoreCase("Chức vụ")) {
-				String searchTypePosition = cboSearchPosition.getSelectedItem().toString();
-				staffList = NhanVienDAO.getInstance().getStaffListByPosition(searchTypePosition);
 				cboSearchPosition.setVisible(true);
 				txtKeyWord.setVisible(false);
-				loadStaffList(staffList);
 			} else {
 				if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-					txtKeyWord.setText("");
 					txtKeyWord.setEditable(false);
 					CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
-					staffList = NhanVienDAO.getInstance().getStaffList();
-					loadStaffList(staffList);
 				} else {
 					txtKeyWord.setEditable(true);
 					CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
@@ -518,10 +515,11 @@ public class PnNhanVien extends JFrame
 				cboSearchPosition.setVisible(false);
 				txtKeyWord.setVisible(true);
 			}
+			removeSelectionInterval();
+			searchEventUsingBtnSearch();
 		} else if (o.equals(cboSearchPosition)) {
-			String searchTypePosition = cboSearchPosition.getSelectedItem().toString();
-			ArrayList<NhanVien> staffList = NhanVienDAO.getInstance().getStaffListByPosition(searchTypePosition);
-			loadStaffList(staffList);
+			removeSelectionInterval();
+			searchEventUsingBtnSearch();
 		}
 	}
 
@@ -682,6 +680,9 @@ public class PnNhanVien extends JFrame
 		}
 	}
 
+	/**
+	 * chạy tất cả các hàm khi bắt đầu chạy form
+	 */
 	private void allLoaded() {
 		reSizeColumnTable();
 		loadStaffList(NhanVienDAO.getInstance().getStaffList());
@@ -701,6 +702,7 @@ public class PnNhanVien extends JFrame
 			txt.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
 		}
 		JOptionPane.showMessageDialog(this, message, title, option);
+		txt.requestFocus();
 	}
 
 	/**
@@ -808,7 +810,7 @@ public class PnNhanVien extends JFrame
 	}
 
 	/**
-	 * Tự động tại mã nhân viên mới tăng theo thứ tụ tăng dần
+	 * Tự động tạo mã nhân viên mới tăng theo thứ tụ tăng dần
 	 * 
 	 * @return <code>String</code>: mã nhân viên mới
 	 */
@@ -837,7 +839,7 @@ public class PnNhanVien extends JFrame
 	 * 
 	 * @return <code>NhanVien</code>: nhân viên
 	 */
-	private NhanVien getStaffDataSelectInForm() {
+	private NhanVien getStaffDataInForm() {
 		String staffID = txtStaffID.getText().trim();
 		String staffName = txtStaffName.getText().trim();
 		String status = radRetired.isSelected() ? "Đã nghỉ" : "Đang làm";
@@ -880,16 +882,16 @@ public class PnNhanVien extends JFrame
 	private void addRow(int stt, NhanVien staff) {
 		DecimalFormat df = new DecimalFormat("#,###.##");
 		String sttStr = df.format(stt);
-		String mucLuongStr = df.format(staff.getMucLuong());
-		boolean gioiTinh = staff.getGioiTinh();
-		String gioiTinhStr = gioiTinh ? "Nữ" : "Nam";
+		String salaryStr = df.format(staff.getMucLuong());
+		boolean gender = staff.getGioiTinh();
+		String genderStr = gender ? "Nữ" : "Nam";
 		String format = "dd-MM-yyyy";
 		String birthDayStr = ConvertTime.getInstance().convertSqlDateToUtilDateFormatString(staff.getNgaySinh(),
 				format);
 		modelTableStaff.addRow(new Object[] { sttStr, addSpaceToString(staff.getMaNhanVien()),
 				addSpaceToString(staff.getHoTen()), addSpaceToString(staff.getCmnd()),
 				addSpaceToString(staff.getChucVu()), addSpaceToString(staff.getSoDienThoai()),
-				addSpaceToString(birthDayStr), addSpaceToString(mucLuongStr), addSpaceToString(gioiTinhStr),
+				addSpaceToString(birthDayStr), addSpaceToString(salaryStr), addSpaceToString(genderStr),
 				addSpaceToString(staff.getTrangThaiNV()), addSpaceToString(staff.getTaiKhoan().getTenDangNhap()) });
 		modelTableStaff.fireTableDataChanged();
 	}
@@ -988,5 +990,13 @@ public class PnNhanVien extends JFrame
 			staffList = NhanVienDAO.getInstance().getStaffListByPosition(keyword);
 		}
 		loadStaffList(staffList);
+	}
+
+	/**
+	 * Xóa bỏ dòng đang chọn
+	 */
+	private void removeSelectionInterval() {
+		int selectedRow = tableStaff.getSelectedRow();
+		tableStaff.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
 	}
 }

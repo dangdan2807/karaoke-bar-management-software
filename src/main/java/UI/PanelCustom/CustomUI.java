@@ -3,7 +3,6 @@ package UI.PanelCustom;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
-
 import javax.swing.border.*;
 
 public class CustomUI {
@@ -13,21 +12,29 @@ public class CustomUI {
             new Color(255, 161, 32, 100));
     public static Border BORDER_BOTTOM_ERROR = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED);
 
-    public static ImageIcon ADD_ICON = new ImageIcon("src/main/java/img/blueAdd_16.png");
-    public static ImageIcon TRASH_ICON = new ImageIcon("src/main/java/img/trash_16.png");
-    public static ImageIcon REFRESH_ICON = new ImageIcon("src/main/java/img/refresh_16.png");
-    public static ImageIcon ANALYTICS_ICON = new ImageIcon("src/main/java/img/analytics_16.png");
-    public static ImageIcon BACK_ICON = new ImageIcon("src/main/java/img/back_16.png");
-    public static ImageIcon SEARCH_ICON = new ImageIcon("src/main/java/img/search_16.png");
-    public static ImageIcon LOGOUT_ICON = new ImageIcon("src/main/java/img/logout_16.png");
-    public static ImageIcon UPDATE_ICON = new ImageIcon("src/main/java/img/update_16.png");
-    public static ImageIcon TRANSFER_ICON = new ImageIcon("src/main/java/img/transfer_16.png");
-    public static ImageIcon PAYMENT_ICON = new ImageIcon("src/main/java/img/payment_16.png");
-    public static ImageIcon ERROR_ICON = new ImageIcon("src/main/java/img/cancel_16.png");
-    public static ImageIcon USER_ICON = new ImageIcon("src/main/java/img/user_16.png");
-    public static ImageIcon MAN_ICON = new ImageIcon("src/main/java/img/man_512.png");
-    public static ImageIcon WOMAN_ICON = new ImageIcon("src/main/java/img/woman_512.png");
-    public static ImageIcon BACKGROUND = new ImageIcon("src/main/java/img/bgBlue.jpg");
+    private static String pathImg = "src/main/java/img/";
+    public static ImageIcon ADD_ICON = new ImageIcon(pathImg + "blueAdd_16.png");
+    public static ImageIcon TRASH_ICON = new ImageIcon(pathImg + "trash_16.png");
+    public static ImageIcon REFRESH_ICON = new ImageIcon(pathImg + "refresh_16.png");
+    public static ImageIcon ANALYTICS_ICON = new ImageIcon(pathImg + "analytics_16.png");
+    public static ImageIcon BACK_ICON = new ImageIcon(pathImg + "back_16.png");
+    public static ImageIcon SEARCH_ICON = new ImageIcon(pathImg + "search_16.png");
+    public static ImageIcon LOGOUT_ICON = new ImageIcon(pathImg + "logout_16.png");
+    public static ImageIcon LOGIN_ICON = new ImageIcon(pathImg + "login_16.png");
+    public static ImageIcon UPDATE_ICON = new ImageIcon(pathImg + "update_16.png");
+    public static ImageIcon TRANSFER_ICON = new ImageIcon(pathImg + "transfer_16.png");
+    public static ImageIcon PAYMENT_ICON = new ImageIcon(pathImg + "payment_16.png");
+    public static ImageIcon ERROR_ICON = new ImageIcon(pathImg + "cancel_16.png");
+    public static ImageIcon USER_ICON = new ImageIcon(pathImg + "user_16.png");
+    public static ImageIcon USER_ICON_512 = new ImageIcon(pathImg + "user_512.png");
+    public static ImageIcon MAN_ICON = new ImageIcon(pathImg + "man_512.png");
+    public static ImageIcon WOMAN_ICON = new ImageIcon(pathImg + "woman_512.png");
+    public static ImageIcon BACKGROUND = new ImageIcon(pathImg + "bgBlue.jpg");
+    public static ImageIcon BACKGROUND_LOGIN = new ImageIcon(pathImg + "anhChen_400.png");
+    public static ImageIcon ROOM_ICON = new ImageIcon(pathImg + "micro_32.png");
+    public static ImageIcon PROFILE_ICON = new ImageIcon(pathImg + "profile_512.png");
+    public static ImageIcon SELL_ICON = new ImageIcon(pathImg + "money_512.png");
+    public static ImageIcon MANAGER_ICON = new ImageIcon(pathImg + "administration_512.png");
 
     /**
      * singleton <code>CustomUI</code>
@@ -81,12 +88,14 @@ public class CustomUI {
         txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
         txt.setBackground(new Color(246, 210, 255, 50));
         txt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        txt.setCaretColor(Color.WHITE);
     }
 
     public void setCustomTextField(JTextField txt) {
         txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
         txt.setBackground(new Color(246, 210, 255, 50));
         txt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        txt.setCaretColor(Color.WHITE);
     }
 
     /**
@@ -98,6 +107,7 @@ public class CustomUI {
         if (txt.isEditable()) {
             txt.setBorder(BORDER_BOTTOM_FOCUS);
             txt.setBackground(new Color(246, 210, 255, 50));
+            txt.setCaretColor(Color.WHITE);
         }
     }
 
@@ -110,6 +120,7 @@ public class CustomUI {
         if (txt.isEditable()) {
             txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
             txt.setBackground(new Color(246, 210, 255, 50));
+            txt.setCaretColor(Color.WHITE);
         }
     }
 
@@ -124,6 +135,7 @@ public class CustomUI {
         txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
         txt.setBackground(new Color(246, 210, 255, 40));
         txt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        txt.setCaretColor(Color.WHITE);
     }
 
     /**
@@ -137,6 +149,7 @@ public class CustomUI {
         txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
         txt.setBackground(new Color(246, 210, 255, 150));
         txt.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        txt.setCaretColor(Color.WHITE);
     }
 
     /**
@@ -147,7 +160,7 @@ public class CustomUI {
     public void setCustomComboBox(JComboBox<?> cbo) {
         cbo.setUI(new BasicComboBoxUI());
         cbo.setFont(new Font("Dialog", Font.BOLD, 12));
-        cbo.setBackground(Color.WHITE);
+        // cbo.setBackground(Color.WHITE);
         cbo.setBorder(BORDER_BOTTOM_UN_FOCUS);
         cbo.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
@@ -160,9 +173,12 @@ public class CustomUI {
      */
     public JTextField setCustomCBoxField(JComboBox<?> cbo) {
         JTextField boxField = (JTextField) cbo.getEditor().getEditorComponent();
-        boxField.setBackground(Color.WHITE);
+        boxField.setFont(new Font("Dialog", Font.PLAIN, 12));
+        boxField.setBackground(new Color(246, 210, 255, 50));
+        boxField.setForeground(Color.WHITE);
         boxField.setBorder(BORDER_BOTTOM_UN_FOCUS);
         boxField.setEditable(false);
+        boxField.setBorder(BorderFactory.createEmptyBorder());
         boxField.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return boxField;
     }
@@ -173,9 +189,17 @@ public class CustomUI {
      * @param spin <code>JSpinner</code>: Spinner cần tùy chỉnh
      */
     public void setCustomSpinner(JSpinner spin) {
+        Color backgroundColor = Color.decode("#f6d2ff");
         spin.setFont(new Font("Dialog", Font.PLAIN, 14));
-        spin.setBackground(Color.WHITE);
-        spin.setBorder(BORDER_BOTTOM_UN_FOCUS);
+        spin.setBorder(BorderFactory.createEmptyBorder());
         spin.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        spin.setBackground(backgroundColor);
+        // spin.setOpaque(false);
+        // spin.setBackground(backgroundColor);
+        // spin.setForeground(Color.WHITE);
+
+        // ((JTextComponent) spin.getEditor().getComponent(0)).setBackground(backgroundColor);
+        // ((JTextComponent) spin.getEditor().getComponent(0)).setForeground(Color.WHITE);
+        // ((JTextComponent) spin.getEditor().getComponent(0)).setCaretColor(Color.WHITE);
     }
 }

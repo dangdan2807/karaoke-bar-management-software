@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import entity.DichVu;
 import entity.NhanVien;
 
 public class NhanVienDAO {
@@ -144,7 +145,7 @@ public class NhanVienDAO {
         String query = "{CALL USP_getStaffNameById( ? )}";
         Object[] parameter = new Object[] { staffId };
         Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
-        String staffID = obj != null ? obj.toString() : "";
-        return staffID;
+        String staffName = obj != null ? obj.toString() : "";
+        return staffName;
     }
 }

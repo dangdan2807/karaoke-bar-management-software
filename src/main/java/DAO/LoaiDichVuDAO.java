@@ -20,7 +20,7 @@ public class LoaiDichVuDAO {
      * @param
      * @return
      */
-    public ArrayList<LoaiDichVu> getDSLoaiDV() {
+    public ArrayList<LoaiDichVu> getServiceTypeList() {
         ArrayList<LoaiDichVu> dataList = new ArrayList<LoaiDichVu>();
         String query = "{CALL USP_getLoaiDichVuList()}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
@@ -32,5 +32,19 @@ public class LoaiDichVuDAO {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    public LoaiDichVu getServiceTypeByName(String serviceTypeName) {
+        LoaiDichVu data = null;
+        String query = "{CALL USP_getServiceTypeByName( ? )}";
+        Object[] parameter = new Object[] { serviceTypeName };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            if (rs.next())
+                data = new LoaiDichVu(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 }

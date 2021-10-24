@@ -22,7 +22,8 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     private int widthDefault = 150;
     private int heightDefault = 20;
     private DialogDatePicker f = new DialogDatePicker();
-    private ImageIcon calenderIcon = new ImageIcon("img/calender_16.png");
+    private String pathImg = "src/main/java/img/";
+    private ImageIcon calenderIcon = new ImageIcon(pathImg + "calender_16.png");
     private Color backgroundColor = Color.decode("#f9f9f9");
 
     /**

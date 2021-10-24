@@ -56,6 +56,7 @@ public class fThongTinCaNhan extends JDialog
 
         btnUpdate = new JButton("Cập nhật");
         CustomUI.getInstance().setCustomBtn(btnUpdate);
+        
         btnClose = new JButton("Thoát");
         CustomUI.getInstance().setCustomBtn(btnClose);
         pnMain.add(btnUpdate);

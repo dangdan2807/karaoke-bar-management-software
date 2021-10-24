@@ -17,11 +17,12 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
     private NhanVien staff = null;
     private String STAFF = "Nhân viên", MANAGER = "Quản lý";
     private ImageIcon profileIcon = new ImageIcon(
-            new ImageIcon("img/profile_512.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+            CustomUI.PROFILE_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
     private ImageIcon sellIcon = new ImageIcon(
-            new ImageIcon("img/money_512.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+            CustomUI.SELL_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
     private ImageIcon managerIcon = new ImageIcon(
-            new ImageIcon("img/administration_512.png").getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+            CustomUI.MANAGER_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+    private ImageIcon logoutIcon = CustomUI.LOGOUT_ICON;
 
     /**
      * Constructor form điều hướng
@@ -80,7 +81,7 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
         pnMain.add(pnBottom);
         pnBottom.setLayout(null);
 
-        btnLogOut = new JButton("Đăng xuất");
+        btnLogOut = new JButton("Đăng xuất", logoutIcon);
         btnLogOut.setBounds(645, 0, 108, 26);
         CustomUI.getInstance().setCustomBtn(btnLogOut);
         pnBottom.add(btnLogOut);

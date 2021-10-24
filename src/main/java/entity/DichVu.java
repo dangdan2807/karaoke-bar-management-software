@@ -78,8 +78,8 @@ public class DichVu {
 
 	@Override
 	public String toString() {
-		return "DichVu [giaBan=" + giaBan + ", maDichVu=" + maDichVu + ", soLuongTon=" + soLuongTon + ", tenDichVu="
-				+ tenDichVu + "]";
+		return "DichVu [giaBan=" + giaBan + ", loaiDV=" + loaiDV + ", maDichVu=" + maDichVu + ", soLuongTon="
+				+ soLuongTon + ", tenDichVu=" + tenDichVu + "]";
 	}
 
 }
