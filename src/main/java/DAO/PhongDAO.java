@@ -11,7 +11,6 @@ public class PhongDAO {
     public static int ROOM_HEIGHT = 90;
     public static int CON_TRONG = 0;
     public static int PAID = 1;
-    // public static int DAT_TRUOC = 2;
 
     public static PhongDAO getInstance() {
         if (instance == null)

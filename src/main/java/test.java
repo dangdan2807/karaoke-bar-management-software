@@ -75,8 +75,10 @@ public class test {
         // BigDecimal b = new BigDecimal("1.00");
         // System.out.println(a.add(b));
         // System.out.println(a.multiply(b));
-        LoaiPhong roomType = new LoaiPhong("LP004", "1", 1, 2300.5);
-        Boolean result = LoaiPhongDAO.getInstance().updateInfoRoomType(roomType);
-        System.out.println(result);
+        // LoaiPhong roomType = new LoaiPhong("LP004", "1", 1, 2300.5);
+        // Boolean result = LoaiPhongDAO.getInstance().updateInfoRoomType(roomType);
+        // System.out.println(result);
+        String data = "8000.0";
+        System.out.println(data.replaceAll("\\.[0]+$", ""));
     }   
 }

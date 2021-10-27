@@ -132,4 +132,26 @@ public class LoaiPhongDAO {
         int result = obj != null ? result = (int) obj : 0;
         return result > 0;
     }
+
+    /**
+     * Lấy danh sách loại phòng có tên phù hợp với từ khóa
+     * 
+     * @param roomTypeName <code>String</code>: từ khóa trong tên loại phòng
+     * @return <code>ArrayList - LoaiPhong</code>: danh sách loại phòng phù hợp điều
+     *         kiện
+     */
+    public ArrayList<LoaiPhong> getRoomTypeListByPrice(String price) {
+        String query = "{CALL USP_getRoomTypeListByPrice( ? )}";
+        Object[] parameter = new Object[] { price };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        ArrayList<LoaiPhong> staffList = new ArrayList<LoaiPhong>();
+        try {
+            while (rs.next()) {
+                staffList.add(new LoaiPhong(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return staffList;
+    }
 }

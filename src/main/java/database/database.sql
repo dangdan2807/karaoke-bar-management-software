@@ -404,6 +404,8 @@ BEGIN
     FROM dbo.TaiKhoan tk
 END
 GO
+
+
 -- loại dịch vụ
 CREATE PROC USP_getLoaiDichVuList
 AS
@@ -489,9 +491,26 @@ CREATE PROC USP_updateInfoServiceType
     @serviceTypeName NVARCHAR(100)
 AS
 BEGIN
+    BEGIN TRANSACTION
     UPDATE dbo.LoaiDichVu
         SET tenLDV = @serviceTypeName
         WHERE maLDV = @servideTypeId
+
+    DECLARE @isExitsId VARCHAR(6)
+    SELECT @isExitsId = ldv.maLDV
+    FROM dbo.LoaiDichVu ldv
+    WHERE ldv.maLDV = @servideTypeId
+        AND ldv.tenLDV = @serviceTypeName
+    IF @isExitsId IS NULL
+    BEGIN
+        PRINT 0
+        ROLLBACK
+    END
+    ELSE
+    BEGIN
+        PRINT 1
+        COMMIT
+    END
 END
 GO
 
@@ -667,10 +686,33 @@ CREATE PROC USP_updateInfoService
     @serviceTypeId VARCHAR(6)
 AS
 BEGIN
+    BEGIN TRANSACTION
     UPDATE dbo.DichVu
-        SET giaBan = @price, tenDichVu = @serviceName, maLDV = @serviceTypeId, 
+        SET giaBan = @price, 
+        tenDichVu = @serviceName, 
+        maLDV = @serviceTypeId, 
         soLuongTon = @quantityInStock
         WHERE maDichVu = @servideId
+
+    DECLARE @isExitsId VARCHAR(6)
+    SELECT @isExitsId = dv.maDichVu
+    FROM dbo.DichVu dv
+    WHERE dv.maDichVu = @servideId
+        AND dv.tenDichVu = @serviceName
+        AND dv.giaBan = @price
+        AND dv.soLuongTon = @quantityInStock
+        AND dv.maLDV = @serviceTypeId
+
+    IF @isExitsId IS NULL
+    BEGIN
+        PRINT 0
+        ROLLBACK
+    END
+    ELSE
+    BEGIN
+        PRINT 1
+        COMMIT
+    END
 END
 GO
 
@@ -687,7 +729,7 @@ BEGIN
         kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH,
         nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
         nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.taiKhoan, nv.trangThaiNV,
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
         tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
     FROM dbo.HoaDon hd, dbo.Phong p, dbo.LoaiPhong lp,
         dbo.KhachHang kh, dbo.NhanVien nv, dbo.TaiKhoan tk
@@ -709,7 +751,7 @@ BEGIN
         kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH,
         nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
         nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.taiKhoan, nv.trangThaiNV,
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
         tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
     FROM dbo.HoaDon hd, dbo.Phong p, dbo.LoaiPhong lp,
         dbo.KhachHang kh, dbo.NhanVien nv, dbo.TaiKhoan tk
@@ -809,9 +851,6 @@ BEGIN
 END
 GO
 
-EXEC USP_getBillInfoListByBillId 3
-GO
-
 CREATE PROC USP_getCTHoaDonByMaHDvaMaDV
     @maHD INT,
     @maDV VARCHAR(5)
@@ -836,7 +875,6 @@ BEGIN
         AND dv.maDichVu = @maDV
 END
 GO
-
 
 CREATE PROC USP_themCTHoaDon
     @maDichVu VARCHAR(5),
@@ -1030,23 +1068,62 @@ CREATE PROC USP_updateTinhTrangPhong
     @maPhong VARCHAR(5)
 AS
 BEGIN
+    BEGIN TRANSACTION
     UPDATE dbo.Phong 
     SET tinhTrangP = @tinhTrangP 
     WHERE maPhong = @maPhong
+
+    DECLARE @isExitsId VARCHAR(6)
+    SELECT @isExitsId = p.maPhong
+    FROM dbo.Phong p
+    WHERE p.maPhong = @maPhong
+        AND p.tinhTrangP = @tinhTrangP
+
+    IF @isExitsId IS NULL
+    BEGIN
+        PRINT 0
+        ROLLBACK
+    END
+    ELSE
+    BEGIN
+        PRINT 1
+        COMMIT
+    END
 END
 GO
 
 CREATE PROC USP_chuyenPhong
-    @maPhongCu VARCHAR(5),
-    @maPhongMoi VARCHAR(5)
+    @billId INT,
+    @oldRoomId VARCHAR(5),
+    @newRoomId VARCHAR(5)
 AS
 BEGIN
-    EXEC USP_updateTinhTrangPhong 0, @maPhongCu
-    EXEC USP_updateTinhTrangPhong 1, @maPhongMoi
+    EXEC USP_updateTinhTrangPhong 0, @oldRoomId
+    EXEC USP_updateTinhTrangPhong 1, @newRoomId
 
+    BEGIN TRANSACTION
     UPDATE dbo.HoaDon
-    SET maPhong = @maPhongMoi
-    WHERE maPhong = @maPhongCu
+    SET maPhong = @newRoomId
+    WHERE maPhong = @oldRoomId
+        AND maHoaDon = @billId
+        AND tinhTrangHD = 0
+
+    DECLARE @isExitsId VARCHAR(6)
+    SELECT @isExitsId = hd.maHoaDon
+    FROM dbo.HoaDon hd
+    WHERE hd.maPhong = @newRoomId
+        AND hd.maHoaDon = @billId
+
+    IF @isExitsId IS NULL
+    BEGIN
+        PRINT 0
+        ROLLBACK
+    END
+    ELSE
+    BEGIN
+        PRINT 1
+        COMMIT
+    END
 END
 GO
 
@@ -1059,7 +1136,7 @@ BEGIN
     SELECT lp.tenLP
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
-        AND p.maPhong = 'LP004' @maPhong
+        AND p.maPhong = @maPhong
 END
 GO
 
@@ -1081,6 +1158,17 @@ BEGIN
     WHERE dbo.fuConvertToUnsign(lp.tenLP) LIKE dbo.fuConvertToUnsign(@name)
 END
 GO
+
+CREATE PROC USP_getRoomTypeListByPrice
+    @price NVARCHAR(100)
+AS
+BEGIN
+    SELECT lp.tenLP, lp.giaTien, lp.maLP, lp.sucChua
+    FROM dbo.LoaiPhong lp
+    WHERE CONVERT(NVARCHAR, lp.giaTien) LIKE N'%' + @price + N'%'
+END
+GO
+
 
 CREATE PROC USP_getLastRoomTypeId
 AS
@@ -1146,24 +1234,35 @@ BEGIN
             giaTien = @price,
             sucChua = @capacity
         WHERE maLP = @roomTypeId
-    
-    DECLARE @isExitsUpdate VARCHAR(5)
-    
+
+    DECLARE @isExitsId VARCHAR(6)
+    SELECT @isExitsId = lp.maLP
+    FROM dbo.LoaiPhong lp
+    WHERE lp.maLP = @roomTypeId
+        AND lp.tenLP = @roomTypeName
+        AND lp.sucChua = @capacity
+        AND lp.giaTien = @price
+
+    IF @isExitsId IS NULL
+    BEGIN
+        PRINT 0
+        ROLLBACK
+    END
+    ELSE
+    BEGIN
+        PRINT 1
+        COMMIT
+    END
 END
 GO
-select * from dbo.LoaiPhong
-
-exec USP_updateInfoRoomType 'LP004'
-go
 
 -- nhân viên
 CREATE PROC USP_getNhanVienByTenDangNhap
     @tenDangNhap VARCHAR(100)
 AS
 BEGIN
-    SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
-        nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.taiKhoan, nv.trangThaiNV,
+    SELECT nv.maNhanVien, nv.cmnd AS cmndNV, nv.hoTen AS hoTenNV, nv.ngaySinh AS ngaySinhNV,
+        nv.soDienThoai AS sdtNV, nv.chucVu, nv.mucLuong, nv.gioiTinh AS gioiTinhNV, nv.trangThaiNV,
         tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
     FROM dbo.TaiKhoan tk, dbo.NhanVien nv
     WHERE tk.tenDangNhap = nv.taiKhoan
@@ -1177,7 +1276,7 @@ AS
 BEGIN
     SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
         nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.taiKhoan, nv.trangThaiNV
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV
     FROM dbo.TaiKhoan tk, dbo.NhanVien nv
     WHERE tk.tenDangNhap = nv.taiKhoan
         AND nv.maNhanVien = @maNV
@@ -1189,7 +1288,7 @@ AS
 BEGIN
     SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
         nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.taiKhoan, nv.trangThaiNV,
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
         tk.tinhTrangTK, tk.tenDangNhap, tk.matKhau
     FROM dbo.NhanVien nv, dbo.TaiKhoan tk
     WHERE nv.taiKhoan = tk.tenDangNhap
@@ -1262,11 +1361,35 @@ CREATE PROC USP_updateInfoStaff
     @gender INT
 AS
 BEGIN
+    BEGIN TRANSACTION
     UPDATE dbo.NhanVien
         SET cmnd = @cmnd, hoTen = @fullName, ngaySinh = @birthDay, 
         soDienThoai = @phoneNumber, chucVu = @position, mucLuong = @salary,
         trangThaiNV = @status, gioiTinh = @gender
         WHERE maNhanVien = @staffID
+
+    DECLARE @isExitsId VARCHAR(6)
+    SELECT @isExitsId = nv.maNhanVien
+    FROM dbo.NhanVien nv
+    WHERE cmnd = @cmnd
+        AND hoTen = @fullName
+        AND ngaySinh = @birthDay
+        AND soDienThoai = @phoneNumber
+        AND chucVu = @position
+        AND mucLuong = @salary
+        AND trangThaiNV = @status
+        AND gioiTinh = @gender
+
+    IF @isExitsId IS NULL
+    BEGIN
+        PRINT 0
+        ROLLBACK
+    END
+    ELSE
+    BEGIN
+        PRINT 1
+        COMMIT
+    END
 END
 GO
 
@@ -1276,7 +1399,7 @@ AS
 BEGIN
     SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
         nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.taiKhoan, nv.trangThaiNV,
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
         tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
     FROM dbo.NhanVien nv, dbo.TaiKhoan tk
     WHERE nv.taiKhoan = tk.tenDangNhap
@@ -1291,7 +1414,7 @@ BEGIN
     DECLARE @name NVARCHAR(102) = N'%'+ @fullName + N'%'
     SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
         nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.taiKhoan, nv.trangThaiNV,
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
         tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
     FROM dbo.NhanVien nv, dbo.TaiKhoan tk
     WHERE nv.taiKhoan = tk.tenDangNhap
@@ -1306,7 +1429,7 @@ BEGIN
     DECLARE @rePhoneNumber VARCHAR(12) = '%'+ @phoneNumber + '%'
     SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
         nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.taiKhoan, nv.trangThaiNV,
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
         tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
     FROM dbo.NhanVien nv, dbo.TaiKhoan tk
     WHERE nv.taiKhoan = tk.tenDangNhap
@@ -1323,4 +1446,3 @@ BEGIN
     WHERE nv.maNhanVien = @staffID
 END
 GO
-

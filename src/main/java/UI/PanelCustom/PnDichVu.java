@@ -7,7 +7,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.*;
 import javax.swing.table.*;
 
 import DAO.*;
@@ -24,12 +23,14 @@ public class PnDichVu extends JFrame
 
 	private JTable tableService;
 	private DefaultTableModel modelTableService;
-	private JTextField txtServiceName, txtPrice, txtServiceID, txtBFieldSerType, txtBFieldSearch;
+	private JTextField txtServiceName, txtServiceID, txtBFieldSerType, txtBFieldSearch;
 	private JTextField txtBFieldSearchSerType, txtKeyWord;
 	private JLabel lbServiceType, lbServiceName, lbQuantityInStock, lbServiceID, lbPrice, lpSearch;
 	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch;
 	private JComboBox<String> cboServiceType, cboSearch, cboSearchServiceType;
-	private JSpinner spinQuantity;
+	private JSpinner spinQuantity, spinPrice;
+	private DecimalFormat df = new DecimalFormat("#,###.##");
+
 
 	private NhanVien staffLogin = null;
 
@@ -90,7 +91,6 @@ public class PnDichVu extends JFrame
 
 		txtServiceName = new JTextField();
 		txtServiceName.setForeground(Color.WHITE);
-		txtServiceName.setFont(new Font("Dialog", Font.PLAIN, 13));
 		txtServiceName.setBounds(555, 15, 250, 20);
 		txtServiceName.setToolTipText("Nhập tên dịch vụ, không quá 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtServiceName);
@@ -109,15 +109,10 @@ public class PnDichVu extends JFrame
 		pnInfo.add(lbServiceName);
 
 		cboServiceType = new JComboBox<String>();
-		cboServiceType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboServiceType.setOpaque(false);
-		cboServiceType.setEditable(true);
-		cboServiceType.setUI(new BasicComboBoxUI());
+		CustomUI.getInstance().setCustomComboBox(cboServiceType);
 		cboServiceType.setToolTipText("Loại dịch vụ");
 		txtBFieldSerType = CustomUI.getInstance().setCustomCBoxField(cboServiceType);
-		cboServiceType.setFont(new Font("Dialog", Font.PLAIN, 12));
 		cboServiceType.setBounds(965, 15, 250, 20);
-		cboServiceType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnInfo.add(cboServiceType);
 
 		lbQuantityInStock = new JLabel("Số lượng tồn:");
@@ -126,18 +121,14 @@ public class PnDichVu extends JFrame
 		lbQuantityInStock.setBounds(435, 45, 115, 16);
 		pnInfo.add(lbQuantityInStock);
 
-		txtPrice = new JTextField();
-		txtPrice.setForeground(Color.WHITE);
-		txtPrice.setFont(new Font("Dialog", Font.PLAIN, 12));
-		txtPrice.setBounds(145, 45, 250, 20);
-		txtPrice.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtPrice.setToolTipText("Nhập giá bán của dịch vụ và phải là một số dương lớn hơn 0");
-		CustomUI.getInstance().setCustomTextFieldUnFocus(txtPrice);
-		pnInfo.add(txtPrice);
+		spinPrice = new JSpinner(new SpinnerNumberModel(1000f, 0f, Double.MAX_VALUE, 1000f));
+		spinPrice.setBounds(145, 45, 250, 20);
+		CustomUI.getInstance().setCustomSpinner(spinPrice);
+		spinPrice.setToolTipText("Nhập giá bán của dịch vụ và phải là một số dương lớn hơn 0");
+		pnInfo.add(spinPrice);
 
 		txtServiceID = new JTextField();
 		txtServiceID.setForeground(Color.WHITE);
-		txtServiceID.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtServiceID.setBounds(145, 15, 250, 20);
 		txtServiceID.setToolTipText("Mã dịch vụ");
 		CustomUI.getInstance().setCustomTextFieldOff(txtServiceID);
@@ -190,11 +181,7 @@ public class PnDichVu extends JFrame
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên dịch vụ");
 		cboSearch.addItem("Tên loại dịch vụ");
-		cboSearch.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboSearch.setOpaque(false);
-		cboSearch.setEditable(true);
-		cboSearch.setUI(new BasicComboBoxUI());
-		cboSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		cboSearch.setToolTipText("Loại tìm kiếm");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(140, 18, 160, 20);
@@ -213,7 +200,6 @@ public class PnDichVu extends JFrame
 
 		txtKeyWord = new JTextField();
 		txtKeyWord.setForeground(Color.WHITE);
-		txtKeyWord.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtKeyWord.setBounds(440, 18, 200, 20);
 		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
@@ -222,14 +208,10 @@ public class PnDichVu extends JFrame
 
 		cboSearchServiceType = new JComboBox<String>();
 		cboSearchServiceType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboSearchServiceType.setOpaque(false);
-		cboSearchServiceType.setEditable(true);
-		cboSearchServiceType.setUI(new BasicComboBoxUI());
+		CustomUI.getInstance().setCustomComboBox(cboSearchServiceType);
 		cboSearchServiceType.setToolTipText("Loại dịch vụ cần tìm kiếm");
-
 		txtBFieldSearchSerType = CustomUI.getInstance().setCustomCBoxField(cboSearchServiceType);
 		cboSearchServiceType.setBounds(440, 18, 200, 20);
-		cboSearchServiceType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		cboSearchServiceType.setVisible(false);
 		pnSearch.add(cboSearchServiceType);
 
@@ -251,7 +233,7 @@ public class PnDichVu extends JFrame
 		tableService.setForeground(new Color(255, 255, 255));
 		tableService.setRowHeight(21);
 		tableService.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tableService.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
+		tableService.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
 		tableService.getTableHeader().setForeground(Color.decode("#9B17EB"));
 		JScrollPane scpTable = new JScrollPane(tableService, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -278,9 +260,9 @@ public class PnDichVu extends JFrame
 		cboSearchServiceType.addItemListener(this);
 
 		txtServiceName.addFocusListener(this);
-		txtPrice.addFocusListener(this);
-		txtKeyWord.addFocusListener(this);
 		((JSpinner.DefaultEditor) spinQuantity.getEditor()).getTextField().addFocusListener(this);
+		txtKeyWord.addFocusListener(this);
+		((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField().addFocusListener(this);
 
 		txtKeyWord.addKeyListener(this);
 
@@ -332,8 +314,8 @@ public class PnDichVu extends JFrame
 			txtServiceID.setText("");
 			txtServiceName.setText("");
 			cboServiceType.setSelectedIndex(0);
-			txtPrice.setText("");
-			spinQuantity.setValue(1);
+			spinPrice.setValue((double) 0);
+			spinQuantity.setValue((int) 1);
 			removeSelectionInterval();
 		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
@@ -383,7 +365,8 @@ public class PnDichVu extends JFrame
 			int selectedRow = tableService.getSelectedRow();
 			txtServiceID.setText(tableService.getValueAt(selectedRow, 1).toString().trim());
 			txtServiceName.setText(tableService.getValueAt(selectedRow, 2).toString().trim());
-			txtPrice.setText(tableService.getValueAt(selectedRow, 3).toString().trim());
+			String priceStr = tableService.getValueAt(selectedRow, 3).toString().trim().replace(",", "");
+			spinPrice.setValue(Integer.parseInt(priceStr));
 			String quantityStr = tableService.getValueAt(selectedRow, 4).toString().trim().replace(",", "");
 			spinQuantity.setValue(Integer.parseInt(quantityStr));
 			cboServiceType.setSelectedItem(tableService.getValueAt(selectedRow, 5).toString().trim());
@@ -477,8 +460,8 @@ public class PnDichVu extends JFrame
 		Object o = e.getSource();
 		if (o.equals(txtServiceName)) {
 			CustomUI.getInstance().setCustomTextFieldFocus(txtServiceName);
-		} else if (o.equals(txtPrice)) {
-			CustomUI.getInstance().setCustomTextFieldFocus(txtPrice);
+		} else if (o.equals(((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField())) {
+			spinPrice.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtKeyWord)) {
 			CustomUI.getInstance().setCustomTextFieldFocus(txtKeyWord);
 		} else if (o.equals(((JSpinner.DefaultEditor) spinQuantity.getEditor()).getTextField())) {
@@ -491,8 +474,8 @@ public class PnDichVu extends JFrame
 		Object o = e.getSource();
 		if (o.equals(txtServiceName)) {
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtServiceName);
-		} else if (o.equals(txtPrice)) {
-			CustomUI.getInstance().setCustomTextFieldUnFocus(txtPrice);
+		} else if (o.equals(((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField())) {
+			spinPrice.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		} else if (o.equals(txtKeyWord)) {
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
 		} else if (o.equals(((JSpinner.DefaultEditor) spinQuantity.getEditor()).getTextField())) {
@@ -518,8 +501,8 @@ public class PnDichVu extends JFrame
 		String serviceID = txtServiceID.getText().trim();
 		String staffName = txtServiceName.getText().trim();
 		String serviceTypeName = cboServiceType.getSelectedItem().toString().trim();
-		Double price = Double.parseDouble(txtPrice.getText().trim().replace(",", ""));
-		int quantity = (int) spinQuantity.getValue();
+		Double price = Double.parseDouble(spinPrice.getValue().toString());
+		int quantity = Integer.parseInt(spinQuantity.getValue().toString());
 		DichVu service = new DichVu(serviceID);
 		if (!serviceID.equals("")) {
 			service = DichVuDAO.getInstance().getServiceById(serviceID);
@@ -539,11 +522,6 @@ public class PnDichVu extends JFrame
 	 */
 	private boolean validData() {
 		boolean valid = ValidationData.getInstance().ValidName(this, txtServiceName, "Tên dịch vụ", 100, 0);
-		if (!valid) {
-			return valid;
-		}
-
-		valid = ValidationData.getInstance().ValidNumber(this, txtPrice, "Giá bán", 0.0, -100.0, 0.0);
 		if (!valid) {
 			return valid;
 		}
@@ -592,7 +570,6 @@ public class PnDichVu extends JFrame
 	 * @param service <code>DichVu</code>: dịch vụ cần được thêm
 	 */
 	private void addRow(int stt, DichVu service) {
-		DecimalFormat df = new DecimalFormat("#,###.##");
 		String sttStr = df.format(stt);
 		String priceStr = df.format(service.getGiaBan());
 		String quantityStr = df.format(service.getSoLuongTon());
@@ -610,7 +587,6 @@ public class PnDichVu extends JFrame
 	 * @param service     <code>DichVu</code: dịch vụ cần cập nhật
 	 */
 	private void updateRow(int selectedRow, DichVu service) {
-		DecimalFormat df = new DecimalFormat("#,###.##");
 		String priceStr = df.format(service.getGiaBan());
 		String quantityStr = df.format(service.getSoLuongTon());
 		String serviceTypeName = service.getLoaiDV().getTenLDV();

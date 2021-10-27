@@ -42,7 +42,7 @@ public class PnNhanVien extends JFrame
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
-
+	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 
 	/**
@@ -658,11 +658,12 @@ public class PnNhanVien extends JFrame
 			return valid;
 		}
 
-		// valid = ValidationData.getInstance().ValidNumber(this, spinSalary, "Mức lương", 0, -1, 0);
+		// valid = ValidationData.getInstance().ValidNumber(this, spinSalary, "Mức
+		// lương", 0, -1, 0);
 		// if (!valid) {
-		// 	return valid;
+		// return valid;
 		// }
-		
+
 		valid = ValidationData.getInstance().ValidPhoneNumber(this, txtPhoneNumber);
 		if (!valid) {
 			return valid;
@@ -769,7 +770,6 @@ public class PnNhanVien extends JFrame
 	 * @param staff <code>NhanVien</code>: nhân viên cần được thêm
 	 */
 	private void addRow(int stt, NhanVien staff) {
-		DecimalFormat df = new DecimalFormat("#,###.##");
 		String sttStr = df.format(stt);
 		String salaryStr = df.format(staff.getMucLuong());
 		boolean gender = staff.getGioiTinh();
@@ -791,7 +791,6 @@ public class PnNhanVien extends JFrame
 	 * @param staff       <code>NhanVien</code: nhân viên cần cập nhật
 	 */
 	private void updateRow(int selectedRow, NhanVien staff) {
-		DecimalFormat df = new DecimalFormat("#,###.##");
 		String mucLuongStr = df.format(staff.getMucLuong());
 		boolean gioiTinh = staff.getGioiTinh();
 		String gioiTinhStr = gioiTinh ? "Nữ" : "Nam";

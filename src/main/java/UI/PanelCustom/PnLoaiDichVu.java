@@ -37,6 +37,7 @@ public class PnLoaiDichVu extends JFrame
 	private JLabel lpSearch;
 	private JTextField txtBFieldSearch, txtKeyWord, txtBFieldSearchType, txtServiceTypeID;
 	private JTextField txtServiceTypeName;
+	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 
 	public PnLoaiDichVu(NhanVien staff) {
@@ -511,7 +512,6 @@ public class PnLoaiDichVu extends JFrame
 	 * @param serviceType <code>LoaiDichVu</code>: loại dịch vụ cần được thêm
 	 */
 	private void addRow(int stt, LoaiDichVu serviceType) {
-		DecimalFormat df = new DecimalFormat("#,###.##");
 		String sttStr = df.format(stt);
 		modelTable.addRow(new Object[] { sttStr, addSpaceToString(serviceType.getMaLDV()),
 				addSpaceToString(serviceType.getTenLDV()) });

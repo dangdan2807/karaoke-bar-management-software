@@ -155,6 +155,7 @@ public class CustomUI {
         cbo.setEditable(true);
         cbo.setUI(new BasicComboBoxUI());
         cbo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cbo.setFont(new Font("Dialog", Font.PLAIN, 14));
     }
 
     /**

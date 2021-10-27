@@ -20,11 +20,11 @@ public class PnLoaiPhong extends JFrame
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private JTable tableTypeRoom;
 	private DefaultTableModel modelTableTypeRoom;
-	private JTextField txtBFieldSearch, txtKeyWord, txtBFieldSearchType, txtRoomTypeId, txtRoomTypeName;
+	private JTextField txtBFieldSearch, txtKeyWord, txtRoomTypeId, txtRoomTypeName;
 	private JLabel lbCapacity, lpSearch;
 	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack;
-	private JComboBox<String> cboSearch, cboSearchType;
-	private JSpinner spinCapacity, spinPrice;
+	private JComboBox<String> cboSearch;
+	private JSpinner spinCapacity, spinPrice, spinSearchPrice;
 
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
@@ -131,6 +131,7 @@ public class PnLoaiPhong extends JFrame
 		cboSearch = new JComboBox<String>();
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên loại phòng");
+		cboSearch.addItem("Giá cho thuê");
 		cboSearch.setToolTipText("Loại tìm kiếm");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
@@ -157,14 +158,12 @@ public class PnLoaiPhong extends JFrame
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
 		pnSearch.add(txtKeyWord);
 
-		cboSearchType = new JComboBox<String>();
-		cboSearchType.addItem("Nam");
-		cboSearchType.addItem("Nữ");
-		CustomUI.getInstance().setCustomComboBox(cboSearchType);
-		txtBFieldSearchType = CustomUI.getInstance().setCustomCBoxField(cboSearchType);
-		cboSearchType.setBounds(440, 18, 200, 20);
-		cboSearchType.setVisible(false);
-		pnSearch.add(cboSearchType);
+		spinSearchPrice = new JSpinner(new SpinnerNumberModel(0f, 0f, Double.MAX_VALUE, 1000f));
+		CustomUI.getInstance().setCustomSpinner(spinSearchPrice);
+		spinSearchPrice.setBounds(440, 18, 200, 20);
+		spinSearchPrice.setToolTipText("Nhập giá phòng cần tìm kiếm");
+		spinSearchPrice.setVisible(false);
+		pnSearch.add(spinSearchPrice);
 
 		JLabel lpPrice = new JLabel("Giá tiền:");
 		lpPrice.setForeground(Color.WHITE);
@@ -240,7 +239,6 @@ public class PnLoaiPhong extends JFrame
 
 		tableTypeRoom.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
-		txtBFieldSearchType.addMouseListener(this);
 		cboSearch.addMouseListener(this);
 		txtRoomTypeName.addMouseListener(this);
 		txtKeyWord.addMouseListener(this);
@@ -251,6 +249,7 @@ public class PnLoaiPhong extends JFrame
 		txtKeyWord.addFocusListener(this);
 
 		txtKeyWord.addKeyListener(this);
+		((JSpinner.DefaultEditor) spinSearchPrice.getEditor()).getTextField().addKeyListener(this);
 
 		cboSearch.addItemListener(this);
 
@@ -347,12 +346,19 @@ public class PnLoaiPhong extends JFrame
 			if (searchTypeName.equalsIgnoreCase("Tất cả")) {
 				txtKeyWord.setEditable(false);
 				CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
+				searchEventUsingBtnSearch();
 			} else {
+				if (searchTypeName.equalsIgnoreCase("Giá cho thuê")) {
+					txtKeyWord.setVisible(false);
+					spinSearchPrice.setVisible(true);
+				} else {
+					txtKeyWord.setVisible(true);
+					spinSearchPrice.setVisible(false);
+				}
 				txtKeyWord.setEditable(true);
 				CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
 			}
 			removeSelectionInterval();
-			searchEventUsingBtnSearch();
 		}
 	}
 
@@ -361,8 +367,6 @@ public class PnLoaiPhong extends JFrame
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
 			cboSearch.showPopup();
-		} else if (o.equals(txtBFieldSearchType)) {
-			cboSearchType.showPopup();
 		} else if (o.equals(tableTypeRoom)) {
 			int selectedRow = tableTypeRoom.getSelectedRow();
 			txtRoomTypeId.setText(tableTypeRoom.getValueAt(selectedRow, 1).toString().trim());
@@ -421,8 +425,8 @@ public class PnLoaiPhong extends JFrame
 	public void keyPressed(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
-
-		if (o.equals(txtKeyWord)) {
+		if (o.equals(((JSpinner.DefaultEditor) spinSearchPrice.getEditor()).getTextField())
+				|| o.equals(txtKeyWord)) {
 			if (key == KeyEvent.VK_ENTER)
 				searchEventUsingBtnSearch();
 		}
@@ -608,6 +612,9 @@ public class PnLoaiPhong extends JFrame
 		} else if (searchTypeName.equalsIgnoreCase("Tên loại phòng")) {
 			keyword = txtKeyWord.getText().trim();
 			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByName(keyword);
+		} else if (searchTypeName.equalsIgnoreCase("Giá cho thuê")) {
+			String priceStr = spinSearchPrice.getValue().toString().replaceAll("\\.[0]+$", "");
+			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByPrice(priceStr);
 		}
 		loadRoomTypeList(roomTypeList);
 	}
