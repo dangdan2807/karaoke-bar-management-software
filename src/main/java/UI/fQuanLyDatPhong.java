@@ -1,9 +1,5 @@
 package UI;
 
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
@@ -11,9 +7,16 @@ import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.table.*;
+
 import DAO.*;
 import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.DialogChonKhachHang;
+import UI.PanelCustom.MyButton;
 import entity.*;
 
 public class fQuanLyDatPhong extends JFrame
@@ -30,12 +33,14 @@ public class fQuanLyDatPhong extends JFrame
 	private JButton btnCannelServices, btnRentRoom, btnRefreshService, btnChooseCustomer;
 	private JTextField txtBillID, txtRoomID, txtTotalPriceBill, txtServiceName, txtRoomLocation, txtRoomTypeName;
 	private JTextField txtQuantityService, txtServicePrice, txtStartTime, txtEndTime, txtCustomerName;
-	private JTextField txtTotalPriceService, boxFieldRoomID, boxFieldRoomType, boxFieldServiceType;
+	private JTextField txtTotalPriceService, txtBFieldRoomID, txtBFieldRoomType, txtBFieldServiceType;
 	private JComboBox<String> cboRoomType, cboRoomID, cboServiceType;
 	private JCheckBox chkSearchService;
 	private JSpinner spinOrderQuantity;
 	private JMenuBar menuBar;
 
+	private ImageIcon bg = new ImageIcon(
+			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon transferIcon = CustomUI.TRANSFER_ICON;
 	private ImageIcon refreshIcon = CustomUI.REFRESH_ICON;
 	private ImageIcon paymentIcon = CustomUI.PAYMENT_ICON;
@@ -45,15 +50,13 @@ public class fQuanLyDatPhong extends JFrame
 	private ImageIcon trashIcon = CustomUI.TRASH_ICON;
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 
+	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
+			Color.decode("#FAFFD1"));
+
 	private int location = -1;
 	private NhanVien staffLogin = null;
 	private KhachHang selectedCustomer = null;
 
-	/**
-	 * Constructor form quản lý đặt phòng
-	 * 
-	 * @param staff <code>NhanVien</code>: nhân viên truy cập
-	 */
 	public fQuanLyDatPhong(NhanVien staff) {
 		setTitle("Phần Mềm Quản Lý Quán Karaoke");
 		setSize(1280, 700);
@@ -66,9 +69,6 @@ public class fQuanLyDatPhong extends JFrame
 		setCloseAction(this);
 	}
 
-	/**
-	 * Khởi tạo menu bar
-	 */
 	public void createMenuBar() {
 		menuBar = new JMenuBar();
 		this.setJMenuBar(menuBar);
@@ -78,43 +78,46 @@ public class fQuanLyDatPhong extends JFrame
 		menuBar.add(menuTK);
 	}
 
-	/**
-	 * Khởi tạo giao diện quản lý đặt phòng
-	 */
 	public void createFromQLKS() {
 		pnMain = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
+				Graphics2D g2 = (Graphics2D) g;
 				setFont(new Font("Dialog", Font.PLAIN, 12));
+				Image bgMain = bg.getImage();
+				g2.drawImage(bgMain, 0, 0, null);
 			}
 		};
 		pnMain.setBackground(Color.WHITE);
 		pnMain.setLayout(null);
-		JPanel pnTitle = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				Graphics2D g2 = (Graphics2D) g;
-				GradientPaint gra = new GradientPaint(179, 0, Color.decode("#900a9c"), 180, getHeight(),
-						Color.decode("#00cccb"));
-				g2.setPaint(gra);
-				g2.fillRect(0, 0, getWidth(), getHeight());
-			}
-		};
+		JPanel pnTitle = new JPanel();
+
 		pnTitle.setBounds(0, 0, 1264, 39);
+		pnTitle.setLayout(null);
+		pnTitle.setOpaque(false);
 		pnMain.add(pnTitle);
 		pnTitle.setBackground(Color.decode("#d0e1fd"));
+
+		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 33, 19, 12, 5);
+		btnBack.setBounds(1150, 5, 100, 35);
+		((MyButton) btnBack).setFontCustom(new Font("Dialog", Font.BOLD, 13));
+		pnTitle.add(btnBack);
 
 		JLabel lbTitle = new JLabel("Quản Lý Đặt Phòng");
 		lbTitle.setForeground(Color.WHITE);
 		lbTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lbTitle.setBounds(500, 5, 400, 30);
 		pnTitle.add(lbTitle);
 
 		JPanel pnEmpInfo = new JPanel();
 		pnEmpInfo.setBackground(Color.WHITE);
-		pnEmpInfo.setBorder(new TitledBorder(null, "Nhân Viên: ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnEmpInfo.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"Nh\u00E2n Vi\u00EAn: ", TitledBorder.LEADING, TitledBorder.TOP, new Font("Dialog", Font.BOLD, 13),
+				Color.WHITE));
 		pnEmpInfo.setBounds(0, 39, 330, 65);
+		pnEmpInfo.setOpaque(false);
 		pnMain.add(pnEmpInfo);
 		pnEmpInfo.setLayout(new BorderLayout(0, 0));
 
@@ -122,67 +125,87 @@ public class fQuanLyDatPhong extends JFrame
 		pnEmpControl.setLayout(null);
 		pnEmpControl.setPreferredSize(new Dimension(330, 70));
 		pnEmpControl.setBackground(Color.WHITE);
+		pnEmpControl.setOpaque(false);
 		pnEmpInfo.add(pnEmpControl);
 
 		lbEmpName = new JLabel("Tên nhân viên");
-		lbEmpName.setBounds(12, 4, 191, 21);
+		lbEmpName.setForeground(Color.WHITE);
+		lbEmpName.setBounds(80, 4, 191, 21);
 		pnEmpControl.add(lbEmpName);
-		lbEmpName.setFont(new Font("Dialog", Font.BOLD, 18));
-
-		btnBack = new JButton("Quay lại", backIcon);
-		btnBack.setBounds(209, 4, 96, 26);
-		pnEmpControl.add(btnBack);
-		CustomUI.getInstance().setCustomBtn(btnBack);
+		lbEmpName.setFont(new Font("Dialog", Font.BOLD, 20));
 
 		JPanel pnRoomList = new JPanel();
 		pnRoomList.setBackground(Color.WHITE);
 		pnRoomList.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Phòng",
-				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+				TitledBorder.LEADING, TitledBorder.TOP, new Font("Dialog", Font.BOLD, 13), Color.WHITE));
 		pnRoomList.setBounds(0, 105, 330, 534);
+		pnRoomList.setOpaque(false);
 		pnMain.add(pnRoomList);
 		pnRoomList.setLayout(new BorderLayout(0, 0));
 
 		JPanel pnRoomControl = new JPanel();
+		pnRoomControl.setOpaque(false);
 		pnRoomControl.setBackground(Color.WHITE);
 		pnRoomList.add(pnRoomControl, BorderLayout.NORTH);
 		pnRoomControl.setLayout(null);
 		pnRoomControl.setPreferredSize(new Dimension(330, 70));
 
-		btnSwitchRoom = new JButton("Đổi phòng", transferIcon);
-		btnSwitchRoom.setBounds(210, 0, 96, 27);
-		btnSwitchRoom.setEnabled(false);
-		CustomUI.getInstance().setCustomBtn(btnSwitchRoom);
+		btnSwitchRoom = new MyButton(90, 30, "Đổi phòng", new Dimension(60, 17), transferIcon.getImage(),
+				new Dimension(14, 18), gra);
+		((MyButton) btnSwitchRoom).setFontCustom(new Font("Dialog", Font.BOLD, 12));
+		btnSwitchRoom.setBounds(220, 0, 90, 30);
+		((MyButton) btnSwitchRoom).setEnabledCustom(false);
 		pnRoomControl.add(btnSwitchRoom);
 
-		btnRefreshRoom = new JButton("Làm mới", refreshIcon);
-		btnRefreshRoom.setBounds(210, 33, 96, 27);
-		CustomUI.getInstance().setCustomBtn(btnRefreshRoom);
+		btnRefreshRoom = new MyButton(90, 30, "Làm mới", new Dimension(50, 17), refreshIcon.getImage(),
+				new Dimension(14, 18), gra);
+		((MyButton) btnRefreshRoom).setFontCustom(new Font("Dialog", Font.BOLD, 12));
+		btnRefreshRoom.setBounds(220, 33, 90, 30);
 		pnRoomControl.add(btnRefreshRoom);
 
 		cboRoomID = new JComboBox<String>();
 		cboRoomID.setBounds(89, 0, 118, 27);
 		cboRoomID.setEditable(true);
-		boxFieldRoomID = CustomUI.getInstance().setCustomCBoxField(cboRoomID);
-		boxFieldRoomID.setBounds(89, 0, 118, 27);
+		cboRoomID.setOpaque(false);
+		cboRoomID.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		cboRoomID.setUI(new BasicComboBoxUI());
+		txtBFieldRoomID = (JTextField) cboRoomID.getEditor().getEditorComponent();
+		txtBFieldRoomID.setBorder(BorderFactory.createEmptyBorder());
+		txtBFieldRoomID.setBackground(new Color(246, 210, 255, 50));
+		txtBFieldRoomID.setForeground(Color.WHITE);
+		txtBFieldRoomID.setEditable(false);
+		cboRoomID.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnRoomControl.add(cboRoomID);
 
 		JLabel lbRoomTypeRoomCtrl = new JLabel("Loại phòng: ");
+		lbRoomTypeRoomCtrl.setFont(new Font("Dialog", Font.BOLD, 13));
+		lbRoomTypeRoomCtrl.setForeground(Color.WHITE);
 		lbRoomTypeRoomCtrl.setBounds(10, 38, 83, 16);
 		pnRoomControl.add(lbRoomTypeRoomCtrl);
 
 		cboRoomType = new JComboBox<String>();
 		cboRoomType.setBounds(89, 33, 118, 27);
 		cboRoomType.setEditable(true);
-		boxFieldRoomType = CustomUI.getInstance().setCustomCBoxField(cboRoomType);
-		boxFieldRoomType.setBounds(89, 33, 118, 27);
+		cboRoomType.setOpaque(false);
+		cboRoomType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		cboRoomType.setUI(new BasicComboBoxUI());
+		txtBFieldRoomType = (JTextField) cboRoomType.getEditor().getEditorComponent();
+		txtBFieldRoomType.setBorder(BorderFactory.createEmptyBorder());
+		txtBFieldRoomType.setBackground(new Color(246, 210, 255, 50));
+		txtBFieldRoomType.setForeground(Color.WHITE);
+		txtBFieldRoomType.setEditable(false);
+		txtBFieldRoomType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnRoomControl.add(cboRoomType);
 
 		JLabel lbRoom = new JLabel("Phòng: ");
+		lbRoom.setForeground(Color.WHITE);
+		lbRoom.setFont(new Font("Dialog", Font.BOLD, 13));
 		lbRoom.setBounds(10, 5, 83, 16);
 		pnRoomControl.add(lbRoom);
 
 		pnShowRoom = new JPanel();
+		pnShowRoom.setOpaque(false);
 		pnShowRoom.setBackground(Color.WHITE);
 		FlowLayout flShowRoom = new FlowLayout(FlowLayout.LEFT);
 		flShowRoom.setHgap(6);
@@ -192,29 +215,39 @@ public class fQuanLyDatPhong extends JFrame
 
 		JScrollPane scpShowRoom = new JScrollPane(pnShowRoom, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scpShowRoom.setOpaque(false);
+		scpShowRoom.getViewport().setOpaque(false);
+
+		JMenu mnNewMenu = new JMenu("New menu");
+		pnShowRoom.add(mnNewMenu);
 		pnRoomList.add(scpShowRoom, BorderLayout.CENTER);
-		scpShowRoom.setBorder(new TitledBorder(null, "Danh sách phòng"));
+		scpShowRoom.setBorder(new TitledBorder(null, "Thông tin cá nhân ", TitledBorder.LEADING, TitledBorder.TOP,
+				new Font("Dialog", Font.BOLD, 13), Color.white));
 		scpShowRoom.setBackground(Color.WHITE);
 		scpShowRoom.getVerticalScrollBar().setUnitIncrement(10);
 
 		JPanel pnBill = new JPanel();
 		pnBill.setBackground(Color.WHITE);
 		pnBill.setBounds(330, 40, 488, 597);
+		pnBill.setOpaque(false);
 
 		JPanel pnBiffInfo = new JPanel();
 		pnBiffInfo.setBackground(Color.WHITE);
-		pnBiffInfo.setBorder(
-				new TitledBorder(null, "Thông tin hóa đơn", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnBiffInfo.setOpaque(false);
+		pnBiffInfo.setBorder(new TitledBorder(null, "Thông tin hóa đơn", TitledBorder.LEADING, TitledBorder.TOP,
+				new Font("Dialog", Font.BOLD, 13), Color.white));
 		pnBiffInfo.setLayout(null);
 		pnBiffInfo.setPreferredSize(new Dimension(488, 210));
 
 		JPanel pnOrderList = new JPanel();
+		pnOrderList.setOpaque(false);
 		pnOrderList.setBackground(Color.WHITE);
 		pnOrderList.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
-				"Danh sách dịch vụ đã đặt", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+				"Danh sách dịch vụ đã đặt", TitledBorder.LEADING, TitledBorder.TOP, new Font("Dialog", Font.BOLD, 13),
+				new Color(255, 255, 255)));
 
-		String[] colsTitleService = { "STT", "Tên sản phẩm", "Đơn giá", "Số Lượng", "Thành tiền" };
+		String[] colsTitleService = { "STT", "Tên dịch vụ", "Đơn giá", "Số Lượng", "Thành tiền" };
 		modelTableBill = new DefaultTableModel(colsTitleService, 0) {
 			@Override
 			public boolean isCellEditable(int i, int i1) {
@@ -223,11 +256,18 @@ public class fQuanLyDatPhong extends JFrame
 		};
 		pnOrderList.setLayout(new BorderLayout(0, 0));
 		tableBill = new JTable(modelTableBill);
-		tableBill.setBackground(Color.WHITE);
+		tableBill.setBackground(new Color(255, 255, 255, 0));
+		tableBill.setForeground(new Color(255, 255, 255));
+		tableBill.setRowHeight(21);
+		tableBill.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
+		tableBill.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		tableBill.getTableHeader().setBackground(new Color(255, 255, 255));
 
 		JScrollPane scpTableBill = new JScrollPane(tableBill, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scpTableBill.setBackground(Color.WHITE);
+		scpTableBill.setOpaque(false);
+		scpTableBill.getViewport().setOpaque(false);
 		scpTableBill.getViewport().setBackground(Color.WHITE);
 		pnOrderList.add(scpTableBill, BorderLayout.CENTER);
 		pnBill.setLayout(new BorderLayout(0, 0));
@@ -235,10 +275,13 @@ public class fQuanLyDatPhong extends JFrame
 		pnBill.add(pnBiffInfo, BorderLayout.NORTH);
 
 		JLabel lbBillID = new JLabel("Mã hóa đơn: ");
+		lbBillID.setForeground(Color.WHITE);
+		lbBillID.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbBillID.setBounds(12, 20, 85, 20);
 		pnBiffInfo.add(lbBillID);
 
 		txtBillID = new JTextField();
+		txtBillID.setForeground(Color.WHITE);
 		txtBillID.setBounds(85, 20, 157, 20);
 		txtBillID.setColumns(10);
 		txtBillID.setText("");
@@ -247,10 +290,13 @@ public class fQuanLyDatPhong extends JFrame
 		pnBiffInfo.add(txtBillID);
 
 		JLabel lbRoomID = new JLabel("Mã phòng:");
+		lbRoomID.setForeground(Color.WHITE);
+		lbRoomID.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbRoomID.setBounds(248, 20, 82, 20);
 		pnBiffInfo.add(lbRoomID);
 
 		txtRoomID = new JTextField();
+		txtRoomID.setForeground(Color.WHITE);
 		txtRoomID.setBounds(328, 21, 150, 20);
 		txtRoomID.setColumns(10);
 		txtRoomID.setText("");
@@ -258,33 +304,42 @@ public class fQuanLyDatPhong extends JFrame
 		pnBiffInfo.add(txtRoomID);
 
 		JLabel lbStartTime = new JLabel("Giờ vào:");
+		lbStartTime.setForeground(Color.WHITE);
+		lbStartTime.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbStartTime.setBounds(12, 51, 85, 16);
 		pnBiffInfo.add(lbStartTime);
 
 		JLabel lbEndTime = new JLabel("Giờ ra:");
+		lbEndTime.setForeground(Color.WHITE);
+		lbEndTime.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbEndTime.setBounds(12, 78, 85, 16);
 		pnBiffInfo.add(lbEndTime);
 
 		txtStartTime = new JTextField("");
+		txtStartTime.setForeground(Color.WHITE);
 		txtStartTime.setBounds(85, 49, 157, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtStartTime);
 		pnBiffInfo.add(txtStartTime);
 
-		btnPayment = new JButton("Thanh toán", paymentIcon);
-		btnPayment.setBounds(170, 172, 150, 26);
-		CustomUI.getInstance().setCustomBtn(btnPayment);
+		btnPayment = new MyButton(100, 35, "Thanh toán", new Dimension(65, 21), paymentIcon.getImage(),
+				new Dimension(16, 18), gra);
+		((MyButton) btnPayment).setFontCustom(new Font("Dialog", Font.BOLD, 12));
+		btnPayment.setBounds(190, 165, 100, 35);
 		pnBiffInfo.add(btnPayment);
 
-		btnRentRoom = new JButton("Thuê ngay", null);
-		btnRentRoom.setBounds(12, 172, 150, 26);
-		CustomUI.getInstance().setCustomBtn(btnRentRoom);
+		btnRentRoom = new MyButton(100, 35, "Thuê ngay", new Dimension(67, 21), null, new Dimension(0, 0), gra);
+		((MyButton) btnRentRoom).setFontCustom(new Font("Dialog", Font.BOLD, 12));
+		btnRentRoom.setBounds(40, 165, 100, 35);
 		pnBiffInfo.add(btnRentRoom);
 
 		JLabel lbTotalPriceBill = new JLabel("Tổng tiền: ");
+		lbTotalPriceBill.setForeground(Color.WHITE);
+		lbTotalPriceBill.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbTotalPriceBill.setBounds(12, 105, 85, 20);
 		pnBiffInfo.add(lbTotalPriceBill);
 
 		txtTotalPriceBill = new JTextField();
+		txtTotalPriceBill.setForeground(Color.WHITE);
 		txtTotalPriceBill.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtTotalPriceBill.setText("0.0");
 		txtTotalPriceBill.setBounds(85, 105, 157, 20);
@@ -293,19 +348,25 @@ public class fQuanLyDatPhong extends JFrame
 		pnBiffInfo.add(txtTotalPriceBill);
 
 		JLabel lbVND = new JLabel("(VND)");
+		lbVND.setForeground(Color.WHITE);
+		lbVND.setFont(new Font("Dialog", Font.BOLD, 11));
 		lbVND.setBounds(248, 105, 43, 20);
 		pnBiffInfo.add(lbVND);
 
 		txtEndTime = new JTextField("");
+		txtEndTime.setForeground(Color.WHITE);
 		txtEndTime.setBounds(85, 76, 157, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtEndTime);
 		pnBiffInfo.add(txtEndTime);
 
 		JLabel lbRoomLocation = new JLabel("Vị Trí Phòng:");
+		lbRoomLocation.setForeground(Color.WHITE);
+		lbRoomLocation.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbRoomLocation.setBounds(248, 49, 82, 20);
 		pnBiffInfo.add(lbRoomLocation);
 
 		txtRoomLocation = new JTextField();
+		txtRoomLocation.setForeground(Color.WHITE);
 		txtRoomLocation.setColumns(10);
 		txtRoomLocation.setBounds(328, 50, 150, 20);
 		txtRoomLocation.setText("");
@@ -314,10 +375,13 @@ public class fQuanLyDatPhong extends JFrame
 		pnBiffInfo.add(txtRoomLocation);
 
 		JLabel lbRoomTypeBillInfo = new JLabel("Loại phòng:");
+		lbRoomTypeBillInfo.setForeground(Color.WHITE);
+		lbRoomTypeBillInfo.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbRoomTypeBillInfo.setBounds(248, 76, 82, 20);
 		pnBiffInfo.add(lbRoomTypeBillInfo);
 
 		txtRoomTypeName = new JTextField();
+		txtRoomTypeName.setForeground(Color.WHITE);
 		txtRoomTypeName.setColumns(10);
 		txtRoomTypeName.setBounds(328, 77, 150, 20);
 		txtRoomTypeName.setText("");
@@ -326,15 +390,19 @@ public class fQuanLyDatPhong extends JFrame
 		pnBiffInfo.add(txtRoomTypeName);
 
 		JLabel lbCustomerName = new JLabel("Tên KH:");
+		lbCustomerName.setForeground(Color.WHITE);
+		lbCustomerName.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbCustomerName.setBounds(12, 136, 85, 20);
 		pnBiffInfo.add(lbCustomerName);
 
-		btnChooseCustomer = new JButton("Chọn KH", null);
-		btnChooseCustomer.setBounds(328, 172, 150, 26);
-		CustomUI.getInstance().setCustomBtn(btnChooseCustomer);
+		btnChooseCustomer = new MyButton(105, 35, "Chọn khách hàng", new Dimension(103, 21), null, new Dimension(0, 0),
+				gra);
+		((MyButton) btnChooseCustomer).setFontCustom(new Font("Dialog", Font.BOLD, 12));
+		btnChooseCustomer.setBounds(340, 165, 105, 35);
 		pnBiffInfo.add(btnChooseCustomer);
 
 		txtCustomerName = new JTextField();
+		txtCustomerName.setForeground(Color.WHITE);
 		txtCustomerName.setColumns(10);
 		txtCustomerName.setBounds(85, 136, 157, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtCustomerName);
@@ -345,9 +413,10 @@ public class fQuanLyDatPhong extends JFrame
 		getContentPane().add(pnMain);
 
 		JPanel pnService = new JPanel();
+		pnService.setOpaque(false);
 		pnService.setBackground(Color.WHITE);
-		pnService.setBorder(
-				new TitledBorder(null, "Thông tin dịch vụ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnService.setBorder(new TitledBorder(null, "Thông tin dịch vụ", TitledBorder.LEADING, TitledBorder.TOP,
+				new Font("Dialog", Font.BOLD, 13), Color.white));
 		pnService.setBounds(819, 40, 445, 597);
 		pnMain.add(pnService);
 		pnService.setLayout(new BorderLayout(0, 0));
@@ -355,26 +424,33 @@ public class fQuanLyDatPhong extends JFrame
 		JPanel pnControlService = new JPanel();
 		pnControlService.setPreferredSize(new Dimension(445, 190));
 		pnControlService.setBackground(Color.WHITE);
+		pnControlService.setOpaque(false);
 		pnService.add(pnControlService, BorderLayout.NORTH);
 		pnControlService.setLayout(null);
 
 		JLabel lbServiceName = new JLabel("Tên dịch vụ:");
+		lbServiceName.setForeground(Color.WHITE);
+		lbServiceName.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbServiceName.setBounds(12, 12, 90, 16);
 		pnControlService.add(lbServiceName);
 
 		txtServiceName = new JTextField();
+		txtServiceName.setForeground(Color.WHITE);
 		txtServiceName.setBounds(110, 10, 170, 20);
 		txtServiceName.setColumns(10);
 		txtServiceName.setText("");
 		CustomUI.getInstance().setCustomTextFieldOn(txtServiceName);
 		pnControlService.add(txtServiceName);
 
-		btnSearchService = new JButton("Tìm", searchIcon);
-		btnSearchService.setBounds(292, 7, 131, 26);
-		CustomUI.getInstance().setCustomBtn(btnSearchService);
+		btnSearchService = new MyButton(90, 30, "Tìm", new Dimension(25, 16), searchIcon.getImage(),
+				new Dimension(16, 18), gra);
+		((MyButton) btnSearchService).setFontCustom(new Font("Dialog", Font.BOLD, 13));
+		btnSearchService.setBounds(310, 6, 90, 30);
 		pnControlService.add(btnSearchService);
 
 		JLabel lbOrderQuantity = new JLabel("Số lượng đặt: ");
+		lbOrderQuantity.setForeground(Color.WHITE);
+		lbOrderQuantity.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbOrderQuantity.setBounds(12, 42, 90, 16);
 		pnControlService.add(lbOrderQuantity);
 
@@ -383,27 +459,38 @@ public class fQuanLyDatPhong extends JFrame
 		spinOrderQuantity.setBounds(110, 39, 170, 20);
 		spinOrderQuantity.setEnabled(false);
 		CustomUI.getInstance().setCustomSpinner(spinOrderQuantity);
+		spinOrderQuantity.setModel(new SpinnerNumberModel(0, 0, null, 1));
+		spinOrderQuantity.setOpaque(false);
+		CustomUI.getInstance()
+				.setCustomTextFieldOff(((JSpinner.DefaultEditor) spinOrderQuantity.getEditor()).getTextField());
 		pnControlService.add(spinOrderQuantity);
 
-		btnOrderServices = new JButton("Thêm", addIcon);
-		btnOrderServices.setBounds(292, 40, 131, 26);
-		CustomUI.getInstance().setCustomBtn(btnOrderServices);
+		btnOrderServices = new MyButton(90, 30, "Thêm", new Dimension(33, 16), addIcon.getImage(),
+				new Dimension(16, 18), gra);
+		((MyButton) btnOrderServices).setFontCustom(new Font("Dialog", Font.BOLD, 13));
+		btnOrderServices.setBounds(310, 42, 90, 30);
 		pnControlService.add(btnOrderServices);
 
-		btnCannelServices = new JButton("Hủy", trashIcon);
-		btnCannelServices.setBounds(292, 76, 131, 26);
-		CustomUI.getInstance().setCustomBtn(btnCannelServices);
+		btnCannelServices = new MyButton(90, 30, "Hủy", new Dimension(25, 16), trashIcon.getImage(),
+				new Dimension(16, 18), gra);
+		((MyButton) btnCannelServices).setFontCustom(new Font("Dialog", Font.BOLD, 13));
+		btnCannelServices.setBounds(310, 78, 90, 30);
 		pnControlService.add(btnCannelServices);
 
 		JLabel lbQuantityService = new JLabel("Số lượng còn: ");
+		lbQuantityService.setForeground(Color.WHITE);
+		lbQuantityService.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbQuantityService.setBounds(12, 69, 90, 16);
 		pnControlService.add(lbQuantityService);
 
 		JLabel lbGiaDV = new JLabel("Giá bán: ");
+		lbGiaDV.setForeground(Color.WHITE);
+		lbGiaDV.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbGiaDV.setBounds(12, 98, 90, 16);
 		pnControlService.add(lbGiaDV);
 
 		txtQuantityService = new JTextField();
+		txtQuantityService.setForeground(Color.WHITE);
 		txtQuantityService.setColumns(10);
 		txtQuantityService.setBounds(110, 67, 170, 20);
 		txtQuantityService.setText("");
@@ -413,6 +500,7 @@ public class fQuanLyDatPhong extends JFrame
 		pnControlService.add(txtQuantityService);
 
 		txtServicePrice = new JTextField();
+		txtServicePrice.setForeground(Color.WHITE);
 		txtServicePrice.setColumns(10);
 		txtServicePrice.setBounds(110, 96, 170, 20);
 		txtServicePrice.setText("");
@@ -421,16 +509,20 @@ public class fQuanLyDatPhong extends JFrame
 		CustomUI.getInstance().setCustomTextFieldOff(txtServicePrice);
 		pnControlService.add(txtServicePrice);
 
-		btnRefreshService = new JButton("Làm mới", refreshIcon);
-		btnRefreshService.setBounds(292, 113, 131, 26);
-		CustomUI.getInstance().setCustomBtn(btnRefreshService);
+		btnRefreshService = new MyButton(90, 30, "Làm mới", new Dimension(50, 17), refreshIcon.getImage(),
+				new Dimension(14, 18), gra);
+		((MyButton) btnRefreshService).setFontCustom(new Font("Dialog", Font.BOLD, 12));
+		btnRefreshService.setBounds(310, 114, 90, 30);
 		pnControlService.add(btnRefreshService);
 
 		JLabel lbTotalPriceService = new JLabel("Tổng tiền: ");
+		lbTotalPriceService.setForeground(Color.WHITE);
+		lbTotalPriceService.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbTotalPriceService.setBounds(12, 127, 90, 16);
 		pnControlService.add(lbTotalPriceService);
 
 		txtTotalPriceService = new JTextField();
+		txtTotalPriceService.setForeground(Color.WHITE);
 		txtTotalPriceService.setText("0.0");
 		txtTotalPriceService.setColumns(10);
 		txtTotalPriceService.setBounds(110, 125, 170, 20);
@@ -439,26 +531,39 @@ public class fQuanLyDatPhong extends JFrame
 		pnControlService.add(txtTotalPriceService);
 
 		JLabel lbServiceType = new JLabel("Loại dịch vụ: ");
+		lbServiceType.setForeground(Color.WHITE);
+		lbServiceType.setFont(new Font("Dialog", Font.BOLD, 12));
 		lbServiceType.setBounds(12, 156, 90, 16);
 		pnControlService.add(lbServiceType);
 
 		cboServiceType = new JComboBox<String>();
 		cboServiceType.setBounds(110, 154, 170, 20);
 		cboServiceType.setEditable(true);
-		boxFieldServiceType = CustomUI.getInstance().setCustomCBoxField(cboServiceType);
-		boxFieldServiceType.setBounds(110, 154, 170, 20);
+		cboServiceType.setOpaque(false);
+		cboServiceType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		cboServiceType.setUI(new BasicComboBoxUI());
+		txtBFieldServiceType = (JTextField) cboServiceType.getEditor().getEditorComponent();
+		txtBFieldServiceType.setBorder(BorderFactory.createEmptyBorder());
+		txtBFieldServiceType.setBackground(new Color(246, 210, 255, 50));
+		txtBFieldServiceType.setForeground(Color.WHITE);
+		txtBFieldServiceType.setEditable(false);
+		txtBFieldServiceType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnControlService.add(cboServiceType);
 
 		chkSearchService = new JCheckBox("<html>Tìm theo tên và loại</html>");
+		chkSearchService.setForeground(Color.WHITE);
+		chkSearchService.setFont(new Font("Dialog", Font.BOLD, 12));
 		chkSearchService.setBackground(Color.WHITE);
 		chkSearchService.setBounds(289, 154, 144, 20);
+		chkSearchService.setOpaque(false);
 		chkSearchService.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnControlService.add(chkSearchService);
 
 		JPanel pnServiceList = new JPanel();
+		pnServiceList.setOpaque(false);
 		pnServiceList.setBackground(Color.WHITE);
-		pnServiceList.setBorder(
-				new TitledBorder(null, "Danh sách dịch vụ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnServiceList.setBorder(new TitledBorder(null, "Danh sách dịch vụ", TitledBorder.LEADING, TitledBorder.TOP,
+				new Font("Dialog", Font.BOLD, 13), Color.white));
 		pnService.add(pnServiceList, BorderLayout.CENTER);
 
 		String[] colsProduct = { "STT", "Tên sản phẩm", "SL còn", "Đơn giá" };
@@ -470,9 +575,17 @@ public class fQuanLyDatPhong extends JFrame
 		};
 		pnServiceList.setLayout(new BorderLayout(0, 0));
 		tableService = new JTable(modelTableService);
+		tableService.setBackground(new Color(255, 255, 255, 0));
+		tableService.setForeground(new Color(255, 255, 255));
+		tableService.setRowHeight(21);
+		tableService.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
+		tableService.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		tableService.getTableHeader().setBackground(new Color(255, 255, 255));
 
 		JScrollPane scpProductList = new JScrollPane(tableService, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scpProductList.setOpaque(false);
+		scpProductList.getViewport().setOpaque(false);
 		scpProductList.getViewport().setBackground(Color.WHITE);
 		pnServiceList.add(scpProductList);
 
@@ -499,9 +612,12 @@ public class fQuanLyDatPhong extends JFrame
 		tableService.addMouseListener(this);
 		tableBill.addMouseListener(this);
 		btnBack.addMouseListener(this);
-		boxFieldRoomID.addMouseListener(this);
-		boxFieldRoomType.addMouseListener(this);
-		boxFieldServiceType.addMouseListener(this);
+		txtBFieldRoomID.addMouseListener(this);
+		txtBFieldRoomType.addMouseListener(this);
+		txtBFieldServiceType.addMouseListener(this);
+		cboRoomID.addMouseListener(this);
+		cboRoomType.addMouseListener(this);
+		cboServiceType.addMouseListener(this);
 
 		txtServiceName.addFocusListener(this);
 		spinOrderQuantity.addFocusListener(this);
@@ -517,7 +633,7 @@ public class fQuanLyDatPhong extends JFrame
 		showStaffName(staffLogin);
 		LoadRoomList(PhongDAO.getInstance().getDSPhong());
 		reSizeColumnTableBillInfo();
-		loadRoomTypeList();
+		loadCboRoomType();
 		loadCboRoom("Tất cả");
 		loadDSServiceType();
 		loadServiceList(DichVuDAO.getInstance().getServiceList());
@@ -555,15 +671,14 @@ public class fQuanLyDatPhong extends JFrame
 					int billID = HoaDonDAO.getInstance().getMaHDCuoiCung();
 					PhongDAO.getInstance().capNhatTinhTrangPhong(roomID, PhongDAO.PAID);
 					txtBillID.setText(String.valueOf(billID));
-					btnPayment.setEnabled(true);
+					((MyButton) btnPayment).setEnabledCustom(true);
 					LoadRoomList(PhongDAO.getInstance().getDSPhong());
 					String format = "dd-MM-yyyy HH:mm:ss";
-					String startTimeStr = ConvertTime.getInstance().convertSqlTimestampToUtilDateFormatString(startTime,
-							format);
+					String startTimeStr = ConvertTime.getInstance().convertTimeToString(startTime, format);
 					txtStartTime.setText(startTimeStr);
-					btnChooseCustomer.setEnabled(false);
-					btnRentRoom.setEnabled(false);
-					btnPayment.setEnabled(true);
+					((MyButton) btnChooseCustomer).setEnabledCustom(false);
+					((MyButton) btnRentRoom).setEnabledCustom(false);
+					((MyButton) btnPayment).setEnabledCustom(true);
 				} else {
 					JOptionPane.showMessageDialog(this, "Cho thuê phòng thất bại");
 				}
@@ -578,8 +693,6 @@ public class fQuanLyDatPhong extends JFrame
 			} else {
 				int selectRow = tableService.getSelectedRow();
 				int orderQuantity = (int) spinOrderQuantity.getValue();
-				if (o.equals(btnCannelServices))
-					orderQuantity *= -1;
 				int quantity = Integer.parseInt(txtQuantityService.getText());
 				if (orderQuantity > quantity) {
 					orderQuantity = quantity;
@@ -591,6 +704,8 @@ public class fQuanLyDatPhong extends JFrame
 					JOptionPane.showMessageDialog(this, "Số lượng dịch vụ đặt phải lớn hơn 0", "Cảnh bảo",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
+					if (o.equals(btnCannelServices))
+						orderQuantity *= -1;
 					String serviceName = txtServiceName.getText().trim();
 					DichVu service = DichVuDAO.getInstance().getDichVuByTenDichVu(serviceName);
 					String roomID = txtRoomID.getText();
@@ -661,27 +776,45 @@ public class fQuanLyDatPhong extends JFrame
 		} else if (o.equals(btnPayment)) {
 			String roomID = txtRoomID.getText().trim();
 			HoaDon bill = HoaDonDAO.getInstance().getUncheckHoaDonByMaPhong(roomID);
-			String totalPriceStr = txtTotalPriceBill.getText().trim();
-			double totalPrice = Double.parseDouble(totalPriceStr.replace(",", ""));
-			long millis = System.currentTimeMillis();
-			Timestamp endTime = new Timestamp(millis);
 			if (bill != null) {
+				String totalPriceStr = txtTotalPriceBill.getText().trim();
+				Double totalPriceService = Double.parseDouble(totalPriceStr.replace(",", ""));
+				long millis = System.currentTimeMillis();
+				Timestamp endTime = new Timestamp(millis);
+				bill.setNgayGioTra(endTime);
+				double hours = bill.tinhGioThue();
+				int minutes = (int) (hours % 1 * 60);
+				int hoursInt = (int) hours;
+				String time = String.format("%d:%d", hoursInt, minutes);
+				Double totalPriceRoom = bill.tinhTienPhong();
+				Double totalPriceBill = totalPriceService * totalPriceRoom;
+				DecimalFormat df = new DecimalFormat("#,###.##");
 				String message = String.format(
-						"Bạn có chắc chắn thanh toán hóa đơn cho %s \nSố tiền khách hàng cần phải trả là: %s VND",
-						roomID, totalPriceStr);
-				int select = JOptionPane.showConfirmDialog(this, message, "Xác nhận thanh toán",
-						JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
-				if (select == JOptionPane.OK_OPTION) {
-					bill.setNgayGioTra(endTime);
-					totalPrice += bill.tinhTienPhong();
-					HoaDonDAO.getInstance().thanhToan(bill.getMaHoaDon(), bill.getNgayGioTra(), totalPrice);
-					showBillInfo(roomID);
-					loadPhong(roomID);
-					String endTimeStr = ConvertTime.getInstance().convertSqlTimestampToUtilDateFormatString(endTime,
-							"dd-MM-yyyy HH:mm:ss");
-					txtEndTime.setText(endTimeStr);
-					DecimalFormat df = new DecimalFormat("#,###.##");
-					txtTotalPriceBill.setText(df.format(totalPrice));
+						"Bạn có chắc chắn thanh toán hóa đơn cho phòng %s\nSố giờ thuê: %s\nTổng tiền dịch vụ: %s VND\nTổng tiền phòng: %s VND \nTiền khách cần thanh toán: %s VND",
+						roomID, time, df.format(totalPriceService), df.format(totalPriceRoom),
+						df.format(totalPriceBill));
+				Object stringArray[] = { "Xác nhận", "Hủy" };
+				int select = JOptionPane.showOptionDialog(null, message, "Xác thực", JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, stringArray, null);
+				if (select == 0) {
+					boolean rs = HoaDonDAO.getInstance().thanhToan(bill.getMaHoaDon(), bill.getNgayGioTra(),
+							totalPriceBill);
+					if (rs) {
+						LoadRoomList(PhongDAO.getInstance().getDSPhong());
+						String endTimeStr = ConvertTime.getInstance().convertTimeToString(endTime,
+								"dd-MM-yyyy HH:mm:ss");
+						String startTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioDat(),
+								"dd-MM-yyyy HH:mm:ss");
+						txtEndTime.setText(endTimeStr);
+						txtTotalPriceBill.setText(df.format(totalPriceBill));
+						txtBillID.setText(String.valueOf(bill.getMaHoaDon()));
+						txtCustomerName.setText(bill.getPhong().getMaPhong());
+						txtStartTime.setText(startTimeStr);
+					} else {
+						JOptionPane.showMessageDialog(this, "Xảy ra lỗi trong quá trình thanh toán vui lòng thử lại");
+					}
+				} else {
+					bill.setNgayGioTra(null);
 				}
 			}
 		} else if (o.equals(btnRefreshRoom)) {
@@ -701,14 +834,10 @@ public class fQuanLyDatPhong extends JFrame
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 				} else {
 					PhongDAO.getInstance().chuyenPhong(RoomIdOld, roomIdNew);
-					loadPhong(RoomIdOld);
-					loadPhong(roomIdNew);
-					showBillInfo(RoomIdOld);
-					showBillInfo(roomIdNew);
+					LoadRoomList(PhongDAO.getInstance().getDSPhong());
 					String roomTypeName = txtRoomTypeName.getText();
 					loadCboRoom(roomTypeName);
 					refreshBillForm();
-					btnSwitchRoom.setEnabled(false);
 				}
 			}
 		} else if (o.equals(btnChooseCustomer)) {
@@ -726,7 +855,6 @@ public class fQuanLyDatPhong extends JFrame
 		Object o = e.getSource();
 		DecimalFormat df = new DecimalFormat("#,###.##");
 		if (o.equals(tableService)) {
-			spinOrderQuantity.setEnabled(true);
 			int row = tableService.getSelectedRow();
 			String serviceName = modelTableService.getValueAt(row, 1).toString();
 			DichVu service = DichVuDAO.getInstance().getDichVuByTenDichVu(serviceName);
@@ -734,7 +862,8 @@ public class fQuanLyDatPhong extends JFrame
 			txtQuantityService.setText(df.format(service.getSoLuongTon()));
 			txtServicePrice.setText(df.format(service.getGiaBan()));
 			txtTotalPriceService.setText(df.format(service.getGiaBan()));
-			spinOrderQuantity.setValue(1);
+			spinOrderQuantity.setEnabled(true);
+			spinOrderQuantity = new JSpinner(new SpinnerNumberModel(1, 1, service.getSoLuongTon(), 1));
 		} else if (o.equals(tableBill)) {
 			spinOrderQuantity.setEnabled(true);
 			int row = tableBill.getSelectedRow();
@@ -746,11 +875,11 @@ public class fQuanLyDatPhong extends JFrame
 			int quantityService = DichVuDAO.getInstance().getSLDVuConByTenDichVu(serviceName);
 			txtQuantityService.setText(String.valueOf(quantityService));
 			spinOrderQuantity.setValue(Math.abs(orderQuantity));
-		} else if (o.equals(boxFieldRoomID)) {
+		} else if (o.equals(txtBFieldRoomID)) {
 			cboRoomID.showPopup();
-		} else if (o.equals(boxFieldRoomType)) {
+		} else if (o.equals(txtBFieldRoomType)) {
 			cboRoomType.showPopup();
-		} else if (o.equals(boxFieldServiceType)) {
+		} else if (o.equals(txtBFieldServiceType)) {
 			cboServiceType.showPopup();
 		}
 	}
@@ -768,52 +897,24 @@ public class fQuanLyDatPhong extends JFrame
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
-		if (o.equals(btnSwitchRoom)) {
-			CustomUI.getInstance().setCustomBtnHover(btnSwitchRoom);
-		} else if (o.equals(btnRefreshRoom)) {
-			CustomUI.getInstance().setCustomBtnHover(btnRefreshRoom);
-		} else if (o.equals(btnSearchService)) {
-			CustomUI.getInstance().setCustomBtnHover(btnSearchService);
-		} else if (o.equals(btnPayment)) {
-			CustomUI.getInstance().setCustomBtnHover(btnPayment);
-		} else if (o.equals(btnOrderServices)) {
-			CustomUI.getInstance().setCustomBtnHover(btnOrderServices);
-		} else if (o.equals(btnCannelServices)) {
-			CustomUI.getInstance().setCustomBtnHover(btnCannelServices);
-		} else if (o.equals(btnRefreshService)) {
-			CustomUI.getInstance().setCustomBtnHover(btnRefreshService);
-		} else if (o.equals(btnRentRoom)) {
-			CustomUI.getInstance().setCustomBtnHover(btnRentRoom);
-		} else if (o.equals(btnChooseCustomer)) {
-			CustomUI.getInstance().setCustomBtnHover(btnChooseCustomer);
-		} else if (o.equals(btnBack)) {
-			CustomUI.getInstance().setCustomBtnHover(btnBack);
+		if (o.equals(txtBFieldRoomID)) {
+			cboRoomID.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+		} else if (o.equals(txtBFieldRoomType)) {
+			cboRoomType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+		} else if (o.equals(txtBFieldServiceType)) {
+			cboServiceType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		Object o = e.getSource();
-		if (o.equals(btnSwitchRoom)) {
-			CustomUI.getInstance().setCustomBtn(btnSwitchRoom);
-		} else if (o.equals(btnRefreshRoom)) {
-			CustomUI.getInstance().setCustomBtn(btnRefreshRoom);
-		} else if (o.equals(btnSearchService)) {
-			CustomUI.getInstance().setCustomBtn(btnSearchService);
-		} else if (o.equals(btnPayment)) {
-			CustomUI.getInstance().setCustomBtn(btnPayment);
-		} else if (o.equals(btnOrderServices)) {
-			CustomUI.getInstance().setCustomBtn(btnOrderServices);
-		} else if (o.equals(btnCannelServices)) {
-			CustomUI.getInstance().setCustomBtn(btnCannelServices);
-		} else if (o.equals(btnRefreshService)) {
-			CustomUI.getInstance().setCustomBtn(btnRefreshService);
-		} else if (o.equals(btnRentRoom)) {
-			CustomUI.getInstance().setCustomBtn(btnRentRoom);
-		} else if (o.equals(btnChooseCustomer)) {
-			CustomUI.getInstance().setCustomBtn(btnChooseCustomer);
-		} else if (o.equals(btnBack)) {
-			CustomUI.getInstance().setCustomBtn(btnBack);
+		if (o.equals(txtBFieldRoomID)) {
+			cboRoomID.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		} else if (o.equals(txtBFieldRoomType)) {
+			cboRoomType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		} else if (o.equals(txtBFieldServiceType)) {
+			cboServiceType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		}
 	}
 
@@ -844,10 +945,13 @@ public class fQuanLyDatPhong extends JFrame
 		Object o = e.getSource();
 		if (o.equals(spinOrderQuantity)) {
 			int soLuongDat = (int) spinOrderQuantity.getValue();
-			double giaTien = Double.parseDouble(txtServicePrice.getText().replace(",", ""));
-			double tongTien = giaTien * soLuongDat;
-			DecimalFormat df = new DecimalFormat("#,###.##");
-			txtTotalPriceService.setText(df.format(tongTien));
+			String giaTienStr = txtServicePrice.getText().trim().replace(",", "");
+			if (!giaTienStr.equals("")) {
+				double giaTien = Double.parseDouble(giaTienStr);
+				double tongTien = giaTien * soLuongDat;
+				DecimalFormat df = new DecimalFormat("#,###.##");
+				txtTotalPriceService.setText(df.format(tongTien));
+			}
 		}
 	}
 
@@ -928,14 +1032,15 @@ public class fQuanLyDatPhong extends JFrame
 	 * 
 	 * @param roomId <code>String</code>: mã phòng cần hiển thị
 	 */
-	private void loadPhong(String roomId) {
-		Phong room = PhongDAO.getInstance().getPhongByMaPhong(roomId);
-		String roomStatus = convertRoomStatus(room.getTinhTrangP());
-		String btnName = "<html><p style='text-align: center;'> " + roomId
-				+ " </p></br><p style='text-align: center;'> " + roomStatus + " </p></html>";
+	private void loadRoom(String maPhong) {
+		Phong room = PhongDAO.getInstance().getPhongByMaPhong(maPhong);
+		String statusP = convertRoomStatus(room.getTinhTrangP());
+		String roomID = room.getMaPhong();
+		String btnName = "<html><p style='text-align: center;'> " + roomID
+				+ " </p></br><p style='text-align: center;'> " + statusP + " </p></html>";
 		int index = 0;
 		for (int i = 0; i < btnRoomList.length; i++) {
-			if (btnRoomList[i].getText().contains(roomId))
+			if (btnRoomList[i].getText().contains(roomID))
 				index = i;
 			else if (btnRoomList[i].getText().equals("")) {
 				index = i;
@@ -949,13 +1054,20 @@ public class fQuanLyDatPhong extends JFrame
 		btnRoomList[index].setPreferredSize(new Dimension(PhongDAO.ROOM_WIDTH, PhongDAO.ROOM_HEIGHT));
 		btnRoomList[index].setIcon(roomIcon);
 		btnRoomList[index].setCursor(new Cursor(Cursor.HAND_CURSOR));
-		switch (roomStatus) {
+		switch (statusP) {
 		case "Trống":
 			btnRoomList[index].setBackground(Color.decode("#00a65a"));
-			btnPayment.setEnabled(false);
+			((MyButton) btnRentRoom).setEnabledCustom(true);
+			((MyButton) btnPayment).setEnabledCustom(false);
+			((MyButton) btnChooseCustomer).setEnabledCustom(false);
+			((MyButton) btnSwitchRoom).setEnabledCustom(false);
 			break;
 		default:
 			btnRoomList[index].setBackground(Color.decode("#3c8dbc"));
+			((MyButton) btnRentRoom).setEnabledCustom(false);
+			((MyButton) btnPayment).setEnabledCustom(true);
+			((MyButton) btnChooseCustomer).setEnabledCustom(true);
+			((MyButton) btnSwitchRoom).setEnabledCustom(true);
 			break;
 		}
 		pnShowRoom.revalidate();
@@ -981,7 +1093,7 @@ public class fQuanLyDatPhong extends JFrame
 			final int selection = i;
 			String roomID = dsPhong.get(i).getMaPhong();
 			btnRoomList[selection] = new JButton("");
-			loadPhong(roomID);
+			loadRoom(roomID);
 			btnRoomList[selection].setBorder(lineGray);
 			if ((i + 1) % 3 == 0) {
 				heightTable += PhongDAO.ROOM_HEIGHT;
@@ -1018,12 +1130,10 @@ public class fQuanLyDatPhong extends JFrame
 						String startTimeStr = "";
 						String endTimeStr = "";
 						if (startTime != null) {
-							startTimeStr = ConvertTime.getInstance()
-									.convertSqlTimestampToUtilDateFormatString(startTime, format);
+							startTimeStr = ConvertTime.getInstance().convertTimeToString(startTime, format);
 						}
 						if (endTime != null) {
-							endTimeStr = ConvertTime.getInstance().convertSqlTimestampToUtilDateFormatString(endTime,
-									format);
+							endTimeStr = ConvertTime.getInstance().convertTimeToString(endTime, format);
 						}
 						txtStartTime.setText(startTimeStr);
 						txtEndTime.setText(endTimeStr);
@@ -1034,23 +1144,23 @@ public class fQuanLyDatPhong extends JFrame
 						txtEndTime.setText("");
 						txtTotalPriceBill.setText("0.0");
 					}
-					spinOrderQuantity.setValue(1);
+					spinOrderQuantity.setValue((int) 1);
 					Phong roomActiveE = PhongDAO.getInstance().getPhongByMaPhong(roomID);
 					txtRoomLocation.setText(roomActiveE.getViTri());
 					txtRoomTypeName.setText(roomActiveE.getLoaiPhong().getTenLP());
 					String status = convertRoomStatus(roomActiveE.getTinhTrangP());
 					switch (status) {
 					case "Trống":
-						btnRentRoom.setEnabled(true);
-						btnPayment.setEnabled(false);
-						btnChooseCustomer.setEnabled(true);
-						btnSwitchRoom.setEnabled(false);
+						((MyButton) btnRentRoom).setEnabledCustom(true);
+						((MyButton) btnPayment).setEnabledCustom(false);
+						((MyButton) btnChooseCustomer).setEnabledCustom(true);
+						((MyButton) btnSwitchRoom).setEnabledCustom(false);
 						break;
 					default:
-						btnRentRoom.setEnabled(false);
-						btnPayment.setEnabled(true);
-						btnChooseCustomer.setEnabled(false);
-						btnSwitchRoom.setEnabled(true);
+						((MyButton) btnRentRoom).setEnabledCustom(false);
+						((MyButton) btnPayment).setEnabledCustom(true);
+						((MyButton) btnChooseCustomer).setEnabledCustom(false);
+						((MyButton) btnSwitchRoom).setEnabledCustom(true);
 						break;
 					}
 				}
@@ -1081,8 +1191,10 @@ public class fQuanLyDatPhong extends JFrame
 			});
 			pnShowRoom.add(btnRoomList[selection]);
 		}
-		if (location != -1 && location < btnRoomList.length)
+		if (location != -1 && location < btnRoomList.length) {
 			btnRoomList[location].setBorder(lineRed);
+			btnRoomList[location].doClick();
+		}
 	}
 
 	/**
@@ -1108,17 +1220,18 @@ public class fQuanLyDatPhong extends JFrame
 	 * 
 	 * @param roomId <code>String</code>: mã phòng
 	 */
-	private void showBillInfo(String roomId) {
-		ArrayList<CTHoaDon> dataList = CTHoaDonDAO.getInstance().getCTHoaDonListByMaPhong(roomId);
+	private void showBillInfo(String maPhong) {
+		ArrayList<CTHoaDon> dataList = CTHoaDonDAO.getInstance().getCTHoaDonListByMaPhong(maPhong);
 		DecimalFormat df = new DecimalFormat("#,###.##");
 		int i = 1;
 		modelTableBill.getDataVector().removeAllElements();
 		modelTableBill.fireTableDataChanged();
-		double totalPrice = 0;
+		Double totalPrice = 0.0;
 		for (CTHoaDon item : dataList) {
-			totalPrice += item.getTienDichVu();
+			Double totalPriceService = item.tinhTienDichVu();
+			totalPrice *= totalPriceService;
 			String stt = df.format(i++);
-			String totalPriceStr = df.format(item.getTienDichVu());
+			String totalPriceStr = df.format(totalPriceService);
 			String priceStr = df.format(item.getDichVu().getGiaBan());
 			String countStr = df.format(item.getSoLuongDat());
 			modelTableBill
@@ -1130,7 +1243,7 @@ public class fQuanLyDatPhong extends JFrame
 	/**
 	 * Hiển thị danh sách loại phòng lên comboBox loại phòng
 	 */
-	private void loadRoomTypeList() {
+	private void loadCboRoomType() {
 		ArrayList<LoaiPhong> dataList = LoaiPhongDAO.getInstance().getDSLoaiPhong();
 		cboRoomType.addItem("Tất cả");
 		for (LoaiPhong item : dataList) {

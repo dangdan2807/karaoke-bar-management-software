@@ -35,6 +35,43 @@ public class MyButton extends JButton implements MouseListener {
 	}
 
 	/**
+	 * Tạo 1 <code>MyButton_1</code> mới tự động tính toán khoản các giữa icon và
+	 * chữ được hiển thị với các tham số sau:
+	 * 
+	 * @param w         <code>int</code>: chiều dài của nút
+	 * @param h         <code>int</code>: chiều cao của nút
+	 * @param label     <code>String</code>: tên được hiển thị
+	 * @param sizeLabel <code>Dimension</code>: kích thước của label
+	 * @param icon      <code>Image</code>: icon của nút
+	 * @param sizeIcon  <code>Dimension</code>: kích thước của icon
+	 * @param gra       <code>GradientPaint</code>: màu của nút
+	 */
+	public MyButton(int w, int h, String label, Dimension sizeLabel, Image icon, Dimension sizeIcon,
+			GradientPaint gra) {
+		super();
+		x = 0;
+		y = 0;
+
+		this.w = w;
+		this.h = h;
+		this.Label = label;
+		this.gra = gra;
+		this.icon = icon;
+		this.xImage = (int) (w - 3 - (sizeIcon.getWidth() + 5 + sizeLabel.getWidth())) / 2;
+		this.yImage = (int) (h - 6 - sizeIcon.getHeight()) / 2;
+		this.xLabel = (int) (this.xImage + sizeIcon.getWidth() + 5);
+		this.yLabel = (int) (h - 6 - (int) sizeLabel.getHeight()) * 2 + 1;
+		colorFont = colorFontExit;
+
+		setContentAreaFilled(false);
+		setFocusPainted(false);
+		setBorder(null);
+		colorShadow = colorShadowExit;
+		setCursor(new Cursor(Cursor.HAND_CURSOR));
+		addMouseListener(this);
+	}
+
+	/**
 	 * Tạo 1 <code>MyButton</code> mới tự động tính toán khoản các giữa icon và chữ
 	 * được hiển thị với các tham số sau:
 	 * 

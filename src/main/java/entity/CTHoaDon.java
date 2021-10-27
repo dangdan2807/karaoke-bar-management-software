@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 public class CTHoaDon {
 	private int soLuongDat;
-	private Double tienDichVu;
 
 	private DichVu dichVu;
 
@@ -15,10 +14,6 @@ public class CTHoaDon {
 
 	public void setSoLuongDat(int soLuongDat) {
 		this.soLuongDat = soLuongDat;
-	}
-
-	public Double getTienDichVu() {
-		return tienDichVu;
 	}
 
 	public DichVu getDichVu() {
@@ -32,7 +27,6 @@ public class CTHoaDon {
 	public CTHoaDon(int soLuongDat, DichVu dichVu) {
 		this.soLuongDat = soLuongDat;
 		this.dichVu = dichVu;
-		this.tienDichVu = tinhTienDichVu();
 	}
 
 	public CTHoaDon() {
@@ -46,14 +40,11 @@ public class CTHoaDon {
 		this(rs.getInt("soLuongDat"), new DichVu(rs, type));
 	}
 
-	
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dichVu == null) ? 0 : dichVu.hashCode());
-		// result = prime * result + ((hoaDon == null) ? 0 : hoaDon.hashCode());
 		return result;
 	}
 
@@ -71,11 +62,6 @@ public class CTHoaDon {
 				return false;
 		} else if (!dichVu.equals(other.dichVu))
 			return false;
-		// if (hoaDon == null) {
-		// 	if (other.hoaDon != null)
-		// 		return false;
-		// } else if (!hoaDon.equals(other.hoaDon))
-		// 	return false;
 		return true;
 	}
 
@@ -85,6 +71,7 @@ public class CTHoaDon {
 	}
 
 	public Double tinhTienDichVu() {
-		return soLuongDat * dichVu.getGiaBan();
+		// BigDecimal soLuongDatBig = new BigDecimal(String.valueOf(soLuongDat));
+		return dichVu.getGiaBan() * soLuongDat;
 	}
 }

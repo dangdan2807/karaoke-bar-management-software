@@ -6,7 +6,8 @@ import javax.swing.event.*;
 import java.awt.event.*;
 
 import DAO.NhanVienDAO;
-import UI.PanelCustom.CustomUI;
+import UI.PanelCustom.PnDichVu;
+import UI.PanelCustom.PnLoaiDichVu;
 import UI.PanelCustom.PnNhanVien;
 import entity.NhanVien;
 
@@ -43,12 +44,15 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
     public void createTabControl() {
         tpTabMain = new JTabbedPane();
         PnNhanVien pnNhanVien = new PnNhanVien(staffLogin);
-        tpTabMain.addTab("Nhân viên", CustomUI.USER_ICON, pnNhanVien, "Quản lý Nhân viên");
+        PnDichVu pnDichVu = new PnDichVu(staffLogin);
+        PnLoaiDichVu pnLoaiDichVu = new PnLoaiDichVu(staffLogin);
+
+        tpTabMain.addTab("Nhân viên", null, pnNhanVien, "Quản lý Nhân viên");
         tpTabMain.addTab("Khách hàng", null, null, "Quản lý Khách hàng");
         tpTabMain.addTab("Loại phòng", null, null, "Quản lý loại phòng");
         tpTabMain.addTab("Phòng", null, null, "Quản lý Phòng");
-        tpTabMain.addTab("Loại dịch vụ", null, null, "Quản lý loại dịch vụ");
-        tpTabMain.addTab("Dịch vụ", null, null, "Quản lý dịch vụ");
+        tpTabMain.addTab("Loại dịch vụ", null, pnLoaiDichVu, "Quản lý loại dịch vụ");
+        tpTabMain.addTab("Dịch vụ", null, pnDichVu, "Quản lý dịch vụ");
         tpTabMain.addTab("Hóa đơn", null, null, "Quản lý Hóa đơn");
         this.add(tpTabMain);
 

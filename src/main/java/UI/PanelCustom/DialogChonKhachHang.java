@@ -333,7 +333,7 @@ public class DialogChonKhachHang extends JDialog
         txtTenKH.setText(khachHang.getHoTen());
         txtCMND.setText(khachHang.getCmnd());
         txtSDT.setText(khachHang.getSoDienThoai());
-        String ngaySinhStr = ConvertTime.getInstance().convertSqlDateToUtilDateFormatString(khachHang.getNgaySinh(),
+        String ngaySinhStr = ConvertTime.getInstance().convertTimeToString(khachHang.getNgaySinh(),
                 "dd-MM-yyyy");
         txtNgaySinh.setText(ngaySinhStr);
         boolean gioiTinh = khachHang.getGioiTinh();

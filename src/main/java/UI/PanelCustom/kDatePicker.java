@@ -122,9 +122,24 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
 
     }
 
+    /**
+     * Làm mờ date picker
+     * 
+     * @param opaque <code>boolean</code>: <code>true</code> giá trị mặc đinh -
+     *               không làm mờ <code>false</code> làm mờ
+     */
     public void setOpaqueCustom(Boolean opaque) {
         this.setOpaque(opaque);
     };
+
+    /**
+     * Thêm tooltip vào khi hover chuột lên date Date Picker
+     * 
+     * @param text <code>String</code>: nội dung cần hiển thị
+     */
+    public void setToolTipTextCustom(String text) {
+        txt.setToolTipText(text);
+    }
 
     /**
      * Thay đổi màu chữ

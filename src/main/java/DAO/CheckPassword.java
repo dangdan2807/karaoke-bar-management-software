@@ -1,4 +1,4 @@
-package UI.xuLy;
+package DAO;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;

@@ -78,8 +78,8 @@ public class KhachHang {
 	}
 
 	public KhachHang(ResultSet rs) throws SQLException {
-		this(rs.getString("maKH"), rs.getString("cmnd"), rs.getString("hoTen"), rs.getString("soDienThoai"),
-				rs.getDate("ngaySinh"), rs.getBoolean("gioiTinh"));
+		this(rs.getString("maKH"), rs.getString("cmndKH"), rs.getString("hoTenKH"), rs.getString("sdtKH"),
+				rs.getDate("ngaySinhKH"), rs.getBoolean("gioiTinhKH"));
 	}
 
 	@Override

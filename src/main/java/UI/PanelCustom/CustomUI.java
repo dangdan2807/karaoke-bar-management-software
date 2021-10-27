@@ -159,8 +159,7 @@ public class CustomUI {
      */
     public void setCustomComboBox(JComboBox<?> cbo) {
         cbo.setUI(new BasicComboBoxUI());
-        cbo.setFont(new Font("Dialog", Font.BOLD, 12));
-        // cbo.setBackground(Color.WHITE);
+        cbo.setFont(new Font("Dialog", Font.BOLD, 14));
         cbo.setBorder(BORDER_BOTTOM_UN_FOCUS);
         cbo.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
@@ -173,7 +172,7 @@ public class CustomUI {
      */
     public JTextField setCustomCBoxField(JComboBox<?> cbo) {
         JTextField boxField = (JTextField) cbo.getEditor().getEditorComponent();
-        boxField.setFont(new Font("Dialog", Font.PLAIN, 12));
+        boxField.setFont(new Font("Dialog", Font.PLAIN, 14));
         boxField.setBackground(new Color(246, 210, 255, 50));
         boxField.setForeground(Color.WHITE);
         boxField.setBorder(BORDER_BOTTOM_UN_FOCUS);
@@ -189,17 +188,12 @@ public class CustomUI {
      * @param spin <code>JSpinner</code>: Spinner cần tùy chỉnh
      */
     public void setCustomSpinner(JSpinner spin) {
-        Color backgroundColor = Color.decode("#f6d2ff");
         spin.setFont(new Font("Dialog", Font.PLAIN, 14));
-        spin.setBorder(BorderFactory.createEmptyBorder());
-        spin.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        spin.setBackground(backgroundColor);
-        // spin.setOpaque(false);
-        // spin.setBackground(backgroundColor);
-        // spin.setForeground(Color.WHITE);
-
-        // ((JTextComponent) spin.getEditor().getComponent(0)).setBackground(backgroundColor);
-        // ((JTextComponent) spin.getEditor().getComponent(0)).setForeground(Color.WHITE);
-        // ((JTextComponent) spin.getEditor().getComponent(0)).setCaretColor(Color.WHITE);
+        spin.setBackground(Color.WHITE);
+        spin.setBorder(BORDER_BOTTOM_UN_FOCUS);
+		spin.setOpaque(false);
+        ((JSpinner.DefaultEditor) spin.getEditor()).getTextField().setCaretColor(Color.WHITE);
+        ((JSpinner.DefaultEditor) spin.getEditor()).getTextField().setForeground(Color.WHITE);
+		((JSpinner.DefaultEditor) spin.getEditor()).getTextField().setBackground(new Color(246, 210, 255, 50));
     }
 }

@@ -3,9 +3,9 @@ package UI;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import DAO.CheckPassword;
 import DAO.NhanVienDAO;
 import UI.PanelCustom.CustomUI;
-import UI.xuLy.CheckPassword;
 import entity.NhanVien;
 
 import java.awt.*;

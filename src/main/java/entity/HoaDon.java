@@ -12,7 +12,6 @@ public class HoaDon {
 	private Timestamp ngayGioDat;
 	private Timestamp ngayGioTra;
 	private int tinhTrangHD;
-	private Double tongTien;
 
 	private NhanVien nhanVien;
 	private KhachHang khachHang;
@@ -50,10 +49,6 @@ public class HoaDon {
 
 	public void setTinhTrangHD(int tinhTrangHD) {
 		this.tinhTrangHD = tinhTrangHD;
-	}
-
-	public Double getTongTien() {
-		return tongTien;
 	}
 
 	public NhanVien getNhanVien() {
@@ -97,7 +92,6 @@ public class HoaDon {
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
 		this.phong = phong;
-		this.tongTien = 0.0;
 
 		ctDSDichVu = new ArrayList<CTHoaDon>();
 
@@ -109,21 +103,17 @@ public class HoaDon {
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
 		this.phong = phong;
-		this.tongTien = 0.0;
 
 		ctDSDichVu = new ArrayList<CTHoaDon>();
 	}
 
 	public HoaDon(int maHoaDon) {
 		this.maHoaDon = maHoaDon;
-		this.tongTien = 0.0;
 
 		ctDSDichVu = new ArrayList<CTHoaDon>();
 	}
 
 	public HoaDon() {
-		this.tongTien = 0.0;
-
 		ctDSDichVu = new ArrayList<CTHoaDon>();
 	}
 
@@ -132,26 +122,19 @@ public class HoaDon {
 				rs.getInt("tinhTrangHD"), new NhanVien(rs), new KhachHang(rs), new Phong(rs));
 	}
 
-	public HoaDon(ResultSet rs, int type) throws SQLException {
-		this(rs.getInt("maHoaDon"), rs.getTimestamp("ngayGioDat"), rs.getTimestamp("ngayGioTra"),
-				rs.getInt("tinhTrangHD"), new NhanVien(rs.getString("maNhanVien")), new KhachHang(rs.getString("maKH")),
-				new Phong(rs, type));
-	}
-
 	@Override
 	public String toString() {
 		return "HoaDon [ngayGioTra=" + ngayGioTra + ", ctDichVu=" + ctDSDichVu + ", khachHang=" + khachHang
 				+ ", maHoaDon=" + maHoaDon + ", ngayGioDat=" + ngayGioDat + ", nhanVien=" + nhanVien + ", phong="
-				+ phong + ", tinhTrangHD=" + tinhTrangHD + ", tongTien=" + tongTien + "]";
+				+ phong + ", tinhTrangHD=" + tinhTrangHD + "]";
 	}
 
 	public Double tinhTienHoaDon() {
 		Double tongTienDV = 0.0;
 		for (CTHoaDon item : ctDSDichVu) {
-			tongTienDV += item.getTienDichVu();
+			tongTienDV += item.tinhTienDichVu();
 		}
-		tongTien = tongTienDV;
-		return tongTien;
+		return tongTienDV;
 	}
 
 	public boolean themCTDichVu(DichVu dichVu, int soLuongDat) {
@@ -173,6 +156,7 @@ public class HoaDon {
 
 	public Double tinhTienPhong() {
 		Double soGio = tinhGioThue();
-		return soGio * phong.getLoaiPhong().getGiaTien();
+		Double tongTien = soGio * phong.getLoaiPhong().getGiaTien();
+		return tongTien;
 	}
 }

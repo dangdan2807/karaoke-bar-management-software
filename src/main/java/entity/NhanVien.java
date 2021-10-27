@@ -107,7 +107,7 @@ public class NhanVien {
 	}
 
 	public NhanVien(String maNhanVien, String cmnd, String hoTen, Date ngaySinh, String soDienThoai, String chucVu,
-			Double mucLuong, Boolean gioiTinh, String trangThaiNV, TaiKhoan taiKhoan) {
+	Double mucLuong, Boolean gioiTinh, String trangThaiNV, TaiKhoan taiKhoan) {
 		this.maNhanVien = maNhanVien;
 		this.cmnd = cmnd;
 		this.hoTen = hoTen;
@@ -128,9 +128,9 @@ public class NhanVien {
 	}
 
 	public NhanVien(ResultSet rs) throws SQLException {
-		this(rs.getString("maNhanVien"), rs.getString("cmnd"), rs.getString("hoTen"), rs.getDate("ngaySinh"),
-				rs.getString("soDienThoai"), rs.getString("chucVu"), rs.getDouble("mucLuong"),
-				rs.getBoolean("gioiTinh"), rs.getString("trangThaiNV"), new TaiKhoan(rs));
+		this(rs.getString("maNhanVien"), rs.getString("cmndNV"), rs.getString("hoTenNV"), rs.getDate("ngaySinhNV"),
+				rs.getString("sdtNV"), rs.getString("chucVu"), rs.getDouble("mucLuong"),
+				rs.getBoolean("gioiTinhNV"), rs.getString("trangThaiNV"), new TaiKhoan(rs));
 	}
 
 	@Override

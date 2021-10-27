@@ -3,16 +3,23 @@ package UI.PanelCustom;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.*;
 
-public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListener, ItemListener, KeyListener {
+import DAO.LoaiDichVuDAO;
+import DAO.NhanVienDAO;
+import DAO.ValidationData;
+import UI.fDieuHuong;
+import entity.LoaiDichVu;
+import entity.NhanVien;
+
+public class PnLoaiDichVu extends JFrame
+		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private static final long serialVersionUID = 1L;
-	private JTable table;
-	private DefaultTableModel modelTable;
-	private JButton btnSearch;
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon addIcon = CustomUI.ADD_ICON;
@@ -22,35 +29,25 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
-	int index = 1;
-	private MyButton btnAdd;
-	private MyButton btnUpdate;
-	private MyButton btnRefresh;
-	private MyButton btnBack;
-	private JTextField boxField;
-	private JComboBox<String> cboSearch;
-	private JTextField boxField1;
-	private JLabel lpSearch;
-	// private JTextField textField;
-	private JTextField txtKeyWord;
-	private JComboBox<String> cboSelect1;
-	private JTextField boxField2;
-	private JTextField txtServiceTypeID;
-	private JTextField txtServiceTypeName;
 
-	public PnLoaiDichVu() {
+	private JTable tableServiceType;
+	private DefaultTableModel modelTable;
+	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack;
+	private JComboBox<String> cboSearch, cboSearchType;
+	private JLabel lpSearch;
+	private JTextField txtBFieldSearch, txtKeyWord, txtBFieldSearchType, txtServiceTypeID;
+	private JTextField txtServiceTypeName;
+	private NhanVien staffLogin = null;
+
+	public PnLoaiDichVu(NhanVien staff) {
+		this.staffLogin = staff;
 		setSize(1270, 630);
-		getContentPane().setLayout(null);
+		this.setLayout(null);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnMain = new JPanel() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -65,7 +62,7 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 		};
 		pnMain.setLayout(null);
 		pnMain.setBounds(0, 0, 1270, 630);
-		getContentPane().add(pnMain);
+		add(pnMain);
 
 		JPanel pnTitle = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -95,14 +92,14 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 		pnMain.add(pnInfo);
 
 		btnAdd = new MyButton(100, 35, "Thêm", gra, addIcon.getImage(), 39, 19);
-		btnAdd.setToolTipText("Thêm nhân viên mới sau khi đã điền đủ thông tin");
+		btnAdd.setToolTipText("Thêm loại dịch vụ mới sau khi đã điền đủ thông tin");
 		btnAdd.setBounds(20, 93, 100, 35);
-		// btnAdd.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		pnInfo.add(btnAdd);
 
 		btnUpdate = new MyButton(100, 35, "Sửa", gra, updateIcon.getImage(), 43, 19);
-		btnUpdate.setToolTipText("Sửa thông tin nhân viên");
+		btnUpdate.setToolTipText("Sửa thông tin loại dịch vụ");
 		btnUpdate.setBounds(150, 93, 100, 35);
+		btnUpdate.setEnabledCustom(false);
 		pnInfo.add(btnUpdate);
 
 		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 27, 19);
@@ -130,19 +127,19 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 		cboSearch.setOpaque(false);
 		cboSearch.setEditable(true);
 		cboSearch.setUI(new BasicComboBoxUI());
-		boxField1 = (JTextField) cboSearch.getEditor().getEditorComponent();
-		boxField1.setBorder(BorderFactory.createEmptyBorder());
-		boxField1.setBackground(new Color(246, 210, 255, 50));
-		boxField1.setForeground(Color.WHITE);
-		boxField1.setEditable(false);
-		boxField1.setFont(new Font("Dialog", Font.PLAIN, 12));
+		txtBFieldSearch = (JTextField) cboSearch.getEditor().getEditorComponent();
+		txtBFieldSearch.setBorder(BorderFactory.createEmptyBorder());
+		txtBFieldSearch.setBackground(new Color(246, 210, 255, 50));
+		txtBFieldSearch.setForeground(Color.WHITE);
+		txtBFieldSearch.setEditable(false);
+		txtBFieldSearch.setFont(new Font("Dialog", Font.PLAIN, 12));
 		cboSearch.setBounds(140, 18, 160, 20);
 		cboSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 		pnSearch.add(cboSearch);
 
 		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, searchIcon.getImage(), 26, 19);
-		btnSearch.setToolTipText("Tìm kiếm thông tin nhân viên theo từ khóa");
+		btnSearch.setToolTipText("Tìm kiếm thông tin loại dịch vụ theo từ khóa");
 		btnSearch.setBounds(702, 10, 100, 35);
 		pnSearch.add(btnSearch);
 
@@ -156,25 +153,21 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 		txtKeyWord.setForeground(Color.WHITE);
 		txtKeyWord.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtKeyWord.setBounds(440, 18, 200, 20);
+		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
+		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
 		pnSearch.add(txtKeyWord);
 
-		cboSelect1 = new JComboBox<String>();
-		cboSelect1.addItem("Nam");
-		cboSelect1.addItem("Nữ");
-		cboSelect1.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboSelect1.setOpaque(false);
-		cboSelect1.setEditable(true);
-		cboSelect1.setUI(new BasicComboBoxUI());
-		boxField2 = (JTextField) cboSelect1.getEditor().getEditorComponent();
-		boxField2.setFont(new Font("Dialog", Font.PLAIN, 12));
-		boxField2.setBorder(BorderFactory.createEmptyBorder());
-		boxField2.setBackground(new Color(246, 210, 255, 50));
-		boxField2.setForeground(Color.WHITE);
-		boxField2.setEditable(false);
-		cboSelect1.setBounds(440, 18, 200, 20);
-		cboSelect1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		pnSearch.add(cboSelect1);
+		// sử dụng trong tương lai
+		cboSearchType = new JComboBox<String>();
+		cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		cboSearchType.setOpaque(false);
+		cboSearchType.setEditable(true);
+		cboSearchType.setUI(new BasicComboBoxUI());
+		txtBFieldSearchType = CustomUI.getInstance().setCustomCBoxField(cboSearchType);
+		cboSearchType.setBounds(440, 18, 200, 20);
+		cboSearchType.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		pnSearch.add(cboSearchType);
 
 		JLabel lbServiceTypeID = new JLabel("Mã loại dịch vụ:");
 		lbServiceTypeID.setForeground(Color.WHITE);
@@ -187,6 +180,7 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 		txtServiceTypeID.setForeground(Color.WHITE);
 		txtServiceTypeID.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtServiceTypeID.setBounds(258, 30, 250, 20);
+		txtServiceTypeID.setToolTipText("Mã loại dịch vụ");
 		CustomUI.getInstance().setCustomTextFieldOff(txtServiceTypeID);
 		txtServiceTypeID.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnInfo.add(txtServiceTypeID);
@@ -201,9 +195,10 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 		txtServiceTypeName.setForeground(Color.WHITE);
 		txtServiceTypeName.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtServiceTypeName.setBounds(875, 30, 250, 20);
+		txtServiceTypeName.setToolTipText("Tên loại dịch vụ, không quá 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtServiceTypeName);
 		pnInfo.add(txtServiceTypeName);
-		cboSelect1.setVisible(false);
+		cboSearchType.setVisible(false);
 		btnSearch.addActionListener(this);
 		btnSearch.addMouseListener(this);
 		cboSearch.addActionListener(this);
@@ -220,14 +215,14 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 				return false;
 			}
 		};
-		table = new JTable(modelTable);
-		table.setBackground(new Color(255, 255, 255, 0));
-		table.setForeground(new Color(255, 255, 255));
-		table.setRowHeight(21);
-		table.setFont(new Font("Dialog", Font.PLAIN, 13));
-		table.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
-		table.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scpTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		tableServiceType = new JTable(modelTable);
+		tableServiceType.setBackground(new Color(255, 255, 255, 0));
+		tableServiceType.setForeground(new Color(255, 255, 255));
+		tableServiceType.setRowHeight(21);
+		tableServiceType.setFont(new Font("Dialog", Font.PLAIN, 13));
+		tableServiceType.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
+		tableServiceType.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		JScrollPane scpTable = new JScrollPane(tableServiceType, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scpTable.getViewport().setBackground(Color.WHITE);
 		scpTable.setBounds(10, 10, 1220, 350);
@@ -235,29 +230,136 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 		scpTable.getViewport().setOpaque(false);
 
 		pnTable.add(scpTable);
-
 		pnMain.add(pnTable);
-		allLoaded();
-		table.addMouseListener(this);
-		boxField1.addMouseListener(this);
-		boxField2.addMouseListener(this);
 
+		tableServiceType.addMouseListener(this);
+		txtBFieldSearch.addMouseListener(this);
+
+		txtKeyWord.addFocusListener(this);
+		txtServiceTypeName.addFocusListener(this);
+
+		txtKeyWord.addKeyListener(this);
+
+		cboSearch.addItemListener(this);
+
+		btnAdd.addActionListener(this);
+		btnBack.addActionListener(this);
+		btnRefresh.addActionListener(this);
+		btnSearch.addActionListener(this);
+		btnUpdate.addActionListener(this);
+
+		allLoaded();
 	}
 
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
-			new PnLoaiDichVu().setVisible(true);
+			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+			new PnLoaiDichVu(staff).setVisible(true);
 		});
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object object = e.getSource();
+		if (object.equals(btnBack)) {
+			fDieuHuong f = new fDieuHuong(staffLogin);
+			this.setVisible(false);
+			f.setVisible(true);
+		} else if (object.equals(btnAdd)) {
+			if (validData()) {
+				String message = "";
+				if (validData()) {
+					LoaiDichVu serviceType = getServiceTypeDataInForm();
+					Boolean result = LoaiDichVuDAO.getInstance().insertService(serviceType);
+					if (result) {
+						message = "Thêm loại dịch vụ mới thành công";
+						txtServiceTypeID.setText(serviceType.getMaLDV());
+						int stt = tableServiceType.getRowCount();
+						addRow(stt, serviceType);
+						int lastIndex = tableServiceType.getRowCount() - 1;
+						tableServiceType.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+						tableServiceType.scrollRectToVisible(tableServiceType.getCellRect(lastIndex, lastIndex, true));
+						JOptionPane.showMessageDialog(this, message);
+						btnAdd.setEnabledCustom(false);
+						btnUpdate.setEnabledCustom(true);
+					} else {
+						message = "Thêm loại dịch vụ thất bại";
+						JOptionPane.showMessageDialog(this, message);
+					}
+				}
+			}
+		} else if (object.equals(btnRefresh)) {
+			txtServiceTypeID.setText("");
+			txtServiceTypeName.setText("");
+			btnUpdate.setEnabledCustom(false);
+			btnAdd.setEnabledCustom(true);
+			removeSelectionInterval();
+		} else if (object.equals(btnSearch)) {
+			searchEventUsingBtnSearch();
+		} else if (object.equals(btnUpdate)) {
+			if (validData()) {
+				LoaiDichVu serviceType = getServiceTypeDataInForm();
+				LoaiDichVu serviceTypeOld = LoaiDichVuDAO.getInstance().getServiceTypeById(serviceType.getMaLDV());
+				String message = "";
+				String name = "loại dịch vụ";
+				int selectedRow = tableServiceType.getSelectedRow();
+				if (selectedRow == -1) {
+					message = "Hãy chọn " + name + " mà bạn cần cập nhật";
+					JOptionPane.showConfirmDialog(this, message, "Thông báo", JOptionPane.OK_OPTION,
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					message = "Xác nhận cập nhật thông tin " + name + ": " + serviceTypeOld.getTenLDV();
+					int choose = JOptionPane.showConfirmDialog(this, message, "Xác nhận cập nhật thông tin " + name,
+							JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+					if (choose == JOptionPane.OK_OPTION) {
+						Boolean result = LoaiDichVuDAO.getInstance().updateInfoServiceType(serviceType);
+						if (result) {
+							message = "Cập nhật thông tin " + name + " thành công";
+							updateRow(selectedRow, serviceType);
+							btnAdd.setEnabledCustom(false);
+							btnUpdate.setEnabledCustom(true);
+							tableServiceType.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+							tableServiceType
+									.scrollRectToVisible(tableServiceType.getCellRect(selectedRow, selectedRow, true));
+						} else {
+							message = "Cập nhật thông tin " + name + " thất bại";
+						}
+						JOptionPane.showMessageDialog(this, message);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		Object o = e.getSource();
+		if (o.equals(cboSearch)) {
+			String searchType = cboSearch.getSelectedItem().toString();
+			txtKeyWord.setText("");
+			if (searchType.equalsIgnoreCase("Tất cả")) {
+				CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
+			} else if (searchType.equalsIgnoreCase("Tên loại dịch vụ")) {
+				CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
+			}
+			removeSelectionInterval();
+			searchEventUsingBtnSearch();
+		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Object o = e.getSource();
-		if (o.equals(boxField1)) {
+		if (o.equals(txtBFieldSearch)) {
 			cboSearch.showPopup();
-		}
-		if (o.equals(boxField2)) {
-			cboSelect1.showPopup();
+		} else if (o.equals(txtBFieldSearchType)) {
+			cboSearchType.showPopup();
+		} else if (o.equals(tableServiceType)) {
+			int selectedRow = tableServiceType.getSelectedRow();
+			txtServiceTypeID.setText(tableServiceType.getValueAt(selectedRow, 1).toString().trim());
+			txtServiceTypeName.setText(tableServiceType.getValueAt(selectedRow, 2).toString().trim());
+			btnAdd.setEnabledCustom(false);
+			btnUpdate.setEnabledCustom(true);
 		}
 	}
 
@@ -273,12 +375,18 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-
+		Object o = e.getSource();
+		if (o.equals(txtBFieldSearch)) {
+			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-
+		Object o = e.getSource();
+		if (o.equals(txtBFieldSearch)) {
+			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		}
 	}
 
 	@Override
@@ -288,12 +396,32 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// Object o = e.getSource();
-		// Object key = e.getKeyCode();
-		// if (o.equals(txtSreachID)) {
-		// if (key.equals(KeyEvent.VK_ENTER))
-		// btnSearch.doClick();
-		// }
+		Object o = e.getSource();
+		Object key = e.getKeyCode();
+		if (o.equals(txtKeyWord)) {
+			if (key.equals(KeyEvent.VK_ENTER))
+				searchEventUsingBtnSearch();
+		}
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		Object o = e.getSource();
+		if (o.equals(txtKeyWord)) {
+			txtKeyWord.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+		} else if (o.equals(txtServiceTypeName)) {
+			txtServiceTypeName.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+		}
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		Object o = e.getSource();
+		if (o.equals(txtKeyWord)) {
+			txtKeyWord.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		} else if (o.equals(txtServiceTypeName)) {
+			txtServiceTypeName.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		}
 	}
 
 	@Override
@@ -301,38 +429,154 @@ public class PnLoaiDichVu extends JFrame implements ActionListener, MouseListene
 
 	}
 
+	/**
+	 * chạy tất cả các hàm khi bắt đầu chạy form
+	 */
 	public void allLoaded() {
 		reSizeColumnTable();
+		loadServiceTypeList(LoaiDichVuDAO.getInstance().getServiceTypeList());
 	}
 
+	/**
+	 * Tự động tạo mã loại dịch vụ mới tăng theo thứ tự tăng dần
+	 * 
+	 * @return <code>String</code>: mã dịch vụ mới
+	 */
+	private String createNewServiceTypeID() {
+		String lastStrId = LoaiDichVuDAO.getInstance().getLastServiceTypeID();
+		String idStr = "LDV";
+		int oldNumberId = 0;
+		if (lastStrId.equalsIgnoreCase("") == false || lastStrId != null) {
+			oldNumberId = Integer.parseInt(lastStrId.replace(idStr, ""));
+		}
+
+		int newNumberId = ++oldNumberId;
+		String newIdStr = idStr + newNumberId;
+		boolean flag = true;
+		while (flag) {
+			newIdStr = newIdStr.replace(idStr, idStr + "0");
+			if (newIdStr.length() > 5) {
+				flag = false;
+			}
+		}
+		return newIdStr;
+	}
+
+	/**
+	 * chuyển đổi thông tin trong form thành đối tượng DichVu
+	 * 
+	 * @return <code>LoaiDichVu</code>: dịch vụ
+	 */
+	private LoaiDichVu getServiceTypeDataInForm() {
+		String serviceTypeID = txtServiceTypeID.getText().trim();
+		String serviceTypeName = txtServiceTypeName.getText().trim();
+		LoaiDichVu serviceType = new LoaiDichVu(serviceTypeID);
+		if (!serviceTypeID.equals("")) {
+			serviceType = LoaiDichVuDAO.getInstance().getServiceTypeById(serviceTypeID);
+			if (serviceType == null) {
+				serviceType = new LoaiDichVu(serviceTypeID, serviceTypeName);
+			}
+		} else {
+			serviceTypeID = createNewServiceTypeID();
+			serviceType.setMaLDV(serviceTypeID);
+			serviceType.setTenLDV(serviceTypeName);
+		}
+		return serviceType;
+	}
+
+	/**
+	 * Kiểm tra thông tin trong form
+	 * 
+	 * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+	 */
+	private boolean validData() {
+		boolean valid = ValidationData.getInstance().ValidName(this, txtServiceTypeName, "Tên loại dịch vụ", 100, 0);
+		return valid;
+	}
+
+	/**
+	 * Thêm khoảng trắng vào trước và sao chuỗi được truyền vào
+	 * 
+	 * @param str <code>String</code>: chuỗi cần xử lý
+	 * @return <code>String</code>: chuỗi đã xử lý
+	 */
+	private String addSpaceToString(String str) {
+		return " " + str + " ";
+	}
+
+	/**
+	 * Thêm dòng vào danh sách loại dịch vụ đang hiển thị
+	 * 
+	 * @param stt         số thứ tự
+	 * @param serviceType <code>LoaiDichVu</code>: loại dịch vụ cần được thêm
+	 */
+	private void addRow(int stt, LoaiDichVu serviceType) {
+		DecimalFormat df = new DecimalFormat("#,###.##");
+		String sttStr = df.format(stt);
+		modelTable.addRow(new Object[] { sttStr, addSpaceToString(serviceType.getMaLDV()),
+				addSpaceToString(serviceType.getTenLDV()) });
+		modelTable.fireTableDataChanged();
+	}
+
+	/**
+	 * Cập nhật thông tin một dòng khi biết dòng mà thông tin loại dịch vụ
+	 * 
+	 * @param selectedRow <code>Int</code>: dòng được chọn
+	 * @param serviceType <code>LoaiDichVu</code: loại dịch vụ cần cập nhật
+	 */
+	private void updateRow(int selectedRow, LoaiDichVu serviceType) {
+		String serviceTypeName = serviceType.getTenLDV();
+		modelTable.setValueAt(addSpaceToString(serviceTypeName), selectedRow, 2);
+		modelTable.fireTableDataChanged();
+	}
+
+	/**
+	 * Hiển thị danh sách dịch vụ
+	 * 
+	 * @param serviceTypeList <code>ArrayList LoaiDichVu </code>: danh sách loại
+	 *                        dịch vụ
+	 */
+	private void loadServiceTypeList(ArrayList<LoaiDichVu> serviceTypeList) {
+		modelTable.getDataVector().removeAllElements();
+		modelTable.fireTableDataChanged();
+		int i = 1;
+		for (LoaiDichVu item : serviceTypeList) {
+			addRow(i++, item);
+		}
+	}
+
+	/**
+	 * Thay đổi kích thước cột
+	 */
 	private void reSizeColumnTable() {
 
-		table.getColumnModel().getColumn(0).setPreferredWidth(70);
-		table.getColumnModel().getColumn(1).setPreferredWidth(130);
-		table.getColumnModel().getColumn(2).setPreferredWidth(250);
+		tableServiceType.getColumnModel().getColumn(0).setPreferredWidth(70);
+		tableServiceType.getColumnModel().getColumn(1).setPreferredWidth(130);
+		tableServiceType.getColumnModel().getColumn(2).setPreferredWidth(250);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
-		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		tableServiceType.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 	}
 
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-
+	/**
+	 * tìm kiếm loại dịch vụ dựa trên điều kiện khi kích hoạt event trên btnSearch
+	 */
+	private void searchEventUsingBtnSearch() {
+		ArrayList<LoaiDichVu> serviceTypeList = null;
+		String keyword = txtKeyWord.getText().trim();
+		serviceTypeList = LoaiDichVuDAO.getInstance().getServiceTypeListByName(keyword);
+		loadServiceTypeList(serviceTypeList);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		Object object = e.getSource();
-		if (object.equals(cboSearch)) {
-			// if (cboSelect.getSelectedIndex() == 1) {
-			// txtKey.setBounds(0, 0, 0, 0);
-			// }
-		}
+	/**
+	 * Xóa bỏ dòng đang chọn
+	 */
+	private void removeSelectionInterval() {
+		int selectedRow = tableServiceType.getSelectedRow();
+		tableServiceType.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
 	}
 }

@@ -121,7 +121,7 @@ public class KhachHangDAO {
 
     public KhachHang getKhachHangByMaKH(String maKH) {
         KhachHang data = null;
-        String query = "SELECT * FROM dbo.KhachHang kh WHERE kh.maKH = ?";
+        String query = "{CALL USP_getCustomerById( ? )}";
         Object[] parameter = new Object[] { maKH };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {

@@ -22,7 +22,7 @@ public class HoaDonDAO {
         HoaDon data = null;
         try {
             if (rs.next()) {
-                data = new HoaDon(rs, 1);
+                data = new HoaDon(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class HoaDonDAO {
         HoaDon data = null;
         try {
             if (rs.next()) {
-                data = new HoaDon(rs, 1);
+                data = new HoaDon(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,9 +63,9 @@ public class HoaDonDAO {
         return result > 0;
     }
 
-    public boolean thanhToan(int maHoaDon, Timestamp ngayGioTra, double tongTien) {
+    public boolean thanhToan(int maHoaDon, Timestamp ngayGioTra, Double tongTien) {
         String query = "{CALL USP_thanhToanHD( ? , ? , ? )}";
-        Object[] param = new Object[] { tongTien, ngayGioTra, maHoaDon };
+        Object[] param = new Object[] { maHoaDon, ngayGioTra, tongTien };
         int result = DataProvider.getInstance().ExecuteNonQuery(query, param);
         return result > 0;
     }
