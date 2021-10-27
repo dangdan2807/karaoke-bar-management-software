@@ -7,7 +7,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.*;
 
 import DAO.LoaiPhongDAO;
@@ -89,7 +88,7 @@ public class PnLoaiPhong extends JFrame
 		pnInfo.setBounds(0, 60, 1238, 140);
 		pnMain.add(pnInfo);
 
-		spinCapacity = new JSpinner(new SpinnerNumberModel(1l, 1l, Integer.MAX_VALUE, 1l));
+		spinCapacity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 		CustomUI.getInstance().setCustomSpinner(spinCapacity);
 		spinCapacity.setBounds(763, 15, 180, 20);
 		pnInfo.add(spinCapacity);
@@ -114,7 +113,6 @@ public class PnLoaiPhong extends JFrame
 		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 27, 19);
 		btnRefresh.setToolTipText("Làm mới form");
 		btnRefresh.setBounds(1118, 93, 100, 35);
-		// btnRefresh.setVisible(false);
 		pnInfo.add(btnRefresh);
 
 		JPanel pnSearch = new JPanel();
@@ -133,14 +131,10 @@ public class PnLoaiPhong extends JFrame
 		cboSearch = new JComboBox<String>();
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên loại phòng");
-		cboSearch.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboSearch.setOpaque(false);
-		cboSearch.setEditable(true);
-		cboSearch.setUI(new BasicComboBoxUI());
 		cboSearch.setToolTipText("Loại tìm kiếm");
+		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(140, 18, 160, 20);
-		cboSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 		pnSearch.add(cboSearch);
 
@@ -157,8 +151,6 @@ public class PnLoaiPhong extends JFrame
 
 		txtKeyWord = new JTextField();
 		txtKeyWord.setText("");
-		txtKeyWord.setForeground(Color.WHITE);
-		txtKeyWord.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtKeyWord.setBounds(440, 18, 200, 20);
 		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
@@ -168,13 +160,10 @@ public class PnLoaiPhong extends JFrame
 		cboSearchType = new JComboBox<String>();
 		cboSearchType.addItem("Nam");
 		cboSearchType.addItem("Nữ");
-		cboSearchType.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 1, Color.decode("#FCA120")));
-		cboSearchType.setOpaque(false);
-		cboSearchType.setEditable(true);
-		cboSearchType.setUI(new BasicComboBoxUI());
+		CustomUI.getInstance().setCustomComboBox(cboSearchType);
 		txtBFieldSearchType = CustomUI.getInstance().setCustomCBoxField(cboSearchType);
 		cboSearchType.setBounds(440, 18, 200, 20);
-		cboSearchType.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		cboSearchType.setVisible(false);
 		pnSearch.add(cboSearchType);
 
 		JLabel lpPrice = new JLabel("Giá tiền:");
@@ -195,14 +184,10 @@ public class PnLoaiPhong extends JFrame
 		pnInfo.add(lbRoomTypeID);
 
 		txtRoomTypeId = new JTextField();
-		txtRoomTypeId.setEditable(false);
 		txtRoomTypeId.setText("");
-		txtRoomTypeId.setForeground(Color.WHITE);
-		txtRoomTypeId.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtRoomTypeId.setBounds(145, 15, 165, 20);
 		txtRoomTypeId.setToolTipText("Mã loại phòng");
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomTypeId);
-		txtRoomTypeId.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnInfo.add(txtRoomTypeId);
 
 		JLabel lbRoomTypeName = new JLabel("Tên loại phòng:");
@@ -213,16 +198,10 @@ public class PnLoaiPhong extends JFrame
 
 		txtRoomTypeName = new JTextField();
 		txtRoomTypeName.setText("");
-		txtRoomTypeName.setForeground(Color.WHITE);
-		txtRoomTypeName.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtRoomTypeName.setBounds(469, 15, 165, 20);
 		txtRoomTypeName.setToolTipText("Tên loại phòng");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtRoomTypeName);
 		pnInfo.add(txtRoomTypeName);
-		cboSearchType.setVisible(false);
-		btnSearch.addActionListener(this);
-		btnSearch.addMouseListener(this);
-		cboSearch.addActionListener(this);
 
 		JPanel pnTable = new JPanel();
 		pnTable.setBackground(Color.WHITE);
@@ -240,8 +219,8 @@ public class PnLoaiPhong extends JFrame
 		tableTypeRoom.setBackground(new Color(255, 255, 255, 0));
 		tableTypeRoom.setForeground(new Color(255, 255, 255));
 		tableTypeRoom.setRowHeight(21);
-		tableTypeRoom.setFont(new Font("Dialog", Font.PLAIN, 13));
-		tableTypeRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
+		tableTypeRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tableTypeRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
 		tableTypeRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
 		JScrollPane scpTable = new JScrollPane(tableTypeRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -267,8 +246,8 @@ public class PnLoaiPhong extends JFrame
 		txtKeyWord.addMouseListener(this);
 
 		txtRoomTypeName.addFocusListener(this);
-		spinCapacity.addFocusListener(this);
-		spinPrice.addFocusListener(this);
+		((JSpinner.DefaultEditor) spinCapacity.getEditor()).getTextField().addFocusListener(this);
+		((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField().addFocusListener(this);
 		txtKeyWord.addFocusListener(this);
 
 		txtKeyWord.addKeyListener(this);
@@ -292,9 +271,9 @@ public class PnLoaiPhong extends JFrame
 			String message = "";
 			if (validData()) {
 				LoaiPhong roomType = getStaffDataInForm();
-				Boolean result = LoaiPhongDAO.getInstance().insertRoomType(roomType);
+				Boolean insertResult = LoaiPhongDAO.getInstance().insertRoomType(roomType);
 				String name = "loại phòng";
-				if (result) {
+				if (insertResult) {
 					message = "Thêm " + name + " mới thành công";
 					txtRoomTypeId.setText(roomType.getMaLP());
 					int stt = tableTypeRoom.getRowCount();
@@ -327,19 +306,19 @@ public class PnLoaiPhong extends JFrame
 				LoaiPhong roomTypeOld = LoaiPhongDAO.getInstance().getRoomTypeById(roomTypeNew.getMaLP());
 				String message = "";
 				int selectedRow = tableTypeRoom.getSelectedRow();
-				String name = "nhân viên";
+				String name = "loại phòng";
 				if (selectedRow == -1) {
 					message = "Hãy chọn " + name + " mà bạn cần cập nhật thông tin";
 					JOptionPane.showConfirmDialog(this, message, "Thông báo", JOptionPane.OK_OPTION,
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
-					message = "Xác nhận cập nhật thông tin " + name + " " + roomTypeOld;
-					int choose = JOptionPane.showConfirmDialog(this, message,
+					message = "Xác nhận cập nhật thông tin " + name + " " + roomTypeOld.getMaLP();
+					int confirmUpdate = JOptionPane.showConfirmDialog(this, message,
 							"Xác nhận cập nhật thông tin " + name + "", JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
-					if (choose == JOptionPane.OK_OPTION) {
-						Boolean result = LoaiPhongDAO.getInstance().updateInfoRoomType(roomTypeNew);
-						if (result) {
+					if (confirmUpdate == JOptionPane.OK_OPTION) {
+						Boolean updateResult = LoaiPhongDAO.getInstance().updateInfoRoomType(roomTypeNew);
+						if (updateResult) {
 							message = "Cập nhật thông tin " + name + " thành công";
 							updateRow(selectedRow, roomTypeNew);
 							btnAdd.setEnabledCustom(false);
@@ -457,12 +436,10 @@ public class PnLoaiPhong extends JFrame
 	@Override
 	public void focusGained(FocusEvent e) {
 		Object o = e.getSource();
-		if (o.equals(spinCapacity)) {
-			((JSpinner.DefaultEditor) spinCapacity.getEditor()).getTextField().setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+		if (o.equals(((JSpinner.DefaultEditor) spinCapacity.getEditor()).getTextField())) {
 			spinCapacity.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-		} else if (o.equals(spinPrice)) {
-			((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField().setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-			spinPrice.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		} else if (o.equals(((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField())) {
+			spinPrice.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtRoomTypeName)) {
 			CustomUI.getInstance().setCustomTextFieldFocus(txtRoomTypeName);
 		} else if (o.equals(txtKeyWord)) {
@@ -473,12 +450,9 @@ public class PnLoaiPhong extends JFrame
 	@Override
 	public void focusLost(FocusEvent e) {
 		Object o = e.getSource();
-		if (o.equals(spinCapacity)) {
-			((JSpinner.DefaultEditor) spinCapacity.getEditor()).getTextField()
-					.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		if (o.equals(((JSpinner.DefaultEditor) spinCapacity.getEditor()).getTextField())) {
 			spinCapacity.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		} else if (o.equals(spinPrice)) {
-			((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField().setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		} else if (o.equals(((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField())) {
 			spinPrice.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		} else if (o.equals(txtKeyWord)) {
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
@@ -538,14 +512,11 @@ public class PnLoaiPhong extends JFrame
 	private LoaiPhong getStaffDataInForm() {
 		String roomTypeId = txtRoomTypeId.getText().trim();
 		String roomTypeName = txtRoomTypeName.getText().trim();
-		int capacity = (int) spinCapacity.getValue();
+		int capacity = Integer.parseInt(spinCapacity.getValue().toString());
 		Double price = Double.parseDouble(spinPrice.getValue().toString());
-		LoaiPhong roomType = new LoaiPhong(roomTypeId);
+		LoaiPhong roomType = new LoaiPhong();
 		if (!roomTypeId.equals("")) {
-			roomType = LoaiPhongDAO.getInstance().getRoomTypeById(roomTypeId);
-			if (roomType == null) {
-				roomType = new LoaiPhong(roomTypeId, roomTypeName, capacity, price);
-			}
+			roomType = new LoaiPhong(roomTypeId, roomTypeName, capacity, price);
 		} else {
 			roomTypeId = createNewServiceTypeID();
 			roomType = new LoaiPhong(roomTypeId, roomTypeName, capacity, price);
@@ -584,11 +555,10 @@ public class PnLoaiPhong extends JFrame
 	 * @param roomType    <code>LoaiPhong</code: loại phòng cần cập nhật
 	 */
 	private void updateRow(int selectedRow, LoaiPhong roomType) {
-		// String mucLuongStr = df.format(roomType.getMucLuong());
 		modelTableTypeRoom.setValueAt(addSpaceToString(roomType.getTenLP()), selectedRow, 2);
 		modelTableTypeRoom.setValueAt(addSpaceToString(df.format(roomType.getSucChua())), selectedRow, 3);
 		Double price = roomType.getGiaTien();
-		modelTableTypeRoom.setValueAt(addSpaceToString(df.format(price)), selectedRow, 3);
+		modelTableTypeRoom.setValueAt(addSpaceToString(df.format(price)), selectedRow, 4);
 		modelTableTypeRoom.fireTableDataChanged();
 	}
 

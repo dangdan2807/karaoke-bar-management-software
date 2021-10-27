@@ -13,6 +13,9 @@ import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.kDatePicker;
 
 public class ValidationData {
+    private static int DATA_TYPE_INT = 0;
+    private static int DATA_TYPE_DOUBLE = 1;
+    private static int DATA_TYPE_LONG = 2;
     private static ValidationData instance = new ValidationData();
     private static DecimalFormat df = new DecimalFormat("#,###.##");
 
@@ -23,14 +26,14 @@ public class ValidationData {
     }
 
     /**
-     * Hiển thị popup thông báo của 1 JTextField
+     * Hiển thị popup thông báo của 1 {@code JTextField}
      * 
-     * @param jFrame  <code>JFrame</code> hiển thị popup thông báo
-     * @param txt     JTextField: được trỏ đến khi cần thông báo
-     * @param type    int: mã dạng thông báo (Nếu 1. là lỗi)
-     * @param message String: Tin nhắn được hiển thị
-     * @param title   String: Tiêu đề thông báo
-     * @param option  int: loại thông báo (icon)
+     * @param jFrame  {@code JFrame} hiển thị popup thông báo
+     * @param txt     {@code JTextField} được trỏ đến khi cần thông báo
+     * @param type    {@code int} mã dạng thông báo (Nếu 1. là lỗi)
+     * @param message {@code String} Tin nhắn được hiển thị
+     * @param title   {@code String} Tiêu đề thông báo
+     * @param option  {@code int} loại thông báo (icon)
      */
     private void showMessage(JFrame jFrame, JTextField txt, int type, String message, String title, int option) {
         if (type == 1) {
@@ -41,14 +44,14 @@ public class ValidationData {
     }
 
     /**
-     * Hiển thị popup thông báo của 1 JTextField
+     * Hiển thị popup thông báo của 1 {@code JTextField}
      * 
-     * @param jPanel  <code>JPanel</code> hiển thị popup thông báo
-     * @param txt     JTextField: được trỏ đến khi cần thông báo
-     * @param type    int: mã dạng thông báo (Nếu 1. là lỗi)
-     * @param message String: Tin nhắn được hiển thị
-     * @param title   String: Tiêu đề thông báo
-     * @param option  int: loại thông báo (icon)
+     * @param jPanel  {@code JPanel} hiển thị popup thông báo
+     * @param txt     {@code JTextField} được trỏ đến khi cần thông báo
+     * @param type    {@code int} mã dạng thông báo (Nếu 1. là lỗi)
+     * @param message {@code String} Tin nhắn được hiển thị
+     * @param title   {@code String} Tiêu đề thông báo
+     * @param option  {@code int} loại thông báo (icon)
      */
     private void showMessage(JPanel jPanel, JTextField txt, int type, String message, String title, int option) {
         if (type == 1) {
@@ -61,10 +64,10 @@ public class ValidationData {
     /**
      * Hiển thị popup thông báo
      * 
-     * @param jFrame  <code>JFrame</code> hiển thị popup thông báo
-     * @param message <code>String</code>: Tin nhắn được hiển thị
-     * @param title   <code>String</code>: Tiêu đề thông báo
-     * @param option  <code>int</code>: loại thông báo (icon)
+     * @param jFrame  {@code JFrame} hiển thị popup thông báo
+     * @param message {@code String} Tin nhắn được hiển thị
+     * @param title   {@code String} Tiêu đề thông báo
+     * @param option  {@code int} loại thông báo (icon)
      */
     private void showMessage(JFrame jFrame, String message, String title, int option) {
         JOptionPane.showMessageDialog(jFrame, message, title, option);
@@ -73,15 +76,31 @@ public class ValidationData {
     /**
      * Hiển thị popup thông báo
      * 
-     * @param jPanel  <code>JPanel</code> hiển thị popup thông báo
-     * @param message <code>String</code>: Tin nhắn được hiển thị
-     * @param title   <code>String</code>: Tiêu đề thông báo
-     * @param option  <code>int</code>: loại thông báo (icon)
+     * @param jPanel  {@code JPanel} hiển thị popup thông báo
+     * @param message {@code String} Tin nhắn được hiển thị
+     * @param title   {@code String} Tiêu đề thông báo
+     * @param option  {@code int} loại thông báo (icon)
      */
     private void showMessage(JPanel jPanel, String message, String title, int option) {
         JOptionPane.showMessageDialog(jPanel, message, title, option);
     }
 
+    /**
+     * Xác thực tên có độ dài từ <code>minLength</code> đến <code>maxLength</code>
+     * ký tự
+     * 
+     * @param jFrame    {@code JFrame} JFrame nhận popup thông báo
+     * @param txt       <code>JTextField</code> JTextField gây ra lỗi
+     * @param name      {@code String} tên cần hiển thị trong thông báo ví dụ:
+     *                  <ul>
+     *                  <li>"tên nhân viên" + thông báo</li>
+     *                  <li>"tên khách hàng" + thông báo</li>
+     *                  <li>"tên dịch vụ" + thông báo</li>
+     *                  </ul>
+     * @param maxLength {@code int} độ dài tối đa của tên
+     * @param minLength {@code int} độ dài tối thiểu của tên
+     * @return
+     */
     public boolean ValidName(JFrame jFrame, JTextField txt, String name, int maxLength, int minLength) {
         String staffName = txt.getText().trim();
         String message = "";
@@ -97,6 +116,22 @@ public class ValidationData {
         return result;
     }
 
+    /**
+     * Xác thực tên có độ dài từ <code>minLength</code> đến <code>maxLength</code>
+     * ký tự
+     * 
+     * @param jFrame    {@code JFrame} JFrame nhận popup thông báo
+     * @param txt       <code>JTextField</code> JTextField gây ra lỗi
+     * @param name      {@code String} tên cần hiển thị trong thông báo ví dụ"
+     *                  <ul>
+     *                  <li>"tên nhân viên" + thông báo</li>
+     *                  <li>"tên khách hàng" + thông báo</li>
+     *                  <li>"tên dịch vụ" + thông báo</li>
+     *                  </ul>
+     * @param maxLength {@code int} độ dài tối đa của tên
+     * @param minLength {@code int} độ dài tối thiểu của tên
+     * @return
+     */
     public boolean ValidName(JPanel jPanel, JTextField txt, String name, int maxLength, int minLength) {
         String data = txt.getText().trim();
         String message = "";

@@ -26,13 +26,13 @@ CREATE TABLE NhanVien
     maNhanVien VARCHAR(10) NOT NULL PRIMARY KEY,
     hoTen NVARCHAR(100) NOT NULL DEFAULT(N''),
     cmnd VARCHAR(12) NOT NULL,
+    -- 0. nam | 1. nữ
     gioiTinh BIT NOT NULL,
     ngaySinh DATE,
     soDienThoai VARCHAR(10),
     chucVu NVARCHAR(100) NOT NULL,
     mucLuong MONEY NOT NULL,
     trangThaiNV NVARCHAR(100) NULL,
-    -- 0. nam | 1. nữ
 
     taiKhoan VARCHAR(100) NOT NULL,
 
@@ -1059,7 +1059,7 @@ BEGIN
     SELECT lp.tenLP
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
-        AND p.maPhong = @maPhong
+        AND p.maPhong = 'LP004' @maPhong
 END
 GO
 
@@ -1140,14 +1140,21 @@ CREATE PROC USP_updateInfoRoomType
     @price MONEY
 AS
 BEGIN
+    BEGIN TRANSACTION
     UPDATE dbo.LoaiPhong
         SET tenLP = @roomTypeName,
             giaTien = @price,
             sucChua = @capacity
         WHERE maLP = @roomTypeId
+    
+    DECLARE @isExitsUpdate VARCHAR(5)
+    
 END
 GO
+select * from dbo.LoaiPhong
 
+exec USP_updateInfoRoomType 'LP004'
+go
 
 -- nhân viên
 CREATE PROC USP_getNhanVienByTenDangNhap

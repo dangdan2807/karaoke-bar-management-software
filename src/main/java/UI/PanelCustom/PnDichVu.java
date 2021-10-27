@@ -32,7 +32,6 @@ public class PnDichVu extends JFrame
 	private JSpinner spinQuantity;
 
 	private NhanVien staffLogin = null;
-	private DecimalFormat df = new DecimalFormat("#,###.##");
 
 	/**
 	 * Constructor mặc định của panel Dịch vụ
@@ -199,7 +198,6 @@ public class PnDichVu extends JFrame
 		cboSearch.setToolTipText("Loại tìm kiếm");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(140, 18, 160, 20);
-
 		pnSearch.add(cboSearch);
 
 		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(), 30, 19);
@@ -228,7 +226,7 @@ public class PnDichVu extends JFrame
 		cboSearchServiceType.setEditable(true);
 		cboSearchServiceType.setUI(new BasicComboBoxUI());
 		cboSearchServiceType.setToolTipText("Loại dịch vụ cần tìm kiếm");
-		
+
 		txtBFieldSearchSerType = CustomUI.getInstance().setCustomCBoxField(cboSearchServiceType);
 		cboSearchServiceType.setBounds(440, 18, 200, 20);
 		cboSearchServiceType.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -236,7 +234,7 @@ public class PnDichVu extends JFrame
 		pnSearch.add(cboSearchServiceType);
 
 		spinQuantity = new JSpinner();
-		spinQuantity.setModel(new SpinnerNumberModel(1, 0, null, 1));
+		spinQuantity.setModel(new SpinnerNumberModel(1, 0, Integer.MAX_VALUE, 1));
 		CustomUI.getInstance().setCustomSpinner(spinQuantity);
 		spinQuantity.setBounds(555, 45, 250, 20);
 		pnInfo.add(spinQuantity);
@@ -282,6 +280,7 @@ public class PnDichVu extends JFrame
 		txtServiceName.addFocusListener(this);
 		txtPrice.addFocusListener(this);
 		txtKeyWord.addFocusListener(this);
+		((JSpinner.DefaultEditor) spinQuantity.getEditor()).getTextField().addFocusListener(this);
 
 		txtKeyWord.addKeyListener(this);
 
@@ -482,6 +481,8 @@ public class PnDichVu extends JFrame
 			CustomUI.getInstance().setCustomTextFieldFocus(txtPrice);
 		} else if (o.equals(txtKeyWord)) {
 			CustomUI.getInstance().setCustomTextFieldFocus(txtKeyWord);
+		} else if (o.equals(((JSpinner.DefaultEditor) spinQuantity.getEditor()).getTextField())) {
+			spinQuantity.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
 
@@ -492,14 +493,10 @@ public class PnDichVu extends JFrame
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtServiceName);
 		} else if (o.equals(txtPrice)) {
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtPrice);
-			String priceStr = txtPrice.getText().trim().replace(",", "");
-			boolean valid = ValidationData.getInstance().ValidNumber(this, txtPrice, "Giá bán", 0.0, -100.0, 0.0);
-			if (!valid) {
-				Double salary = Double.parseDouble(priceStr);
-				txtPrice.setText(df.format(salary));
-			}
 		} else if (o.equals(txtKeyWord)) {
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
+		} else if (o.equals(((JSpinner.DefaultEditor) spinQuantity.getEditor()).getTextField())) {
+			spinQuantity.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		}
 	}
 

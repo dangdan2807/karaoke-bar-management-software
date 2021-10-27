@@ -2,6 +2,7 @@
 import java.math.BigDecimal;
 import java.sql.*;
 import java.sql.Date;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -47,32 +48,35 @@ public class test {
      */
     private static String createNewServiceID() {
         String lastStrId = LoaiDichVuDAO.getInstance().getLastServiceTypeID();
-		String idStr = "LDV";
-		int oldNumberId = 0;
-		if (lastStrId.equalsIgnoreCase("") == false || lastStrId != null) {
-			oldNumberId = Integer.parseInt(lastStrId.replace(idStr, ""));
-		}
+        String idStr = "LDV";
+        int oldNumberId = 0;
+        if (lastStrId.equalsIgnoreCase("") == false || lastStrId != null) {
+            oldNumberId = Integer.parseInt(lastStrId.replace(idStr, ""));
+        }
 
-		int newNumberId = ++oldNumberId;
-		String newIdStr = idStr + newNumberId;
-		boolean flag = true;
-		while (flag) {
-			newIdStr = newIdStr.replace(idStr, idStr + "0");
-			if (newIdStr.length() > 5) {
-				flag = false;
-			}
-		}
-		return newIdStr;
+        int newNumberId = ++oldNumberId;
+        String newIdStr = idStr + newNumberId;
+        boolean flag = true;
+        while (flag) {
+            newIdStr = newIdStr.replace(idStr, idStr + "0");
+            if (newIdStr.length() > 5) {
+                flag = false;
+            }
+        }
+        return newIdStr;
     }
+
     public static void main(String[] args) {
         // testTime();
         // System.out.println(createNewServiceID());
         // ExportBill.getInstance().exportBillToExcel(1, "D:/hd.xlsx");
         // ExportBill.getInstance().exportBillToPdf(1, "D:/hd.pdf");
-        BigDecimal a = new BigDecimal("0.00");
-        BigDecimal b = new BigDecimal("1.00");
-        System.out.println(a.add(b));
-        System.out.println(a.multiply(b));
-
-    }
+        // BigDecimal a = new BigDecimal("0.00");
+        // BigDecimal b = new BigDecimal("1.00");
+        // System.out.println(a.add(b));
+        // System.out.println(a.multiply(b));
+        LoaiPhong roomType = new LoaiPhong("LP004", "1", 1, 2300.5);
+        Boolean result = LoaiPhongDAO.getInstance().updateInfoRoomType(roomType);
+        System.out.println(result);
+    }   
 }

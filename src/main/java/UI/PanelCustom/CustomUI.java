@@ -84,20 +84,6 @@ public class CustomUI {
         lb.setForeground(Color.decode("#1a66e3"));
     }
 
-    public void setCustomTxt(JTextField txt) {
-        txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
-        txt.setBackground(new Color(246, 210, 255, 50));
-        txt.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        txt.setCaretColor(Color.WHITE);
-    }
-
-    public void setCustomTextField(JTextField txt) {
-        txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
-        txt.setBackground(new Color(246, 210, 255, 50));
-        txt.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        txt.setCaretColor(Color.WHITE);
-    }
-
     /**
      * tùy chỉnh nhanh text filed khi có sự kiện focus (không bao gồm sự kiện)
      * 
@@ -108,6 +94,8 @@ public class CustomUI {
             txt.setBorder(BORDER_BOTTOM_FOCUS);
             txt.setBackground(new Color(246, 210, 255, 50));
             txt.setCaretColor(Color.WHITE);
+            txt.setFont(new Font("Dialog", Font.PLAIN, 14));
+            txt.setForeground(Color.WHITE);
         }
     }
 
@@ -121,6 +109,8 @@ public class CustomUI {
             txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
             txt.setBackground(new Color(246, 210, 255, 50));
             txt.setCaretColor(Color.WHITE);
+            txt.setFont(new Font("Dialog", Font.PLAIN, 14));
+            txt.setForeground(Color.WHITE);
         }
     }
 
@@ -134,8 +124,9 @@ public class CustomUI {
         txt.setFont(new Font("Dialog", Font.PLAIN, 14));
         txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
         txt.setBackground(new Color(246, 210, 255, 40));
-        txt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        txt.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         txt.setCaretColor(Color.WHITE);
+        txt.setForeground(Color.WHITE);
     }
 
     /**
@@ -150,6 +141,7 @@ public class CustomUI {
         txt.setBackground(new Color(246, 210, 255, 150));
         txt.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         txt.setCaretColor(Color.WHITE);
+        txt.setForeground(Color.WHITE);
     }
 
     /**
@@ -158,9 +150,10 @@ public class CustomUI {
      * @param cbo <code>JComboBox</code>: comboBox cần tùy chỉnh
      */
     public void setCustomComboBox(JComboBox<?> cbo) {
-        cbo.setUI(new BasicComboBoxUI());
-        cbo.setFont(new Font("Dialog", Font.BOLD, 14));
         cbo.setBorder(BORDER_BOTTOM_UN_FOCUS);
+        cbo.setOpaque(false);
+        cbo.setEditable(true);
+        cbo.setUI(new BasicComboBoxUI());
         cbo.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
@@ -191,9 +184,9 @@ public class CustomUI {
         spin.setFont(new Font("Dialog", Font.PLAIN, 14));
         spin.setBackground(Color.WHITE);
         spin.setBorder(BORDER_BOTTOM_UN_FOCUS);
-		spin.setOpaque(false);
+        spin.setOpaque(false);
         ((JSpinner.DefaultEditor) spin.getEditor()).getTextField().setCaretColor(Color.WHITE);
         ((JSpinner.DefaultEditor) spin.getEditor()).getTextField().setForeground(Color.WHITE);
-		((JSpinner.DefaultEditor) spin.getEditor()).getTextField().setBackground(new Color(246, 210, 255, 50));
+        ((JSpinner.DefaultEditor) spin.getEditor()).getTextField().setBackground(new Color(246, 210, 255, 50));
     }
 }

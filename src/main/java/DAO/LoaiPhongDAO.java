@@ -33,10 +33,16 @@ public class LoaiPhongDAO {
         return dataList;
     }
 
+    /**
+     * Lấy tên loại phòng theo mã loại phòng
+     * 
+     * @param maPhong <code>String</code>: mã loại phòng
+     * @return <code>String</code>: tên loại phòng
+     */
     public String getTenLPbyMaPhong(String maPhong) {
         String query = "{CALL USP_getTenLPbyMaPhong( ? )}";
         Object[] parameter = new Object[] { maPhong };
-        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter).toString();
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
         String roomTypeName = obj != null ? roomTypeName = obj.toString() : "";
         return roomTypeName;
     }
@@ -111,6 +117,13 @@ public class LoaiPhongDAO {
         return result > 0;
     }
 
+    /**
+     * Cập nhật thông tin loại phòng
+     * 
+     * @param roomType <code>LoaiPhong</code>: loại phòng cần cập nhật
+     * @return <code>boolean</code>: <code>true</code> thành công,
+     *         <code>false</code> nếu thất bại
+     */
     public Boolean updateInfoRoomType(LoaiPhong roomType) {
         String query = "{CALL USP_updateInfoRoomType( ? , ? , ? , ? )}";
         Object[] parameter = new Object[] { roomType.getMaLP(), roomType.getTenLP(), roomType.getSucChua(),

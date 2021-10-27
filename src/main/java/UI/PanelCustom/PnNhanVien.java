@@ -22,7 +22,7 @@ public class PnNhanVien extends JFrame
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private JTable tableStaff;
 	private DefaultTableModel modelTableStaff;
-	private JTextField txtCMND, txtPhoneNumber, txtSalary, txtStaffName, txtStaffID, txtBFieldGender;
+	private JTextField txtCMND, txtPhoneNumber, txtStaffName, txtStaffID, txtBFieldGender;
 	private JTextField txtBFieldSearch, txtKeyWord, txtBFieldSearchPosition, txtBFieldPosition;
 	private JTextField txtUsername;
 	private JComboBox<String> cboGender, cboSearch, cboSearchPosition, cboPosition;
@@ -31,6 +31,7 @@ public class PnNhanVien extends JFrame
 	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch;
 	private JRadioButton radWorking, radRetired;
 	private kDatePicker dpBirthDay;
+	private JSpinner spinSalary;
 
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
@@ -43,7 +44,6 @@ public class PnNhanVien extends JFrame
 			Color.decode("#FAFFD1"));
 
 	private NhanVien staffLogin = null;
-	private DecimalFormat df = new DecimalFormat("#,###.##");
 
 	/**
 	 * Constructor form quản lý nhân viên
@@ -148,14 +148,11 @@ public class PnNhanVien extends JFrame
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtPhoneNumber);
 		pnInfo.add(txtPhoneNumber);
 
-		txtSalary = new JTextField("0");
-		txtSalary.setForeground(Color.WHITE);
-		txtSalary.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtSalary.setBounds(555, 54, 250, 20);
-		txtSalary.setCaretColor(Color.WHITE);
-		txtSalary.setToolTipText("Nhập mức lương của nhân viên phải lớn hơn hoặc bằng 0");
-		CustomUI.getInstance().setCustomTextFieldUnFocus(txtSalary);
-		pnInfo.add(txtSalary);
+		spinSalary = new JSpinner(new SpinnerNumberModel(0f, 0f, Double.MAX_VALUE, 1000f));
+		CustomUI.getInstance().setCustomSpinner(spinSalary);
+		spinSalary.setBounds(555, 54, 250, 20);
+		spinSalary.setToolTipText("Nhập mức lương của nhân viên phải lớn hơn hoặc bằng 0");
+		pnInfo.add(spinSalary);
 
 		cboGender = new JComboBox<String>();
 		cboGender.addItem("Nam");
@@ -390,7 +387,7 @@ public class PnNhanVien extends JFrame
 		txtStaffName.addMouseListener(this);
 		txtCMND.addMouseListener(this);
 		txtPhoneNumber.addMouseListener(this);
-		txtSalary.addMouseListener(this);
+		spinSalary.addMouseListener(this);
 		txtBFieldGender.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
 		txtBFieldSearchPosition.addMouseListener(this);
@@ -405,7 +402,6 @@ public class PnNhanVien extends JFrame
 		txtStaffName.addFocusListener(this);
 		txtKeyWord.addFocusListener(this);
 		txtPhoneNumber.addFocusListener(this);
-		txtSalary.addFocusListener(this);
 		txtCMND.addFocusListener(this);
 		cboGender.addFocusListener(this);
 		cboPosition.addFocusListener(this);
@@ -413,6 +409,7 @@ public class PnNhanVien extends JFrame
 		cboSearchPosition.addFocusListener(this);
 		dpBirthDay.addFocusListener(this);
 		txtUsername.addFocusListener(this);
+		((JSpinner.DefaultEditor) spinSalary.getEditor()).getTextField().addFocusListener(this);
 
 		cboSearch.addItemListener(this);
 		cboSearchPosition.addItemListener(this);
@@ -428,7 +425,7 @@ public class PnNhanVien extends JFrame
 	}
 
 	public static void main(String[] args) {
-		NhanVien staff = new NhanVien();
+		NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
 		new PnNhanVien(staff).setVisible(true);
 	}
 
@@ -499,7 +496,8 @@ public class PnNhanVien extends JFrame
 			}
 			txtPhoneNumber.setText(tableStaff.getValueAt(selectedRow, 5).toString().trim());
 			dpBirthDay.setValue(tableStaff.getValueAt(selectedRow, 6).toString().trim());
-			txtSalary.setText(tableStaff.getValueAt(selectedRow, 7).toString().trim());
+			String salaryStr = tableStaff.getValueAt(selectedRow, 7).toString().trim().replace(",", "");
+			spinSalary.setValue(Double.parseDouble(salaryStr));
 			String genderStr = tableStaff.getValueAt(selectedRow, 8).toString().trim();
 			cboGender.setSelectedIndex(0);
 			if (genderStr.equalsIgnoreCase("Nữ")) {
@@ -589,12 +587,12 @@ public class PnNhanVien extends JFrame
 			CustomUI.getInstance().setCustomTextFieldFocus(txtKeyWord);
 		} else if (o.equals(txtPhoneNumber)) {
 			CustomUI.getInstance().setCustomTextFieldFocus(txtPhoneNumber);
-		} else if (o.equals(txtSalary)) {
-			CustomUI.getInstance().setCustomTextFieldFocus(txtSalary);
 		} else if (o.equals(txtCMND)) {
 			CustomUI.getInstance().setCustomTextFieldFocus(txtCMND);
 		} else if (o.equals(txtUsername)) {
 			CustomUI.getInstance().setCustomTextFieldFocus(txtUsername);
+		} else if (o.equals(((JSpinner.DefaultEditor) spinSalary.getEditor()).getTextField())) {
+			spinSalary.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
 
@@ -607,18 +605,12 @@ public class PnNhanVien extends JFrame
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
 		} else if (o.equals(txtPhoneNumber)) {
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtPhoneNumber);
-		} else if (o.equals(txtSalary)) {
-			CustomUI.getInstance().setCustomTextFieldUnFocus(txtSalary);
-			String salaryStr = txtSalary.getText().trim().replace(",", "");
-			boolean valid = ValidationData.getInstance().ValidNumber(this, txtSalary, "Mức lương", 0.0, -100.0, 0.0);
-			if (!valid) {
-				Double salary = Double.parseDouble(salaryStr);
-				txtSalary.setText(df.format(salary));
-			}
 		} else if (o.equals(txtCMND)) {
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtCMND);
 		} else if (o.equals(txtUsername)) {
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtUsername);
+		} else if (o.equals(((JSpinner.DefaultEditor) spinSalary.getEditor()).getTextField())) {
+			spinSalary.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		}
 	}
 
@@ -666,11 +658,11 @@ public class PnNhanVien extends JFrame
 			return valid;
 		}
 
-		valid = ValidationData.getInstance().ValidNumber(this, txtSalary, "Mức lương", 0, -1, 0);
-		if (!valid) {
-			return valid;
-		}
-
+		// valid = ValidationData.getInstance().ValidNumber(this, spinSalary, "Mức lương", 0, -1, 0);
+		// if (!valid) {
+		// 	return valid;
+		// }
+		
 		valid = ValidationData.getInstance().ValidPhoneNumber(this, txtPhoneNumber);
 		if (!valid) {
 			return valid;
@@ -741,7 +733,7 @@ public class PnNhanVien extends JFrame
 		String staffName = txtStaffName.getText().trim();
 		String status = radRetired.isSelected() ? "Đã nghỉ" : "Đang làm";
 		String position = cboPosition.getSelectedItem().toString().trim();
-		Double salary = Double.parseDouble(txtSalary.getText().trim().replace(",", ""));
+		Double salary = Double.parseDouble(spinSalary.getValue().toString());
 		String phoneNumber = txtPhoneNumber.getText().trim();
 		String cmnd = txtCMND.getText().trim();
 		Date birthDay = dpBirthDay.getValueSqlDate();
@@ -903,7 +895,7 @@ public class PnNhanVien extends JFrame
 		txtStaffName.setText("");
 		txtCMND.setText("");
 		txtPhoneNumber.setText("");
-		txtSalary.setText("");
+		spinSalary.setValue((double) 0);
 		cboGender.setSelectedIndex(0);
 		cboPosition.setSelectedIndex(0);
 		dpBirthDay.setValueToDay();
