@@ -425,8 +425,7 @@ public class PnLoaiPhong extends JFrame
 	public void keyPressed(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
-		if (o.equals(((JSpinner.DefaultEditor) spinSearchPrice.getEditor()).getTextField())
-				|| o.equals(txtKeyWord)) {
+		if (o.equals(((JSpinner.DefaultEditor) spinSearchPrice.getEditor()).getTextField()) || o.equals(txtKeyWord)) {
 			if (key == KeyEvent.VK_ENTER)
 				searchEventUsingBtnSearch();
 		}
@@ -476,7 +475,11 @@ public class PnLoaiPhong extends JFrame
 	/**
 	 * Kiểm tra thông tin trong form
 	 * 
-	 * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra thông tin
+     *         <ul>
+     *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+     *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+     *         </ul>
 	 */
 	private boolean validData() {
 		boolean valid = ValidationData.getInstance().ValidName(this, txtRoomTypeName, "Tên loại phòng", 100, 0);
@@ -486,7 +489,7 @@ public class PnLoaiPhong extends JFrame
 	/**
 	 * Tự động tạo mã loại dịch vụ mới tăng theo thứ tự tăng dần
 	 * 
-	 * @return <code>String</code>: mã dịch vụ mới
+	 * @return {@code String}: mã dịch vụ mới
 	 */
 	private String createNewServiceTypeID() {
 		String lastStrId = LoaiPhongDAO.getInstance().getLastRoomTypeId();
@@ -511,7 +514,7 @@ public class PnLoaiPhong extends JFrame
 	/**
 	 * chuyển đổi thông tin trong form thành đối tượng LoaiPhong
 	 * 
-	 * @return <code>LoaiPhong</code>: loại phòng
+	 * @return {@code LoaiPhong}: loại phòng được chuyển đổi thông tin từ form
 	 */
 	private LoaiPhong getStaffDataInForm() {
 		String roomTypeId = txtRoomTypeId.getText().trim();
@@ -531,8 +534,8 @@ public class PnLoaiPhong extends JFrame
 	/**
 	 * Thêm khoảng trắng vào trước và sao chuỗi được truyền vào
 	 * 
-	 * @param str <code>String</code>: chuỗi cần xử lý
-	 * @return <code>String</code>: chuỗi đã xử lý
+	 * @param str {@code String}: chuỗi cần xử lý
+	 * @return {@code String}: chuỗi đã xử lý
 	 */
 	private String addSpaceToString(String str) {
 		return " " + str + " ";
@@ -541,8 +544,8 @@ public class PnLoaiPhong extends JFrame
 	/**
 	 * Thêm dòng vào danh sách loại phòng đang hiển thị
 	 * 
-	 * @param stt      số thứ tự
-	 * @param roomType <code>LoaiPhong</code>: loại phòng cần được thêm
+	 * @param stt {@code int}: số thứ tự
+	 * @param roomType {@code LoaiPhong}: loại phòng cần được thêm
 	 */
 	private void addRow(int stt, LoaiPhong roomType) {
 		String sttStr = df.format(stt);
@@ -555,8 +558,8 @@ public class PnLoaiPhong extends JFrame
 	/**
 	 * Cập nhật thông tin một dòng khi biết dòng mà thông tin loại phòng
 	 * 
-	 * @param selectedRow <code>Int</code>: dòng được chọn
-	 * @param roomType    <code>LoaiPhong</code: loại phòng cần cập nhật
+	 * @param selectedRow {@code int}: dòng được chọn
+	 * @param roomType    {@code LoaiPhong}: loại phòng cần cập nhật
 	 */
 	private void updateRow(int selectedRow, LoaiPhong roomType) {
 		modelTableTypeRoom.setValueAt(addSpaceToString(roomType.getTenLP()), selectedRow, 2);
@@ -569,7 +572,7 @@ public class PnLoaiPhong extends JFrame
 	/**
 	 * Hiển thị danh sách loại phòng
 	 * 
-	 * @param roomTypeList <code>ArrayList DichVu </code>: danh sách loại phòng
+	 * @param roomTypeList {@code ArrayList<DichVu>}: danh sách loại phòng
 	 */
 	private void loadRoomTypeList(ArrayList<LoaiPhong> roomTypeList) {
 		modelTableTypeRoom.getDataVector().removeAllElements();

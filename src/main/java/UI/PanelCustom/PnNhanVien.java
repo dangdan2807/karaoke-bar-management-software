@@ -48,7 +48,7 @@ public class PnNhanVien extends JFrame
 	/**
 	 * Constructor form quản lý nhân viên
 	 * 
-	 * @param staff <code>NhanVien</code>: nhân viên truy cập
+	 * @param staff {@code NhanVien}: nhân viên truy cập
 	 */
 	public PnNhanVien(NhanVien staff) {
 		this.staffLogin = staff;
@@ -625,11 +625,11 @@ public class PnNhanVien extends JFrame
 	/**
 	 * Hiển thị popup thông báo của 1 JTextField
 	 * 
-	 * @param txt     JTextField: được trỏ đến khi cần thông báo
-	 * @param type    int: mã dạng thông báo (Nếu 1. là lỗi)
-	 * @param message String: Tin nhắn được hiển thị
-	 * @param title   String: Tiêu đề thông báo
-	 * @param option  int: loại thông báo (icon)
+	 * @param txt     {@code JTextField}: được trỏ đến khi cần thông báo
+	 * @param type    {@code int}: mã dạng thông báo (Nếu 1. là lỗi)
+	 * @param message {@code String}: Tin nhắn được hiển thị
+	 * @param title   {@code String}: Tiêu đề thông báo
+	 * @param option  {@code int}: loại thông báo (icon)
 	 */
 	private void showMessage(JTextField txt, int type, String message, String title, int option) {
 		if (type == 1) {
@@ -642,7 +642,11 @@ public class PnNhanVien extends JFrame
 	/**
 	 * Kiểm tra thông tin trong form
 	 * 
-	 * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra thông tin
+     *         <ul>
+     *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+     *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+     *         </ul>
 	 */
 	private boolean validData() {
 		String message = "";
@@ -657,12 +661,6 @@ public class PnNhanVien extends JFrame
 		if (!valid) {
 			return valid;
 		}
-
-		// valid = ValidationData.getInstance().ValidNumber(this, spinSalary, "Mức
-		// lương", 0, -1, 0);
-		// if (!valid) {
-		// return valid;
-		// }
 
 		valid = ValidationData.getInstance().ValidPhoneNumber(this, txtPhoneNumber);
 		if (!valid) {
@@ -702,7 +700,7 @@ public class PnNhanVien extends JFrame
 	/**
 	 * Tự động tạo mã nhân viên mới tăng theo thứ tự tăng dần
 	 * 
-	 * @return <code>String</code>: mã nhân viên mới
+	 * @return {@code String}: mã nhân viên mới
 	 */
 	private String createNewStaffID() {
 		String lastStaffId = NhanVienDAO.getInstance().getLastStaffID();
@@ -725,9 +723,9 @@ public class PnNhanVien extends JFrame
 	}
 
 	/**
-	 * chuyển đổi thông tin trong form thành đối tượng <code>NhanVien</code>
+	 * chuyển đổi thông tin trong form thành đối tượng {@code NhanVien}
 	 * 
-	 * @return <code>NhanVien</code>: nhân viên
+	 * @return {@code NhanVien}: nhân viên được chuyển đổi thông tin từ form
 	 */
 	private NhanVien getStaffDataInForm() {
 		String staffID = txtStaffID.getText().trim();
@@ -756,8 +754,8 @@ public class PnNhanVien extends JFrame
 	/**
 	 * Thêm khoảng trắng vào trước và sao chuỗi được truyền vào
 	 * 
-	 * @param str <code>String</code>: chuỗi cần xử lý
-	 * @return <code>String</code>: chuỗi đã xử lý
+	 * @param str {@code String}: chuỗi cần xử lý
+	 * @return {@code String}: chuỗi đã xử lý
 	 */
 	private String addSpaceToString(String str) {
 		return " " + str + " ";
@@ -766,8 +764,8 @@ public class PnNhanVien extends JFrame
 	/**
 	 * Thêm dòng vào danh sách nhân viên đang hiển thị
 	 * 
-	 * @param stt   số thứ tự
-	 * @param staff <code>NhanVien</code>: nhân viên cần được thêm
+	 * @param stt   {@code int}: số thứ tự
+	 * @param staff {@code NhanVien}: nhân viên cần được thêm
 	 */
 	private void addRow(int stt, NhanVien staff) {
 		String sttStr = df.format(stt);
@@ -787,8 +785,8 @@ public class PnNhanVien extends JFrame
 	/**
 	 * Cập nhật thông tin một dòng khi biết dòng mà thông tin nhân viên
 	 * 
-	 * @param selectedRow <code>Int</code>: dòng được chọn
-	 * @param staff       <code>NhanVien</code: nhân viên cần cập nhật
+	 * @param selectedRow {@code int}: dòng được chọn
+	 * @param staff       {@code NhanVien}: nhân viên cần cập nhật
 	 */
 	private void updateRow(int selectedRow, NhanVien staff) {
 		String mucLuongStr = df.format(staff.getMucLuong());
@@ -810,7 +808,7 @@ public class PnNhanVien extends JFrame
 	/**
 	 * Hiển thị danh sách nhân viên
 	 * 
-	 * @param staffList <code>ArrayList<NhanVien></code>: danh sách nhân viên
+	 * @param staffList {@code ArrayList <NhanVien>}: danh sách nhân viên
 	 */
 	private void loadStaffList(ArrayList<NhanVien> staffList) {
 		modelTableStaff.getDataVector().removeAllElements();

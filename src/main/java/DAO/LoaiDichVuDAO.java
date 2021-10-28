@@ -17,7 +17,7 @@ public class LoaiDichVuDAO {
     /**
      * Lấy danh sách thông tin tất cả loại dịch vụ
      * 
-     * @return <code>ArrayList - LoaiDichVu</code>: danh sách loại dịch vụ
+     * @return {@code ArrayList<LoaiDichVu>}: danh sách loại dịch vụ
      */
     public ArrayList<LoaiDichVu> getServiceTypeList() {
         ArrayList<LoaiDichVu> dataList = new ArrayList<LoaiDichVu>();
@@ -36,8 +36,12 @@ public class LoaiDichVuDAO {
     /**
      * Lấy thông tin loại dịch vụ dựa theo tên
      * 
-     * @param serviceTypeName <code>String</code>: tên loại dịch vụ
-     * @return <code>LoaiDichVu</code>: loại dịch vụ được tìm thấy
+     * @param serviceTypeName {@code String}: tên loại dịch vụ
+     * @return {@code LoaiDichVu}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code LoaiDichVi}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
+     *         </ul>
      */
     public LoaiDichVu getServiceTypeByName(String serviceTypeName) {
         LoaiDichVu data = null;
@@ -56,7 +60,11 @@ public class LoaiDichVuDAO {
     /**
      * Lấy mã loại dịch vụ được thêm mới nhất
      * 
-     * @return <code>String</code>: mã loại dịch vụ mới nhất được thêm vào
+     * @return {@code String}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code mã loại dịch vụ}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code ""}</li>
+     *         </ul>
      */
     public String getLastServiceTypeID() {
         String query = "{CALL USP_getLastServiceTypeID}";
@@ -68,8 +76,9 @@ public class LoaiDichVuDAO {
     /**
      * Lấy danh sách loại dịch vụ có tên phù hợp với từ khóa
      * 
-     * @param serviceTypeName <code>String</code>: từ khóa trong tên loại dịch vụ
-     * @return <code>ArrayList - LoaiDichVu</code>: danh sách loại dịch vụ phù hợp điều kiện
+     * @param serviceTypeName {@code String}: từ khóa trong tên loại dịch vụ
+     * @return {@code ArrayList<LoaiDichVu>}: danh sách loại dịch vụ phù hợp điều
+     *         kiện
      */
     public ArrayList<LoaiDichVu> getServiceTypeListByName(String serviceTypeName) {
         String query = "{CALL USP_getServiceTypeListByName( ? )}";
@@ -89,8 +98,12 @@ public class LoaiDichVuDAO {
     /**
      * Lấy thông tin loại dịch vụ dựa theo tên
      * 
-     * @param serviceTypeID <code>String</code>: mã loại dịch vụ
-     * @return <code>LoaiDichVu</code>: loại dịch vụ được tìm thấy
+     * @param serviceTypeID {@code String}: mã loại dịch vụ
+     * @return {@code LoaiDichVu}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code LoaiDichVu}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
+     *         </ul>
      */
     public LoaiDichVu getServiceTypeById(String serviceTypeID) {
         LoaiDichVu data = null;
@@ -109,9 +122,12 @@ public class LoaiDichVuDAO {
     /**
      * Thêm một loại dịch vụ mới vào cơ sở dữ liệu
      * 
-     * @param serviceType <code>LoaiDichVu</code>: loại dịch vụ cần thêm
-     * @return <code>boolean</code>: <code>true</code> thành công,
-     *         <code>false</code> nếu thất bại
+     * @param serviceType {@code LoaiDichVu}: loại dịch vụ cần thêm
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thêm thành công thì trả về {@code true}</li>
+     *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
+     *         </ul>
      */
     public Boolean insertService(LoaiDichVu serviceType) {
         String query = "{CALL USP_insertServiceType( ? , ? )}";
@@ -124,9 +140,12 @@ public class LoaiDichVuDAO {
     /**
      * Cập nhật thông tin loại dịch vụ vào cơ sở dữ liệu
      * 
-     * @param serviceType <code>LoaiDichVu</code>: loại dịch vụ cần cập nhật
-     * @return <code>boolean</code>: <code>true</code> thành công,
-     *         <code>false</code> nếu thất bại
+     * @param serviceType {@code LoaiDichVu}: loại dịch vụ cần cập nhật
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thêm thành công thì trả về {@code true}</li>
+     *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
+     *         </ul>
      */
     public Boolean updateInfoServiceType(LoaiDichVu serviceType) {
         String query = "{CALL USP_updateInfoServiceType( ? , ? )}";

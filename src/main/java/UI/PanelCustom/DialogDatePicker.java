@@ -261,7 +261,7 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
     /**
      * Hiển thị ngày được chọn
      * 
-     * @param day
+     * @param day {@code int}: ngày được chọn
      */
     public void displayShowDate(int day) {
         Calendar cal = Calendar.getInstance();
@@ -282,7 +282,7 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
     /**
      * Lấy ngày chọn từ lịch và trả về ngày dạng chuỗi
      * 
-     * @return <code>String</code>: ngày được chọn
+     * @return {@code String}: ngày được chọn
      */
     private String getPickedDate() {
         if (day.equals(""))
@@ -294,9 +294,9 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
     }
 
     /**
-     * Lấy ngày chọn từ lịch và trả về ngày dạng java.sql.Date
+     * Lấy ngày chọn từ lịch và trả về ngày dạng {@code java.sql.Date}
      * 
-     * @return <code>java.sql.Date</code>: ngày được chọn
+     * @return {@code java.sql.Date}: ngày được chọn
      */
     public Date getDate() {
         if (day.equals(""))
@@ -310,7 +310,7 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
     /**
      * Lấy ngày hiện tại và trả về ngày dạng chuỗi
      * 
-     * @return <code>String</code>: ngày hiện tại
+     * @return {@code String}: ngày hiện tại
      */
     public static String getToDay() {
         Calendar cal = Calendar.getInstance();
@@ -321,7 +321,7 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
     /**
      * Lấy ra ngày đã chọn ở dạng chuỗi
      * 
-     * @return <code>String</code>: ngày được chọn
+     * @return {@code String}: ngày được chọn
      */
     public String getValueString() {
         String re = "";

@@ -441,7 +441,7 @@ public class PnLoaiDichVu extends JFrame
 	/**
 	 * Tự động tạo mã loại dịch vụ mới tăng theo thứ tự tăng dần
 	 * 
-	 * @return <code>String</code>: mã dịch vụ mới
+	 * @return {@code String}: mã dịch vụ mới
 	 */
 	private String createNewServiceTypeID() {
 		String lastStrId = LoaiDichVuDAO.getInstance().getLastServiceTypeID();
@@ -466,7 +466,7 @@ public class PnLoaiDichVu extends JFrame
 	/**
 	 * chuyển đổi thông tin trong form thành đối tượng DichVu
 	 * 
-	 * @return <code>LoaiDichVu</code>: dịch vụ
+	 * @return {@code LoaiDichVu}: dịch vụ được chuyển đổi thông tin từ form
 	 */
 	private LoaiDichVu getServiceTypeDataInForm() {
 		String serviceTypeID = txtServiceTypeID.getText().trim();
@@ -488,7 +488,11 @@ public class PnLoaiDichVu extends JFrame
 	/**
 	 * Kiểm tra thông tin trong form
 	 * 
-	 * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra thông tin
+     *         <ul>
+     *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+     *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+     *         </ul>
 	 */
 	private boolean validData() {
 		boolean valid = ValidationData.getInstance().ValidName(this, txtServiceTypeName, "Tên loại dịch vụ", 100, 0);
@@ -498,8 +502,8 @@ public class PnLoaiDichVu extends JFrame
 	/**
 	 * Thêm khoảng trắng vào trước và sao chuỗi được truyền vào
 	 * 
-	 * @param str <code>String</code>: chuỗi cần xử lý
-	 * @return <code>String</code>: chuỗi đã xử lý
+	 * @param str {@code String}: chuỗi cần xử lý
+	 * @return {@code String}: chuỗi đã xử lý
 	 */
 	private String addSpaceToString(String str) {
 		return " " + str + " ";
@@ -508,8 +512,8 @@ public class PnLoaiDichVu extends JFrame
 	/**
 	 * Thêm dòng vào danh sách loại dịch vụ đang hiển thị
 	 * 
-	 * @param stt         số thứ tự
-	 * @param serviceType <code>LoaiDichVu</code>: loại dịch vụ cần được thêm
+	 * @param stt         {@code int}: số thứ tự
+	 * @param serviceType {@code LoaiDichVu}: loại dịch vụ cần được thêm
 	 */
 	private void addRow(int stt, LoaiDichVu serviceType) {
 		String sttStr = df.format(stt);
@@ -521,8 +525,8 @@ public class PnLoaiDichVu extends JFrame
 	/**
 	 * Cập nhật thông tin một dòng khi biết dòng mà thông tin loại dịch vụ
 	 * 
-	 * @param selectedRow <code>Int</code>: dòng được chọn
-	 * @param serviceType <code>LoaiDichVu</code: loại dịch vụ cần cập nhật
+	 * @param selectedRow {@code int}: dòng được chọn
+	 * @param serviceType {@code LoaiDichVu}: loại dịch vụ cần cập nhật
 	 */
 	private void updateRow(int selectedRow, LoaiDichVu serviceType) {
 		String serviceTypeName = serviceType.getTenLDV();
@@ -533,8 +537,7 @@ public class PnLoaiDichVu extends JFrame
 	/**
 	 * Hiển thị danh sách dịch vụ
 	 * 
-	 * @param serviceTypeList <code>ArrayList LoaiDichVu </code>: danh sách loại
-	 *                        dịch vụ
+	 * @param serviceTypeList {@code ArrayList <LoaiDichVu>}: danh sách loại dịch vụ
 	 */
 	private void loadServiceTypeList(ArrayList<LoaiDichVu> serviceTypeList) {
 		modelTable.getDataVector().removeAllElements();

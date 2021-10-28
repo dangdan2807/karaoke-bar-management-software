@@ -15,9 +15,12 @@ public class DataProvider {
 
     /**
      * Dùng để truy vấn select
-     * @param query câu truy vấn
-     * @param parameter các giá trị được truyền vào dấu truy vấn tại các dấu ?
-     * @return trả về 1 ResultSet chứa thông tin của câu truy vấn truyền vào
+     * 
+     * @param query     {@code String}: câu truy vấn
+     * @param parameter {@code Object[]}: các giá trị được truyền vào dấu truy vấn
+     *                  tại các dấu {@code ?}
+     * @return {@code ResultSet} trả về 1 {@code ResultSet} chứa thông tin của câu
+     *         truy vấn truyền vào
      */
     public ResultSet ExecuteQuery(String query, Object[] parameter) {
         PreparedStatement stmt = null;
@@ -46,9 +49,15 @@ public class DataProvider {
 
     /**
      * Dùng khi insert, delete, update hoặc các câu query trả về số lượng dòng thực
-     * @param query câu truy vấn
-     * @param parameter các giá trị được truyền vào dấu truy vấn tại các dấu ?
-     * @return trả về true hoặc false
+     * 
+     * @param query     {@code String}: câu truy vấn
+     * @param parameter {@code Object[]}: các giá trị được truyền vào dấu truy vấn
+     *                  tại các dấu {@code ?}
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>{@code true} truy vấn thành công</li>
+     *         <li>{@code false} truy vấn thất bại</li>
+     *         </ul>
      */
     public int ExecuteNonQuery(String query, Object[] parameter) {
         int data = 0;
@@ -82,10 +91,13 @@ public class DataProvider {
     }
 
     /**
-     * Dùng để đếm, ... hoặc lấy giá trị của hàng đầu của cột đầu tiên của kế quả câu truy vấn
-     * @param query câu truy vấn
-     * @param parameter các giá trị được truyền vào dấu truy vấn tại các dấu ?
-     * @return trả về 1 Object chứa giá trị cần lấy
+     * Dùng để đếm, ... hoặc lấy giá trị của hàng đầu của cột đầu tiên của kế quả
+     * câu truy vấn
+     * 
+     * @param query     {@code String}: câu truy vấn
+     * @param parameter {@code Object[]}: các giá trị được truyền vào dấu truy vấn
+     *                  tại các dấu {@code ?}
+     * @return {@code Object}: trả về 1 Object chứa giá trị cần lấy ra
      */
     public Object ExecuteScalar(String query, Object[] parameter) {
         Object data = null;

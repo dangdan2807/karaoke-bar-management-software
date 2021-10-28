@@ -222,7 +222,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	/**
 	 * Hiển thị popup thông báo
 	 * 
-	 * @param message <code>String</code>: nội dung thông báo
+	 * @param message {@code String}: nội dung thông báo
 	 */
 	private void showMessage(String message) {
 		JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.OK_OPTION);
@@ -231,7 +231,11 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	/**
 	 * Kiểm tra thông tin trước khi đăng nhập
 	 * 
-	 * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra
+	 *         <ul>
+	 *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+	 *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+	 *         </ul>
 	 */
 	private boolean validData() {
 		String username = txtUsername.getText().trim();
@@ -258,9 +262,13 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	/**
 	 * Đăng nhập tài khoản
 	 * 
-	 * @param username <code>String</code>: tên đăng nhập
-	 * @param password <code>String</code>: mật khẩu
-	 * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+	 * @param username {@code String}: tên đăng nhập
+	 * @param password {@code String}: mật khẩu
+	 * @return {@code boolean}: kết quả trả về của câu truy vấn
+	 *         <ul>
+	 *         <li>Nếu thêm thành công thì trả về {@code true}</li>
+	 *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
+	 *         </ul>
 	 */
 	private boolean login(String username, String password) {
 		boolean result = TaiKhoanDAO.getInstance().dangNhap(username, password);

@@ -3,6 +3,7 @@ package UI;
 import javax.swing.*;
 
 import DAO.NhanVienDAO;
+import DAO.ValidationData;
 import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.kDatePicker;
 import entity.NhanVien;
@@ -33,7 +34,7 @@ public class fThongTinCaNhan extends JDialog
     /**
      * Constructor form thông tin cá nhân
      * 
-     * @param staff <code>NhanVien</code>: nhân viên truy cập
+     * @param staff {@code NhanVien}: nhân viên truy cập
      */
     public fThongTinCaNhan(NhanVien staff) {
         setTitle("Quản Lý Thông Tin Tài Khoản");
@@ -56,7 +57,7 @@ public class fThongTinCaNhan extends JDialog
 
         btnUpdate = new JButton("Cập nhật");
         CustomUI.getInstance().setCustomBtn(btnUpdate);
-        
+
         btnClose = new JButton("Thoát");
         CustomUI.getInstance().setCustomBtn(btnClose);
         pnMain.add(btnUpdate);
@@ -374,7 +375,7 @@ public class fThongTinCaNhan extends JDialog
     /**
      * Hiển thị thông tin nhân viên được truyền vào lên màn hình
      * 
-     * @param staff Nhân viên cần hiển thị thông tin
+     * @param staff {@code NhanVien}: Nhân viên cần hiển thị thông tin
      */
     private void showInfoStaff(NhanVien staff) {
         this.staffLogin = staff;
@@ -398,9 +399,9 @@ public class fThongTinCaNhan extends JDialog
     }
 
     /**
-     * Lấy thông tin trên form và trả về 1 NhanVien
+     * Chuyển đổi thông tin trong form thành đối tượng {@code NhanVien}
      * 
-     * @return NhanVien
+     * @return {@code NhanVien}: Nhân viên sau khi đã chuyển đổi
      */
     private NhanVien getDataInForm() {
         String maNhanVien = txtEmpID.getText().trim();
@@ -417,13 +418,13 @@ public class fThongTinCaNhan extends JDialog
     }
 
     /**
-     * Hiển thị popup thông báo của 1 JTextField
+     * Hiển thị popup thông báo của 1 {@code JTextField}
      * 
-     * @param txt     JTextField: được trỏ đến khi cần thông báo
-     * @param type    int: mã dạng thông báo (Nếu 1. là lỗi)
-     * @param message String: Tin nhắn được hiển thị
-     * @param title   String: Tiêu đề thông báo
-     * @param option  int: loại thông báo (icon)
+     * @param txt     {@code JTextField}: được trỏ đến khi cần thông báo
+     * @param type    {@code int}: mã dạng thông báo (Nếu 1. là lỗi)
+     * @param message {@code String}: Tin nhắn được hiển thị
+     * @param title   {@code String}: Tiêu đề thông báo
+     * @param option  {@code int}: loại thông báo (icon)
      */
     private void showMessage(JTextField txt, int type, String message, String title, int option) {
         if (type == 1) {
@@ -433,22 +434,11 @@ public class fThongTinCaNhan extends JDialog
     }
 
     /**
-     * Hiển thị popup thông báo
-     * 
-     * @param message <code>String</code>: Tin nhắn được hiển thị
-     * @param title   <code>String</code>: Tiêu đề thông báo
-     * @param option  <code>int</code>: loại thông báo (icon)
-     */
-    private void showMessage(String message, String title, int option) {
-        JOptionPane.showMessageDialog(this, message, title, option);
-    }
-
-    /**
      * Kiểm tra mât khẩu
      * 
-     * @param matKhau <code>String</code>: mật khẩu
-     * @param mess    <code>String</code>: tên loại mật khẩu (mật khẩu, mật khẩu
-     *                mới, nhập lại mật khẩu, ...)
+     * @param matKhau {@code String}: mật khẩu
+     * @param mess    {@code String}: tên loại mật khẩu (mật khẩu, mật khẩu mới,
+     *                nhập lại mật khẩu, ...)
      */
     private void checkPassword(String matKhau, String mess) {
         String message = mess;
@@ -464,35 +454,32 @@ public class fThongTinCaNhan extends JDialog
     /**
      * Kiểm tra thông tin trong form
      * 
-     * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+     * @return {@code boolean}: kết quả trả về của quá trình kiểm tra thông tin
+     *         trong form
+     *         <ul>
+     *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+     *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+     *         </ul>
      */
     private boolean validData() {
         String message = "";
-        String hoTen = txtFullName.getText().trim();
-        if (hoTen.equalsIgnoreCase("")) {
-            message = "Họ tên không được rỗng";
-            showMessage(txtFullName, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+        boolean valid = ValidationData.getInstance().ValidName(this, txtFullName, "Họ và tên", 100, 0);
+        if (!valid) {
             return false;
         }
 
-        String cmnd = txtCMND.getText().trim();
-        if (!cmnd.matches("^[\\d]{9}$|^[\\d]{12}$")) {
-            message = "CMND phải là số và gồm 9 số hoặc nếu là CCCD phải là số và gồm 12 số";
-            showMessage(txtCMND, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+        valid = ValidationData.getInstance().ValidCmnd(this, txtCMND);
+        if (!valid) {
             return false;
         }
 
-        Date ngaySinh = dpNgaySinh.getFullDate();
-        if (ngaySinh.after(dpNgaySinh.getValueToDay())) {
-            message = "Ngày sinh phải bé hơn ngày hiện tại";
-            showMessage(message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+        valid = ValidationData.getInstance().ValidBirthDay(this, dpNgaySinh, "", 0);
+        if (!valid) {
             return false;
         }
 
-        String soDienThoai = txtPhoneNumber.getText();
-        if (!soDienThoai.matches("^0[35789][\\d]{8}$")) {
-            message = "Số điện thoại phải là số và gồm 10 số bắt đầu bằng 03, 05, 07, 08, 09";
-            showMessage(txtCMND, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+        valid = ValidationData.getInstance().ValidPhoneNumber(this, txtPhoneNumber);
+        if (!valid) {
             return false;
         }
 
@@ -562,7 +549,7 @@ public class fThongTinCaNhan extends JDialog
             nhanVienLoginMoi.getTaiKhoan().setMatKhau(matKhauMoi);
         }
 
-        boolean ketQua = NhanVienDAO.getInstance().updateTTNhanVien(nhanVienLoginMoi);
+        boolean ketQua = NhanVienDAO.getInstance().updateInfoStaff(nhanVienLoginMoi);
         if (ketQua) {
             message = "Cập nhật thông tin thành công";
             JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);

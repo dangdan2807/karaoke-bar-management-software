@@ -57,6 +57,11 @@ public class fQuanLyDatPhong extends JFrame
 	private NhanVien staffLogin = null;
 	private KhachHang selectedCustomer = null;
 
+	/**
+	 * Hàm khởi tạo form
+	 * 
+	 * @param staff {@code NhanVien}: nhân viên đăng nhập
+	 */
 	public fQuanLyDatPhong(NhanVien staff) {
 		setTitle("Phần Mềm Quản Lý Quán Karaoke");
 		setSize(1280, 700);
@@ -65,10 +70,13 @@ public class fQuanLyDatPhong extends JFrame
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.staffLogin = staff;
 		createMenuBar();
-		createFromQLKS();
+		createFrom();
 		setCloseAction(this);
 	}
 
+	/**
+	 * Hàm tạo menu bar
+	 */
 	public void createMenuBar() {
 		menuBar = new JMenuBar();
 		this.setJMenuBar(menuBar);
@@ -78,7 +86,10 @@ public class fQuanLyDatPhong extends JFrame
 		menuBar.add(menuTK);
 	}
 
-	public void createFromQLKS() {
+	/**
+	 * Hàm tạo form
+	 */
+	public void createFrom() {
 		pnMain = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -714,7 +725,7 @@ public class fQuanLyDatPhong extends JFrame
 					boolean result = false;
 					String message = "Thêm dịch vụ thất bại";
 					if (BillID != -1) {
-						CTHoaDon serviceInfo = CTHoaDonDAO.getInstance().getCTHoaDonByMaHDvaMaDV(BillID,
+						CTDichVu serviceInfo = CTDichVuDAO.getInstance().getCTHoaDonByMaHDvaMaDV(BillID,
 								service.getMaDichVu());
 						// nếu ctDichVu đã tồn tại thì cập nhật
 						// nếu ctDichVu không tồn tại thì thêm mới
@@ -723,14 +734,14 @@ public class fQuanLyDatPhong extends JFrame
 							if (serviceInfo.getSoLuongDat() > 0 && newQuantity > 0) {
 								int newOrderQuantity = serviceInfo.getSoLuongDat() + orderQuantity;
 								serviceInfo.setSoLuongDat(newOrderQuantity);
-								result = CTHoaDonDAO.getInstance().themCTHoaDon(serviceInfo, orderQuantity,
+								result = CTDichVuDAO.getInstance().themCTHoaDon(serviceInfo, orderQuantity,
 										bill.getMaHoaDon());
 							} else {
 								message = "Dịch vụ chưa được thêm nên không thể hủy";
 							}
 						} else {
-							serviceInfo = new CTHoaDon(orderQuantity, service);
-							result = CTHoaDonDAO.getInstance().themCTHoaDon(serviceInfo, orderQuantity,
+							serviceInfo = new CTDichVu(orderQuantity, service);
+							result = CTDichVuDAO.getInstance().themCTHoaDon(serviceInfo, orderQuantity,
 									bill.getMaHoaDon());
 						}
 						// kiểm tra kết quả thêm, cập nhật
@@ -999,7 +1010,7 @@ public class fQuanLyDatPhong extends JFrame
 	 * Bắt sự kiện khi click btn close(x), sẽ show 1 form xác nhận đăng xuất hay
 	 * thoát chương trình
 	 * 
-	 * @param jframe sẽ nhận sự kiện
+	 * @param jframe {@code JFrame} sẽ nhận sự kiện
 	 */
 	public void setCloseAction(JFrame jframe) {
 		jframe.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -1015,9 +1026,9 @@ public class fQuanLyDatPhong extends JFrame
 	/**
 	 * chuyển đổi tình trạng phòng từ số sang chuỗi
 	 * 
-	 * @param type tình trạng phòng
-	 * @return <code>String</code>: tính trạng dạng chuỗi 0 là phòng trống và 1 là
-	 *         đã cho thuê
+	 * @param type {@code int}: tình trạng phòng
+	 * @return {@code String}: tính trạng dạng chuỗi 0 là phòng trống và 1 là đã cho
+	 *         thuê
 	 */
 	private String convertRoomStatus(int type) {
 		// 1 là đã cho thuê | 0 là là còn trống
@@ -1030,7 +1041,7 @@ public class fQuanLyDatPhong extends JFrame
 	/**
 	 * Hiển thị thông tin của 1 phòng
 	 * 
-	 * @param roomId <code>String</code>: mã phòng cần hiển thị
+	 * @param roomId {@code String}: mã phòng cần hiển thị
 	 */
 	private void loadRoom(String maPhong) {
 		Phong room = PhongDAO.getInstance().getPhongByMaPhong(maPhong);
@@ -1077,7 +1088,7 @@ public class fQuanLyDatPhong extends JFrame
 	/**
 	 * Hiển thị danh sách phòng được truyền vào
 	 * 
-	 * @param dsPhong <code>ArrayList<Phong></code>: danh sách phòng cần hiển thị
+	 * @param dsPhong {@code ArrayList<Phong>}: danh sách phòng cần hiển thị
 	 */
 	private void LoadRoomList(ArrayList<Phong> dsPhong) {
 		heightTable = 70;
@@ -1200,7 +1211,7 @@ public class fQuanLyDatPhong extends JFrame
 	/**
 	 * Hiển thị danh sách phòng khi biết loại phòng trên comboBox Phòng
 	 * 
-	 * @param roomTypeName <code>String</code>: loại phòng
+	 * @param roomTypeName {@code String}: loại tên phòng
 	 */
 	private void loadCboRoom(String roomTypeName) {
 		ArrayList<Phong> roomList = new ArrayList<Phong>();
@@ -1218,16 +1229,16 @@ public class fQuanLyDatPhong extends JFrame
 	/**
 	 * Hiển thị danh sách CTHoaDon khi biết mã phòng
 	 * 
-	 * @param roomId <code>String</code>: mã phòng
+	 * @param roomId {@code String}: mã phòng
 	 */
 	private void showBillInfo(String maPhong) {
-		ArrayList<CTHoaDon> dataList = CTHoaDonDAO.getInstance().getCTHoaDonListByMaPhong(maPhong);
+		ArrayList<CTDichVu> dataList = CTDichVuDAO.getInstance().getCTHoaDonListByMaPhong(maPhong);
 		DecimalFormat df = new DecimalFormat("#,###.##");
 		int i = 1;
 		modelTableBill.getDataVector().removeAllElements();
 		modelTableBill.fireTableDataChanged();
 		Double totalPrice = 0.0;
-		for (CTHoaDon item : dataList) {
+		for (CTDichVu item : dataList) {
 			Double totalPriceService = item.tinhTienDichVu();
 			totalPrice *= totalPriceService;
 			String stt = df.format(i++);
@@ -1254,7 +1265,7 @@ public class fQuanLyDatPhong extends JFrame
 	/**
 	 * Hiển thị danh sách phòng dựa trên tên loại phòng
 	 * 
-	 * @param roomTypeName <code>String</code>: tên lại phòng
+	 * @param roomTypeName {@code String}: tên loại phòng
 	 */
 	private void loadRoomListByRoomTypeName(String roomTypeName) {
 		ArrayList<Phong> dataList = null;
@@ -1270,7 +1281,7 @@ public class fQuanLyDatPhong extends JFrame
 	/**
 	 * Hiển thị danh sách dịch vụ
 	 * 
-	 * @param dataList <code>ArrayList<DichVu></code>: danh sách dịch vụ
+	 * @param dataList {@code ArrayList<DichVu>}: danh sách dịch vụ
 	 */
 	private void loadServiceList(ArrayList<DichVu> dataList) {
 		DecimalFormat df = new DecimalFormat("#,###.##");
@@ -1299,7 +1310,7 @@ public class fQuanLyDatPhong extends JFrame
 	/**
 	 * Hiển thị tên nhân viên đang sử dụng phần mềm
 	 * 
-	 * @param staff <code>NhanVien</code>: nhân viên được hiển thị tên
+	 * @param staff {@code NhanVien}: nhân viên được hiển thị tên
 	 */
 	private void showStaffName(NhanVien staff) {
 		lbEmpName.setText(staff.getHoTen());
@@ -1333,7 +1344,7 @@ public class fQuanLyDatPhong extends JFrame
 	}
 
 	/**
-	 * Thay đổi kích thước các cột trong bảng chi tiết hóa đơn
+	 * Thay đổi kích thước các cột trong bảng chi tiết dịch vụ
 	 */
 	private void reSizeColumnTableBillInfo() {
 		tableBill.getColumnModel().getColumn(0).setPreferredWidth(15);

@@ -326,7 +326,7 @@ public class DialogChonKhachHang extends JDialog
     /**
      * Hiển thị thông tin khách hàng lên form thông tin khách hàng
      * 
-     * @param khachHang <code>KhachHang</code>: khách hàng cần hiển thị
+     * @param khachHang {@code KhachHang}: khách hàng cần hiển thị
      */
     private void loadDataLenForm(KhachHang khachHang) {
         txtMaKH.setText(khachHang.getMaKH());
@@ -346,7 +346,7 @@ public class DialogChonKhachHang extends JDialog
     /**
      * Hiển thị thông tin khách hàng hàng
      * 
-     * @param maKH mã khách hàng
+     * @param maKH {@code String}: mã của khách hàng cần hiển thị
      */
     private void loadBtnKH(String maKH) {
         KhachHang khachHang = KhachHangDAO.getInstance().getKhachHangByMaKH(maKH);
@@ -383,7 +383,7 @@ public class DialogChonKhachHang extends JDialog
     /**
      * Hiển thị danh sách khách hàng
      * 
-     * @param dsKhachHang <code>ArrayList KhachHang</code>
+     * @param dsKhachHang {@code ArrayList<KhachHang>} : danh sách khách hàng cần hiển thị
      */
     private void LoadDSPhong(ArrayList<KhachHang> dsKhachHang) {
         heightTable = KhachHangDAO.TABLE_HEIGHT;
@@ -437,7 +437,7 @@ public class DialogChonKhachHang extends JDialog
     /**
      * Lấy giá trị trong text filed mã khách hàng
      * 
-     * @return <code>String</code>: mã khách hàng
+     * @return {@code String}: mã khách hàng
      */
     public String getValueTxtMaKH() {
         return txtMaKH.getText();
@@ -446,7 +446,7 @@ public class DialogChonKhachHang extends JDialog
     /**
      * Lấy ra JButton chọn khách hàng
      * 
-     * @return <code>JButton</code>: button chọn khách hàng
+     * @return {@code JButton}: button chọn khách hàng
      */
     public JButton getBtnChonKH() {
         return btnChonKH;
@@ -486,7 +486,7 @@ public class DialogChonKhachHang extends JDialog
     /**
      * Lấy thông tin khách hàng được chọn
      * 
-     * @return <code>KhachHang</code>: khách hàng được chọn
+     * @return {@code KhachHang}: khách hàng được chọn
      */
     public KhachHang getKHDuocChon() {
         return khachHang;

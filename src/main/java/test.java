@@ -44,7 +44,7 @@ public class test {
     /**
      * Tự động tạo mã dịch vụ mới tăng theo thứ tự tăng dần
      * 
-     * @return <code>String</code>: mã dịch vụ mới
+     * @return {@code String}: mã dịch vụ mới
      */
     private static String createNewServiceID() {
         String lastStrId = LoaiDichVuDAO.getInstance().getLastServiceTypeID();
@@ -69,7 +69,7 @@ public class test {
     public static void main(String[] args) {
         // testTime();
         // System.out.println(createNewServiceID());
-        // ExportBill.getInstance().exportBillToExcel(1, "D:/hd.xlsx");
+        ExportBill.getInstance().exportBillToExcel(1, "D:/hd.xlsx");
         // ExportBill.getInstance().exportBillToPdf(1, "D:/hd.pdf");
         // BigDecimal a = new BigDecimal("0.00");
         // BigDecimal b = new BigDecimal("1.00");
@@ -78,7 +78,7 @@ public class test {
         // LoaiPhong roomType = new LoaiPhong("LP004", "1", 1, 2300.5);
         // Boolean result = LoaiPhongDAO.getInstance().updateInfoRoomType(roomType);
         // System.out.println(result);
-        String data = "8000.0";
-        System.out.println(data.replaceAll("\\.[0]+$", ""));
+        // String data = "8000.0";
+        // System.out.println(data.replaceAll("\\.[0]+$", ""));
     }   
 }

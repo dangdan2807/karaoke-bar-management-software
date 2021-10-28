@@ -15,10 +15,10 @@ public class ConvertTime {
     }
 
     /**
-     * Chuyển đổi ngày ở kiểu dữ liệu java.sql.Date sang ngày ở kiểu dữ liệu
+     * Chuyển đổi ngày ở kiểu dữ liệu {@code java.sql.Date} sang ngày ở kiểu dữ liệu
      * java.util.Date
      * 
-     * @param date java.sql.Date
+     * @param date {@code java.sql.Date}
      * @return java.util.Date
      */
     public java.util.Date convertSqlDateToUtilDate(Date date) {
@@ -27,13 +27,13 @@ public class ConvertTime {
     }
 
     /**
-     * chuyển đổi ngày ở kiểu dữ liệu <code>java.util.Date</code> sang ngày ở kiểu
-     * dạng chuỗi
+     * chuyển đổi ngày ở kiểu dữ liệu {@code java.util.Date} sang ngày ở kiểu dạng
+     * chuỗi
      * 
-     * @param date   <code>java.sql.Date</code>: ngày cần chuyển đổi ở kiểu dữ liệu
-     * @param format <code>String</code>: định dạng cần format Ví dụ: "dd/MM/yyyy",
-     *               "hh:mm:ss", "dd/MM/yyyy hh:mm:ss", ...
-     * @return <code>String</code>: chuỗi ngày giờ đã định dạng
+     * @param date   {@code java.sql.Date}: ngày cần chuyển đổi ở kiểu dữ liệu
+     * @param format {@code String}: định dạng cần format Ví dụ: {@code dd/MM/yyyy},
+     *               {@code hh:mm:ss}, {@code dd/MM/yyyy hh:mm:ss}, ...
+     * @return {@code String}: chuỗi ngày giờ đã định dạng
      */
     public String convertTimeToString(Date date, String format) {
         java.util.Date utilDate = new java.util.Date(date.getTime());
@@ -42,14 +42,13 @@ public class ConvertTime {
     }
 
     /**
-     * chuyển đổi ngày ở kiểu dữ liệu <code>java.sql.Timestamp</code> sang ngày ở
-     * kiểu dạng chuỗi
+     * chuyển đổi ngày ở kiểu dữ liệu {@code java.sql.Timestamp} sang ngày ở kiểu
+     * dạng chuỗi
      * 
-     * @param date   <code>java.sql.Timestamp</code>: ngày cần chuyển đổi ở kiểu dữ
-     *               liệu
-     * @param format <code>String</code>: định dạng cần format Ví dụ: "dd/MM/yyyy",
-     *               "hh:mm:ss", "dd/MM/yyyy hh:mm:ss", ...
-     * @return <code>String</code>: chuỗi ngày giờ đã định dạng
+     * @param date   {@code java.sql.Timestamp}: ngày cần chuyển đổi ở kiểu dữ liệu
+     * @param format {@code String}: định dạng cần format Ví dụ: {@code dd/MM/yyyy},
+     *               {@code hh:mm:ss}, {@code dd/MM/yyyy hh:mm:ss}, ...
+     * @return {@code String}: chuỗi ngày giờ đã định dạng
      */
     public String convertTimeToString(Timestamp date, String format) {
         java.util.Date utilDate = new java.util.Date(date.getTime());

@@ -37,9 +37,9 @@ public class CustomUI {
     public static ImageIcon MANAGER_ICON = new ImageIcon(pathImg + "administration_512.png");
 
     /**
-     * singleton <code>CustomUI</code>
+     * singleton {@code CustomUI}
      * 
-     * @return <code>CustomUI</code>:
+     * @return {@code CustomUI}:
      */
     public static CustomUI getInstance() {
         if (instance == null)
@@ -50,7 +50,7 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh button
      * 
-     * @param btn <code>JButton</code>: button cần tùy chỉnh
+     * @param btn {@code JButton}: button cần tùy chỉnh
      */
     public void setCustomBtn(JButton btn) {
         btn.setBackground(Color.decode("#d0e1fd"));
@@ -63,7 +63,7 @@ public class CustomUI {
      * tùy chỉnh nhanh button khi có sự kiện được đưa chuột lên button (không bao
      * gồm sự kiện)
      * 
-     * @param btn <code>JButton</code>: button cần tùy chỉnh
+     * @param btn {@code JButton}: button cần tùy chỉnh
      */
     public void setCustomBtnHover(JButton btn) {
         if (btn.isEnabled()) {
@@ -77,7 +77,7 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh label
      * 
-     * @param lb <code>JLabel</code>: label cần tùy chỉnh
+     * @param lb {@code JLabel}: label cần tùy chỉnh
      */
     public void setCustomLbTitle(JLabel lb) {
         lb.setFont(new Font("Dialog", Font.BOLD, 24));
@@ -87,7 +87,7 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh text filed khi có sự kiện focus (không bao gồm sự kiện)
      * 
-     * @param txt <code>JTextField</code>: text filed cần tùy chỉnh
+     * @param txt {@code JTextField}: text filed cần tùy chỉnh
      */
     public void setCustomTextFieldFocus(JTextField txt) {
         if (txt.isEditable()) {
@@ -102,7 +102,7 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh text filed khi có sự kiện unFocus (không bao gồm sự kiện)
      * 
-     * @param txt <code>JTextField</code>: text filed cần tùy chỉnh
+     * @param txt {@code JTextField}: text filed cần tùy chỉnh
      */
     public void setCustomTextFieldUnFocus(JTextField txt) {
         if (txt.isEditable()) {
@@ -117,7 +117,7 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh text filed không bị vô hiệu hóa (không bao gồm sự kiện)
      * 
-     * @param txt <code>JTextField</code>: text filed cần tùy chỉnh
+     * @param txt {@code JTextField}: text filed cần tùy chỉnh
      */
     public void setCustomTextFieldOn(JTextField txt) {
         txt.setEditable(true);
@@ -132,7 +132,7 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh text filed bị vô hiệu hóa (không bao gồm sự kiện)
      * 
-     * @param txt <code>JTextField</code>: text filed cần tùy chỉnh
+     * @param txt {@code JTextField}: text filed cần tùy chỉnh
      */
     public void setCustomTextFieldOff(JTextField txt) {
         txt.setEditable(false);
@@ -147,7 +147,7 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh comboBox
      * 
-     * @param cbo <code>JComboBox</code>: comboBox cần tùy chỉnh
+     * @param cbo {@code JComboBox}: comboBox cần tùy chỉnh
      */
     public void setCustomComboBox(JComboBox<?> cbo) {
         cbo.setBorder(BORDER_BOTTOM_UN_FOCUS);
@@ -161,8 +161,8 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh text filed khi dùng kết hợp với comboBox
      * 
-     * @param cbo <code>JComboBox</code>: comboBox cần tùy chỉnh
-     * @return cbo <code>JTextField</code>: text filed đi kèm
+     * @param cbo {@code JComboBox}: comboBox cần tùy chỉnh
+     * @return {@code JTextField}: text filed đi kèm
      */
     public JTextField setCustomCBoxField(JComboBox<?> cbo) {
         JTextField boxField = (JTextField) cbo.getEditor().getEditorComponent();
@@ -179,7 +179,7 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh Spinner
      * 
-     * @param spin <code>JSpinner</code>: Spinner cần tùy chỉnh
+     * @param spin {@code JSpinner}: Spinner cần tùy chỉnh
      */
     public void setCustomSpinner(JSpinner spin) {
         spin.setFont(new Font("Dialog", Font.PLAIN, 14));

@@ -25,7 +25,7 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
 
     /**
      * Constructor form quản trị
-     * @param staff <code>NhanVien</code> : nhân viên truy cập
+     * @param staff {@code NhanVien}: nhân viên truy cập
      */
     public fQuanTri(NhanVien staff) {
         setTitle("Quản Lý Hệ Thống");
@@ -77,7 +77,7 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
      * Bắt sự kiện khi click btn close(x), sẽ show 1 form xác nhận đăng xuất hay
      * thoát chương trình
      * 
-     * @param jframe sẽ nhận sự kiện
+     * @param jframe {@code JFrame} sẽ nhận sự kiện
      */
     public void setCloseAction(JFrame jframe) {
         jframe.addWindowListener(new java.awt.event.WindowAdapter() {

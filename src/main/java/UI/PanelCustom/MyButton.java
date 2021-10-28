@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * Tạo 1 <code>JButton</code> tự tùy chỉnh theo ý muốn
+ * Tạo 1 {@code JButton} tự tùy chỉnh theo ý muốn
  */
 public class MyButton extends JButton implements MouseListener {
 	private String Label;
@@ -29,22 +29,22 @@ public class MyButton extends JButton implements MouseListener {
 	private Color colorShadowExit = new Color(215, 254, 251, 100);
 
 	/**
-	 * Tạo 1 <code>MyButton</code> mới không có tham số
+	 * Tạo 1 {@code MyButton} mới không có tham số
 	 */
 	public MyButton() {
 	}
 
 	/**
-	 * Tạo 1 <code>MyButton_1</code> mới tự động tính toán khoản các giữa icon và
-	 * chữ được hiển thị với các tham số sau:
+	 * Tạo 1 {@code MyButton} mới tự động tính toán khoản các giữa icon và chữ được
+	 * hiển thị với các tham số sau:
 	 * 
-	 * @param w         <code>int</code>: chiều dài của nút
-	 * @param h         <code>int</code>: chiều cao của nút
-	 * @param label     <code>String</code>: tên được hiển thị
-	 * @param sizeLabel <code>Dimension</code>: kích thước của label
-	 * @param icon      <code>Image</code>: icon của nút
-	 * @param sizeIcon  <code>Dimension</code>: kích thước của icon
-	 * @param gra       <code>GradientPaint</code>: màu của nút
+	 * @param w         {@code int}: chiều dài của nút
+	 * @param h         {@code int}: chiều cao của nút
+	 * @param label     {@code String}: tên được hiển thị
+	 * @param sizeLabel {@code Dimension}: kích thước của label
+	 * @param icon      {@code Image}: icon của nút
+	 * @param sizeIcon  {@code Dimension}: kích thước của icon
+	 * @param gra       {@code GradientPaint}: màu của nút
 	 */
 	public MyButton(int w, int h, String label, Dimension sizeLabel, Image icon, Dimension sizeIcon,
 			GradientPaint gra) {
@@ -72,16 +72,16 @@ public class MyButton extends JButton implements MouseListener {
 	}
 
 	/**
-	 * Tạo 1 <code>MyButton</code> mới tự động tính toán khoản các giữa icon và chữ
-	 * được hiển thị với các tham số sau:
+	 * Tạo 1 {@code MyButton} mới tự động tính toán khoản các giữa icon và chữ được
+	 * hiển thị với các tham số sau:
 	 * 
-	 * @param w      <code>int</code>: chiều dài của nút
-	 * @param h      <code>int</code>: chiều cao của nút
-	 * @param label  <code>String</code>: tên được hiển thị
-	 * @param gra    <code>GradientPaint</code>: màu của nút
-	 * @param icon   <code>Image</code>: icon của nút
-	 * @param xLabel <code>int</code>: vị trí x bắt dầu của chữ
-	 * @param yLabel <code>int</code>: vị trí y bắt dầu của chữ
+	 * @param w      {@code int}: chiều dài của nút
+	 * @param h      {@code int}: chiều cao của nút
+	 * @param label  {@code String}: tên được hiển thị
+	 * @param gra    {@code GradientPaint}: màu của nút
+	 * @param icon   {@code Image}: icon của nút
+	 * @param xLabel {@code int}: vị trí x bắt dầu của chữ
+	 * @param yLabel {@code int}: vị trí y bắt dầu của chữ
 	 */
 	public MyButton(int w, int h, String label, GradientPaint gra, Image icon, int xLabel, int yLabel) {
 		super();
@@ -108,18 +108,18 @@ public class MyButton extends JButton implements MouseListener {
 	}
 
 	/**
-	 * Tạo 1 <code>MyButton</code> mới không tự động tính toán khoản các giữa icon
-	 * và chữ được hiển thị với các tham số sau:
+	 * Tạo 1 {@code MyButton} mới không tự động tính toán khoản các giữa icon và chữ
+	 * được hiển thị với các tham số sau:
 	 * 
-	 * @param w      <code>int</code>: chiều dài của nút
-	 * @param h      <code>int</code>: chiều cao của nút
-	 * @param label  <code>String</code>: tên được hiển thị
-	 * @param gra    <code>GradientPaint</code>: màu của nút
-	 * @param icon   <code>Image</code>: icon của nút
-	 * @param xLabel <code>int</code>: vị trí x bắt dầu của chữ
-	 * @param yLabel <code>int</code>: vị trí y bắt dầu của chữ
-	 * @param xImage <code>int</code>: vị trí x bắt dầu của icon
-	 * @param yImage <code>int</code>: vị trí y bắt dầu của icon
+	 * @param w      {@code int}: chiều dài của nút
+	 * @param h      {@code int}: chiều cao của nút
+	 * @param label  {@code String}: tên được hiển thị
+	 * @param gra    {@code GradientPaint}: màu của nút
+	 * @param icon   {@code Image}: icon của nút
+	 * @param xLabel {@code int}: vị trí x bắt dầu của chữ
+	 * @param yLabel {@code int}: vị trí y bắt dầu của chữ
+	 * @param xImage {@code int}: vị trí x bắt dầu của icon
+	 * @param yImage {@code int}: vị trí y bắt dầu của icon
 	 */
 	public MyButton(int w, int h, String Label, GradientPaint gra, Image image, int xLabel, int yLabel, int xImage,
 			int yImage) {
@@ -147,20 +147,20 @@ public class MyButton extends JButton implements MouseListener {
 	}
 
 	/**
-	 * Tạo 1 <code>MyButton</code> mới không tự động tính toán khoản các giữa icon
-	 * và chữ được hiển thị với các tham số sau:
+	 * Tạo 1 {@code MyButton} mới không tự động tính toán khoản các giữa icon và chữ
+	 * được hiển thị với các tham số sau:
 	 * 
-	 * @param w                  <code>int</code>: chiều dài của nút
-	 * @param h                  <code>int</code>: chiều cao của nút
-	 * @param label              <code>String</code>: tên được hiển thị
-	 * @param gra                <code>GradientPaint</code>: màu của nút
-	 * @param icon               <code>Image</code>: icon của nút
-	 * @param xLabel             <code>int</code>: vị trí x bắt dầu của chữ
-	 * @param yLabel             <code>int</code>: vị trí y bắt dầu của chữ
-	 * @param xImage             <code>int</code>: vị trí x bắt dầu của icon
-	 * @param yImage             <code>int</code>: vị trí y bắt dầu của icon
-	 * @param colorShadowDefault <code>Color</code>: Màu đổi bóng mặc định
-	 * @param colorFontDefault   <code>Color</code>: Màu đổi chữ mặc định
+	 * @param w                  {@code int}: chiều dài của nút
+	 * @param h                  {@code int}: chiều cao của nút
+	 * @param label              {@code String}: tên được hiển thị
+	 * @param gra                {@code GradientPaint}: màu của nút
+	 * @param icon               {@code Image}: icon của nút
+	 * @param xLabel             {@code int}: vị trí x bắt dầu của chữ
+	 * @param yLabel             {@code int}: vị trí y bắt dầu của chữ
+	 * @param xImage             {@code int}: vị trí x bắt dầu của icon
+	 * @param yImage             {@code int}: vị trí y bắt dầu của icon
+	 * @param colorShadowDefault {@code Color}: Màu đổi bóng mặc định
+	 * @param colorFontDefault   {@code Color}: Màu đổi chữ mặc định
 	 */
 	public MyButton(int w, int h, String Label, GradientPaint gra, Image image, int xLabel, int yLabel, int xImage,
 			int yImage, Color colorShadowDefault, Color colorFontDefault) {
@@ -256,7 +256,7 @@ public class MyButton extends JButton implements MouseListener {
 	/**
 	 * thay đổi màu đổ bóng của nút khi nhấn vào
 	 * 
-	 * @param color <code>Color</code>: màu cần thay đổi
+	 * @param color {@code Color}: màu cần thay đổi
 	 */
 	public void setColorShadowPress(Color color) {
 		this.colorShadowPress = color;
@@ -265,7 +265,7 @@ public class MyButton extends JButton implements MouseListener {
 	/**
 	 * thay đổi màu đổ bóng của nút khi nhấn thả ra
 	 * 
-	 * @param color <code>Color</code>: màu cần thay đổi
+	 * @param color {@code Color}: màu cần thay đổi
 	 */
 	public void setColorShadowExit(Color color) {
 		this.colorShadowExit = color;
@@ -274,7 +274,7 @@ public class MyButton extends JButton implements MouseListener {
 	/**
 	 * thay đổi màu chữ khi đưa chuột lên nút
 	 * 
-	 * @param color <code>Color</code>: màu cần thay đổi
+	 * @param color {@code Color}: màu cần thay đổi
 	 */
 	public void setColorHover(Color color) {
 		this.colorFontHover = color;
@@ -283,7 +283,7 @@ public class MyButton extends JButton implements MouseListener {
 	/**
 	 * thay đổi màu chữ khi đưa chuột ra khỏi nút
 	 * 
-	 * @param color <code>Color</code>: màu cần thay đổi
+	 * @param color {@code Color}: màu cần thay đổi
 	 */
 	public void setColorExit(Color color) {
 		this.colorFontExit = color;
@@ -292,7 +292,7 @@ public class MyButton extends JButton implements MouseListener {
 	/**
 	 * Thay đổi font chữ của nút
 	 * 
-	 * @param font <code>FOnt</code>: font chữ cần thay đổi
+	 * @param font {@code Font} font chữ cần thay đổi
 	 */
 	public void setFontCustom(Font font) {
 		this.font = font;
@@ -301,8 +301,11 @@ public class MyButton extends JButton implements MouseListener {
 	/**
 	 * Thay đổi trạng thái vô hiện hóa của nút
 	 * 
-	 * @param enabled <code>boolean</code> <code>true</code> nút có thể sử dụng,
-	 *                <code>false</code> nếu nút bị vô hiệu hóa
+	 * @param enabled {@code boolean}
+	 *                <ul>
+	 *                <li>{@code true} nút có thể sử dụng</li>
+	 *                <li>{@code false} nếu nút bị vô hiệu hóa</li>
+	 *                </ul>
 	 */
 	public void setEnabledCustom(boolean enabled) {
 		this.enabled = enabled;

@@ -37,7 +37,7 @@ public class PnDichVu extends JFrame
 	/**
 	 * Constructor mặc định của panel Dịch vụ
 	 * 
-	 * @param staff <code>NhanVien</code>: nhân viên truy cập
+	 * @param staff {@code NhanVien}: nhân viên truy cập
 	 */
 	public PnDichVu(NhanVien staff) {
 		this.staffLogin = staff;
@@ -495,7 +495,7 @@ public class PnDichVu extends JFrame
 	/**
 	 * chuyển đổi thông tin trong form thành đối tượng DichVu
 	 * 
-	 * @return <code>DichVu</code>: dịch vụ
+	 * @return {@code DichVu}: dịch vụ
 	 */
 	private DichVu getServiceDataInForm() {
 		String serviceID = txtServiceID.getText().trim();
@@ -518,7 +518,11 @@ public class PnDichVu extends JFrame
 	/**
 	 * Kiểm tra thông tin trong form
 	 * 
-	 * @return <code>boolean</code>: true nếu hợp lê, false nếu không hợp lệ
+	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra thông tin
+     *         <ul>
+     *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+     *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+     *         </ul>
 	 */
 	private boolean validData() {
 		boolean valid = ValidationData.getInstance().ValidName(this, txtServiceName, "Tên dịch vụ", 100, 0);
@@ -531,7 +535,7 @@ public class PnDichVu extends JFrame
 	/**
 	 * Tự động tạo mã dịch vụ mới tăng theo thứ tự tăng dần
 	 * 
-	 * @return <code>String</code>: mã dịch vụ mới
+	 * @return {@code String}: mã dịch vụ mới
 	 */
 	private String createNewServiceID() {
 		String lastServiceId = DichVuDAO.getInstance().getLastServiceID();
@@ -556,8 +560,8 @@ public class PnDichVu extends JFrame
 	/**
 	 * Thêm khoảng trắng vào trước và sao chuỗi được truyền vào
 	 * 
-	 * @param str <code>String</code>: chuỗi cần xử lý
-	 * @return <code>String</code>: chuỗi đã xử lý
+	 * @param str {@code String}: chuỗi cần xử lý
+	 * @return {@code String}: chuỗi đã xử lý
 	 */
 	private String addSpaceToString(String str) {
 		return " " + str + " ";
@@ -566,8 +570,8 @@ public class PnDichVu extends JFrame
 	/**
 	 * Thêm dòng vào danh sách dịch vụ đang hiển thị
 	 * 
-	 * @param stt     số thứ tự
-	 * @param service <code>DichVu</code>: dịch vụ cần được thêm
+	 * @param stt   {@code int}: số thứ tự
+	 * @param service {@code DichVu}: dịch vụ cần được thêm
 	 */
 	private void addRow(int stt, DichVu service) {
 		String sttStr = df.format(stt);
@@ -583,8 +587,8 @@ public class PnDichVu extends JFrame
 	/**
 	 * Cập nhật thông tin một dòng khi biết dòng mà thông tin dịch vụ
 	 * 
-	 * @param selectedRow <code>Int</code>: dòng được chọn
-	 * @param service     <code>DichVu</code: dịch vụ cần cập nhật
+	 * @param selectedRow {@code int}: dòng được chọn
+	 * @param service     {@code DichVu}: dịch vụ cần cập nhật
 	 */
 	private void updateRow(int selectedRow, DichVu service) {
 		String priceStr = df.format(service.getGiaBan());
@@ -600,7 +604,7 @@ public class PnDichVu extends JFrame
 	/**
 	 * Hiển thị danh sách dịch vụ
 	 * 
-	 * @param serviceList <code>ArrayList DichVu </code>: danh sách dịch vụ
+	 * @param serviceList {@code ArrayList<DichVu>}: danh sách dịch vụ
 	 */
 	private void loadServiceList(ArrayList<DichVu> serviceList) {
 		modelTableService.getDataVector().removeAllElements();
@@ -614,7 +618,7 @@ public class PnDichVu extends JFrame
 	/**
 	 * Hiển thị danh sách dịch vụ vào comboBox
 	 * 
-	 * @param serviceTypeList <code>ArrayList DichVu </code>: danh sách dịch vụ
+	 * @param serviceTypeList {@code ArrayList<DichVu>}: danh sách dịch vụ
 	 */
 	private void loadServiceTypeList(ArrayList<LoaiDichVu> serviceTypeList) {
 		cboServiceType.removeAllItems();

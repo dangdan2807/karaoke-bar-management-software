@@ -15,6 +15,11 @@ public class NhanVienDAO {
         return instance;
     }
 
+    /**
+     * Lấy danh sách tất cả khách hàng
+     * 
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     */
     public ArrayList<NhanVien> getStaffList() {
         String query = "{CALL USP_getStaffList}";
         Object[] parameter = new Object[] {};
@@ -30,6 +35,16 @@ public class NhanVienDAO {
         return staffList;
     }
 
+    /**
+     * Lấy thông tin nhân viên theo tên đăng nhập
+     * 
+     * @param username {@code String}: tên đăng nhập
+     * @return {@code NhanVien}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code NhanVien}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
+     *         </ul>
+     */
     public NhanVien getStaffByUsername(String username) {
         String query = "{CALL USP_getNhanVienByTenDangNhap( ? )}";
         Object[] parameter = new Object[] { username };
@@ -45,6 +60,16 @@ public class NhanVienDAO {
         return staff;
     }
 
+    /**
+     * Lấy thông tin nhân viên theo mã nhân viên
+     * 
+     * @param maNhanVien {@code String}: mã nhân viên
+     * @return {@code NhanVien}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code NhanVien}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
+     *         </ul>
+     */
     public NhanVien getStaffByStaffID(String maNhanVien) {
         String query = "{CALL USP_getStaffByStaffID( ? )}";
         Object[] parameter = new Object[] { maNhanVien };
@@ -60,14 +85,15 @@ public class NhanVienDAO {
         return staff;
     }
 
-    public boolean updateTTNhanVien(NhanVien nhanVien) {
-        String query = "{CALL UPS_updateAccount ( ? , ? , ? , ? )}";
-        Object[] parameter = new Object[] {};
-        Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
-        int result = obj != null ? result = (int) obj : 0;
-        return result > 0;
-    }
-
+    /**
+     * Lấy mã nhân viên mới nhất
+     * 
+     * @return {@code String}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code mã nhân viên mới nhất}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code ""}</li>
+     *         </ul>
+     */
     public String getLastStaffID() {
         String query = "{CALL USP_getLastStaffID}";
         Object obj = DataProvider.getInstance().ExecuteScalar(query, null);
@@ -75,6 +101,16 @@ public class NhanVienDAO {
         return staffID;
     }
 
+    /**
+     * Thêm mới nhân viên
+     * 
+     * @param staff {@code NhanVien}: nhân viên cần thêm
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thành công thì trả về {@code true}</li>
+     *         <li>Nếu thất bại thì trả về {@code false}</li>
+     *         </ul>
+     */
     public boolean insertStaff(NhanVien staff) {
         String query = "{CALL USP_insertStaff( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )}";
         Object[] parameter = new Object[] { staff.getMaNhanVien(), staff.getCmnd(), staff.getHoTen(),
@@ -85,6 +121,16 @@ public class NhanVienDAO {
         return result > 0;
     }
 
+    /**
+     * Cập nhật thông tin nhân viên
+     * 
+     * @param staff {@code NhanVien}: nhân viên cần cập nhật
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thành công thì trả về {@code true}</li>
+     *         <li>Nếu thất bại thì trả về {@code false}</li>
+     *         </ul>
+     */
     public Boolean updateInfoStaff(NhanVien staff) {
         String query = "{CALL USP_updateInfoStaff( ? , ? , ? , ? , ? , ? , ? , ? , ? )}";
         Object[] parameter = new Object[] { staff.getMaNhanVien(), staff.getCmnd(), staff.getHoTen(),
@@ -95,6 +141,12 @@ public class NhanVienDAO {
         return result > 0;
     }
 
+    /**
+     * Lấy danh sách nhân viên dự theo chức vụ
+     * 
+     * @param position {@code String}: chức vụ nhân viên cần tìm
+     * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
+     */
     public ArrayList<NhanVien> getStaffListByPosition(String position) {
         String query = "{CALL USP_getStaffListByPosition( ? )}";
         Object[] parameter = new Object[] { position };
@@ -110,6 +162,12 @@ public class NhanVienDAO {
         return staffList;
     }
 
+    /**
+     * Lấy danh sách nhân viên dự theo tên nhân viên
+     * 
+     * @param staffName {@code String}: tên nhân viên cần tìm
+     * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
+     */
     public ArrayList<NhanVien> getStaffListByStaffName(String staffName) {
         String query = "{CALL USP_getStaffListByStaffName( ? )}";
         Object[] parameter = new Object[] { staffName };
@@ -125,6 +183,12 @@ public class NhanVienDAO {
         return staffList;
     }
 
+    /**
+     * Lấy danh sách nhân viên dự theo số điện thoại
+     * 
+     * @param phoneNumber {@code String}: số điện thoại cần tìm
+     * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
+     */
     public ArrayList<NhanVien> getStaffListByPhoneNumber(String phoneNumber) {
         String query = "{CALL USP_getStaffListByPhoneNumber( ? )}";
         Object[] parameter = new Object[] { phoneNumber };
@@ -140,6 +204,16 @@ public class NhanVienDAO {
         return staffList;
     }
 
+    /**
+     * Lấy tên nhân viên dựa trên mã nhân viên
+     * 
+     * @param staffId {@code String}: mã nhân viên cần tìm
+     * @return {@code String}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code tên nhân viên}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code ""}</li>
+     *         </ul>
+     */
     public String getStaffNameById(String staffId) {
         String query = "{CALL USP_getStaffNameById( ? )}";
         Object[] parameter = new Object[] { staffId };

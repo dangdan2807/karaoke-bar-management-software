@@ -15,6 +15,17 @@ public class HoaDonDAO {
         return instance;
     }
 
+    /**
+     * Lấy hóa đơn chưa tính tiền dựa trên mã phòng
+     * 
+     * @param maPhong {@code String}: mã phòng
+     * @return {@code HoaDon}: hóa đơn
+     *         <ul>
+     *         <li>Nếu tìm thấy hóa đơn thì trả về {@code HoaDon}</li>
+     *         <li>Nếu không tìm thấy hóa đơn thì trả về {@code HoaDon có mã hóa
+     *         đơn = -1}</li>
+     *         </ul>
+     */
     public HoaDon getUncheckHoaDonByMaPhong(String maPhong) {
         String query = "{CALL USP_getUncheckHoaDonByMaPhong ( ? )}";
         Object[] parameter = new Object[] { maPhong };
@@ -30,6 +41,17 @@ public class HoaDonDAO {
         return data != null ? data : new HoaDon(-1);
     }
 
+    /**
+     * Lấy hóa đơn dựa trên mã hóa đơn
+     * 
+     * @param maHoaDon {@code int}: mã hóa đơn
+     * @return {@code HoaDon}: hóa đơn
+     *         <ul>
+     *         <li>Nếu tìm thấy hóa đơn thì trả về {@code HoaDon}</li>
+     *         <li>Nếu không tìm thấy hóa đơn thì trả về {@code HoaDon có mã hóa
+     *         đơn = -1}</li>
+     *         </ul>
+     */
     public HoaDon getHoaDonByMaHD(int maHoaDon) {
         String query = "{CALL USP_getHoaDonByMaHD ( ? )}";
         Object[] parameter = new Object[] { maHoaDon };
@@ -48,13 +70,32 @@ public class HoaDonDAO {
         return new HoaDon(-1);
     }
 
+    /**
+     * Lấy mã hóa đơn mới nhất
+     * 
+     * @return {@code int}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code mã hóa đơn}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code -1}</li>
+     *         </ul>
+     */
     public int getMaHDCuoiCung() {
         String query = "{CALL USP_getMaHDCuoiCung}";
         Object obj = DataProvider.getInstance().ExecuteScalar(query, null);
-        int billID = obj != null ? billID = (int) obj : 0;
+        int billID = obj != null ? billID = (int) obj : -1;
         return billID;
     }
 
+    /**
+     * Thêm hóa đơn mới
+     * 
+     * @param hoaDon {@code HoaDon}: hóa đơn cần thêm
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thêm thành công thì trả về {@code true}</li>
+     *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
+     *         </ul>
+     */
     public boolean themHoaDon(HoaDon hoaDon) {
         String query = "{CALL USP_themHoaDon ( ? , ? , ? , ? )}";
         Object[] parameter = new Object[] { hoaDon.getNgayGioDat(), hoaDon.getNhanVien().getMaNhanVien(),
@@ -63,6 +104,18 @@ public class HoaDonDAO {
         return result > 0;
     }
 
+    /**
+     * Thanh toán hóa đơn
+     * 
+     * @param maHoaDon   {@code int}: mã hóa đơn
+     * @param ngayGioTra {@code Timestamp}: ngày giờ thanh toán
+     * @param tongTien   {@code int}: tổng tiền thanh toán
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thêm thành công thì trả về {@code true}</li>
+     *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
+     *         </ul>
+     */
     public boolean thanhToan(int maHoaDon, Timestamp ngayGioTra, Double tongTien) {
         String query = "{CALL USP_thanhToanHD( ? , ? , ? )}";
         Object[] param = new Object[] { maHoaDon, ngayGioTra, tongTien };

@@ -19,8 +19,7 @@ public class KhachHangDAO {
     /**
      * Lấy ra danh sách tất cả khách hàng
      * 
-     * @param
-     * @return
+     * @return {@code ArrayList<KhachHang>} : danh sách khách hàng
      */
     public ArrayList<KhachHang> getDSKhachHang() {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
@@ -39,8 +38,8 @@ public class KhachHangDAO {
     /**
      * Lấy ra danh sách tất cả khách hàng có mã khách hàng phù hợp điều kiện
      * 
-     * @param maKH mã khách hàng
-     * @return ArrayList<KhachHang> danh sách khách hàng
+     * @param maKH {@code String}: mã khách hàng
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
     public ArrayList<KhachHang> getDSKhachHangByMaKH(String maKH) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
@@ -60,8 +59,8 @@ public class KhachHangDAO {
     /**
      * Lấy ra danh sách tất cả khách hàng có tên khách hàng phù hợp điều kiện
      * 
-     * @param tenKH tên khách hàng
-     * @return ArrayList<KhachHang> danh sách khách hàng
+     * @param tenKH {@code String}: tên khách hàng
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
     public ArrayList<KhachHang> getDSKhachHangByTenKH(String tenKH) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
@@ -82,8 +81,8 @@ public class KhachHangDAO {
      * Lấy ra danh sách tất cả khách hàng có số điện thoại của khách hàng phù hợp
      * điều kiện
      * 
-     * @param sdtKH số điện thoại của khách hàng
-     * @return ArrayList<KhachHang> danh sách khách hàng
+     * @param sdtKH {@code String}: số điện thoại của khách hàng
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
     public ArrayList<KhachHang> getDSKhachHangBySDT(String sdtKH) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
@@ -103,7 +102,7 @@ public class KhachHangDAO {
     /**
      * Lấy ra danh sách tất cả khách hàng chưa đặt phòng
      * 
-     * @return ArrayList<KhachHang> danh sách khách hàng chưa đặt phòng
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng chưa đặt phòng
      */
     public ArrayList<KhachHang> getDSKhachHangChuaDatPhong() {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
@@ -119,6 +118,16 @@ public class KhachHangDAO {
         return dataList;
     }
 
+    /**
+     * Lấy thông tin khách hàng theo mã khách hàng
+     * 
+     * @param maKH {@code String}: mã khách hàng
+     * @return {@code KhachHang}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code KhachHang}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
+     *         </ul>
+     */
     public KhachHang getKhachHangByMaKH(String maKH) {
         KhachHang data = null;
         String query = "{CALL USP_getCustomerById( ? )}";
@@ -134,6 +143,16 @@ public class KhachHangDAO {
         return data;
     }
 
+    /**
+     * Thêm khách hàng mới
+     * 
+     * @param khachHang {@code KhachHang}: khách hàng cần thêm
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thêm thành công thì trả về {@code true}</li>
+     *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
+     *         </ul>
+     */
     public boolean themKhachHang(KhachHang khachHang) {
         String query = "INSERT INTO dbo.KhachHang (maKH, cmnd, hoTen, gioiTinh, soDienThoai, ngaySinh) "
                 + "VALUES ( ? , ? , ? , ? , ? , ? )";
@@ -144,6 +163,15 @@ public class KhachHangDAO {
         return result > 0;
     }
 
+    /**
+     * Lấy thông tin khách hàng được thêm mới nhất
+     * 
+     * @return {@code String}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code mã khách hàng}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code ""}</li>
+     *         </ul>
+     */
     public String getMaKHCuoiCung() {
         String query = "SELECT TOP 1 * FROM dbo.KhachHang ORDER BY maKH DESC";
         Object[] parameter = new Object[] {};
@@ -152,6 +180,16 @@ public class KhachHangDAO {
         return result;
     }
 
+    /**
+     * Cập nhật thông tin khách hàng
+     * 
+     * @param khachHang {@code khachHang}: khách hàng cần cập nhật
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu cập nhật thành công thì trả về {@code true}</li>
+     *         <li>Nếu cập nhật thất bại thì trả về {@code false}</li>
+     *         </ul>
+     */
     public boolean capNhatTTKhachHang(KhachHang khachHang) {
         String query = "Update dbo.KhachHang set cmnd = ? , hoTen = ? , gioiTinh = ? , soDienThoai = ? , "
                 + "ngaySinh = ? , Where maKH = ?";

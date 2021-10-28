@@ -1050,15 +1050,15 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getDSPhongTrongTheoLoaiPhong
-    @loaiPhong NVARCHAR(100)
+CREATE PROC USP_getDSPhongTrongTheoTenLoaiPhong
+    @tenLoaiPhong NVARCHAR(100)
 AS
 BEGIN
     SELECT p.maPhong, p.tinhTrangP, p.viTri,
         lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
-        AND lp.tenLP = @loaiPhong
+        AND lp.tenLP = @tenLoaiPhong
         AND p.tinhTrangP = 0
 END
 GO

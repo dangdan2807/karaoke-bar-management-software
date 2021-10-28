@@ -17,7 +17,7 @@ public class LoaiPhongDAO {
     /**
      * Lấy danh sách tất cả loại phòng
      * 
-     * @return <code>ArrayList - LoaiPhong</code>: danh sách loại phòng
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
      */
     public ArrayList<LoaiPhong> getDSLoaiPhong() {
         ArrayList<LoaiPhong> dataList = new ArrayList<LoaiPhong>();
@@ -36,8 +36,12 @@ public class LoaiPhongDAO {
     /**
      * Lấy tên loại phòng theo mã loại phòng
      * 
-     * @param maPhong <code>String</code>: mã loại phòng
-     * @return <code>String</code>: tên loại phòng
+     * @param maPhong {@code String}: mã loại phòng
+     * @return {@code String}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code tên loại phòng}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code ""}</li>
+     *         </ul>
      */
     public String getTenLPbyMaPhong(String maPhong) {
         String query = "{CALL USP_getTenLPbyMaPhong( ? )}";
@@ -50,9 +54,8 @@ public class LoaiPhongDAO {
     /**
      * Lấy danh sách loại phòng có tên phù hợp với từ khóa
      * 
-     * @param roomTypeName <code>String</code>: từ khóa trong tên loại phòng
-     * @return <code>ArrayList - LoaiPhong</code>: danh sách loại phòng phù hợp điều
-     *         kiện
+     * @param roomTypeName {@code String}: từ khóa trong tên loại phòng
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng phù hợp điều kiện
      */
     public ArrayList<LoaiPhong> getRoomTypeListByName(String roomTypeName) {
         String query = "{CALL USP_getRoomTypeListByName( ? )}";
@@ -72,7 +75,11 @@ public class LoaiPhongDAO {
     /**
      * Lấy mã loại phòng được thêm mới nhất
      * 
-     * @return <code>String</code>: mã loại phòng mới nhất được thêm vào
+     * @return {@code String}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code mã loại phòng}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code ""}</li>
+     *         </ul>
      */
     public String getLastRoomTypeId() {
         String query = "{CALL USP_getLastRoomTypeId}";
@@ -84,8 +91,12 @@ public class LoaiPhongDAO {
     /**
      * Lấy thông tin loại phòng dựa theo mã phòng
      * 
-     * @param roomTypeId <code>String</code>: mã loại phòng
-     * @return <code>LoaiPhong</code>: loại phòng được tìm thấy
+     * @param roomTypeId {@code String}: mã loại phòng
+     * @return {@code LoaiPhong}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code LoaiPhong}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
+     *         </ul>
      */
     public LoaiPhong getRoomTypeById(String roomTypeId) {
         LoaiPhong data = null;
@@ -104,9 +115,12 @@ public class LoaiPhongDAO {
     /**
      * Thêm một loại phòng mới vào cơ sở dữ liệu
      * 
-     * @param roomType <code>LoaiPhong</code>: loại phòng cần thêm
-     * @return <code>boolean</code>: <code>true</code> thành công,
-     *         <code>false</code> nếu thất bại
+     * @param roomType {@code LoaiPhong}: loại phòng cần thêm
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thêm thành công thì trả về {@code true}</li>
+     *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
+     *         </ul>
      */
     public Boolean insertRoomType(LoaiPhong roomType) {
         String query = "{CALL USP_insertRoomType( ? , ? , ? , ? )}";
@@ -120,9 +134,12 @@ public class LoaiPhongDAO {
     /**
      * Cập nhật thông tin loại phòng
      * 
-     * @param roomType <code>LoaiPhong</code>: loại phòng cần cập nhật
-     * @return <code>boolean</code>: <code>true</code> thành công,
-     *         <code>false</code> nếu thất bại
+     * @param roomType {@code LoaiPhong}: loại phòng cần cập nhật
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thêm thành công thì trả về {@code true}</li>
+     *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
+     *         </ul>
      */
     public Boolean updateInfoRoomType(LoaiPhong roomType) {
         String query = "{CALL USP_updateInfoRoomType( ? , ? , ? , ? )}";
@@ -136,9 +153,8 @@ public class LoaiPhongDAO {
     /**
      * Lấy danh sách loại phòng có tên phù hợp với từ khóa
      * 
-     * @param roomTypeName <code>String</code>: từ khóa trong tên loại phòng
-     * @return <code>ArrayList - LoaiPhong</code>: danh sách loại phòng phù hợp điều
-     *         kiện
+     * @param roomTypeName {@code String}: từ khóa trong tên loại phòng
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng phù hợp điều kiện
      */
     public ArrayList<LoaiPhong> getRoomTypeListByPrice(String price) {
         String query = "{CALL USP_getRoomTypeListByPrice( ? )}";

@@ -13,8 +13,7 @@ import java.text.*;
 import java.sql.Date;
 
 /**
- * <code>kDatePicker</code> dùng để tạo 1 <code>JPanel</code> có thể dùng để
- * chọn ngày
+ * {@code kDatePicker} dùng để tạo 1 {@code JPanel} có thể dùng để chọn ngày
  */
 public class kDatePicker extends JPanel implements ActionListener, MouseListener {
     private JTextField txt;
@@ -41,8 +40,8 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * Constructor với 2 tham số
      * 
-     * @param width  <code>int</code>: chiều dài được hiển thị
-     * @param height <code>int</code>: chiều cao được hiển thị
+     * @param width  {@code int}: chiều dài được hiển thị
+     * @param height {@code int}: chiều cao được hiển thị
      */
     public kDatePicker(int width, int height) {
         setLayout(null);
@@ -59,7 +58,6 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
         txt = new JTextField();
         txt.setBounds(0, 0, widthDefault - 30, heightDefault);
         txt.setEditable(false);
-        // txt.setBorder(border);
         txt.setText(DialogDatePicker.getToDay());
         txt.setBackground(backgroundColor);
 
@@ -125,8 +123,11 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * Làm mờ date picker
      * 
-     * @param opaque <code>boolean</code>: <code>true</code> giá trị mặc đinh -
-     *               không làm mờ <code>false</code> làm mờ
+     * @param opaque {@code boolean}:
+     *               <ul>
+     *               <li>{@code true} (giá trị mặc đinh) không làm mờ</li>
+     *               <li>{@code false} làm mờ</li>
+     *               </ul>
      */
     public void setOpaqueCustom(Boolean opaque) {
         this.setOpaque(opaque);
@@ -135,7 +136,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * Thêm tooltip vào khi hover chuột lên date Date Picker
      * 
-     * @param text <code>String</code>: nội dung cần hiển thị
+     * @param text {@code String}: nội dung cần hiển thị
      */
     public void setToolTipTextCustom(String text) {
         txt.setToolTipText(text);
@@ -144,7 +145,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * Thay đổi màu chữ
      * 
-     * @param color <code>Color</code>: màu cần thay đổi
+     * @param color {@code Color}: màu cần thay đổi
      */
     public void setForegroundCustom(Color color) {
         txt.setForeground(color);
@@ -153,7 +154,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * Thay đổi màu nền
      * 
-     * @param color <code>Color</code>: màu cần thay đổi
+     * @param color {@code Color}: màu cần thay đổi
      */
     public void setBackgroundColor(Color color) {
         txt.setBackground(color);
@@ -162,16 +163,16 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * Thay đổi viền
      * 
-     * @param border <code>Border</code>: border cần thay đổi
+     * @param border {@code Border}: border cần thay đổi
      */
     public void setBorderCustom(Border border) {
         txt.setBorder(border);
     }
 
     /**
-     * Lấy TextField của DatePicker
+     * Lấy {@code JTextField} của DatePicker
      * 
-     * @return <code>JTextField</code> Trả về TextField của DatePicker
+     * @return {@code JTextField}: Trả về {@code JTextField} của DatePicker
      */
     public JTextField getTextFieldCustom() {
         return txt;
@@ -180,7 +181,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * Thay đổi font chữ
      * 
-     * @param font <code>Font</code> font cần thay đổi
+     * @param font {@code Font}: font cần thay đổi
      */
     public void setFontCustom(Font font) {
         txt.setFont(font);
@@ -189,16 +190,16 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * Trả về ngày được hiển thị dạng chuỗi
      * 
-     * @return <code>String</code>: ngày được hiển thị
+     * @return {@code String}: ngày được hiển thị
      */
     public String getValue() {
         return txt.getText();
     }
 
     /**
-     * Trả về ngày được hiển thị dạng <code>java.sql.Date</code>
+     * Trả về ngày được hiển thị dạng {@code java.sql.Date}
      * 
-     * @return <code>java.sql.Date</code>: trả bề ngày được hiển thị
+     * @return {@code java.sql.Date}: trả bề ngày được hiển thị
      */
     public Date getValueSqlDate() {
         String strDate = txt.getText().trim();
@@ -223,7 +224,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * Lấy ngày hiện tại
      * 
-     * @return <code>java.sql.Date</code>: ngày hiện tại
+     * @return {@code java.sql.Date}: ngày hiện tại
      * @throws ParseException
      */
     public Date getValueToDay() {
@@ -240,9 +241,9 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     }
 
     /**
-     * Cập nhật giá trị với giá trị đầu vào là một <code>java.sql.Date</code>
+     * Cập nhật giá trị với giá trị đầu vào là một {@code java.sql.Date}
      * 
-     * @param date <code>java.sql.Date</code>: ngày cần cập nhật
+     * @param date {@code java.sql.Date}: ngày cần cập nhật
      */
     public void setValue(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -250,7 +251,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     }
 
     /**
-     * Cập nhật giá trị với đầu vào là 1 chuỗi (<code>String</code>)
+     * Cập nhật giá trị với đầu vào là 1 chuỗi ({@code String})
      */
     public void setValue(String strDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -264,9 +265,9 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     }
 
     /**
-     * Lấy ra giá trị ngày dưới dạng <code>java.sql.Date</code>
+     * Lấy ra giá trị ngày dưới dạng {@code java.sql.Date}
      * 
-     * @return <code>java.sql.Date</code> ngày được trả về
+     * @return {@code java.sql.Date} ngày được trả về
      */
     public Date getFullDate() {
         String strDate = txt.getText();
@@ -284,7 +285,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * lấy ra ngày được hiển thị
      * 
-     * @return <code>int</code>: ngày được trả về
+     * @return {@code int}: ngày được trả về
      */
     public int getDay() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
@@ -295,7 +296,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * lấy ra tháng được hiển thị
      * 
-     * @return <code>int</code>: tháng được trả về
+     * @return {@code int}: tháng được trả về
      */
     public int getMonth() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM");
@@ -306,7 +307,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     /**
      * lấy ra năm được hiển thị
      * 
-     * @return <code>int</code>: năm được trả về
+     * @return {@code int}: năm được trả về
      */
     public int getYear() {
         SimpleDateFormat sdf = new SimpleDateFormat("yy");
