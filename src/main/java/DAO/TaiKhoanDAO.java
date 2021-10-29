@@ -20,8 +20,8 @@ public class TaiKhoanDAO {
      * 
      * @return {@code ArrayList<TaiKhoan>}: danh sách tài khoản
      */
-    public ArrayList<TaiKhoan> getDSTaiKhoan() {
-        String query = "{CALL USP_getAccountList()}";
+    public ArrayList<TaiKhoan> getAccountList() {
+        String query = "{CALL USP_getAccountList}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         ArrayList<TaiKhoan> dataList = new ArrayList<TaiKhoan>();
         try {
@@ -45,7 +45,7 @@ public class TaiKhoanDAO {
      *         <li>Nếu thất bại thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean dangNhap(String username, String password) {
+    public boolean login(String username, String password) {
         int count = 0;
         String query = "{CALL USP_Login ( ?, ? )}";
         Object[] parameter = new Object[] { username, password };

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entity.NhanVien;
+import entity.TaiKhoan;
 
 public class NhanVienDAO {
     private static NhanVienDAO instance = new NhanVienDAO();
@@ -46,7 +47,7 @@ public class NhanVienDAO {
      *         </ul>
      */
     public NhanVien getStaffByUsername(String username) {
-        String query = "{CALL USP_getNhanVienByTenDangNhap( ? )}";
+        String query = "{CALL USP_getStaffByUsername( ? )}";
         Object[] parameter = new Object[] { username };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         NhanVien staff = null;
@@ -136,6 +137,27 @@ public class NhanVienDAO {
         Object[] parameter = new Object[] { staff.getMaNhanVien(), staff.getCmnd(), staff.getHoTen(),
                 staff.getNgaySinh(), staff.getSoDienThoai(), staff.getChucVu(), staff.getMucLuong(),
                 staff.getTrangThaiNV(), staff.getGioiTinh() };
+        Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        int result = obj != null ? result = (int) obj : 0;
+        return result > 0;
+    }
+
+    /**
+     * Cập nhật thông tin nhân viên và mật khẩu
+     * 
+     * @param staff {@code NhanVien}: nhân viên cần cập nhật
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thành công thì trả về {@code true}</li>
+     *         <li>Nếu thất bại thì trả về {@code false}</li>
+     *         </ul>
+     */
+    public Boolean updateInfoStaffAndAccount(NhanVien staff) {
+        String query = "{CALL USP_updateInfoStaffAndAccount( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )}";
+        TaiKhoan taiKhoan = staff.getTaiKhoan();
+        Object[] parameter = new Object[] { staff.getMaNhanVien(), staff.getCmnd(), staff.getHoTen(),
+                staff.getNgaySinh(), staff.getSoDienThoai(), staff.getChucVu(), staff.getMucLuong(),
+                staff.getTrangThaiNV(), staff.getGioiTinh(), taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau() };
         Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         int result = obj != null ? result = (int) obj : 0;
         return result > 0;

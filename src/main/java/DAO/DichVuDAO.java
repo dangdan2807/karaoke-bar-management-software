@@ -78,17 +78,17 @@ public class DichVuDAO {
     /**
      * Lấy dịch vụ theo tên dịch vụ
      * 
-     * @param tenDichVu {@code int}: tên dịch vụ
+     * @param serviceName {@code int}: tên dịch vụ
      * @return {@code DichVu}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu tìm thấy thì trả về {@code DichVu}</li>
      *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
      *         </ul>
      */
-    public DichVu getDichVuByTenDichVu(String tenDichVu) {
+    public DichVu getServiceByName(String serviceName) {
         DichVu data = null;
-        String query = "{CALL USP_getDichVuByTenDichVu( ? )}";
-        Object[] parameter = new Object[] { tenDichVu };
+        String query = "{CALL USP_getServiceByName( ? )}";
+        Object[] parameter = new Object[] { serviceName };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             if (rs.next())
@@ -102,16 +102,16 @@ public class DichVuDAO {
     /**
      * Lấy số lượng tồn của dịch vụ bằng tên dịch vụ
      * 
-     * @param tenDichVu {@code String}: tên dịch vụ
+     * @param serviceName {@code String}: tên dịch vụ
      * @return {@code int}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu tìm thấy thì trả về {@code số lượng tồn của dịch vụ}</li>
      *         <li>Nếu không tìm thấy thì trả về {@code 0} 0</li>
      *         </ul>
      */
-    public int getSLDVuConByTenDichVu(String tenDichVu) {
-        String query = "{CALL USP_getSLDVuConByTenDichVu( ? )}";
-        Object[] parameter = new Object[] { tenDichVu };
+    public int getQuantityByServiceName(String serviceName) {
+        String query = "{CALL USP_getQuantityByServiceName( ? )}";
+        Object[] parameter = new Object[] { serviceName };
         Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
         int result = obj != null ? result = (int) obj : 0;
         return result;
@@ -120,34 +120,13 @@ public class DichVuDAO {
     /**
      * Lấy danh sách dịch vụ theo tên dịch vụ
      * 
-     * @param tenDichVu {@code String}: tên dịch vụ
+     * @param serviceName {@code String}: tên dịch vụ
      * @return {@code ArrayList<DichVu>}: danh sách dịch vụ
      */
-    public ArrayList<DichVu> getDSDichVuByTenDichVu(String tenDichVu) {
+    public ArrayList<DichVu> getServiceListByName(String serviceName) {
         ArrayList<DichVu> dataList = new ArrayList<DichVu>();
-        String query = "{CALL USP_getDSDichVuByTenDichVu( ? )}";
-        Object[] parameter = new Object[] { tenDichVu };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        try {
-            while (rs.next()) {
-                dataList.add(new DichVu(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return dataList;
-    }
-
-    /**
-     * Lấy danh sách dịch vụ theo tên loại dịch vụ
-     * 
-     * @param tenLoaiDV {@code String}: tên loại dịch vụ
-     * @return {@code ArrayList<DichVu>}: danh sách dịch vụ
-     */
-    public ArrayList<DichVu> getDSDichVuByTenLoaiDV(String tenLoaiDV) {
-        ArrayList<DichVu> dataList = new ArrayList<DichVu>();
-        String query = "{CALL USP_getDSDichVuByTenLoaiDV( ? )}";
-        Object[] parameter = new Object[] { tenLoaiDV };
+        String query = "{CALL USP_getServiceListByName( ? )}";
+        Object[] parameter = new Object[] { serviceName };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -162,14 +141,14 @@ public class DichVuDAO {
     /**
      * Lấy danh sách dịch vụ theo tên dịch vụ và tên loại dịch vụ
      * 
-     * @param tenDV     {@code String}: tên dịch vụ
-     * @param tenLoaiDV {@code String}: tên loại dịch vụ
+     * @param serviceName     {@code String}: tên dịch vụ
+     * @param serviceTypeName {@code String}: tên loại dịch vụ
      * @return {@code ArrayList<DichVu>}: danh sách dịch vụ
      */
-    public ArrayList<DichVu> getDSDichVuByTenDVvaTenLoaiDV(String tenDV, String tenLoaiDV) {
+    public ArrayList<DichVu> getServiceListByNameAndServiceTypeName(String serviceName, String serviceTypeName) {
         ArrayList<DichVu> dataList = new ArrayList<DichVu>();
-        String query = "{CALL USP_getDSDichVuByTenDVvaTenLoaiDV( ? , ? )}";
-        Object[] parameter = new Object[] { tenDV, tenLoaiDV };
+        String query = "{CALL USP_getServiceListByNameAndServiceTypeName( ? , ? )}";
+        Object[] parameter = new Object[] { serviceName, serviceTypeName };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -191,7 +170,7 @@ public class DichVuDAO {
      *         </ul>
      */
     public String getLastServiceID() {
-        String query = "{CALL USP_getLastServiceID}";
+        String query = "{CALL USP_getLastServiceId}";
         Object obj = DataProvider.getInstance().ExecuteScalar(query, null);
         String staffID = obj != null ? obj.toString() : "";
         return staffID;

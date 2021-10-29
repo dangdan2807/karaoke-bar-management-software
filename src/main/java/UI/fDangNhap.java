@@ -271,7 +271,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	 *         </ul>
 	 */
 	private boolean login(String username, String password) {
-		boolean result = TaiKhoanDAO.getInstance().dangNhap(username, password);
+		boolean result = TaiKhoanDAO.getInstance().login(username, password);
 		return result;
 	}
 }

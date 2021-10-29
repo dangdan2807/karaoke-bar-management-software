@@ -1,6 +1,8 @@
 package UI.PanelCustom;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.*;
 
@@ -19,7 +21,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class PnNhanVien extends JFrame
-		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
+		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener, ChangeListener {
 	private JTable tableStaff;
 	private DefaultTableModel modelTableStaff;
 	private JTextField txtCMND, txtPhoneNumber, txtStaffName, txtStaffID, txtBFieldGender;
@@ -414,6 +416,8 @@ public class PnNhanVien extends JFrame
 		cboSearch.addItemListener(this);
 		cboSearchPosition.addItemListener(this);
 
+		spinSalary.addChangeListener(this);
+
 		txtKeyWord.addKeyListener(this);
 		btnAdd.addKeyListener(this);
 		btnBack.addKeyListener(this);
@@ -614,6 +618,15 @@ public class PnNhanVien extends JFrame
 		}
 	}
 
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		Object o = e.getSource();
+		if (o.equals(spinSalary)) {
+			double salary = (double) spinSalary.getValue();
+			System.out.println(salary);
+		}
+	}
+
 	/**
 	 * chạy tất cả các hàm khi bắt đầu chạy form
 	 */
@@ -643,10 +656,10 @@ public class PnNhanVien extends JFrame
 	 * Kiểm tra thông tin trong form
 	 * 
 	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra thông tin
-     *         <ul>
-     *         <li>Nếu hợp lệ thì trả về {@code true}</li>
-     *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
-     *         </ul>
+	 *         <ul>
+	 *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+	 *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+	 *         </ul>
 	 */
 	private boolean validData() {
 		String message = "";
@@ -736,8 +749,8 @@ public class PnNhanVien extends JFrame
 		String phoneNumber = txtPhoneNumber.getText().trim();
 		String cmnd = txtCMND.getText().trim();
 		Date birthDay = dpBirthDay.getValueSqlDate();
-		String gioiTinhStr = cboGender.getSelectedItem().toString().trim();
-		boolean gioiTinh = gioiTinhStr.equalsIgnoreCase("nam") ? false : true;
+		String genderStr = cboGender.getSelectedItem().toString().trim();
+		boolean gender = genderStr.equalsIgnoreCase("nam") ? false : true;
 		String username = txtUsername.getText().trim();
 		TaiKhoan account = new TaiKhoan(username);
 		if (!staffID.equals("")) {
@@ -747,8 +760,7 @@ public class PnNhanVien extends JFrame
 			}
 		} else
 			staffID = createNewStaffID();
-		return new NhanVien(staffID, cmnd, staffName, birthDay, phoneNumber, position, salary, gioiTinh, status,
-				account);
+		return new NhanVien(staffID, cmnd, staffName, birthDay, phoneNumber, position, salary, gender, status, account);
 	}
 
 	/**
@@ -789,9 +801,9 @@ public class PnNhanVien extends JFrame
 	 * @param staff       {@code NhanVien}: nhân viên cần cập nhật
 	 */
 	private void updateRow(int selectedRow, NhanVien staff) {
-		String mucLuongStr = df.format(staff.getMucLuong());
-		boolean gioiTinh = staff.getGioiTinh();
-		String gioiTinhStr = gioiTinh ? "Nữ" : "Nam";
+		String SalaryStr = df.format(staff.getMucLuong());
+		boolean gender = staff.getGioiTinh();
+		String genderStr = gender ? "Nữ" : "Nam";
 		String format = "dd-MM-yyyy";
 		String birthDayStr = ConvertTime.getInstance().convertTimeToString(staff.getNgaySinh(), format);
 		modelTableStaff.setValueAt(addSpaceToString(staff.getHoTen()), selectedRow, 2);
@@ -799,8 +811,8 @@ public class PnNhanVien extends JFrame
 		modelTableStaff.setValueAt(addSpaceToString(staff.getChucVu()), selectedRow, 4);
 		modelTableStaff.setValueAt(addSpaceToString(staff.getSoDienThoai()), selectedRow, 5);
 		modelTableStaff.setValueAt(addSpaceToString(birthDayStr), selectedRow, 6);
-		modelTableStaff.setValueAt(addSpaceToString(mucLuongStr), selectedRow, 7);
-		modelTableStaff.setValueAt(addSpaceToString(gioiTinhStr), selectedRow, 8);
+		modelTableStaff.setValueAt(addSpaceToString(SalaryStr), selectedRow, 7);
+		modelTableStaff.setValueAt(addSpaceToString(genderStr), selectedRow, 8);
 		modelTableStaff.setValueAt(addSpaceToString(staff.getTrangThaiNV()), selectedRow, 9);
 		modelTableStaff.fireTableDataChanged();
 	}
@@ -913,8 +925,9 @@ public class PnNhanVien extends JFrame
 		if (validData()) {
 			NhanVien staff = getStaffDataInForm();
 			Boolean result = NhanVienDAO.getInstance().insertStaff(staff);
+			String name = "nhân viên";
 			if (result) {
-				message = "Thêm nhân viên mới thành công";
+				message = "Thêm " + name + " mới thành công";
 				txtStaffID.setText(staff.getMaNhanVien());
 				int stt = tableStaff.getRowCount();
 				addRow(stt, staff);
@@ -925,7 +938,7 @@ public class PnNhanVien extends JFrame
 				btnAdd.setEnabledCustom(false);
 				btnUpdate.setEnabledCustom(true);
 			} else {
-				message = "Thêm nhân viên thất bại";
+				message = "Thêm " + name + " thất bại";
 			}
 			JOptionPane.showMessageDialog(this, message);
 		}
@@ -976,4 +989,5 @@ public class PnNhanVien extends JFrame
 		this.setVisible(false);
 		f.setVisible(true);
 	}
+
 }

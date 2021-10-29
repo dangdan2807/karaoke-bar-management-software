@@ -18,7 +18,7 @@ public class HoaDonDAO {
     /**
      * Lấy hóa đơn chưa tính tiền dựa trên mã phòng
      * 
-     * @param maPhong {@code String}: mã phòng
+     * @param roomId {@code String}: mã phòng
      * @return {@code HoaDon}: hóa đơn
      *         <ul>
      *         <li>Nếu tìm thấy hóa đơn thì trả về {@code HoaDon}</li>
@@ -26,9 +26,9 @@ public class HoaDonDAO {
      *         đơn = -1}</li>
      *         </ul>
      */
-    public HoaDon getUncheckHoaDonByMaPhong(String maPhong) {
-        String query = "{CALL USP_getUncheckHoaDonByMaPhong ( ? )}";
-        Object[] parameter = new Object[] { maPhong };
+    public HoaDon getUncheckBillByRoomId(String roomId) {
+        String query = "{CALL USP_getUncheckBillByRoomId( ? )}";
+        Object[] parameter = new Object[] { roomId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         HoaDon data = null;
         try {
@@ -44,7 +44,7 @@ public class HoaDonDAO {
     /**
      * Lấy hóa đơn dựa trên mã hóa đơn
      * 
-     * @param maHoaDon {@code int}: mã hóa đơn
+     * @param billId {@code int}: mã hóa đơn
      * @return {@code HoaDon}: hóa đơn
      *         <ul>
      *         <li>Nếu tìm thấy hóa đơn thì trả về {@code HoaDon}</li>
@@ -52,9 +52,9 @@ public class HoaDonDAO {
      *         đơn = -1}</li>
      *         </ul>
      */
-    public HoaDon getHoaDonByMaHD(int maHoaDon) {
-        String query = "{CALL USP_getHoaDonByMaHD ( ? )}";
-        Object[] parameter = new Object[] { maHoaDon };
+    public HoaDon getBillByBillId(int billId) {
+        String query = "{CALL USP_getBillByBillId( ? )}";
+        Object[] parameter = new Object[] { billId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         HoaDon data = null;
         try {
@@ -79,8 +79,8 @@ public class HoaDonDAO {
      *         <li>Nếu không tìm thấy thì trả về {@code -1}</li>
      *         </ul>
      */
-    public int getMaHDCuoiCung() {
-        String query = "{CALL USP_getMaHDCuoiCung}";
+    public int getLastBillId() {
+        String query = "{CALL USP_getLastBillId}";
         Object obj = DataProvider.getInstance().ExecuteScalar(query, null);
         int billID = obj != null ? billID = (int) obj : -1;
         return billID;
@@ -89,17 +89,17 @@ public class HoaDonDAO {
     /**
      * Thêm hóa đơn mới
      * 
-     * @param hoaDon {@code HoaDon}: hóa đơn cần thêm
+     * @param bill {@code HoaDon}: hóa đơn cần thêm
      * @return {@code boolean}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu thêm thành công thì trả về {@code true}</li>
      *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean themHoaDon(HoaDon hoaDon) {
-        String query = "{CALL USP_themHoaDon ( ? , ? , ? , ? )}";
-        Object[] parameter = new Object[] { hoaDon.getNgayGioDat(), hoaDon.getNhanVien().getMaNhanVien(),
-                hoaDon.getKhachHang().getMaKH(), hoaDon.getPhong().getMaPhong() };
+    public boolean insertBill(HoaDon bill) {
+        String query = "{CALL USP_insertBill( ? , ? , ? , ? )}";
+        Object[] parameter = new Object[] { bill.getNgayGioDat(), bill.getNhanVien().getMaNhanVien(),
+                bill.getKhachHang().getMaKH(), bill.getPhong().getMaPhong() };
         int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         return result > 0;
     }
@@ -107,18 +107,18 @@ public class HoaDonDAO {
     /**
      * Thanh toán hóa đơn
      * 
-     * @param maHoaDon   {@code int}: mã hóa đơn
-     * @param ngayGioTra {@code Timestamp}: ngày giờ thanh toán
-     * @param tongTien   {@code int}: tổng tiền thanh toán
+     * @param billId   {@code int}: mã hóa đơn
+     * @param orderDate {@code Timestamp}: ngày giờ thanh toán
+     * @param totalPrice   {@code int}: tổng tiền thanh toán
      * @return {@code boolean}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu thêm thành công thì trả về {@code true}</li>
      *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean thanhToan(int maHoaDon, Timestamp ngayGioTra, Double tongTien) {
-        String query = "{CALL USP_thanhToanHD( ? , ? , ? )}";
-        Object[] param = new Object[] { maHoaDon, ngayGioTra, tongTien };
+    public boolean payment(int billId, Timestamp orderDate, Double totalPrice) {
+        String query = "{CALL USP_payment( ? , ? , ? )}";
+        Object[] param = new Object[] { billId, orderDate, totalPrice };
         int result = DataProvider.getInstance().ExecuteNonQuery(query, param);
         return result > 0;
     }

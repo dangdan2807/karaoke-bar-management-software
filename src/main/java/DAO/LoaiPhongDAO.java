@@ -19,9 +19,9 @@ public class LoaiPhongDAO {
      * 
      * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
      */
-    public ArrayList<LoaiPhong> getDSLoaiPhong() {
+    public ArrayList<LoaiPhong> getRoomTypeList() {
         ArrayList<LoaiPhong> dataList = new ArrayList<LoaiPhong>();
-        String query = "{CALL USP_getDSLoaiPhong}";
+        String query = "{CALL USP_getRoomTypeList}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {
@@ -36,16 +36,16 @@ public class LoaiPhongDAO {
     /**
      * Lấy tên loại phòng theo mã loại phòng
      * 
-     * @param maPhong {@code String}: mã loại phòng
+     * @param roomId {@code String}: mã loại phòng
      * @return {@code String}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu tìm thấy thì trả về {@code tên loại phòng}</li>
      *         <li>Nếu không tìm thấy thì trả về {@code ""}</li>
      *         </ul>
      */
-    public String getTenLPbyMaPhong(String maPhong) {
-        String query = "{CALL USP_getTenLPbyMaPhong( ? )}";
-        Object[] parameter = new Object[] { maPhong };
+    public String getRoomTypeNameById(String roomId) {
+        String query = "{CALL USP_getRoomTypeNameById( ? )}";
+        Object[] parameter = new Object[] { roomId };
         Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
         String roomTypeName = obj != null ? roomTypeName = obj.toString() : "";
         return roomTypeName;

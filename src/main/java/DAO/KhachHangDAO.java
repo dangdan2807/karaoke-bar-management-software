@@ -21,9 +21,9 @@ public class KhachHangDAO {
      * 
      * @return {@code ArrayList<KhachHang>} : danh sách khách hàng
      */
-    public ArrayList<KhachHang> getDSKhachHang() {
+    public ArrayList<KhachHang> getCustomerList() {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "SELECT * FROM dbo.KhachHang";
+        String query = "{CALL USP_getCustomerList}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {
@@ -38,13 +38,13 @@ public class KhachHangDAO {
     /**
      * Lấy ra danh sách tất cả khách hàng có mã khách hàng phù hợp điều kiện
      * 
-     * @param maKH {@code String}: mã khách hàng
+     * @param customerId {@code String}: mã khách hàng
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<KhachHang> getDSKhachHangByMaKH(String maKH) {
+    public ArrayList<KhachHang> getCustomerListById(String customerId) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "{CALL USP_getDSKhachHangByMaKH( ? )}";
-        Object[] parameter = new Object[] { maKH };
+        String query = "{CALL USP_getCustomerListById( ? )}";
+        Object[] parameter = new Object[] { customerId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -59,13 +59,13 @@ public class KhachHangDAO {
     /**
      * Lấy ra danh sách tất cả khách hàng có tên khách hàng phù hợp điều kiện
      * 
-     * @param tenKH {@code String}: tên khách hàng
+     * @param customerName {@code String}: tên khách hàng
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<KhachHang> getDSKhachHangByTenKH(String tenKH) {
+    public ArrayList<KhachHang> getCustomerListByName(String customerName) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "{CALL USP_getDSKhachHangByTenKH( ? )}";
-        Object[] parameter = new Object[] { tenKH };
+        String query = "{CALL USP_getCustomerListByName( ? )}";
+        Object[] parameter = new Object[] { customerName };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -81,13 +81,13 @@ public class KhachHangDAO {
      * Lấy ra danh sách tất cả khách hàng có số điện thoại của khách hàng phù hợp
      * điều kiện
      * 
-     * @param sdtKH {@code String}: số điện thoại của khách hàng
+     * @param phoneNumber {@code String}: số điện thoại của khách hàng
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<KhachHang> getDSKhachHangBySDT(String sdtKH) {
+    public ArrayList<KhachHang> getCustomerListByPhoneNumber(String phoneNumber) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "{CALL USP_getDSKhachHangBySDT( ? )}";
-        Object[] parameter = new Object[] { sdtKH };
+        String query = "{CALL USP_getCustomerListByPhoneNumber( ? )}";
+        Object[] parameter = new Object[] { phoneNumber };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -104,9 +104,9 @@ public class KhachHangDAO {
      * 
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng chưa đặt phòng
      */
-    public ArrayList<KhachHang> getDSKhachHangChuaDatPhong() {
+    public ArrayList<KhachHang> getCustomerListUnBooked() {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "{CALL USP_getDSKhachHangChuaDatPhong()}";
+        String query = "{CALL USP_getCustomerListUnBooked()}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {
@@ -121,17 +121,17 @@ public class KhachHangDAO {
     /**
      * Lấy thông tin khách hàng theo mã khách hàng
      * 
-     * @param maKH {@code String}: mã khách hàng
+     * @param customerId {@code String}: mã khách hàng
      * @return {@code KhachHang}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu tìm thấy thì trả về {@code KhachHang}</li>
      *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
      *         </ul>
      */
-    public KhachHang getKhachHangByMaKH(String maKH) {
+    public KhachHang getCustomerById(String customerId) {
         KhachHang data = null;
         String query = "{CALL USP_getCustomerById( ? )}";
-        Object[] parameter = new Object[] { maKH };
+        Object[] parameter = new Object[] { customerId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             if (rs.next()) {
@@ -146,18 +146,17 @@ public class KhachHangDAO {
     /**
      * Thêm khách hàng mới
      * 
-     * @param khachHang {@code KhachHang}: khách hàng cần thêm
+     * @param customer {@code KhachHang}: khách hàng cần thêm
      * @return {@code boolean}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu thêm thành công thì trả về {@code true}</li>
      *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean themKhachHang(KhachHang khachHang) {
-        String query = "INSERT INTO dbo.KhachHang (maKH, cmnd, hoTen, gioiTinh, soDienThoai, ngaySinh) "
-                + "VALUES ( ? , ? , ? , ? , ? , ? )";
-        Object[] parameter = new Object[] { khachHang.getMaKH(), khachHang.getCmnd(), khachHang.getHoTen(),
-                khachHang.getGioiTinh(), khachHang.getSoDienThoai(), khachHang.getNgaySinh() };
+    public boolean insertCustomer(KhachHang customer) {
+        String query = "{CALL USP_insertCustomer( ? , ? , ? , ? , ? , ? )}";
+        Object[] parameter = new Object[] { customer.getMaKH(), customer.getCmnd(), customer.getHoTen(),
+                customer.getGioiTinh(), customer.getSoDienThoai(), customer.getNgaySinh() };
         Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         int result = obj != null ? result = (int) obj : 0;
         return result > 0;
@@ -172,8 +171,8 @@ public class KhachHangDAO {
      *         <li>Nếu không tìm thấy thì trả về {@code ""}</li>
      *         </ul>
      */
-    public String getMaKHCuoiCung() {
-        String query = "SELECT TOP 1 * FROM dbo.KhachHang ORDER BY maKH DESC";
+    public String getLastCustomerId() {
+        String query = "{CALL USP_getLastCustomerId}";
         Object[] parameter = new Object[] {};
         Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
         String result = obj != null ? result = obj.toString() : "";
@@ -190,11 +189,10 @@ public class KhachHangDAO {
      *         <li>Nếu cập nhật thất bại thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean capNhatTTKhachHang(KhachHang khachHang) {
-        String query = "Update dbo.KhachHang set cmnd = ? , hoTen = ? , gioiTinh = ? , soDienThoai = ? , "
-                + "ngaySinh = ? , Where maKH = ?";
-        Object[] parameter = new Object[] { khachHang.getCmnd(), khachHang.getHoTen(), khachHang.getGioiTinh(),
-                khachHang.getSoDienThoai(), khachHang.getNgaySinh(), khachHang.getMaKH() };
+    public boolean updateCustomerInfo(KhachHang khachHang) {
+        String query = "{CALL USP_updateCustomerInfo( ? , ? , ? , ? , ? , ? )}";
+        Object[] parameter = new Object[] { khachHang.getMaKH(), khachHang.getCmnd(), khachHang.getHoTen(),
+                khachHang.getGioiTinh(), khachHang.getSoDienThoai(), khachHang.getNgaySinh(), };
         Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         int result = obj != null ? result = (int) obj : 0;
         return result > 0;

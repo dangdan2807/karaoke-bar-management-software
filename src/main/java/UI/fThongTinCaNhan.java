@@ -25,11 +25,11 @@ public class fThongTinCaNhan extends JDialog
     private JTextField txtCMND, txtPhoneNumber, txtPosition, txtSalary, txtEmpID;
     private JButton btnUpdate, btnClose;
     private JComboBox<String> cboGender;
-    private kDatePicker dpNgaySinh;
+    private kDatePicker dpBirthday;
+    private JCheckBox chkChangePassword;
 
     private int withPn = 400, heightPn = 315;
     private NhanVien staffLogin = null;
-    private JCheckBox chkDoiMatKhau;
 
     /**
      * Constructor form thông tin cá nhân
@@ -108,12 +108,12 @@ public class fThongTinCaNhan extends JDialog
         txtCMND.setFont(new Font("Dialog", Font.PLAIN, 14));
         txtCMND.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
-        dpNgaySinh = new kDatePicker(250, 25);
-        dpNgaySinh.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-        dpNgaySinh.setBackgroundColor(Color.WHITE);
-        dpNgaySinh.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
-        dpNgaySinh.setBounds(130, 124, 250, 25);
-        pnPersonalInfo.add(dpNgaySinh);
+        dpBirthday = new kDatePicker(250, 25);
+        dpBirthday.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        dpBirthday.setBackgroundColor(Color.WHITE);
+        dpBirthday.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
+        dpBirthday.setBounds(130, 124, 250, 25);
+        pnPersonalInfo.add(dpBirthday);
 
         JLabel lbBirthDay = new JLabel("Ngày sinh: ");
         lbBirthDay.setBounds(10, 124, 120, 25);
@@ -214,11 +214,11 @@ public class fThongTinCaNhan extends JDialog
         txtNewPassword.setEditable(false);
         pnPasswordInfo.add(txtNewPassword);
 
-        chkDoiMatKhau = new JCheckBox("Đổi mật khẩu");
-        chkDoiMatKhau.setBounds(10, 16, 370, 23);
-        chkDoiMatKhau.setFont(new Font("Dialog", Font.BOLD, 12));
-        chkDoiMatKhau.setBackground(Color.WHITE);
-        pnPasswordInfo.add(chkDoiMatKhau);
+        chkChangePassword = new JCheckBox("Đổi mật khẩu");
+        chkChangePassword.setBounds(10, 16, 370, 23);
+        chkChangePassword.setFont(new Font("Dialog", Font.BOLD, 12));
+        chkChangePassword.setBackground(Color.WHITE);
+        pnPasswordInfo.add(chkChangePassword);
 
         lbReNewPassword = new JLabel("Nhập lại: ");
         lbReNewPassword.setBounds(10, 82, 120, 25);
@@ -249,7 +249,7 @@ public class fThongTinCaNhan extends JDialog
         txtNewPassword.addFocusListener(this);
         txtReNewPassword.addFocusListener(this);
 
-        chkDoiMatKhau.addItemListener(this);
+        chkChangePassword.addItemListener(this);
 
         showInfoStaff(staffLogin);
     }
@@ -264,7 +264,7 @@ public class fThongTinCaNhan extends JDialog
         Object o = e.getSource();
         if (o.equals(btnUpdate)) {
             if (validData())
-                capNhatThongTin();
+                updateInfo();
         } else if (o.equals(btnClose)) {
             this.dispose();
         }
@@ -282,7 +282,7 @@ public class fThongTinCaNhan extends JDialog
         if (o.equals(txtPassword) || o.equals(txtFullName) || o.equals(txtNewPassword) || o.equals(txtReNewPassword)) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 if (validData())
-                    capNhatThongTin();
+                    updateInfo();
             }
         }
     }
@@ -366,9 +366,9 @@ public class fThongTinCaNhan extends JDialog
     @Override
     public void itemStateChanged(ItemEvent e) {
         Object o = e.getSource();
-        if (o.equals(chkDoiMatKhau)) {
-            txtNewPassword.setEditable(chkDoiMatKhau.isSelected());
-            txtReNewPassword.setEditable(chkDoiMatKhau.isSelected());
+        if (o.equals(chkChangePassword)) {
+            txtNewPassword.setEditable(chkChangePassword.isSelected());
+            txtReNewPassword.setEditable(chkChangePassword.isSelected());
         }
     }
 
@@ -382,12 +382,12 @@ public class fThongTinCaNhan extends JDialog
         txtEmpID.setText(staff.getMaNhanVien());
         txtFullName.setText(staff.getHoTen());
         txtCMND.setText(staff.getCmnd());
-        dpNgaySinh.setValue(staff.getNgaySinh());
+        dpBirthday.setValue(staff.getNgaySinh());
         txtPhoneNumber.setText(staff.getSoDienThoai());
         txtPosition.setText(staff.getChucVu());
-        boolean gioiTinh = staff.getGioiTinh();
+        boolean gender = staff.getGioiTinh();
         cboGender.setSelectedIndex(0);
-        if (gioiTinh) {
+        if (gender) {
             cboGender.setSelectedIndex(1);
         }
         DecimalFormat df = new DecimalFormat("#,###.##");
@@ -404,16 +404,16 @@ public class fThongTinCaNhan extends JDialog
      * @return {@code NhanVien}: Nhân viên sau khi đã chuyển đổi
      */
     private NhanVien getDataInForm() {
-        String maNhanVien = txtEmpID.getText().trim();
-        String hoTen = txtFullName.getText().trim();
+        String staffId = txtEmpID.getText().trim();
+        String staffName = txtFullName.getText().trim();
         String cmnd = txtCMND.getText().trim();
-        Date ngaySinh = dpNgaySinh.getFullDate();
-        String soDienThoai = txtPhoneNumber.getText();
-        String chucVu = txtPosition.getText();
-        boolean gioiTinh = (boolean) cboGender.getSelectedItem();
-        Double mucLuong = Double.parseDouble(txtSalary.getText().trim().replace(",", ""));
+        Date birthday = dpBirthday.getFullDate();
+        String phoneNumber = txtPhoneNumber.getText();
+        String position = txtPosition.getText();
+        boolean gender = (boolean) cboGender.getSelectedItem();
+        Double salary = Double.parseDouble(txtSalary.getText().trim().replace(",", ""));
 
-        return new NhanVien(maNhanVien, cmnd, hoTen, ngaySinh, soDienThoai, chucVu, mucLuong, gioiTinh,
+        return new NhanVien(staffId, cmnd, staffName, birthday, phoneNumber, position, salary, gender,
                 staffLogin.getTrangThaiNV(), staffLogin.getTaiKhoan());
     }
 
@@ -473,7 +473,7 @@ public class fThongTinCaNhan extends JDialog
             return false;
         }
 
-        valid = ValidationData.getInstance().ValidBirthDay(this, dpNgaySinh, "", 0);
+        valid = ValidationData.getInstance().ValidBirthDay(this, dpBirthday, "", 0);
         if (!valid) {
             return false;
         }
@@ -483,53 +483,53 @@ public class fThongTinCaNhan extends JDialog
             return false;
         }
 
-        NhanVien nhanVienLoginMoi = getDataInForm();
-        String matKhau = txtPassword.getText().trim();
-        if (matKhau.equalsIgnoreCase("")) {
+        NhanVien newStaffLogin = getDataInForm();
+        String password = txtPassword.getText().trim();
+        if (password.equalsIgnoreCase("")) {
             message = "Vui lòng nhập mật khẩu để xác nhận bạn là chủ tài khoản";
             showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
             return false;
 
-        } else if (matKhau.equals("123456")) {
+        } else if (password.equals("123456")) {
             message = "Mật khẩu quá đơn giản. Vui lòng đổi mật khẩu khác";
             showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
             return false;
 
-        } else if (matKhau.length() >= 6 && matKhau.matches("^[a-zA-Z0-9@!#$_]{6,}$")) {
-            checkPassword(matKhau, "Mật khẩu");
+        } else if (password.length() >= 6 && password.matches("^[a-zA-Z0-9@!#$_]{6,}$")) {
+            checkPassword(password, "Mật khẩu");
             return false;
 
-        } else if (!matKhau.equals(nhanVienLoginMoi.getTaiKhoan().getMatKhau())) {
+        } else if (!password.equals(newStaffLogin.getTaiKhoan().getMatKhau())) {
             message = "Mật khẩu sai. Vui lòng nhập lại";
             showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
-        if (chkDoiMatKhau.isSelected()) {
-            String matKhauMoi = txtNewPassword.getText().trim();
-            String nlMatKhau = txtReNewPassword.getText().trim();
+        if (chkChangePassword.isSelected()) {
+            String newPassword = txtNewPassword.getText().trim();
+            String rePassword = txtReNewPassword.getText().trim();
 
-            if (!(nlMatKhau.equals(matKhauMoi))) {
+            if (!(rePassword.equals(newPassword))) {
                 message = "Mật khẩu mới không khớp";
                 showMessage(txtReNewPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
                 return false;
 
-            } else if (matKhauMoi.equals("")) {
+            } else if (newPassword.equals("")) {
                 message = "Mật khẩu mới không được rỗng";
                 showMessage(txtNewPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
                 return false;
 
-            } else if (nlMatKhau.equals("")) {
+            } else if (rePassword.equals("")) {
                 message = "Mật khẩu nhập lại không được rỗng";
                 showMessage(txtReNewPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
                 return false;
 
-            } else if (nlMatKhau.length() >= 6 && nlMatKhau.matches("^[a-zA-Z0-9_@#]{6,}$")) {
-                checkPassword(nlMatKhau, "Mật khẩu nhập lại");
+            } else if (rePassword.length() >= 6 && rePassword.matches("^[a-zA-Z0-9_@#]{6,}$")) {
+                checkPassword(rePassword, "Mật khẩu nhập lại");
                 return false;
 
-            } else if (matKhauMoi.length() >= 6 && matKhauMoi.matches("^[a-zA-Z0-9_@#]{6,}$")) {
-                checkPassword(matKhauMoi, "Mật khẩu mới");
+            } else if (newPassword.length() >= 6 && newPassword.matches("^[a-zA-Z0-9_@#]{6,}$")) {
+                checkPassword(newPassword, "Mật khẩu mới");
                 return false;
 
             }
@@ -540,21 +540,24 @@ public class fThongTinCaNhan extends JDialog
     /**
      * Cập nhật thông tin nhân viên
      */
-    private void capNhatThongTin() {
+    private void updateInfo() {
         String message = "";
-        NhanVien nhanVienLoginMoi = getDataInForm();
-        String matKhauMoi = txtNewPassword.getText().trim();
+        NhanVien newStaffLogin = getDataInForm();
+        String newPassword = txtNewPassword.getText().trim();
 
-        if (chkDoiMatKhau.isSelected()) {
-            nhanVienLoginMoi.getTaiKhoan().setMatKhau(matKhauMoi);
+        boolean result = false;
+        if (chkChangePassword.isSelected()) {
+            newStaffLogin.getTaiKhoan().setMatKhau(newPassword);
+            result = NhanVienDAO.getInstance().updateInfoStaffAndAccount(newStaffLogin);
+        } else {
+            result = NhanVienDAO.getInstance().updateInfoStaff(newStaffLogin);
         }
-
-        boolean ketQua = NhanVienDAO.getInstance().updateInfoStaff(nhanVienLoginMoi);
-        if (ketQua) {
+        if (result) {
             message = "Cập nhật thông tin thành công";
             JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            showInfoStaff(nhanVienLoginMoi);
-            staffLogin = nhanVienLoginMoi;
+            showInfoStaff(newStaffLogin);
+            staffLogin = newStaffLogin;
+
         } else {
             message = "Cập nhật thông tin thất bại";
             JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);

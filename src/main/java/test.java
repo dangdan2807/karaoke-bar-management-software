@@ -2,6 +2,7 @@
 import java.math.BigDecimal;
 import java.sql.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -69,7 +70,7 @@ public class test {
     public static void main(String[] args) {
         // testTime();
         // System.out.println(createNewServiceID());
-        ExportBill.getInstance().exportBillToExcel(1, "D:/hd.xlsx");
+        // ExportBill.getInstance().exportBillToExcel(1, "D:/hd.xlsx");
         // ExportBill.getInstance().exportBillToPdf(1, "D:/hd.pdf");
         // BigDecimal a = new BigDecimal("0.00");
         // BigDecimal b = new BigDecimal("1.00");
@@ -80,5 +81,9 @@ public class test {
         // System.out.println(result);
         // String data = "8000.0";
         // System.out.println(data.replaceAll("\\.[0]+$", ""));
+        ArrayList<Integer> a = new ArrayList<>();
+        a.add(1);
+        a.add(2);
+        System.out.println(a.get(0));
     }   
 }

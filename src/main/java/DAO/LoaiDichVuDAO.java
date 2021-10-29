@@ -21,7 +21,7 @@ public class LoaiDichVuDAO {
      */
     public ArrayList<LoaiDichVu> getServiceTypeList() {
         ArrayList<LoaiDichVu> dataList = new ArrayList<LoaiDichVu>();
-        String query = "{CALL USP_getLoaiDichVuList()}";
+        String query = "{CALL USP_getServiceTypeList()}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {

@@ -469,7 +469,7 @@ public class PnLoaiPhong extends JFrame
 	 */
 	public void allLoaded() {
 		reSizeColumnTable();
-		loadRoomTypeList(LoaiPhongDAO.getInstance().getDSLoaiPhong());
+		loadRoomTypeList(LoaiPhongDAO.getInstance().getRoomTypeList());
 	}
 
 	/**
@@ -611,7 +611,7 @@ public class PnLoaiPhong extends JFrame
 		ArrayList<LoaiPhong> roomTypeList = null;
 		String keyword = "";
 		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			roomTypeList = LoaiPhongDAO.getInstance().getDSLoaiPhong();
+			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeList();
 		} else if (searchTypeName.equalsIgnoreCase("Tên loại phòng")) {
 			keyword = txtKeyWord.getText().trim();
 			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByName(keyword);

@@ -693,7 +693,7 @@ public class ExportBill {
      * @param path   {@code String}: đường dẫn đến file excel
      */
     public void exportBillToExcel(int billId, String path) {
-        HoaDon bill = HoaDonDAO.getInstance().getHoaDonByMaHD(billId);
+        HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billId);
         workbook = new XSSFWorkbook();
 
         sheet = workbook.createSheet("Hóa Đơn");
@@ -708,7 +708,7 @@ public class ExportBill {
         rowIndex = createHeaderExcel(rowIndex);
         rowIndex = createBillInfoExcel(bill, rowIndex);
         rowIndex = createServiceOrderHeaderExcel(rowIndex);
-        ArrayList<CTDichVu> billInfoList = CTDichVuDAO.getInstance().getBillInfoListByBillId(billId);
+        ArrayList<CTDichVu> billInfoList = CTDichVuDAO.getInstance().getServiceDetailListByBillId(billId);
         rowIndex = showServiceOrderExcel(billInfoList, rowIndex);
         rowIndex = showTotalPriceExcel(billInfoList, bill, rowIndex);
         rowIndex = showFooterExcel(rowIndex, bill.getPhong());

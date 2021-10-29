@@ -31,7 +31,7 @@ public class ConvertTime {
      * chuỗi
      * 
      * @param date   {@code java.sql.Date}: ngày cần chuyển đổi ở kiểu dữ liệu
-     * @param format {@code String}: định dạng cần format Ví dụ: {@code dd/MM/yyyy},
+     * @param format {@code String}: định dạng cần format. Ví dụ: {@code dd/MM/yyyy},
      *               {@code hh:mm:ss}, {@code dd/MM/yyyy hh:mm:ss}, ...
      * @return {@code String}: chuỗi ngày giờ đã định dạng
      */
@@ -46,7 +46,7 @@ public class ConvertTime {
      * dạng chuỗi
      * 
      * @param date   {@code java.sql.Timestamp}: ngày cần chuyển đổi ở kiểu dữ liệu
-     * @param format {@code String}: định dạng cần format Ví dụ: {@code dd/MM/yyyy},
+     * @param format {@code String}: định dạng cần format. Ví dụ: {@code dd/MM/yyyy},
      *               {@code hh:mm:ss}, {@code dd/MM/yyyy hh:mm:ss}, ...
      * @return {@code String}: chuỗi ngày giờ đã định dạng
      */

@@ -272,8 +272,9 @@ public class PnLoaiDichVu extends JFrame
 				if (validData()) {
 					LoaiDichVu serviceType = getServiceTypeDataInForm();
 					Boolean result = LoaiDichVuDAO.getInstance().insertService(serviceType);
+					String name = "loại dịch vụ";
 					if (result) {
-						message = "Thêm loại dịch vụ mới thành công";
+						message = "Thêm " + name + " mới thành công";
 						txtServiceTypeID.setText(serviceType.getMaLDV());
 						int stt = tableServiceType.getRowCount();
 						addRow(stt, serviceType);
@@ -284,7 +285,7 @@ public class PnLoaiDichVu extends JFrame
 						btnAdd.setEnabledCustom(false);
 						btnUpdate.setEnabledCustom(true);
 					} else {
-						message = "Thêm loại dịch vụ thất bại";
+						message = "Thêm " + name + " mới thất bại";
 						JOptionPane.showMessageDialog(this, message);
 					}
 				}
@@ -489,10 +490,10 @@ public class PnLoaiDichVu extends JFrame
 	 * Kiểm tra thông tin trong form
 	 * 
 	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra thông tin
-     *         <ul>
-     *         <li>Nếu hợp lệ thì trả về {@code true}</li>
-     *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
-     *         </ul>
+	 *         <ul>
+	 *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+	 *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+	 *         </ul>
 	 */
 	private boolean validData() {
 		boolean valid = ValidationData.getInstance().ValidName(this, txtServiceTypeName, "Tên loại dịch vụ", 100, 0);

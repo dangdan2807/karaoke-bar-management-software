@@ -216,7 +216,7 @@ public class DialogChonKhachHang extends JDialog
 
         cboTimKiem.addItemListener(this);
 
-        LoadDSPhong(KhachHangDAO.getInstance().getDSKhachHangChuaDatPhong());
+        LoadDSPhong(KhachHangDAO.getInstance().getCustomerListUnBooked());
     }
 
     public static void main(String[] args) {
@@ -231,7 +231,7 @@ public class DialogChonKhachHang extends JDialog
             if (maKH.equalsIgnoreCase("")) {
                 JOptionPane.showMessageDialog(this, "Bạn phải chọn một khách hàng", "Thông báo", JOptionPane.OK_OPTION);
             } else {
-                khachHang = KhachHangDAO.getInstance().getKhachHangByMaKH(maKH);
+                khachHang = KhachHangDAO.getInstance().getCustomerById(maKH);
                 this.dispose();
             }
         } else if (o.equals(btnTimKiem)) {
@@ -349,7 +349,7 @@ public class DialogChonKhachHang extends JDialog
      * @param maKH {@code String}: mã của khách hàng cần hiển thị
      */
     private void loadBtnKH(String maKH) {
-        KhachHang khachHang = KhachHangDAO.getInstance().getKhachHangByMaKH(maKH);
+        KhachHang khachHang = KhachHangDAO.getInstance().getCustomerById(maKH);
         String tenBtn = "<html>" + "<p style='text-align: left; width:116px'>Mã KH: " + khachHang.getMaKH() + " </p>"
                 + "<p style='text-align: left; width:116px'>Tên: " + khachHang.getHoTen() + " </p>"
                 + "<p style='text-align: left; width:116px'>CMND: " + khachHang.getCmnd() + "</p>"
@@ -413,7 +413,7 @@ public class DialogChonKhachHang extends JDialog
                     }
                     viTri = selection;
                     btnDSKHang[selection].setBorder(lineRed);
-                    KhachHang khActiveE = KhachHangDAO.getInstance().getKhachHangByMaKH(maKH);
+                    KhachHang khActiveE = KhachHangDAO.getInstance().getCustomerById(maKH);
                     loadDataLenForm(khActiveE);
                 }
             });
@@ -465,16 +465,16 @@ public class DialogChonKhachHang extends JDialog
             switch (loaiTimKiem) {
             case 0:
                 txtTimKiem.setText("");
-                dsKhachHang = KhachHangDAO.getInstance().getDSKhachHang();
+                dsKhachHang = KhachHangDAO.getInstance().getCustomerList();
                 break;
             case 1:
-                dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangByTenKH(tuKhoa);
+                dsKhachHang = KhachHangDAO.getInstance().getCustomerListByName(tuKhoa);
                 break;
             case 2:
-                dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangByMaKH(tuKhoa);
+                dsKhachHang = KhachHangDAO.getInstance().getCustomerListById(tuKhoa);
                 break;
             case 3:
-                dsKhachHang = KhachHangDAO.getInstance().getDSKhachHangBySDT(tuKhoa);
+                dsKhachHang = KhachHangDAO.getInstance().getCustomerListByPhoneNumber(tuKhoa);
                 break;
             default:
                 break;

@@ -56,6 +56,7 @@ public class fQuanLyDatPhong extends JFrame
 	private int location = -1;
 	private NhanVien staffLogin = null;
 	private KhachHang selectedCustomer = null;
+	private DecimalFormat df = new DecimalFormat("#,###.##");
 
 	/**
 	 * Hàm khởi tạo form
@@ -642,7 +643,7 @@ public class fQuanLyDatPhong extends JFrame
 		txtServiceName.addKeyListener(this);
 
 		showStaffName(staffLogin);
-		LoadRoomList(PhongDAO.getInstance().getDSPhong());
+		LoadRoomList(PhongDAO.getInstance().getRoomList());
 		reSizeColumnTableBillInfo();
 		loadCboRoomType();
 		loadCboRoom("Tất cả");
@@ -674,16 +675,16 @@ public class fQuanLyDatPhong extends JFrame
 				long millis = System.currentTimeMillis();
 				Timestamp startTime = new Timestamp(millis);
 				String roomID = txtRoomID.getText().trim();
-				Phong room = PhongDAO.getInstance().getPhongByMaPhong(roomID);
+				Phong room = PhongDAO.getInstance().getRoomByRoomId(roomID);
 				HoaDon bill = new HoaDon(startTime, HoaDonDAO.UNPAID, staffLogin, selectedCustomer, room);
-				boolean resultBill = HoaDonDAO.getInstance().themHoaDon(bill);
+				boolean resultBill = HoaDonDAO.getInstance().insertBill(bill);
 				if (resultBill) {
 					JOptionPane.showMessageDialog(this, "Cho thuê phòng thành công");
-					int billID = HoaDonDAO.getInstance().getMaHDCuoiCung();
-					PhongDAO.getInstance().capNhatTinhTrangPhong(roomID, PhongDAO.PAID);
+					int billID = HoaDonDAO.getInstance().getLastBillId();
+					PhongDAO.getInstance().updateRoomStatus(roomID, PhongDAO.PAID);
 					txtBillID.setText(String.valueOf(billID));
 					((MyButton) btnPayment).setEnabledCustom(true);
-					LoadRoomList(PhongDAO.getInstance().getDSPhong());
+					LoadRoomList(PhongDAO.getInstance().getRoomList());
 					String format = "dd-MM-yyyy HH:mm:ss";
 					String startTimeStr = ConvertTime.getInstance().convertTimeToString(startTime, format);
 					txtStartTime.setText(startTimeStr);
@@ -718,14 +719,14 @@ public class fQuanLyDatPhong extends JFrame
 					if (o.equals(btnCannelServices))
 						orderQuantity *= -1;
 					String serviceName = txtServiceName.getText().trim();
-					DichVu service = DichVuDAO.getInstance().getDichVuByTenDichVu(serviceName);
+					DichVu service = DichVuDAO.getInstance().getServiceByName(serviceName);
 					String roomID = txtRoomID.getText();
 					int BillID = Integer.parseInt(txtBillID.getText());
-					HoaDon bill = HoaDonDAO.getInstance().getHoaDonByMaHD(BillID);
+					HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(BillID);
 					boolean result = false;
 					String message = "Thêm dịch vụ thất bại";
 					if (BillID != -1) {
-						CTDichVu serviceInfo = CTDichVuDAO.getInstance().getCTHoaDonByMaHDvaMaDV(BillID,
+						CTDichVu serviceInfo = CTDichVuDAO.getInstance().getServiceDetailByBillIdAndServiceId(BillID,
 								service.getMaDichVu());
 						// nếu ctDichVu đã tồn tại thì cập nhật
 						// nếu ctDichVu không tồn tại thì thêm mới
@@ -734,14 +735,14 @@ public class fQuanLyDatPhong extends JFrame
 							if (serviceInfo.getSoLuongDat() > 0 && newQuantity > 0) {
 								int newOrderQuantity = serviceInfo.getSoLuongDat() + orderQuantity;
 								serviceInfo.setSoLuongDat(newOrderQuantity);
-								result = CTDichVuDAO.getInstance().themCTHoaDon(serviceInfo, orderQuantity,
+								result = CTDichVuDAO.getInstance().insertServiceDetail(serviceInfo, orderQuantity,
 										bill.getMaHoaDon());
 							} else {
 								message = "Dịch vụ chưa được thêm nên không thể hủy";
 							}
 						} else {
 							serviceInfo = new CTDichVu(orderQuantity, service);
-							result = CTDichVuDAO.getInstance().themCTHoaDon(serviceInfo, orderQuantity,
+							result = CTDichVuDAO.getInstance().insertServiceDetail(serviceInfo, orderQuantity,
 									bill.getMaHoaDon());
 						}
 						// kiểm tra kết quả thêm, cập nhật
@@ -774,19 +775,20 @@ public class fQuanLyDatPhong extends JFrame
 				if (serviceTypeName.equalsIgnoreCase("tất cả")) {
 					serviceList = DichVuDAO.getInstance().getServiceList();
 				} else {
-					serviceList = DichVuDAO.getInstance().getDSDichVuByTenLoaiDV(serviceTypeName);
+					serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName);
 				}
 			} else {
 				if (chkSearchService.isSelected() && !serviceTypeName.equalsIgnoreCase("tất cả")) {
-					serviceList = DichVuDAO.getInstance().getDSDichVuByTenDVvaTenLoaiDV(serviceName, serviceTypeName);
+					serviceList = DichVuDAO.getInstance().getServiceListByNameAndServiceTypeName(serviceName,
+							serviceTypeName);
 				} else {
-					serviceList = DichVuDAO.getInstance().getDSDichVuByTenDichVu(serviceName);
+					serviceList = DichVuDAO.getInstance().getServiceListByName(serviceName);
 				}
 			}
 			loadServiceList(serviceList);
 		} else if (o.equals(btnPayment)) {
 			String roomID = txtRoomID.getText().trim();
-			HoaDon bill = HoaDonDAO.getInstance().getUncheckHoaDonByMaPhong(roomID);
+			HoaDon bill = HoaDonDAO.getInstance().getUncheckBillByRoomId(roomID);
 			if (bill != null) {
 				String totalPriceStr = txtTotalPriceBill.getText().trim();
 				Double totalPriceService = Double.parseDouble(totalPriceStr.replace(",", ""));
@@ -808,10 +810,10 @@ public class fQuanLyDatPhong extends JFrame
 				int select = JOptionPane.showOptionDialog(null, message, "Xác thực", JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE, null, stringArray, null);
 				if (select == 0) {
-					boolean rs = HoaDonDAO.getInstance().thanhToan(bill.getMaHoaDon(), bill.getNgayGioTra(),
+					boolean rs = HoaDonDAO.getInstance().payment(bill.getMaHoaDon(), bill.getNgayGioTra(),
 							totalPriceBill);
 					if (rs) {
-						LoadRoomList(PhongDAO.getInstance().getDSPhong());
+						LoadRoomList(PhongDAO.getInstance().getRoomList());
 						String endTimeStr = ConvertTime.getInstance().convertTimeToString(endTime,
 								"dd-MM-yyyy HH:mm:ss");
 						String startTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioDat(),
@@ -844,18 +846,18 @@ public class fQuanLyDatPhong extends JFrame
 					JOptionPane.showConfirmDialog(this, message, "Phòng này chưa được cho thuê nên không thể chuyển",
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 				} else {
-					PhongDAO.getInstance().chuyenPhong(RoomIdOld, roomIdNew);
-					LoadRoomList(PhongDAO.getInstance().getDSPhong());
+					PhongDAO.getInstance().switchRoom(RoomIdOld, roomIdNew);
+					LoadRoomList(PhongDAO.getInstance().getRoomList());
 					String roomTypeName = txtRoomTypeName.getText();
 					loadCboRoom(roomTypeName);
 					refreshBillForm();
 				}
 			}
 		} else if (o.equals(btnChooseCustomer)) {
-			DialogChonKhachHang chonKH = new DialogChonKhachHang();
-			chonKH.setModal(true);
-			chonKH.setVisible(true);
-			selectedCustomer = chonKH.getKHDuocChon();
+			DialogChonKhachHang chooseCustomer = new DialogChonKhachHang();
+			chooseCustomer.setModal(true);
+			chooseCustomer.setVisible(true);
+			selectedCustomer = chooseCustomer.getKHDuocChon();
 			if (selectedCustomer != null)
 				txtCustomerName.setText(selectedCustomer.getHoTen());
 		}
@@ -868,7 +870,7 @@ public class fQuanLyDatPhong extends JFrame
 		if (o.equals(tableService)) {
 			int row = tableService.getSelectedRow();
 			String serviceName = modelTableService.getValueAt(row, 1).toString();
-			DichVu service = DichVuDAO.getInstance().getDichVuByTenDichVu(serviceName);
+			DichVu service = DichVuDAO.getInstance().getServiceByName(serviceName);
 			txtServiceName.setText(serviceName);
 			txtQuantityService.setText(df.format(service.getSoLuongTon()));
 			txtServicePrice.setText(df.format(service.getGiaBan()));
@@ -883,7 +885,7 @@ public class fQuanLyDatPhong extends JFrame
 			int orderQuantity = Integer.parseInt(modelTableBill.getValueAt(row, 3).toString());
 			String price = modelTableBill.getValueAt(row, 2).toString();
 			txtServicePrice.setText(price);
-			int quantityService = DichVuDAO.getInstance().getSLDVuConByTenDichVu(serviceName);
+			int quantityService = DichVuDAO.getInstance().getQuantityByServiceName(serviceName);
 			txtQuantityService.setText(String.valueOf(quantityService));
 			spinOrderQuantity.setValue(Math.abs(orderQuantity));
 		} else if (o.equals(txtBFieldRoomID)) {
@@ -933,14 +935,14 @@ public class fQuanLyDatPhong extends JFrame
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
 		if (o.equals(cboRoomType)) {
-			String tenLoaiPhong = cboRoomType.getSelectedItem().toString();
-			loadRoomListByRoomTypeName(tenLoaiPhong);
+			String roomTypeName = cboRoomType.getSelectedItem().toString();
+			loadRoomListByRoomTypeName(roomTypeName);
 		} else if (o.equals(cboServiceType)) {
-			String tenLoaiDV = cboServiceType.getSelectedItem().toString();
-			if (tenLoaiDV.equalsIgnoreCase("tất cả")) {
+			String serviceTypeName = cboServiceType.getSelectedItem().toString();
+			if (serviceTypeName.equalsIgnoreCase("tất cả")) {
 				loadServiceList(DichVuDAO.getInstance().getServiceList());
 			} else {
-				loadServiceList(DichVuDAO.getInstance().getDSDichVuByTenLoaiDV(tenLoaiDV));
+				loadServiceList(DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName));
 			}
 		} else if (o.equals(chkSearchService)) {
 			if (chkSearchService.isSelected()) {
@@ -955,13 +957,12 @@ public class fQuanLyDatPhong extends JFrame
 	public void stateChanged(ChangeEvent e) {
 		Object o = e.getSource();
 		if (o.equals(spinOrderQuantity)) {
-			int soLuongDat = (int) spinOrderQuantity.getValue();
-			String giaTienStr = txtServicePrice.getText().trim().replace(",", "");
-			if (!giaTienStr.equals("")) {
-				double giaTien = Double.parseDouble(giaTienStr);
-				double tongTien = giaTien * soLuongDat;
-				DecimalFormat df = new DecimalFormat("#,###.##");
-				txtTotalPriceService.setText(df.format(tongTien));
+			int orderQuantity = (int) spinOrderQuantity.getValue();
+			String priceStr = txtServicePrice.getText().trim().replace(",", "");
+			if (!priceStr.equals("")) {
+				double price = Double.parseDouble(priceStr);
+				double totalPrice = price * orderQuantity;
+				txtTotalPriceService.setText(df.format(totalPrice));
 			}
 		}
 	}
@@ -1044,7 +1045,7 @@ public class fQuanLyDatPhong extends JFrame
 	 * @param roomId {@code String}: mã phòng cần hiển thị
 	 */
 	private void loadRoom(String maPhong) {
-		Phong room = PhongDAO.getInstance().getPhongByMaPhong(maPhong);
+		Phong room = PhongDAO.getInstance().getRoomByRoomId(maPhong);
 		String statusP = convertRoomStatus(room.getTinhTrangP());
 		String roomID = room.getMaPhong();
 		String btnName = "<html><p style='text-align: center;'> " + roomID
@@ -1120,7 +1121,7 @@ public class fQuanLyDatPhong extends JFrame
 					if (location != -1) {
 						btnRoomList[location].setBorder(lineGray);
 					}
-					String roomTypeName = LoaiPhongDAO.getInstance().getTenLPbyMaPhong(roomID);
+					String roomTypeName = LoaiPhongDAO.getInstance().getRoomTypeNameById(roomID);
 					if (roomTypeName == null) {
 						roomTypeName = "Tất cả";
 					}
@@ -1129,10 +1130,9 @@ public class fQuanLyDatPhong extends JFrame
 					btnRoomList[selection].setBorder(lineRed);
 					showBillInfo(roomID);
 					txtRoomID.setText(roomID);
-					HoaDon bill = HoaDonDAO.getInstance().getUncheckHoaDonByMaPhong(roomID);
+					HoaDon bill = HoaDonDAO.getInstance().getUncheckBillByRoomId(roomID);
 					if (bill.getMaHoaDon() != -1) {
-						KhachHang customer = KhachHangDAO.getInstance()
-								.getKhachHangByMaKH(bill.getKhachHang().getMaKH());
+						KhachHang customer = KhachHangDAO.getInstance().getCustomerById(bill.getKhachHang().getMaKH());
 						txtCustomerName.setText(customer.getHoTen());
 						txtBillID.setText(String.valueOf(bill.getMaHoaDon()));
 						String format = "dd-MM-yyyy HH:mm:ss";
@@ -1156,7 +1156,7 @@ public class fQuanLyDatPhong extends JFrame
 						txtTotalPriceBill.setText("0.0");
 					}
 					spinOrderQuantity.setValue((int) 1);
-					Phong roomActiveE = PhongDAO.getInstance().getPhongByMaPhong(roomID);
+					Phong roomActiveE = PhongDAO.getInstance().getRoomByRoomId(roomID);
 					txtRoomLocation.setText(roomActiveE.getViTri());
 					txtRoomTypeName.setText(roomActiveE.getLoaiPhong().getTenLP());
 					String status = convertRoomStatus(roomActiveE.getTinhTrangP());
@@ -1187,7 +1187,7 @@ public class fQuanLyDatPhong extends JFrame
 
 				@Override
 				public void mouseExited(MouseEvent e) {
-					Phong roomActiveE = PhongDAO.getInstance().getPhongByMaPhong(roomID);
+					Phong roomActiveE = PhongDAO.getInstance().getRoomByRoomId(roomID);
 					String status = convertRoomStatus(roomActiveE.getTinhTrangP());
 					switch (status) {
 					case "Trống":
@@ -1216,13 +1216,13 @@ public class fQuanLyDatPhong extends JFrame
 	private void loadCboRoom(String roomTypeName) {
 		ArrayList<Phong> roomList = new ArrayList<Phong>();
 		if (roomTypeName.equalsIgnoreCase("Tất cả")) {
-			roomList = PhongDAO.getInstance().getDSPhongTrong();
+			roomList = PhongDAO.getInstance().getListAvailableRoom();
 		} else {
-			roomList = PhongDAO.getInstance().getDSPhongTrongTheoLoaiPhong(roomTypeName);
+			roomList = PhongDAO.getInstance().getListAvailableRoomByRoomTypeName(roomTypeName);
 		}
 		cboRoomID.removeAllItems();
-		for (Phong phong : roomList) {
-			cboRoomID.addItem(phong.getMaPhong());
+		for (Phong room : roomList) {
+			cboRoomID.addItem(room.getMaPhong());
 		}
 	}
 
@@ -1232,8 +1232,7 @@ public class fQuanLyDatPhong extends JFrame
 	 * @param roomId {@code String}: mã phòng
 	 */
 	private void showBillInfo(String maPhong) {
-		ArrayList<CTDichVu> dataList = CTDichVuDAO.getInstance().getCTHoaDonListByMaPhong(maPhong);
-		DecimalFormat df = new DecimalFormat("#,###.##");
+		ArrayList<CTDichVu> dataList = CTDichVuDAO.getInstance().getServiceDetailListByRoomId(maPhong);
 		int i = 1;
 		modelTableBill.getDataVector().removeAllElements();
 		modelTableBill.fireTableDataChanged();
@@ -1244,9 +1243,9 @@ public class fQuanLyDatPhong extends JFrame
 			String stt = df.format(i++);
 			String totalPriceStr = df.format(totalPriceService);
 			String priceStr = df.format(item.getDichVu().getGiaBan());
-			String countStr = df.format(item.getSoLuongDat());
+			String quantityStr = df.format(item.getSoLuongDat());
 			modelTableBill
-					.addRow(new Object[] { stt, item.getDichVu().getTenDichVu(), priceStr, countStr, totalPriceStr });
+					.addRow(new Object[] { stt, item.getDichVu().getTenDichVu(), priceStr, quantityStr, totalPriceStr });
 		}
 		txtTotalPriceBill.setText(df.format(totalPrice));
 	}
@@ -1255,10 +1254,10 @@ public class fQuanLyDatPhong extends JFrame
 	 * Hiển thị danh sách loại phòng lên comboBox loại phòng
 	 */
 	private void loadCboRoomType() {
-		ArrayList<LoaiPhong> dataList = LoaiPhongDAO.getInstance().getDSLoaiPhong();
+		ArrayList<LoaiPhong> dataList = LoaiPhongDAO.getInstance().getRoomTypeList();
 		cboRoomType.addItem("Tất cả");
-		for (LoaiPhong item : dataList) {
-			cboRoomType.addItem(item.getTenLP());
+		for (LoaiPhong roomType : dataList) {
+			cboRoomType.addItem(roomType.getTenLP());
 		}
 	}
 
@@ -1270,10 +1269,10 @@ public class fQuanLyDatPhong extends JFrame
 	private void loadRoomListByRoomTypeName(String roomTypeName) {
 		ArrayList<Phong> dataList = null;
 		if (roomTypeName.equalsIgnoreCase("Tất cả"))
-			dataList = PhongDAO.getInstance().getDSPhong();
+			dataList = PhongDAO.getInstance().getRoomList();
 		else {
 			location = -1;
-			dataList = PhongDAO.getInstance().getDSPhongByTenLoaiPhong(roomTypeName);
+			dataList = PhongDAO.getInstance().getRoomListByRoomTypeName(roomTypeName);
 		}
 		LoadRoomList(dataList);
 	}
@@ -1284,7 +1283,6 @@ public class fQuanLyDatPhong extends JFrame
 	 * @param dataList {@code ArrayList<DichVu>}: danh sách dịch vụ
 	 */
 	private void loadServiceList(ArrayList<DichVu> dataList) {
-		DecimalFormat df = new DecimalFormat("#,###.##");
 		int i = 1;
 		modelTableService.getDataVector().removeAllElements();
 		modelTableService.fireTableDataChanged();
@@ -1336,9 +1334,9 @@ public class fQuanLyDatPhong extends JFrame
 		ArrayList<DichVu> serviceList = null;
 		String serviceTypeName = cboServiceType.getSelectedItem().toString();
 		if (chkSearchService.isSelected() && !serviceTypeName.equalsIgnoreCase("tất cả")) {
-			serviceList = DichVuDAO.getInstance().getDSDichVuByTenDVvaTenLoaiDV(serviceName, serviceTypeName);
+			serviceList = DichVuDAO.getInstance().getServiceListByNameAndServiceTypeName(serviceName, serviceTypeName);
 		} else {
-			serviceList = DichVuDAO.getInstance().getDSDichVuByTenDichVu(serviceName);
+			serviceList = DichVuDAO.getInstance().getServiceListByName(serviceName);
 		}
 		loadServiceList(serviceList);
 	}
