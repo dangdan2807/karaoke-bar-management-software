@@ -171,7 +171,7 @@ public class PnDichVu extends JFrame
 		pnSearch.setLayout(null);
 		pnInfo.add(pnSearch);
 
-		lpSearch = new JLabel("Tìm kiếm theo:");
+		lpSearch = new JLabel("Lọc theo:");
 		lpSearch.setForeground(Color.WHITE);
 		lpSearch.setFont(new Font("Dialog", Font.BOLD, 13));
 		lpSearch.setBounds(30, 18, 100, 20);
@@ -498,21 +498,16 @@ public class PnDichVu extends JFrame
 	 * @return {@code DichVu}: dịch vụ
 	 */
 	private DichVu getServiceDataInForm() {
-		String serviceID = txtServiceID.getText().trim();
+		String serviceId = txtServiceID.getText().trim();
 		String staffName = txtServiceName.getText().trim();
 		String serviceTypeName = cboServiceType.getSelectedItem().toString().trim();
 		Double price = Double.parseDouble(spinPrice.getValue().toString());
 		int quantity = Integer.parseInt(spinQuantity.getValue().toString());
-		DichVu service = new DichVu(serviceID);
-		if (!serviceID.equals("")) {
-			service = DichVuDAO.getInstance().getServiceById(serviceID);
-			if (service == null) {
-				service = new DichVu(serviceID);
-			}
-		} else
-			serviceID = createNewServiceID();
+		if (serviceId.equals("") || serviceId.length() <= 0) {
+			serviceId = createNewServiceID();
+		}
 		LoaiDichVu serviceType = LoaiDichVuDAO.getInstance().getServiceTypeByName(serviceTypeName);
-		return new DichVu(serviceID, staffName, price, quantity, serviceType);
+		return new DichVu(serviceId, staffName, price, quantity, serviceType);
 	}
 
 	/**
@@ -664,7 +659,7 @@ public class PnDichVu extends JFrame
 			serviceList = DichVuDAO.getInstance().getServiceList();
 		} else if (searchTypeName.equalsIgnoreCase("Tên dịch vụ")) {
 			keyword = txtKeyWord.getText().trim();
-			serviceList = DichVuDAO.getInstance().getServiceListByServiceName(keyword);
+			serviceList = DichVuDAO.getInstance().getServiceListByName(keyword);
 		} else if (searchTypeName.equalsIgnoreCase("Tên loại dịch vụ")) {
 			keyword = cboSearchServiceType.getSelectedItem().toString().trim();
 			serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(keyword);

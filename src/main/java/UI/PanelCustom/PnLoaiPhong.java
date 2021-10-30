@@ -122,7 +122,7 @@ public class PnLoaiPhong extends JFrame
 		pnSearch.setLayout(null);
 		pnInfo.add(pnSearch);
 
-		lpSearch = new JLabel("Tìm kiếm theo:");
+		lpSearch = new JLabel("Lọc theo:");
 		lpSearch.setForeground(Color.WHITE);
 		lpSearch.setFont(new Font("Dialog", Font.BOLD, 13));
 		lpSearch.setBounds(30, 18, 100, 20);
@@ -269,7 +269,7 @@ public class PnLoaiPhong extends JFrame
 		if (o.equals(btnAdd)) {
 			String message = "";
 			if (validData()) {
-				LoaiPhong roomType = getStaffDataInForm();
+				LoaiPhong roomType = getRoomTypeDataInForm();
 				Boolean insertResult = LoaiPhongDAO.getInstance().insertRoomType(roomType);
 				String name = "loại phòng";
 				if (insertResult) {
@@ -301,8 +301,8 @@ public class PnLoaiPhong extends JFrame
 			f.setVisible(true);
 		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
-				LoaiPhong roomTypeNew = getStaffDataInForm();
-				LoaiPhong roomTypeOld = LoaiPhongDAO.getInstance().getRoomTypeById(roomTypeNew.getMaLP());
+				LoaiPhong newRoomType = getRoomTypeDataInForm();
+				LoaiPhong oldRoomType = LoaiPhongDAO.getInstance().getRoomTypeById(newRoomType.getMaLP());
 				String message = "";
 				int selectedRow = tableTypeRoom.getSelectedRow();
 				String name = "loại phòng";
@@ -311,15 +311,15 @@ public class PnLoaiPhong extends JFrame
 					JOptionPane.showConfirmDialog(this, message, "Thông báo", JOptionPane.OK_OPTION,
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
-					message = "Xác nhận cập nhật thông tin " + name + " " + roomTypeOld.getMaLP();
+					message = "Xác nhận cập nhật thông tin " + name + " " + oldRoomType.getTenLP();
 					int confirmUpdate = JOptionPane.showConfirmDialog(this, message,
 							"Xác nhận cập nhật thông tin " + name + "", JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
 					if (confirmUpdate == JOptionPane.OK_OPTION) {
-						Boolean updateResult = LoaiPhongDAO.getInstance().updateInfoRoomType(roomTypeNew);
+						Boolean updateResult = LoaiPhongDAO.getInstance().updateInfoRoomType(newRoomType);
 						if (updateResult) {
 							message = "Cập nhật thông tin " + name + " thành công";
-							updateRow(selectedRow, roomTypeNew);
+							updateRow(selectedRow, newRoomType);
 							btnAdd.setEnabledCustom(false);
 							btnUpdate.setEnabledCustom(true);
 							tableTypeRoom.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
@@ -476,10 +476,10 @@ public class PnLoaiPhong extends JFrame
 	 * Kiểm tra thông tin trong form
 	 * 
 	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra thông tin
-     *         <ul>
-     *         <li>Nếu hợp lệ thì trả về {@code true}</li>
-     *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
-     *         </ul>
+	 *         <ul>
+	 *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+	 *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+	 *         </ul>
 	 */
 	private boolean validData() {
 		boolean valid = ValidationData.getInstance().ValidName(this, txtRoomTypeName, "Tên loại phòng", 100, 0);
@@ -516,19 +516,15 @@ public class PnLoaiPhong extends JFrame
 	 * 
 	 * @return {@code LoaiPhong}: loại phòng được chuyển đổi thông tin từ form
 	 */
-	private LoaiPhong getStaffDataInForm() {
+	private LoaiPhong getRoomTypeDataInForm() {
 		String roomTypeId = txtRoomTypeId.getText().trim();
 		String roomTypeName = txtRoomTypeName.getText().trim();
 		int capacity = Integer.parseInt(spinCapacity.getValue().toString());
 		Double price = Double.parseDouble(spinPrice.getValue().toString());
-		LoaiPhong roomType = new LoaiPhong();
-		if (!roomTypeId.equals("")) {
-			roomType = new LoaiPhong(roomTypeId, roomTypeName, capacity, price);
-		} else {
+		if (roomTypeId.equals("") || roomTypeId.length() <= 0) {
 			roomTypeId = createNewServiceTypeID();
-			roomType = new LoaiPhong(roomTypeId, roomTypeName, capacity, price);
 		}
-		return roomType;
+		return new LoaiPhong(roomTypeId, roomTypeName, capacity, price);
 	}
 
 	/**
@@ -544,7 +540,7 @@ public class PnLoaiPhong extends JFrame
 	/**
 	 * Thêm dòng vào danh sách loại phòng đang hiển thị
 	 * 
-	 * @param stt {@code int}: số thứ tự
+	 * @param stt      {@code int}: số thứ tự
 	 * @param roomType {@code LoaiPhong}: loại phòng cần được thêm
 	 */
 	private void addRow(int stt, LoaiPhong roomType) {

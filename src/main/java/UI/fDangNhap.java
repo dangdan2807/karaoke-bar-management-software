@@ -13,8 +13,12 @@ import entity.NhanVien;
 public class fDangNhap extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener {
 	private JTextField txtUsername, txtPassword;
 	private JButton btnLogin;
+
+	private static String pathImg = "src/main/resources/images/";
+	// private ImageIcon logoIcon = new ImageIcon(
+	// 		CustomUI.USER_ICON_512.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
 	private ImageIcon logoIcon = new ImageIcon(
-			CustomUI.USER_ICON_512.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
+			new ImageIcon(pathImg + "user_512.png").getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
 	private ImageIcon anhChen = new ImageIcon(
 			CustomUI.BACKGROUND_LOGIN.getImage().getScaledInstance(700, 300, Image.SCALE_SMOOTH));
 	private ImageIcon loginIcon = new ImageIcon(
@@ -69,7 +73,6 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		JLabel lbLogo = new JLabel(logoIcon);
 		lbLogo.setBounds(0, 57, 455, 82);
 		pnMau.add(lbLogo);
-		lbLogo.setText("");
 		lbLogo.setHorizontalAlignment(SwingConstants.CENTER);
 
 		JLabel lbWelcome = new JLabel("Đăng nhập");
@@ -91,7 +94,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		lbUsername.setFont(new Font("Dialog", Font.BOLD, 14));
 		lbUsername.setForeground(Color.decode("#1a66e3"));
 
-		txtUsername = new JTextField();
+		txtUsername = new JTextField("phamdangdan");
 		txtUsername.setBounds(83, 49, 285, 25);
 		pnLogin.add(txtUsername);
 		txtUsername.setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -103,7 +106,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		lbPassword.setFont(new Font("Dialog", Font.BOLD, 14));
 		lbPassword.setForeground(Color.decode("#1a66e3"));
 
-		txtPassword = new JPasswordField();
+		txtPassword = new JPasswordField("1234567");
 		txtPassword.setBounds(83, 123, 285, 25);
 		pnLogin.add(txtPassword);
 		txtPassword.setFont(new Font("Dialog", Font.PLAIN, 14));

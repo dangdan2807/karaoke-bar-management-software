@@ -84,7 +84,7 @@ GO
 CREATE TABLE Phong
 (
     maPhong VARCHAR(5) NOT NULL PRIMARY KEY,
-    --  0 là là còn trống | 1 là đã cho thuê
+    --  0 là là còn trống | 1 là đang sử dụng
     tinhTrangP INT NOT NULL DEFAULT(0),
     viTri NVARCHAR(100) NOT NULL DEFAULT(N''),
     maLP VARCHAR(5) NOT NULL,
@@ -551,19 +551,6 @@ BEGIN
         ldv.tenLDV, ldv.maLDV
     FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
     WHERE dv.maLDV = ldv.maLDV;
-END
-GO
-
-CREATE PROC USP_getServiceListByServiceName
-    @ServiceName NVARCHAR(100)
-AS
-BEGIN
-    DECLARE @name NVARCHAR(102) = N'%' + @ServiceName + N'%'
-    SELECT dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
-        ldv.tenLDV, ldv.maLDV
-    FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
-    WHERE dv.maLDV = ldv.maLDV
-        AND dbo.fuConvertToUnsign(dv.tenDichVu) LIKE dbo.fuConvertToUnsign(@name)
 END
 GO
 
@@ -1104,7 +1091,7 @@ BEGIN
         lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
-        AND lp.tenLP =@roomTypeName
+        AND lp.tenLP = @roomTypeName
 END
 GO
 
@@ -1196,6 +1183,108 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_getRoomListByLocation
+    @location NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @keyword NVARCHAR(102) = N'%' + @location + N'%'
+    SELECT p.maPhong, p.tinhTrangP, p.viTri,
+        lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+    FROM dbo.Phong p, dbo.LoaiPhong lp
+    WHERE p.maLP = lp.maLP
+        AND dbo.fuConvertToUnsign(p.viTri) like dbo.fuConvertToUnsign(@keyword)
+END
+GO
+
+--  0 là là còn trống | 1 là đang sử dụng
+CREATE PROC USP_getRoomListByStatus
+    @roomStatus INT
+AS
+BEGIN
+    SELECT p.maPhong, p.tinhTrangP, p.viTri,
+        lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+    FROM dbo.Phong p, dbo.LoaiPhong lp
+    WHERE p.maLP = lp.maLP
+        AND p.tinhTrangP = @roomStatus
+END
+GO
+
+CREATE PROC USP_updateInfoRoom
+    @roomId VARCHAR(5),
+    @roomStatus INT,
+    @location NVARCHAR(100),
+    @roomTypeId VARCHAR(5)
+AS
+BEGIN
+    BEGIN TRANSACTION
+    UPDATE dbo.Phong
+        SET tinhTrangP = @roomStatus,
+            viTri = @location,
+            maLP = @roomTypeId
+        WHERE maPhong = @roomId
+
+    DECLARE @isExitsId VARCHAR(5)
+    SELECT @isExitsId = p.maPhong
+    FROM dbo.Phong p
+    WHERE p.maPhong = @roomId
+        AND p.tinhTrangP = @roomStatus
+        AND p.viTri = @location
+        AND p.maLP = @roomTypeId
+
+    IF @isExitsId IS NULL
+    BEGIN
+        PRINT 0
+        ROLLBACK
+    END
+    ELSE
+    BEGIN
+        PRINT 1
+        COMMIT
+    END
+END
+GO
+
+CREATE PROC USP_insertRoom
+    @roomId VARCHAR(5),
+    @roomStatus INT,
+    @location NVARCHAR(100),
+    @roomTypeId VARCHAR(5)
+AS
+BEGIN
+    DECLARE @isExitsId VARCHAR(5)
+    BEGIN TRANSACTION
+    INSERT INTO dbo.Phong
+        (maPhong, tinhTrangP, viTri, maLP)
+    VALUES
+        (@roomId, @roomStatus, @location, @roomTypeId)
+
+    SELECT @isExitsId = p.maLP
+    FROM dbo.Phong p
+    WHERE p.maPhong = @roomId
+
+    IF @isExitsId IS NULL
+    BEGIN
+        ROLLBACK
+        PRINT 0
+    END
+    ELSE 
+    BEGIN
+        COMMIT
+        PRINT 1
+    END
+END
+GO
+
+CREATE PROC USP_getLastRoomId
+AS
+BEGIN
+    SELECT TOP 1
+        p.maPhong
+    FROM dbo.Phong p
+    ORDER BY p.maPhong DESC
+END
+GO
+
 
 -- loại phòng
 CREATE PROC USP_getRoomTypeNameById
@@ -1256,6 +1345,16 @@ BEGIN
     SELECT lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
     FROM dbo.LoaiPhong lp
     WHERE lp.maLP = @roomTypeId
+END
+GO
+
+CREATE PROC USP_getRoomTypeByName
+    @roomTypeName NVARCHAR(100)
+AS
+BEGIN
+    SELECT lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+    FROM dbo.LoaiPhong lp
+    WHERE lp.tenLP = @roomTypeName
 END
 GO
 
@@ -1324,6 +1423,7 @@ BEGIN
     END
 END
 GO
+
 
 -- nhân viên
 CREATE PROC USP_getStaffByUsername

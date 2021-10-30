@@ -46,8 +46,8 @@ public class LoaiDichVu {
 	/**
 	 * Tạo 1 {@code LoaiDichVu} với các tham số sau:
 	 * 
-	 * @param maLDV  {@code LoaiDichVu} : loại dịch vụ
-	 * @param tenLDV {@code LoaiDichVu} : loại dịch vụ
+	 * @param maLDV  {@code String} : mã loại dịch vụ
+	 * @param tenLDV {@code String} : tên loại dịch vụ
 	 */
 	public LoaiDichVu(String maLDV, String tenLDV) {
 		this.maLDV = maLDV;
@@ -57,7 +57,7 @@ public class LoaiDichVu {
 	/**
 	 * Tạo 1 {@code LoaiDichVu} với các tham số sau:
 	 * 
-	 * @param maLDV {@code LoaiDichVu} : loại dịch vụ
+	 * @param maLDV {@code String} : mã loại dịch vụ
 	 */
 	public LoaiDichVu(String maLDV) {
 		this.maLDV = maLDV;
@@ -72,7 +72,7 @@ public class LoaiDichVu {
 	/**
 	 * Tạo 1 {@code LoaiDichVu} từ kết quả truy vấn nhận được từ cơ sở dữ liệu
 	 * 
-	 * @param rs kết quả truy vấn
+	 * @param rs {@code ResultSet}: kết quả truy vấn
 	 * @return {@code LoaiDichVu}: loại dịch vụ được tìm thấy
 	 * @throws SQLException nếu có lỗi trong quá trình lấy dữ liệu
 	 */

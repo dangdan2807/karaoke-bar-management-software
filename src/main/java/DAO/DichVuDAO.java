@@ -34,30 +34,9 @@ public class DichVuDAO {
     }
 
     /**
-     * Lấy danh sách dịch vụ theo tên dịch vụ
-     * 
-     * @param serviceName {@code String}: tên dịch vụ
-     * @return {@code ArrayList<DichVu>}: danh sách dịch vụ
-     */
-    public ArrayList<DichVu> getServiceListByServiceName(String serviceName) {
-        ArrayList<DichVu> dataList = new ArrayList<DichVu>();
-        String query = "{CALL USP_getServiceListByServiceName( ? )}";
-        Object[] parameter = new Object[] { serviceName };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        try {
-            while (rs.next()) {
-                dataList.add(new DichVu(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return dataList;
-    }
-
-    /**
      * Lấy danh sách dịch vụ theo tên loại dịch vụ
      * 
-     * @param serviceTypeName {@code String}: loại tên dịch vụ
+     * @param serviceTypeName {@code String}: tên loại dịch vụ
      * @return {@code ArrayList<DichVu>}: danh sách dịch vụ
      */
     public ArrayList<DichVu> getServiceListByServiceTypeName(String serviceTypeName) {

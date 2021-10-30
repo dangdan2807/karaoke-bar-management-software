@@ -39,7 +39,7 @@ public class LoaiDichVuDAO {
      * @param serviceTypeName {@code String}: tên loại dịch vụ
      * @return {@code LoaiDichVu}: kết quả trả về của câu truy vấn
      *         <ul>
-     *         <li>Nếu tìm thấy thì trả về {@code LoaiDichVi}</li>
+     *         <li>Nếu tìm thấy thì trả về {@code LoaiDichVu}</li>
      *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
      *         </ul>
      */

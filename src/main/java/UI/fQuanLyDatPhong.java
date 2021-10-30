@@ -126,8 +126,7 @@ public class fQuanLyDatPhong extends JFrame
 		pnEmpInfo.setBackground(Color.WHITE);
 		pnEmpInfo.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
-				"Nh\u00E2n Vi\u00EAn: ", TitledBorder.LEADING, TitledBorder.TOP, new Font("Dialog", Font.BOLD, 13),
-				Color.WHITE));
+				"Nhân viên: ", TitledBorder.LEADING, TitledBorder.TOP, new Font("Dialog", Font.BOLD, 13), Color.WHITE));
 		pnEmpInfo.setBounds(0, 39, 330, 65);
 		pnEmpInfo.setOpaque(false);
 		pnMain.add(pnEmpInfo);
@@ -681,7 +680,7 @@ public class fQuanLyDatPhong extends JFrame
 				if (resultBill) {
 					JOptionPane.showMessageDialog(this, "Cho thuê phòng thành công");
 					int billID = HoaDonDAO.getInstance().getLastBillId();
-					PhongDAO.getInstance().updateRoomStatus(roomID, PhongDAO.PAID);
+					PhongDAO.getInstance().updateRoomStatus(roomID, PhongDAO.RENT);
 					txtBillID.setText(String.valueOf(billID));
 					((MyButton) btnPayment).setEnabledCustom(true);
 					LoadRoomList(PhongDAO.getInstance().getRoomList());
@@ -1035,7 +1034,7 @@ public class fQuanLyDatPhong extends JFrame
 		// 1 là đã cho thuê | 0 là là còn trống
 		String statusStr = "Trống";
 		if (type == 1)
-			statusStr = "Đã cho thuê";
+			statusStr = "Đang sử dụng";
 		return statusStr;
 	}
 
@@ -1227,6 +1226,16 @@ public class fQuanLyDatPhong extends JFrame
 	}
 
 	/**
+	 * Thêm khoảng trắng vào trước và sao chuỗi được truyền vào
+	 * 
+	 * @param str {@code String}: chuỗi cần xử lý
+	 * @return {@code String}: chuỗi đã xử lý
+	 */
+	private String addSpaceToString(String str) {
+		return " " + str + " ";
+	}
+
+	/**
 	 * Hiển thị danh sách CTHoaDon khi biết mã phòng
 	 * 
 	 * @param roomId {@code String}: mã phòng
@@ -1244,8 +1253,8 @@ public class fQuanLyDatPhong extends JFrame
 			String totalPriceStr = df.format(totalPriceService);
 			String priceStr = df.format(item.getDichVu().getGiaBan());
 			String quantityStr = df.format(item.getSoLuongDat());
-			modelTableBill
-					.addRow(new Object[] { stt, item.getDichVu().getTenDichVu(), priceStr, quantityStr, totalPriceStr });
+			modelTableBill.addRow(new Object[] { stt, addSpaceToString(item.getDichVu().getTenDichVu()),
+					addSpaceToString(priceStr), addSpaceToString(quantityStr), addSpaceToString(totalPriceStr) });
 		}
 		txtTotalPriceBill.setText(df.format(totalPrice));
 	}
@@ -1290,7 +1299,7 @@ public class fQuanLyDatPhong extends JFrame
 			String stt = df.format(i++);
 			String priceStr = df.format(item.getGiaBan());
 			String quantityStr = df.format(item.getSoLuongTon());
-			modelTableService.addRow(new Object[] { stt, item.getTenDichVu(), quantityStr, priceStr });
+			modelTableService.addRow(new Object[] { stt, addSpaceToString(item.getTenDichVu()), addSpaceToString(quantityStr), addSpaceToString(priceStr) });
 		}
 	}
 

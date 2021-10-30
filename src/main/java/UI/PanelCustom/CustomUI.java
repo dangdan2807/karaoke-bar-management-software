@@ -12,7 +12,7 @@ public class CustomUI {
             new Color(255, 161, 32, 100));
     public static Border BORDER_BOTTOM_ERROR = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED);
 
-    private static String pathImg = "src/main/java/img/";
+    private static String pathImg = "src/main/resources/images/";
     public static ImageIcon ADD_ICON = new ImageIcon(pathImg + "blueAdd_16.png");
     public static ImageIcon TRASH_ICON = new ImageIcon(pathImg + "trash_16.png");
     public static ImageIcon REFRESH_ICON = new ImageIcon(pathImg + "refresh_16.png");

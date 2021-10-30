@@ -85,7 +85,7 @@ public class CTDichVuDAO {
     /**
      * Thêm một chi tiết dịch vụ
      * 
-     * @param ctDichVu   {@code CTHoaDon}: chi tiết dịch vụ cần thêm
+     * @param ctDichVu   {@code CTDichVu}: chi tiết dịch vụ cần thêm
      * @param soLuongDat {@code int}: số lượng đặt
      * @param maHoaDon   {@code String}: mã hóa đơn
      * @return {@code boolean}: kết quả trả về của câu truy vấn

@@ -84,8 +84,8 @@ public class LoaiPhongDAO {
     public String getLastRoomTypeId() {
         String query = "{CALL USP_getLastRoomTypeId}";
         Object obj = DataProvider.getInstance().ExecuteScalar(query, null);
-        String staffID = obj != null ? obj.toString() : "";
-        return staffID;
+        String roomTypeId = obj != null ? obj.toString() : "";
+        return roomTypeId;
     }
 
     /**
@@ -151,9 +151,9 @@ public class LoaiPhongDAO {
     }
 
     /**
-     * Lấy danh sách loại phòng có tên phù hợp với từ khóa
+     * Lấy danh sách loại phòng có giá phòng phù hợp với giá được nhập
      * 
-     * @param roomTypeName {@code String}: từ khóa trong tên loại phòng
+     * @param price {@code String}: Giá phòng
      * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng phù hợp điều kiện
      */
     public ArrayList<LoaiPhong> getRoomTypeListByPrice(String price) {
@@ -169,5 +169,29 @@ public class LoaiPhongDAO {
             e.printStackTrace();
         }
         return staffList;
+    }
+
+    /**
+     * Lấy thông tin loại phòng dựa theo tên loại phòng
+     * 
+     * @param roomTypeName {@code String}: tên loại phòng
+     * @return {@code LoaiPhong}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code LoaiPhong}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
+     *         </ul>
+     */
+    public LoaiPhong getRoomTypeByName(String roomTypeName) {
+        LoaiPhong data = null;
+        String query = "{CALL USP_getRoomTypeByName( ? )}";
+        Object[] parameter = new Object[] { roomTypeName };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            if (rs.next())
+                data = new LoaiPhong(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 }

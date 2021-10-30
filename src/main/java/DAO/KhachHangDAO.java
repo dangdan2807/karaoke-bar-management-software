@@ -36,7 +36,7 @@ public class KhachHangDAO {
     }
 
     /**
-     * Lấy ra danh sách tất cả khách hàng có mã khách hàng phù hợp điều kiện
+     * Lấy danh sách tất cả khách hàng dựa trên mã khách hàng
      * 
      * @param customerId {@code String}: mã khách hàng
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
@@ -57,7 +57,7 @@ public class KhachHangDAO {
     }
 
     /**
-     * Lấy ra danh sách tất cả khách hàng có tên khách hàng phù hợp điều kiện
+     * Lấy danh sách tất cả khách hàng có tên khách hàng phù hợp điều kiện
      * 
      * @param customerName {@code String}: tên khách hàng
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
@@ -78,8 +78,7 @@ public class KhachHangDAO {
     }
 
     /**
-     * Lấy ra danh sách tất cả khách hàng có số điện thoại của khách hàng phù hợp
-     * điều kiện
+     * Lấy danh sách tất cả khách hàng có số điện thoại phù hợp điều kiện
      * 
      * @param phoneNumber {@code String}: số điện thoại của khách hàng
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng

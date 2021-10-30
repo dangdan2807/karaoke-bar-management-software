@@ -85,7 +85,7 @@ GO
 CREATE TABLE Phong
 (
     maPhong VARCHAR(5) NOT NULL PRIMARY KEY,
-    --  0 là là còn trống | 1 là đã cho thuê
+    --  0 là là còn trống | 1 là đang sử dụng
     tinhTrangP INT NOT NULL DEFAULT(0),
     viTri NVARCHAR(100) NOT NULL DEFAULT(N''),
     maLP VARCHAR(5) NOT NULL,

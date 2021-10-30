@@ -1,10 +1,22 @@
 
 import java.math.BigDecimal;
+import java.awt.*;
 import java.sql.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.awt.Component;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 
@@ -67,6 +79,44 @@ public class test {
         return newIdStr;
     }
 
+    private static void test1(Component c) {
+        if (c instanceof JFrame) {
+            System.out.println("jFrame");
+        } else if (c instanceof JPanel) {
+            System.out.println("jPanel");
+        } else if (c instanceof JDialog) {
+            System.out.println("jDialog");
+        } else {
+            System.out.println("khong xac dinh");
+        }
+    }
+
+    private static void test2(JComponent c) {
+        if (c instanceof JTextField) {
+            System.out.println("jTextField");
+        } else if (c instanceof JLabel) {
+            System.out.println("jLabel");
+        } else if (c instanceof JCheckBox) {
+            System.out.println("jCheckBox");
+        } else if (c instanceof JSpinner) {
+            System.out.println("jSpinner");
+        } else {
+            System.out.println("khong xac dinh");
+        }
+    }
+
+    private void showMessage(JFrame jFrame) {
+
+    }
+
+    private void showMessage(JDialog jDialog) {
+
+    }
+
+    private void showMessage(JPanel jPanel) {
+
+    }
+
     public static void main(String[] args) {
         // testTime();
         // System.out.println(createNewServiceID());
@@ -81,9 +131,20 @@ public class test {
         // System.out.println(result);
         // String data = "8000.0";
         // System.out.println(data.replaceAll("\\.[0]+$", ""));
-        ArrayList<Integer> a = new ArrayList<>();
-        a.add(1);
-        a.add(2);
-        System.out.println(a.get(0));
-    }   
+        // JFrame frame = new JFrame("Test");
+        // JDialog jDialog = new JDialog();
+        // JPanel jPanel = new JPanel();
+
+        // test1((Component) frame);
+        // test1((Component) jDialog);
+        // test1((Component) jPanel);
+        JTextField a = new JTextField();
+        JCheckBox b = new JCheckBox();
+        JSpinner c = new JSpinner();
+        JLabel d = new JLabel();
+        test2(a);
+        test2(b);
+        test2(c);
+        test2(d);
+    }
 }

@@ -2,7 +2,6 @@ package DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import entity.TaiKhoan;
 
@@ -13,25 +12,6 @@ public class TaiKhoanDAO {
         if (instance == null)
             instance = new TaiKhoanDAO();
         return instance;
-    }
-
-    /**
-     * Lấy danh sách tất cả tài khoản
-     * 
-     * @return {@code ArrayList<TaiKhoan>}: danh sách tài khoản
-     */
-    public ArrayList<TaiKhoan> getAccountList() {
-        String query = "{CALL USP_getAccountList}";
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
-        ArrayList<TaiKhoan> dataList = new ArrayList<TaiKhoan>();
-        try {
-            while (rs.next()) {
-                dataList.add(new TaiKhoan(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return dataList;
     }
 
     /**
@@ -84,23 +64,5 @@ public class TaiKhoanDAO {
             e.printStackTrace();
         }
         return account;
-    }
-
-    /**
-     * cập nhật thông tin nhân viên
-     * 
-     * @param account {@code NhanVien}: nhân viên cần cập nhật
-     * @return {@code boolean}: kết quả trả về của câu truy vấn
-     *         <ul>
-     *         <li>Nếu thành công thì trả về {@code true}</li>
-     *         <li>Nếu thất bại thì trả về {@code false}</li>
-     *         </ul>
-     */
-    public boolean updateAccount(TaiKhoan account) {
-        String query = "{CALL UPS_updateAccount ( ? , ? , ? , ? )}";
-        Object[] parameter = new Object[] {};
-        Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
-        int result = obj != null ? result = (int) obj : 0;
-        return result > 0;
     }
 }

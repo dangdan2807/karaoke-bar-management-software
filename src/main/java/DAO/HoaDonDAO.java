@@ -22,8 +22,7 @@ public class HoaDonDAO {
      * @return {@code HoaDon}: hóa đơn
      *         <ul>
      *         <li>Nếu tìm thấy hóa đơn thì trả về {@code HoaDon}</li>
-     *         <li>Nếu không tìm thấy hóa đơn thì trả về {@code HoaDon có mã hóa
-     *         đơn = -1}</li>
+     *         <li>Nếu không tìm thấy hóa đơn thì trả về {@code null}</li>
      *         </ul>
      */
     public HoaDon getUncheckBillByRoomId(String roomId) {
@@ -38,7 +37,7 @@ public class HoaDonDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return data != null ? data : new HoaDon(-1);
+        return data;
     }
 
     /**

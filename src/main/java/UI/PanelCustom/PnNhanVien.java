@@ -1,9 +1,6 @@
 package UI.PanelCustom;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.*;
 
 import DAO.ConvertTime;
@@ -21,7 +18,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class PnNhanVien extends JFrame
-		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener, ChangeListener {
+		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private JTable tableStaff;
 	private DefaultTableModel modelTableStaff;
 	private JTextField txtCMND, txtPhoneNumber, txtStaffName, txtStaffID, txtBFieldGender;
@@ -159,18 +156,10 @@ public class PnNhanVien extends JFrame
 		cboGender = new JComboBox<String>();
 		cboGender.addItem("Nam");
 		cboGender.addItem("Nữ");
-		cboGender.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboGender.setOpaque(false);
-		cboGender.setEditable(true);
-		cboGender.setUI(new BasicComboBoxUI());
+		CustomUI.getInstance().setCustomComboBox(cboGender);
 		cboGender.setToolTipText("chọn giới tính của nhân viên");
-		txtBFieldGender = (JTextField) cboGender.getEditor().getEditorComponent();
-		txtBFieldGender.setBorder(BorderFactory.createEmptyBorder());
-		txtBFieldGender.setBackground(new Color(246, 210, 255, 50));
-		txtBFieldGender.setForeground(Color.WHITE);
-		txtBFieldGender.setEditable(false);
+		txtBFieldGender = CustomUI.getInstance().setCustomCBoxField(cboGender);
 		cboGender.setBounds(965, 79, 250, 20);
-		cboGender.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnInfo.add(cboGender);
 
 		lbPosition = new JLabel("Chức vụ:");
@@ -189,18 +178,13 @@ public class PnNhanVien extends JFrame
 		pnInfo.add(lbPhoneNumber);
 
 		txtStaffName = new JTextField();
-		txtStaffName.setForeground(Color.WHITE);
 		txtStaffName.setBounds(145, 54, 250, 20);
-		txtStaffName.setCaretColor(Color.WHITE);
 		txtStaffName.setToolTipText("Nhập tên của nhân viên, không quá 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtStaffName);
 		pnInfo.add(txtStaffName);
 
 		txtStaffID = new JTextField();
-		txtStaffID.setForeground(Color.WHITE);
-		txtStaffID.setEditable(false);
 		txtStaffID.setBounds(145, 28, 250, 20);
-		txtStaffID.setCaretColor(Color.WHITE);
 		txtStaffID.setToolTipText("Mã nhân viên");
 		CustomUI.getInstance().setCustomTextFieldOff(txtStaffID);
 		pnInfo.add(txtStaffID);
@@ -245,14 +229,10 @@ public class PnNhanVien extends JFrame
 		cboPosition = new JComboBox<String>();
 		cboPosition.addItem("Nhân viên");
 		cboPosition.addItem("Chủ quán");
-		cboPosition.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboPosition.setOpaque(false);
-		cboPosition.setEditable(true);
-		cboPosition.setUI(new BasicComboBoxUI());
+		CustomUI.getInstance().setCustomComboBox(cboPosition);
 		cboPosition.setToolTipText("Chọn chức vụ của nhân viên");
 		txtBFieldPosition = CustomUI.getInstance().setCustomCBoxField(cboPosition);
 		cboPosition.setBounds(555, 28, 250, 20);
-		cboPosition.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnInfo.add(cboPosition);
 
 		JPanel pnSearch = new JPanel();
@@ -262,7 +242,7 @@ public class PnNhanVien extends JFrame
 		pnSearch.setLayout(null);
 		pnInfo.add(pnSearch);
 
-		lpSearch = new JLabel("Tìm kiếm theo:");
+		lpSearch = new JLabel("Lọc theo:");
 		lpSearch.setForeground(Color.WHITE);
 		lpSearch.setBounds(285, 10, 100, 20);
 		pnSearch.add(lpSearch);
@@ -272,14 +252,10 @@ public class PnNhanVien extends JFrame
 		cboSearch.addItem("Tên nhân viên");
 		cboSearch.addItem("Số diện thoại");
 		cboSearch.addItem("Chức vụ");
-		cboSearch.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboSearch.setOpaque(false);
-		cboSearch.setEditable(true);
-		cboSearch.setUI(new BasicComboBoxUI());
+		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		cboSearch.setToolTipText("Chọn loại thông tin cần tìm kiếm");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(385, 11, 200, 20);
-		cboSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnSearch.add(cboSearch);
 
 		btnSearch = new MyButton(110, 35, "Tìm kiếm", gra, searchIcon.getImage(), 35, 19, 14, 5);
@@ -305,15 +281,11 @@ public class PnNhanVien extends JFrame
 		cboSearchPosition = new JComboBox<String>();
 		cboSearchPosition.addItem("Nhân viên");
 		cboSearchPosition.addItem("Chủ quán");
-		cboSearchPosition.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboSearchPosition.setOpaque(false);
-		cboSearchPosition.setEditable(true);
-		cboSearchPosition.setUI(new BasicComboBoxUI());
+		CustomUI.getInstance().setCustomComboBox(cboSearchPosition);
 		cboSearchPosition.setToolTipText("Chọn chức vụ nhân viên");
 		txtBFieldSearchPosition = CustomUI.getInstance().setCustomCBoxField(cboSearchPosition);
 		cboSearchPosition.setVisible(false);
 		cboSearchPosition.setBounds(707, 11, 190, 20);
-		cboSearchPosition.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnSearch.add(cboSearchPosition);
 
 		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 31, 19, 10, 5);
@@ -364,6 +336,7 @@ public class PnNhanVien extends JFrame
 		tableStaff.setBackground(new Color(255, 255, 255, 0));
 		tableStaff.setForeground(new Color(255, 255, 255));
 		tableStaff.setRowHeight(21);
+		tableStaff.setFont(new Font("Dialog", Font.PLAIN, 14));
 		tableStaff.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
 		tableStaff.getTableHeader().setForeground(Color.decode("#9B17EB"));
 		tableStaff.getTableHeader().setBackground(new Color(255, 255, 255));
@@ -415,8 +388,6 @@ public class PnNhanVien extends JFrame
 
 		cboSearch.addItemListener(this);
 		cboSearchPosition.addItemListener(this);
-
-		spinSalary.addChangeListener(this);
 
 		txtKeyWord.addKeyListener(this);
 		btnAdd.addKeyListener(this);
@@ -618,15 +589,6 @@ public class PnNhanVien extends JFrame
 		}
 	}
 
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		Object o = e.getSource();
-		if (o.equals(spinSalary)) {
-			double salary = (double) spinSalary.getValue();
-			System.out.println(salary);
-		}
-	}
-
 	/**
 	 * chạy tất cả các hàm khi bắt đầu chạy form
 	 */
@@ -753,12 +715,7 @@ public class PnNhanVien extends JFrame
 		boolean gender = genderStr.equalsIgnoreCase("nam") ? false : true;
 		String username = txtUsername.getText().trim();
 		TaiKhoan account = new TaiKhoan(username);
-		if (!staffID.equals("")) {
-			account = TaiKhoanDAO.getInstance().getAccountByUsername(username);
-			if (account == null) {
-				account = new TaiKhoan(username);
-			}
-		} else
+		if (staffID.equals("") || staffID.length() <= 0)
 			staffID = createNewStaffID();
 		return new NhanVien(staffID, cmnd, staffName, birthDay, phoneNumber, position, salary, gender, status, account);
 	}

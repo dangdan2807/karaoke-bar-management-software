@@ -7,7 +7,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.*;
 
 import DAO.LoaiDichVuDAO;
@@ -115,7 +114,7 @@ public class PnLoaiDichVu extends JFrame
 		pnSearch.setLayout(null);
 		pnInfo.add(pnSearch);
 
-		lpSearch = new JLabel("Tìm kiếm theo:");
+		lpSearch = new JLabel("Lọc theo:");
 		lpSearch.setForeground(Color.WHITE);
 		lpSearch.setFont(new Font("Dialog", Font.BOLD, 13));
 		lpSearch.setBounds(30, 18, 100, 20);
@@ -124,18 +123,9 @@ public class PnLoaiDichVu extends JFrame
 		cboSearch = new JComboBox<String>();
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên loại dịch vụ");
-		cboSearch.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboSearch.setOpaque(false);
-		cboSearch.setEditable(true);
-		cboSearch.setUI(new BasicComboBoxUI());
-		txtBFieldSearch = (JTextField) cboSearch.getEditor().getEditorComponent();
-		txtBFieldSearch.setBorder(BorderFactory.createEmptyBorder());
-		txtBFieldSearch.setBackground(new Color(246, 210, 255, 50));
-		txtBFieldSearch.setForeground(Color.WHITE);
-		txtBFieldSearch.setEditable(false);
-		txtBFieldSearch.setFont(new Font("Dialog", Font.PLAIN, 12));
+		CustomUI.getInstance().setCustomComboBox(cboSearch);
+		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(140, 18, 160, 20);
-		cboSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 		pnSearch.add(cboSearch);
 
@@ -161,13 +151,9 @@ public class PnLoaiDichVu extends JFrame
 
 		// sử dụng trong tương lai
 		cboSearchType = new JComboBox<String>();
-		cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboSearchType.setOpaque(false);
-		cboSearchType.setEditable(true);
-		cboSearchType.setUI(new BasicComboBoxUI());
+		CustomUI.getInstance().setCustomComboBox(cboSearchType);
 		txtBFieldSearchType = CustomUI.getInstance().setCustomCBoxField(cboSearchType);
 		cboSearchType.setBounds(440, 18, 200, 20);
-		cboSearchType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnSearch.add(cboSearchType);
 
 		JLabel lbServiceTypeID = new JLabel("Mã loại dịch vụ:");
@@ -472,18 +458,10 @@ public class PnLoaiDichVu extends JFrame
 	private LoaiDichVu getServiceTypeDataInForm() {
 		String serviceTypeID = txtServiceTypeID.getText().trim();
 		String serviceTypeName = txtServiceTypeName.getText().trim();
-		LoaiDichVu serviceType = new LoaiDichVu(serviceTypeID);
-		if (!serviceTypeID.equals("")) {
-			serviceType = LoaiDichVuDAO.getInstance().getServiceTypeById(serviceTypeID);
-			if (serviceType == null) {
-				serviceType = new LoaiDichVu(serviceTypeID, serviceTypeName);
-			}
-		} else {
+		if (serviceTypeID.equals("") || serviceTypeID.length() <= 0) {
 			serviceTypeID = createNewServiceTypeID();
-			serviceType.setMaLDV(serviceTypeID);
-			serviceType.setTenLDV(serviceTypeName);
 		}
-		return serviceType;
+		return new LoaiDichVu(serviceTypeID, serviceTypeName);
 	}
 
 	/**
