@@ -71,8 +71,6 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setColor(new Color(255, 255, 255));
-				setFont(new Font("Dialog", Font.BOLD, 20));
-				g2.drawString("QUẢN LÝ PHÒNG", 555, 33);
 			}
 		};
 
@@ -85,6 +83,13 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
 		pnTitle.add(btnBack);
 		pnMain.add(pnTitle);
+
+		JLabel lbTitle = new JLabel("QUẢN LÝ PHÒNG");
+		lbTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lbTitle.setForeground(Color.WHITE);
+		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lbTitle.setBounds(0, 0, 1250, 45);
+		pnTitle.add(lbTitle);
 
 		JPanel pnInfo = new JPanel();
 		pnInfo.setLayout(null);
@@ -422,12 +427,16 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
+			cboSearch.showPopup();
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldSearchType)) {
+			cboSearchType.showPopup();
 			cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldRoomType)) {
+			cboRoomType.showPopup();
 			cboRoomType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldRoomStatus)) {
+			cboRoomStatus.showPopup();
 			cboRoomStatus.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
@@ -619,20 +628,21 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	 * Thay đổi kích thước cột
 	 */
 	private void reSizeColumnTable() {
-		tableRoom.getColumnModel().getColumn(0).setPreferredWidth(70);
-		tableRoom.getColumnModel().getColumn(1).setPreferredWidth(130);
-		tableRoom.getColumnModel().getColumn(2).setPreferredWidth(250);
-		tableRoom.getColumnModel().getColumn(3).setPreferredWidth(200);
-		tableRoom.getColumnModel().getColumn(4).setPreferredWidth(200);
+		TableColumnModel columnModel = tableRoom.getColumnModel();
+		columnModel.getColumn(0).setPreferredWidth(70);
+		columnModel.getColumn(1).setPreferredWidth(130);
+		columnModel.getColumn(2).setPreferredWidth(250);
+		columnModel.getColumn(3).setPreferredWidth(200);
+		columnModel.getColumn(4).setPreferredWidth(200);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
-		tableRoom.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		tableRoom.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
-		tableRoom.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+		columnModel.getColumn(0).setCellRenderer(centerRenderer);
+		columnModel.getColumn(3).setCellRenderer(rightRenderer);
+		columnModel.getColumn(4).setCellRenderer(rightRenderer);
 	}
 
 	/**

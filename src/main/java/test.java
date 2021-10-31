@@ -138,13 +138,18 @@ public class test {
         // test1((Component) frame);
         // test1((Component) jDialog);
         // test1((Component) jPanel);
-        JTextField a = new JTextField();
-        JCheckBox b = new JCheckBox();
-        JSpinner c = new JSpinner();
-        JLabel d = new JLabel();
-        test2(a);
-        test2(b);
-        test2(c);
-        test2(d);
+        // JTextField a = new JTextField();
+        // JCheckBox b = new JCheckBox();
+        // JSpinner c = new JSpinner();
+        // JLabel d = new JLabel();
+        // test2(a);
+        // test2(b);
+        // test2(c);
+        // test2(d);
+        String phone = "0303030303";
+        phone = phone.substring(0, 4) + "-" + phone.substring(4, 7) + "-" + phone.substring(7, 10);
+        System.out.println(phone);
+        phone = phone.replace("-", "");
+        System.out.println(phone);
     }
 }

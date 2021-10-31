@@ -216,11 +216,11 @@ public class NhanVien {
 	 * @param chucVu      {@code String} chức vụ
 	 * @param mucLuong    {@code Double} mức lương
 	 * @param gioiTinh    {@code Boolean} giới tính
-	 * @param trangThaiNV {@code Boolean} trạng thái nhân viên
 	 *                    <ul>
-	 *                    <li>{@code true} Nữ</li>
-	 *                    <li>{@code false} Nam</li>
+	 *                    <li>{@code true} thì là Nữ</li>
+	 *                    <li>{@code false} thì là Nam</li>
 	 *                    </ul>
+	 * @param trangThaiNV {@code Boolean} trạng thái nhân viên
 	 * @param taiKhoan    {@code TaiKhoan} tài khoản nhân viên
 	 */
 	public NhanVien(String maNhanVien, String cmnd, String hoTen, Date ngaySinh, String soDienThoai, String chucVu,

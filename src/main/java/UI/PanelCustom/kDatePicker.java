@@ -21,9 +21,11 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     private int widthDefault = 150;
     private int heightDefault = 20;
     private DialogDatePicker f = new DialogDatePicker();
-    private String pathImg = "src/main/java/img/";
+    private String pathImg = "src/main/resources/images/";
     private ImageIcon calenderIcon = new ImageIcon(pathImg + "calender_16.png");
     private Color backgroundColor = Color.decode("#f9f9f9");
+    private Border borderBottomFocus = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#FCA120"));
+    private Border borderBottomUnFocus = BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 161, 32, 100));
 
     /**
      * Constructor mặc định không tham số
@@ -60,8 +62,10 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
         txt.setEditable(false);
         txt.setText(DialogDatePicker.getToDay());
         txt.setBackground(backgroundColor);
+        txt.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         btn = new JButton(calenderIcon);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btn.setBounds(widthDefault - 30, 0, 30, heightDefault);
 
         this.add(txt);
@@ -107,17 +111,23 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        Object o = e.getSource();
+        if (o.equals(txt)) {
+            txt.setBorder(borderBottomFocus);
+        }
 
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        Object o = e.getSource();
+        if (o.equals(txt)) {
+            txt.setBorder(borderBottomUnFocus);
+        }
     }
 
     /**
@@ -247,7 +257,8 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
      */
     public void setValue(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        txt.setText(sdf.format(date));
+        String dateStr = sdf.format(date);
+        txt.setText(dateStr);
     }
 
     /**

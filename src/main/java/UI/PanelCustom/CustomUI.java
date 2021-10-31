@@ -145,6 +145,19 @@ public class CustomUI {
     }
 
     /**
+     * Tùy chỉnh nhanh radio button
+     * 
+     * @param rad {@code JRadioButton}: radio button cần tùy chỉnh
+     */
+    public void setCustomRadioButton(JRadioButton rad) {
+        rad.setForeground(Color.WHITE);
+        rad.setFocusable(false);
+        rad.setOpaque(false);
+        rad.setBackground(Color.WHITE);
+        rad.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+
+    /**
      * tùy chỉnh nhanh comboBox
      * 
      * @param cbo {@code JComboBox}: comboBox cần tùy chỉnh

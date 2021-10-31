@@ -72,18 +72,24 @@ public class PnLoaiDichVu extends JFrame
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setColor(new Color(255, 255, 255));
-				setFont(new Font("Dialog", Font.BOLD, 20));
-				g2.drawString("QUẢN LÝ LOẠI DỊCH VỤ", 500, 33);
 			}
 		};
 		pnTitle.setBounds(0, 0, 1270, 50);
 		pnTitle.setOpaque(false);
 		pnTitle.setLayout(null);
+
 		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19, 9, 5);
 		btnBack.setBounds(1150, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
 		pnTitle.add(btnBack);
 		pnMain.add(pnTitle);
+
+		JLabel lbTitle = new JLabel("QUẢN LÝ LOẠI DỊCH VỤ");
+		lbTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lbTitle.setForeground(Color.WHITE);
+		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lbTitle.setBounds(0, 0, 1250, 45);
+		pnTitle.add(lbTitle);
 
 		JPanel pnInfo = new JPanel();
 		pnInfo.setLayout(null);
@@ -365,6 +371,7 @@ public class PnLoaiDichVu extends JFrame
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
+			cboSearch.showPopup();
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
@@ -531,17 +538,18 @@ public class PnLoaiDichVu extends JFrame
 	 * Thay đổi kích thước cột
 	 */
 	private void reSizeColumnTable() {
+		TableColumnModel columnModel = tableServiceType.getColumnModel();
 
-		tableServiceType.getColumnModel().getColumn(0).setPreferredWidth(70);
-		tableServiceType.getColumnModel().getColumn(1).setPreferredWidth(130);
-		tableServiceType.getColumnModel().getColumn(2).setPreferredWidth(250);
+		columnModel.getColumn(0).setPreferredWidth(70);
+		columnModel.getColumn(1).setPreferredWidth(130);
+		columnModel.getColumn(2).setPreferredWidth(250);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
-		tableServiceType.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		columnModel.getColumn(0).setCellRenderer(centerRenderer);
 	}
 
 	/**

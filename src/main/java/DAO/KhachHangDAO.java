@@ -196,4 +196,29 @@ public class KhachHangDAO {
         int result = obj != null ? result = (int) obj : 0;
         return result > 0;
     }
+
+    /**
+     * Lấy danh sách khách hàng theo giới tính
+     * 
+     * @param gender {@code boolean}: giới tính khách hàng
+     *               <ul>
+     *               <li>{@code true} thì là Nữ</li>
+     *               <li>{@code false} thì là Nam</li>
+     *               </ul>
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     */
+    public ArrayList<KhachHang> getCustomerListByGender(boolean gender) {
+        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
+        String query = "{CALL USP_getCustomerListByGender( ? )}";
+        Object[] parameter = new Object[] { gender };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new KhachHang(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
 }

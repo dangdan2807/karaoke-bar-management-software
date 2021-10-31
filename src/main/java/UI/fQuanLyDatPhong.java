@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.*;
 
 import DAO.*;
@@ -177,16 +176,8 @@ public class fQuanLyDatPhong extends JFrame
 
 		cboRoomID = new JComboBox<String>();
 		cboRoomID.setBounds(89, 0, 118, 27);
-		cboRoomID.setEditable(true);
-		cboRoomID.setOpaque(false);
-		cboRoomID.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboRoomID.setUI(new BasicComboBoxUI());
-		txtBFieldRoomID = (JTextField) cboRoomID.getEditor().getEditorComponent();
-		txtBFieldRoomID.setBorder(BorderFactory.createEmptyBorder());
-		txtBFieldRoomID.setBackground(new Color(246, 210, 255, 50));
-		txtBFieldRoomID.setForeground(Color.WHITE);
-		txtBFieldRoomID.setEditable(false);
-		cboRoomID.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		CustomUI.getInstance().setCustomComboBox(cboRoomID);
+		txtBFieldRoomID = CustomUI.getInstance().setCustomCBoxField(cboRoomID);
 		pnRoomControl.add(cboRoomID);
 
 		JLabel lbRoomTypeRoomCtrl = new JLabel("Loại phòng: ");
@@ -197,16 +188,8 @@ public class fQuanLyDatPhong extends JFrame
 
 		cboRoomType = new JComboBox<String>();
 		cboRoomType.setBounds(89, 33, 118, 27);
-		cboRoomType.setEditable(true);
-		cboRoomType.setOpaque(false);
-		cboRoomType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboRoomType.setUI(new BasicComboBoxUI());
-		txtBFieldRoomType = (JTextField) cboRoomType.getEditor().getEditorComponent();
-		txtBFieldRoomType.setBorder(BorderFactory.createEmptyBorder());
-		txtBFieldRoomType.setBackground(new Color(246, 210, 255, 50));
-		txtBFieldRoomType.setForeground(Color.WHITE);
-		txtBFieldRoomType.setEditable(false);
-		txtBFieldRoomType.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		CustomUI.getInstance().setCustomComboBox(cboRoomType);
+		txtBFieldRoomType = CustomUI.getInstance().setCustomCBoxField(cboRoomID);
 		pnRoomControl.add(cboRoomType);
 
 		JLabel lbRoom = new JLabel("Phòng: ");
@@ -548,17 +531,9 @@ public class fQuanLyDatPhong extends JFrame
 		pnControlService.add(lbServiceType);
 
 		cboServiceType = new JComboBox<String>();
+		CustomUI.getInstance().setCustomComboBox(cboServiceType);
+		txtBFieldServiceType = CustomUI.getInstance().setCustomCBoxField(cboServiceType);
 		cboServiceType.setBounds(110, 154, 170, 20);
-		cboServiceType.setEditable(true);
-		cboServiceType.setOpaque(false);
-		cboServiceType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		cboServiceType.setUI(new BasicComboBoxUI());
-		txtBFieldServiceType = (JTextField) cboServiceType.getEditor().getEditorComponent();
-		txtBFieldServiceType.setBorder(BorderFactory.createEmptyBorder());
-		txtBFieldServiceType.setBackground(new Color(246, 210, 255, 50));
-		txtBFieldServiceType.setForeground(Color.WHITE);
-		txtBFieldServiceType.setEditable(false);
-		txtBFieldServiceType.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnControlService.add(cboServiceType);
 
 		chkSearchService = new JCheckBox("<html>Tìm theo tên và loại</html>");
@@ -1299,7 +1274,8 @@ public class fQuanLyDatPhong extends JFrame
 			String stt = df.format(i++);
 			String priceStr = df.format(item.getGiaBan());
 			String quantityStr = df.format(item.getSoLuongTon());
-			modelTableService.addRow(new Object[] { stt, addSpaceToString(item.getTenDichVu()), addSpaceToString(quantityStr), addSpaceToString(priceStr) });
+			modelTableService.addRow(new Object[] { stt, addSpaceToString(item.getTenDichVu()),
+					addSpaceToString(quantityStr), addSpaceToString(priceStr) });
 		}
 	}
 

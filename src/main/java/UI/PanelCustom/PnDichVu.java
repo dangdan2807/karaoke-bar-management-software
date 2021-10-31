@@ -31,7 +31,6 @@ public class PnDichVu extends JFrame
 	private JSpinner spinQuantity, spinPrice;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 
-
 	private NhanVien staffLogin = null;
 
 	/**
@@ -70,18 +69,24 @@ public class PnDichVu extends JFrame
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setColor(new Color(255, 255, 255));
-				setFont(new Font("Dialog", Font.BOLD, 20));
-				g2.drawString("QUẢN LÝ DỊCH VỤ", 500, 33);
 			}
 		};
 		pnTitle.setBounds(0, 0, 1270, 50);
 		pnTitle.setOpaque(false);
 		pnTitle.setLayout(null);
+
 		btnBack = new MyButton(100, 35, "Quay lại", gra, CustomUI.BACK_ICON.getImage(), 30, 19);
 		btnBack.setBounds(1150, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
 		pnTitle.add(btnBack);
 		pnMain.add(pnTitle);
+
+		JLabel lbTitle = new JLabel("QUẢN LÝ DỊCH VỤ");
+		lbTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lbTitle.setForeground(Color.WHITE);
+		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lbTitle.setBounds(0, 0, 1250, 45);
+		pnTitle.add(lbTitle);
 
 		JPanel pnInfo = new JPanel();
 		pnInfo.setLayout(null);
@@ -389,10 +394,13 @@ public class PnDichVu extends JFrame
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSerType)) {
+			cboServiceType.showPopup();
 			cboServiceType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldSearch)) {
+			cboSearch.showPopup();
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldSearchSerType)) {
+			cboSearchServiceType.showPopup();
 			cboSearchServiceType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
@@ -514,10 +522,10 @@ public class PnDichVu extends JFrame
 	 * Kiểm tra thông tin trong form
 	 * 
 	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra thông tin
-     *         <ul>
-     *         <li>Nếu hợp lệ thì trả về {@code true}</li>
-     *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
-     *         </ul>
+	 *         <ul>
+	 *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+	 *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+	 *         </ul>
 	 */
 	private boolean validData() {
 		boolean valid = ValidationData.getInstance().ValidName(this, txtServiceName, "Tên dịch vụ", 100, 0);
@@ -565,7 +573,7 @@ public class PnDichVu extends JFrame
 	/**
 	 * Thêm dòng vào danh sách dịch vụ đang hiển thị
 	 * 
-	 * @param stt   {@code int}: số thứ tự
+	 * @param stt     {@code int}: số thứ tự
 	 * @param service {@code DichVu}: dịch vụ cần được thêm
 	 */
 	private void addRow(int stt, DichVu service) {
@@ -630,22 +638,23 @@ public class PnDichVu extends JFrame
 	 * Thay đổi kích thước cột
 	 */
 	private void reSizeColumnTable() {
-		tableService.getColumnModel().getColumn(0).setPreferredWidth(70);
-		tableService.getColumnModel().getColumn(1).setPreferredWidth(130);
-		tableService.getColumnModel().getColumn(2).setPreferredWidth(250);
-		tableService.getColumnModel().getColumn(3).setPreferredWidth(200);
-		tableService.getColumnModel().getColumn(4).setPreferredWidth(200);
-		tableService.getColumnModel().getColumn(5).setPreferredWidth(200);
+		TableColumnModel columnModel = tableService.getColumnModel();
+		columnModel.getColumn(0).setPreferredWidth(70);
+		columnModel.getColumn(1).setPreferredWidth(130);
+		columnModel.getColumn(2).setPreferredWidth(250);
+		columnModel.getColumn(3).setPreferredWidth(200);
+		columnModel.getColumn(4).setPreferredWidth(200);
+		columnModel.getColumn(5).setPreferredWidth(200);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
-		tableService.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		tableService.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-		tableService.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
-		tableService.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+		columnModel.getColumn(0).setCellRenderer(centerRenderer);
+		columnModel.getColumn(1).setCellRenderer(centerRenderer);
+		columnModel.getColumn(3).setCellRenderer(rightRenderer);
+		columnModel.getColumn(4).setCellRenderer(rightRenderer);
 	}
 
 	/**

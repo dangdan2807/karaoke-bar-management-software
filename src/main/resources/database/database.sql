@@ -957,6 +957,17 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_getCustomerListByGender
+    @gender BIT
+AS
+BEGIN
+    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
+        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    FROM dbo.KhachHang kh
+    WHERE kh.gioiTinh = @gender
+END
+GO
+
 CREATE PROC USP_getCustomerListByPhoneNumber
     @phoneNumber VARCHAR(10)
 AS

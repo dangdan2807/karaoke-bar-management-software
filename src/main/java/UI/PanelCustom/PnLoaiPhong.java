@@ -69,18 +69,24 @@ public class PnLoaiPhong extends JFrame
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setColor(new Color(255, 255, 255));
-				setFont(new Font("Dialog", Font.BOLD, 20));
-				g2.drawString("QUẢN LÝ LOẠI PHÒNG", 500, 33);
 			}
 		};
 		pnTitle.setBounds(0, 0, 1270, 50);
 		pnTitle.setOpaque(false);
 		pnTitle.setLayout(null);
+
 		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19);
 		btnBack.setBounds(1150, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
 		pnTitle.add(btnBack);
 		pnMain.add(pnTitle);
+
+		JLabel lbTitle = new JLabel("QUẢN LÝ LOẠI PHÒNG");
+		lbTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lbTitle.setForeground(Color.WHITE);
+		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lbTitle.setBounds(0, 0, 1250, 45);
+		pnTitle.add(lbTitle);
 
 		JPanel pnInfo = new JPanel();
 		pnInfo.setLayout(null);
@@ -404,6 +410,7 @@ public class PnLoaiPhong extends JFrame
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
+			cboSearch.showPopup();
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
@@ -583,20 +590,21 @@ public class PnLoaiPhong extends JFrame
 	 * Thay đổi kích thước cột
 	 */
 	private void reSizeColumnTable() {
-		tableTypeRoom.getColumnModel().getColumn(0).setPreferredWidth(70);
-		tableTypeRoom.getColumnModel().getColumn(1).setPreferredWidth(130);
-		tableTypeRoom.getColumnModel().getColumn(2).setPreferredWidth(250);
-		tableTypeRoom.getColumnModel().getColumn(3).setPreferredWidth(200);
-		tableTypeRoom.getColumnModel().getColumn(4).setPreferredWidth(200);
+		TableColumnModel columnModel = tableTypeRoom.getColumnModel();
+		columnModel.getColumn(0).setPreferredWidth(70);
+		columnModel.getColumn(1).setPreferredWidth(130);
+		columnModel.getColumn(2).setPreferredWidth(250);
+		columnModel.getColumn(3).setPreferredWidth(200);
+		columnModel.getColumn(4).setPreferredWidth(200);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
-		tableTypeRoom.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		tableTypeRoom.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
-		tableTypeRoom.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+		columnModel.getColumn(0).setCellRenderer(centerRenderer);
+		columnModel.getColumn(3).setCellRenderer(rightRenderer);
+		columnModel.getColumn(4).setCellRenderer(rightRenderer);
 	}
 
 	/**

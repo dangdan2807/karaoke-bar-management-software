@@ -8,9 +8,11 @@ import java.awt.event.*;
 
 import DAO.NhanVienDAO;
 import UI.PanelCustom.PnDichVu;
+import UI.PanelCustom.PnKhachHang;
 import UI.PanelCustom.PnLoaiDichVu;
 import UI.PanelCustom.PnLoaiPhong;
 import UI.PanelCustom.PnNhanVien;
+import UI.PanelCustom.PnPhong;
 import entity.NhanVien;
 
 public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
@@ -51,22 +53,19 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         tpTabMain.setFont(new Font("Dialog", Font.PLAIN, 14));
 
         PnNhanVien pnNhanVien = new PnNhanVien(staffLogin);
-        PnDichVu pnDichVu = new PnDichVu(staffLogin);
-        PnLoaiDichVu pnLoaiDichVu = new PnLoaiDichVu(staffLogin);
+        PnKhachHang pnKhachHang = new PnKhachHang(staffLogin);
         PnLoaiPhong pnLoaiPhong = new PnLoaiPhong(staffLogin);
+        PnPhong pnPhong = new PnPhong(staffLogin);
+        PnLoaiDichVu pnLoaiDichVu = new PnLoaiDichVu(staffLogin);
+        PnDichVu pnDichVu = new PnDichVu(staffLogin);
 
         tpTabMain.addTab("Nhân viên", null, pnNhanVien, "Quản lý Nhân viên");
-        tpTabMain.addTab("Khách hàng", null, null, "Quản lý Khách hàng");
+        tpTabMain.addTab("Khách hàng", null, pnKhachHang, "Quản lý Khách hàng");
         tpTabMain.addTab("Loại phòng", null, pnLoaiPhong, "Quản lý loại phòng");
-        tpTabMain.addTab("Phòng", null, null, "Quản lý Phòng");
+        tpTabMain.addTab("Phòng", null, pnPhong, "Quản lý Phòng");
         tpTabMain.addTab("Loại dịch vụ", null, pnLoaiDichVu, "Quản lý loại dịch vụ");
         tpTabMain.addTab("Dịch vụ", null, pnDichVu, "Quản lý dịch vụ");
         tpTabMain.addTab("Hóa đơn", null, null, "Quản lý Hóa đơn");
-        // tpTabMain.addTab("Quản lý Hóa đơn 1", null, null, "Quản lý Hóa đơn 1");
-        // tpTabMain.addTab("Quản lý Hóa đơn 2", null, null, "Quản lý Hóa đơn 2");
-        // tpTabMain.addTab("Quản lý Hóa đơn 3", null, null, "Quản lý Hóa đơn 3");
-        // tpTabMain.addTab("Quản lý Hóa đơn 4", null, null, "Quản lý Hóa đơn 4");
-        // tpTabMain.addTab("Quản lý Hóa đơn 5", null, null, "Quản lý Hóa đơn 5");
         this.add(tpTabMain);
 
         tpTabMain.addChangeListener(this);
