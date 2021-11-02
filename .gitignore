@@ -1,6 +1,5 @@
-.vscode/launch.json
-src/demo.java
-src/test/*
-src/tesst/*
-src/test.*
+.settings/*
 .gitignore
+target/classes/*
+.vscode/*
+Coffee.jrxml
