@@ -22,9 +22,9 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
     private int year = Calendar.getInstance().get(Calendar.YEAR);
     private JButton btnPre, btnNext, btnCancel, btnSubmit;
     private SpinnerNumberModel spinYearModel;
-    private JSpinner spinYear;
+    private JSpinner spnYear;
     private int check = 0, viTri = -1;
-    private JLabel lbMonth, lbYear, lbThu, lbNgayThang, lbToDay;
+    private JLabel lblMonth, lblYear, lblThu, lblNgayThang, lblToDay;
     private String blueColor = "#3f51b5";
     private String whiteColor = "#fafafa";
 
@@ -44,38 +44,38 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
      * Khởi tạo giao diện
      */
     public void createFormDatePicker() {
-        JPanel pnMain = new JPanel();
-        pnMain.setBounds(0, 0, widthPn, heightPn);
-        pnMain.setBackground(Color.decode(whiteColor));
-        pnMain.setLayout(null);
+        JPanel pnlMain = new JPanel();
+        pnlMain.setBounds(0, 0, widthPn, heightPn);
+        pnlMain.setBackground(Color.decode(whiteColor));
+        pnlMain.setLayout(null);
 
-        JPanel pnShowTime = new JPanel();
-        pnShowTime.setBounds(0, 0, 100, 202);
-        pnShowTime.setBackground(Color.decode(blueColor));
-        pnMain.add(pnShowTime);
-        pnShowTime.setLayout(null);
+        JPanel pnlShowTime = new JPanel();
+        pnlShowTime.setBounds(0, 0, 100, 202);
+        pnlShowTime.setBackground(Color.decode(blueColor));
+        pnlMain.add(pnlShowTime);
+        pnlShowTime.setLayout(null);
 
-        lbYear = new JLabel("year");
-        lbYear.setFont(new Font("Dialog", Font.BOLD, 15));
-        lbYear.setBounds(12, 12, 107, 16);
-        lbYear.setForeground(Color.decode("#aeb5df"));
-        pnShowTime.add(lbYear);
+        lblYear = new JLabel("year");
+        lblYear.setFont(new Font("Dialog", Font.BOLD, 15));
+        lblYear.setBounds(12, 12, 107, 16);
+        lblYear.setForeground(Color.decode("#aeb5df"));
+        pnlShowTime.add(lblYear);
 
-        lbThu = new JLabel("thứ");
-        lbThu.setFont(new Font("Dialog", Font.BOLD, 18));
-        lbThu.setBounds(12, 40, 107, 25);
-        lbThu.setForeground(Color.WHITE);
-        pnShowTime.add(lbThu);
+        lblThu = new JLabel("thứ");
+        lblThu.setFont(new Font("Dialog", Font.BOLD, 18));
+        lblThu.setBounds(12, 40, 107, 25);
+        lblThu.setForeground(Color.WHITE);
+        pnlShowTime.add(lblThu);
 
-        lbNgayThang = new JLabel("tháng ngày");
-        lbNgayThang.setFont(new Font("Dialog", Font.BOLD, 18));
-        lbNgayThang.setBounds(12, 68, 107, 25);
-        lbNgayThang.setForeground(Color.WHITE);
-        pnShowTime.add(lbNgayThang);
+        lblNgayThang = new JLabel("tháng ngày");
+        lblNgayThang.setFont(new Font("Dialog", Font.BOLD, 18));
+        lblNgayThang.setBounds(12, 68, 107, 25);
+        lblNgayThang.setForeground(Color.WHITE);
+        pnlShowTime.add(lblNgayThang);
 
         String[] header = { "S", "M", "T", "W", "T", "F", "S" };
-        JPanel pnDateTable = new JPanel(new GridLayout(7, 7));
-        pnDateTable.setBackground(Color.decode(whiteColor));
+        JPanel pnlDateTable = new JPanel(new GridLayout(7, 7));
+        pnlDateTable.setBackground(Color.decode(whiteColor));
 
         for (int i = 0; i < button.length; i++) {
             final int selection = i;
@@ -105,79 +105,79 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
             button[i].setBorder(null);
             button[i].setPreferredSize(new Dimension(20, 20));
             button[i].setBackground(Color.decode(whiteColor));
-            pnDateTable.add(button[i]);
+            pnlDateTable.add(button[i]);
         }
 
-        JPanel pnBtn = new JPanel();
-        pnBtn.setLayout(null);
-        pnBtn.setBackground(Color.decode(whiteColor));
+        JPanel pnlBtn = new JPanel();
+        pnlBtn.setLayout(null);
+        pnlBtn.setBackground(Color.decode(whiteColor));
 
         btnPre = new JButton("<");
         btnNext = new JButton(">");
 
         spinYearModel = new SpinnerNumberModel(year, 1900, null, 1);
-        spinYear = new JSpinner(spinYearModel);
-        spinYear.setFont(new Font("Dialog", Font.BOLD, 13));
-        lbMonth = new JLabel("tháng");
-        lbMonth.setHorizontalAlignment(SwingConstants.CENTER);
-        lbMonth.setFont(new Font("Dialog", Font.BOLD, 14));
+        spnYear = new JSpinner(spinYearModel);
+        spnYear.setFont(new Font("Dialog", Font.BOLD, 13));
+        lblMonth = new JLabel("tháng");
+        lblMonth.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMonth.setFont(new Font("Dialog", Font.BOLD, 14));
 
         int h = 25;
         btnPre.setBounds(3, 0, 41, h);
         btnPre.setBackground(Color.decode(whiteColor));
         btnPre.setForeground(Color.decode(blueColor));
         btnPre.setBorder(null);
-        lbMonth.setBounds(62, 2, 105, 25);
-        spinYear.setBounds(165, 2, 70, h);
+        lblMonth.setBounds(62, 2, 105, 25);
+        spnYear.setBounds(165, 2, 70, h);
         btnNext.setBounds(287, 0, 41, h);
         btnNext.setBackground(Color.decode(whiteColor));
         btnNext.setForeground(Color.decode(blueColor));
         btnNext.setBorder(null);
 
-        pnBtn.setBounds(101, 0, 330, 30);
-        pnDateTable.setBounds(101, 30, 330, 140);
+        pnlBtn.setBounds(101, 0, 330, 30);
+        pnlDateTable.setBounds(101, 30, 330, 140);
 
-        pnBtn.add(btnPre);
-        pnBtn.add(lbMonth);
-        pnBtn.add(spinYear);
-        pnBtn.add(btnNext);
+        pnlBtn.add(btnPre);
+        pnlBtn.add(lblMonth);
+        pnlBtn.add(spnYear);
+        pnlBtn.add(btnNext);
 
-        pnMain.add(pnBtn);
-        pnMain.add(pnDateTable);
+        pnlMain.add(pnlBtn);
+        pnlMain.add(pnlDateTable);
 
-        JPanel pnSubmit = new JPanel();
-        pnSubmit.setBackground(Color.decode(whiteColor));
-        pnSubmit.setLayout(null);
-        pnSubmit.setBounds(101, 172, 330, 30);
-        pnMain.add(pnSubmit);
+        JPanel pnlSubmit = new JPanel();
+        pnlSubmit.setBackground(Color.decode(whiteColor));
+        pnlSubmit.setLayout(null);
+        pnlSubmit.setBounds(101, 172, 330, 30);
+        pnlMain.add(pnlSubmit);
 
         btnSubmit = new JButton("OK");
         btnSubmit.setBounds(268, 0, 60, 26);
         btnSubmit.setBackground(Color.decode(whiteColor));
         btnSubmit.setForeground(Color.decode(blueColor));
         btnSubmit.setBorder(null);
-        pnSubmit.add(btnSubmit);
+        pnlSubmit.add(btnSubmit);
 
         btnCancel = new JButton("Cancel");
         btnCancel.setBounds(182, 0, 74, 26);
         btnCancel.setBackground(Color.decode(whiteColor));
         btnCancel.setForeground(Color.decode(blueColor));
         btnCancel.setBorder(null);
-        pnSubmit.add(btnCancel);
+        pnlSubmit.add(btnCancel);
 
-        lbToDay = new JLabel("Today: ");
-        lbToDay.setBounds(10, 6, 162, 14);
-        pnSubmit.add(lbToDay);
+        lblToDay = new JLabel("Today: ");
+        lblToDay.setBounds(10, 6, 162, 14);
+        pnlSubmit.add(lblToDay);
 
         displayDate();
         showToDay();
-        getContentPane().add(pnMain);
+        getContentPane().add(pnlMain);
 
         btnNext.addActionListener(this);
         btnPre.addActionListener(this);
         btnSubmit.addActionListener(this);
         btnCancel.addActionListener(this);
-        spinYear.addChangeListener(this);
+        spnYear.addChangeListener(this);
     }
 
     public static void main(String[] args) {
@@ -205,7 +205,7 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
     @Override
     public void stateChanged(ChangeEvent e) {
         Object o = e.getSource();
-        if (o.equals(spinYear)) {
+        if (o.equals(spnYear)) {
             displayDate();
         }
     }
@@ -218,14 +218,14 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
             button[i].setText("");
         SimpleDateFormat sdfMonth = new SimpleDateFormat("MMMM");
         Calendar cal = Calendar.getInstance();
-        int y = (int) spinYear.getValue();
+        int y = (int) spnYear.getValue();
         if (y != year)
             year = y;
 
         cal.set(year, month, 1);
 
-        lbMonth.setText(sdfMonth.format(cal.getTime()));
-        spinYear.setValue(year);
+        lblMonth.setText(sdfMonth.format(cal.getTime()));
+        spnYear.setValue(year);
 
         int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -247,15 +247,15 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
     public void showToDay() {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
-        lbNgayThang.setText(sdf.format(cal.getTime()));
+        lblNgayThang.setText(sdf.format(cal.getTime()));
         sdf = new SimpleDateFormat("E");
 
-        lbThu.setText(sdf.format(cal.getTime()) + ",");
+        lblThu.setText(sdf.format(cal.getTime()) + ",");
         sdf = new SimpleDateFormat("yyyy");
 
-        lbYear.setText(sdf.format(cal.getTime()));
+        lblYear.setText(sdf.format(cal.getTime()));
         sdf = new SimpleDateFormat("dd/MM/yyyy");
-        lbToDay.setText("Today: " + sdf.format(cal.getTime()));
+        lblToDay.setText("Today: " + sdf.format(cal.getTime()));
     }
 
     /**
@@ -265,18 +265,18 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
      */
     public void displayShowDate(int day) {
         Calendar cal = Calendar.getInstance();
-        int y = (int) spinYear.getValue();
+        int y = (int) spnYear.getValue();
         if (y != year)
             year = y;
         cal.set(year, month, day);
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
-        lbNgayThang.setText(sdf.format(cal.getTime()));
+        lblNgayThang.setText(sdf.format(cal.getTime()));
 
         sdf = new SimpleDateFormat("E");
-        lbThu.setText(sdf.format(cal.getTime()) + ",");
+        lblThu.setText(sdf.format(cal.getTime()) + ",");
 
         sdf = new SimpleDateFormat("yyyy");
-        lbYear.setText(sdf.format(cal.getTime()));
+        lblYear.setText(sdf.format(cal.getTime()));
     }
 
     /**

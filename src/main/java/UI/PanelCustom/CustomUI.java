@@ -77,11 +77,11 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh label
      * 
-     * @param lb {@code JLabel}: label cần tùy chỉnh
+     * @param lbl {@code JLabel}: label cần tùy chỉnh
      */
-    public void setCustomLbTitle(JLabel lb) {
-        lb.setFont(new Font("Dialog", Font.BOLD, 24));
-        lb.setForeground(Color.decode("#1a66e3"));
+    public void setCustomLabel(JLabel lbl) {
+        lbl.setFont(new Font("Dialog", Font.BOLD, 14));
+        lbl.setForeground(Color.WHITE);
     }
 
     /**
@@ -111,6 +111,8 @@ public class CustomUI {
             txt.setCaretColor(Color.WHITE);
             txt.setFont(new Font("Dialog", Font.PLAIN, 14));
             txt.setForeground(Color.WHITE);
+        } else {
+            txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
         }
     }
 
@@ -192,15 +194,42 @@ public class CustomUI {
     /**
      * tùy chỉnh nhanh Spinner
      * 
-     * @param spin {@code JSpinner}: Spinner cần tùy chỉnh
+     * @param spn {@code JSpinner}: Spinner cần tùy chỉnh
      */
-    public void setCustomSpinner(JSpinner spin) {
-        spin.setFont(new Font("Dialog", Font.PLAIN, 14));
-        spin.setBackground(Color.WHITE);
-        spin.setBorder(BORDER_BOTTOM_UN_FOCUS);
-        spin.setOpaque(false);
-        ((JSpinner.DefaultEditor) spin.getEditor()).getTextField().setCaretColor(Color.WHITE);
-        ((JSpinner.DefaultEditor) spin.getEditor()).getTextField().setForeground(Color.WHITE);
-        ((JSpinner.DefaultEditor) spin.getEditor()).getTextField().setBackground(new Color(246, 210, 255, 50));
+    public void setCustomSpinner(JSpinner spn) {
+        spn.setFont(new Font("Dialog", Font.PLAIN, 14));
+        spn.setBackground(Color.WHITE);
+        spn.setBorder(BORDER_BOTTOM_UN_FOCUS);
+        spn.setOpaque(false);
+        ((JSpinner.DefaultEditor) spn.getEditor()).getTextField().setCaretColor(Color.WHITE);
+        ((JSpinner.DefaultEditor) spn.getEditor()).getTextField().setForeground(Color.WHITE);
+        ((JSpinner.DefaultEditor) spn.getEditor()).getTextField().setBackground(new Color(246, 210, 255, 50));
+    }
+
+    /**
+     * tùy chỉnh nhanh table
+     * 
+     * @param btn {@code JTable}: table cần tùy chỉnh
+     */
+    public void setCustomTable(JTable tbl) {
+        tbl.setBackground(new Color(255, 255, 255, 0));
+        tbl.setForeground(new Color(255, 255, 255));
+        tbl.setFont(new Font("Dialog", Font.PLAIN, 14));
+        tbl.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
+        tbl.getTableHeader().setForeground(Color.decode("#9B17EB"));
+    }
+    
+    /**
+     * tùy chỉnh nhanh {@code JScrollPane}
+     * 
+     * @param tbl {@code JTable}: table nhận JScrollPane tùy chỉnh
+     */
+    public JScrollPane setCustomScrollPane(JTable tbl) {
+        JScrollPane src = new JScrollPane(tbl, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		src.getViewport().setBackground(Color.WHITE);
+		src.setOpaque(false);
+        src.getViewport().setOpaque(false);
+        return src;
     }
 }

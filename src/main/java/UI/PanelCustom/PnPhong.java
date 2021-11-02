@@ -15,7 +15,7 @@ import entity.*;
 
 public class PnPhong extends JFrame implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private static final long serialVersionUID = 1L;
-	private JTable tableRoom;
+	private JTable tblTableRoom;
 	private DefaultTableModel modelTableRoom;
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
@@ -29,7 +29,7 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 
 	private JTextField txtLocation, txtBFieldSearch, txtKeyWord, txtBFieldSearchType, txtRoomID;
 	private JTextField txtBFieldRoomStatus, txtBFieldRoomType;
-	private JLabel lbLocation, lpSearch;
+	private JLabel lblLocation, lblSearch;
 	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch;
 	private JComboBox<String> cboSearch, cboSearchType, cboRoomType, cboRoomStatus;
 
@@ -44,7 +44,7 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		JPanel pnMain = new JPanel() {
+		JPanel pnlMain = new JPanel() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -59,11 +59,11 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 				g2.drawRoundRect(9, 49, 1240, 530, 20, 20);
 			}
 		};
-		pnMain.setLayout(null);
-		pnMain.setBounds(0, 0, 1270, 630);
-		getContentPane().add(pnMain);
+		pnlMain.setLayout(null);
+		pnlMain.setBounds(0, 0, 1270, 630);
+		getContentPane().add(pnlMain);
 
-		JPanel pnTitle = new JPanel() {
+		JPanel pnlTitle = new JPanel() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -74,68 +74,68 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 			}
 		};
 
-		pnTitle.setBounds(0, 0, 1270, 50);
-		pnTitle.setOpaque(false);
-		pnTitle.setLayout(null);
+		pnlTitle.setBounds(0, 0, 1270, 50);
+		pnlTitle.setOpaque(false);
+		pnlTitle.setLayout(null);
 
 		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19, 9, 5);
 		btnBack.setBounds(1150, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
-		pnTitle.add(btnBack);
-		pnMain.add(pnTitle);
+		pnlTitle.add(btnBack);
+		pnlMain.add(pnlTitle);
 
-		JLabel lbTitle = new JLabel("QUẢN LÝ PHÒNG");
-		lbTitle.setFont(new Font("Dialog", Font.BOLD, 24));
-		lbTitle.setForeground(Color.WHITE);
-		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lbTitle.setBounds(0, 0, 1250, 45);
-		pnTitle.add(lbTitle);
+		JLabel lblTitle = new JLabel("QUẢN LÝ PHÒNG");
+		lblTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lblTitle.setForeground(Color.WHITE);
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setBounds(0, 0, 1250, 45);
+		pnlTitle.add(lblTitle);
 
-		JPanel pnInfo = new JPanel();
-		pnInfo.setLayout(null);
-		pnInfo.setOpaque(false);
-		pnInfo.setBounds(0, 60, 1238, 140);
-		pnMain.add(pnInfo);
+		JPanel pnlInfo = new JPanel();
+		pnlInfo.setLayout(null);
+		pnlInfo.setOpaque(false);
+		pnlInfo.setBounds(0, 60, 1238, 140);
+		pnlMain.add(pnlInfo);
 
 		txtLocation = new JTextField();
 		txtLocation.setBounds(725, 15, 180, 20);
 		txtLocation.setToolTipText("Nhập vị trí của phòng");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtLocation);
-		pnInfo.add(txtLocation);
+		pnlInfo.add(txtLocation);
 
-		lbLocation = new JLabel("Vị trí:");
-		lbLocation.setForeground(Color.WHITE);
-		lbLocation.setFont(new Font("Dialog", Font.BOLD, 13));
-		lbLocation.setBounds(660, 15, 70, 20);
-		pnInfo.add(lbLocation);
+		lblLocation = new JLabel("Vị trí:");
+		lblLocation.setForeground(Color.WHITE);
+		lblLocation.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblLocation.setBounds(660, 15, 70, 20);
+		pnlInfo.add(lblLocation);
 
 		btnAdd = new MyButton(100, 35, "Thêm", gra, addIcon.getImage(), 39, 19);
 		btnAdd.setToolTipText("Thêm nhân viên mới sau khi đã điền đủ thông tin");
 		btnAdd.setBounds(20, 93, 100, 35);
-		pnInfo.add(btnAdd);
+		pnlInfo.add(btnAdd);
 
 		btnUpdate = new MyButton(100, 35, "Sửa", gra, updateIcon.getImage(), 43, 19);
 		btnUpdate.setToolTipText("Sửa thông tin nhân viên");
 		btnUpdate.setBounds(150, 93, 100, 35);
 		btnUpdate.setEnabledCustom(false);
-		pnInfo.add(btnUpdate);
+		pnlInfo.add(btnUpdate);
 
 		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 27, 19);
 		btnRefresh.setToolTipText("Làm mới form");
 		btnRefresh.setBounds(1118, 93, 100, 35);
-		pnInfo.add(btnRefresh);
+		pnlInfo.add(btnRefresh);
 
-		JPanel pnSearch = new JPanel();
-		pnSearch.setBounds(286, 83, 822, 53);
-		pnSearch.setOpaque(false);
-		pnSearch.setLayout(null);
-		pnInfo.add(pnSearch);
+		JPanel pnlSearch = new JPanel();
+		pnlSearch.setBounds(286, 83, 822, 53);
+		pnlSearch.setOpaque(false);
+		pnlSearch.setLayout(null);
+		pnlInfo.add(pnlSearch);
 
-		lpSearch = new JLabel("Lọc theo:");
-		lpSearch.setForeground(Color.WHITE);
-		lpSearch.setFont(new Font("Dialog", Font.BOLD, 13));
-		lpSearch.setBounds(30, 18, 100, 20);
-		pnSearch.add(lpSearch);
+		lblSearch = new JLabel("Lọc theo:");
+		lblSearch.setForeground(Color.WHITE);
+		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblSearch.setBounds(30, 18, 100, 20);
+		pnlSearch.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
 		cboSearch.addItem("Tất cả");
@@ -147,25 +147,25 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(140, 18, 160, 20);
 
-		pnSearch.add(cboSearch);
+		pnlSearch.add(cboSearch);
 
 		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, searchIcon.getImage(), 26, 19);
 		btnSearch.setToolTipText("Tìm kiếm thông tin nhân viên theo từ khóa");
 		btnSearch.setBounds(702, 10, 100, 35);
-		pnSearch.add(btnSearch);
+		pnlSearch.add(btnSearch);
 
-		JLabel lpKeyWord = new JLabel("Từ khóa:");
-		lpKeyWord.setForeground(Color.WHITE);
-		lpKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
-		lpKeyWord.setBounds(364, 18, 76, 20);
-		pnSearch.add(lpKeyWord);
+		JLabel lblKeyWord = new JLabel("Từ khóa:");
+		lblKeyWord.setForeground(Color.WHITE);
+		lblKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblKeyWord.setBounds(364, 18, 76, 20);
+		pnlSearch.add(lblKeyWord);
 
 		txtKeyWord = new JTextField();
 		txtKeyWord.setToolTipText("Nhập từ khoá cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
 		txtKeyWord.setBounds(440, 18, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
-		pnSearch.add(txtKeyWord);
+		pnlSearch.add(txtKeyWord);
 
 		cboSearchType = new JComboBox<String>();
 		cboSearchType.setToolTipText("Loại phòng cần tìm");
@@ -173,31 +173,31 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		txtBFieldSearchType = CustomUI.getInstance().setCustomCBoxField(cboSearchType);
 		cboSearchType.setBounds(440, 18, 200, 20);
 		cboSearchType.setVisible(false);
-		pnSearch.add(cboSearchType);
+		pnlSearch.add(cboSearchType);
 
-		JLabel lpRoomType = new JLabel("Loại phòng:");
-		lpRoomType.setForeground(Color.WHITE);
-		lpRoomType.setFont(new Font("Dialog", Font.BOLD, 13));
-		lpRoomType.setBounds(955, 15, 90, 20);
-		pnInfo.add(lpRoomType);
+		JLabel lblRoomType = new JLabel("Loại phòng:");
+		lblRoomType.setForeground(Color.WHITE);
+		lblRoomType.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblRoomType.setBounds(955, 15, 90, 20);
+		pnlInfo.add(lblRoomType);
 
-		JLabel lbRoomID = new JLabel("Mã phòng:");
-		lbRoomID.setForeground(Color.WHITE);
-		lbRoomID.setFont(new Font("Dialog", Font.BOLD, 13));
-		lbRoomID.setBounds(25, 15, 90, 20);
-		pnInfo.add(lbRoomID);
+		JLabel lblRoomID = new JLabel("Mã phòng:");
+		lblRoomID.setForeground(Color.WHITE);
+		lblRoomID.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblRoomID.setBounds(25, 15, 90, 20);
+		pnlInfo.add(lblRoomID);
 
 		txtRoomID = new JTextField();
 		txtRoomID.setBounds(115, 15, 180, 20);
 		txtRoomID.setToolTipText("Mã phòng");
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomID);
-		pnInfo.add(txtRoomID);
+		pnlInfo.add(txtRoomID);
 
-		JLabel lbStatusRoom = new JLabel("Tình trạng:");
-		lbStatusRoom.setForeground(Color.WHITE);
-		lbStatusRoom.setFont(new Font("Dialog", Font.BOLD, 13));
-		lbStatusRoom.setBounds(340, 15, 90, 20);
-		pnInfo.add(lbStatusRoom);
+		JLabel lblStatusRoom = new JLabel("Tình trạng:");
+		lblStatusRoom.setForeground(Color.WHITE);
+		lblStatusRoom.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblStatusRoom.setBounds(340, 15, 90, 20);
+		pnlInfo.add(lblStatusRoom);
 
 		cboRoomStatus = new JComboBox<String>();
 		cboRoomStatus.addItem("Phòng trống");
@@ -206,43 +206,43 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		CustomUI.getInstance().setCustomComboBox(cboRoomStatus);
 		txtBFieldRoomStatus = CustomUI.getInstance().setCustomCBoxField(cboRoomStatus);
 		cboRoomStatus.setBounds(430, 15, 180, 20);
-		pnInfo.add(cboRoomStatus);
+		pnlInfo.add(cboRoomStatus);
 
 		cboRoomType = new JComboBox<String>();
 		cboRoomType.setToolTipText("Chọn loại phòng");
 		CustomUI.getInstance().setCustomComboBox(cboRoomType);
 		txtBFieldRoomType = CustomUI.getInstance().setCustomCBoxField(cboRoomType);
 		cboRoomType.setBounds(1050, 15, 180, 20);
-		pnInfo.add(cboRoomType);
+		pnlInfo.add(cboRoomType);
 
-		JPanel pnTable = new JPanel();
-		pnTable.setBackground(Color.WHITE);
-		pnTable.setLayout(null);
-		pnTable.setBounds(8, 201, 1240, 384);
-		pnTable.setOpaque(false);
+		JPanel pnlTable = new JPanel();
+		pnlTable.setBackground(Color.WHITE);
+		pnlTable.setLayout(null);
+		pnlTable.setBounds(8, 201, 1240, 384);
+		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã phòng", "Tình trạng ", "Vị trí", "Loại phòng" };
 		modelTableRoom = new DefaultTableModel(cols, 0);
-		tableRoom = new JTable(modelTableRoom) {
+		tblTableRoom = new JTable(modelTableRoom) {
 			@Override
 			public boolean isCellEditable(int i, int i1) {
 				return false;
 			}
 		};
-		tableRoom.setBackground(new Color(255, 255, 255, 0));
-		tableRoom.setForeground(new Color(255, 255, 255));
-		tableRoom.setRowHeight(21);
-		tableRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tableRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tableRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scpTable = new JScrollPane(tableRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		tblTableRoom.setBackground(new Color(255, 255, 255, 0));
+		tblTableRoom.setForeground(new Color(255, 255, 255));
+		tblTableRoom.setRowHeight(21);
+		tblTableRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tblTableRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
+		tblTableRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		JScrollPane scrTable = new JScrollPane(tblTableRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scpTable.getViewport().setBackground(Color.WHITE);
-		scpTable.setBounds(10, 10, 1220, 350);
-		scpTable.setOpaque(false);
-		scpTable.getViewport().setOpaque(false);
+		scrTable.getViewport().setBackground(Color.WHITE);
+		scrTable.setBounds(10, 10, 1220, 350);
+		scrTable.setOpaque(false);
+		scrTable.getViewport().setOpaque(false);
 
-		pnTable.add(scpTable);
-		pnMain.add(pnTable);
+		pnlTable.add(scrTable);
+		pnlMain.add(pnlTable);
 
 		btnAdd.addActionListener(this);
 		btnBack.addActionListener(this);
@@ -250,7 +250,7 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		btnSearch.addActionListener(this);
 		btnUpdate.addActionListener(this);
 
-		tableRoom.addMouseListener(this);
+		tblTableRoom.addMouseListener(this);
 		txtLocation.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
 		txtBFieldSearchType.addMouseListener(this);
@@ -288,9 +288,9 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 			cboSearch.setSelectedIndex(0);
 			removeSelectionInterval();
 		} else if (o.equals(btnBack)) {
-			fDieuHuong f = new fDieuHuong(staffLogin);
+			fDieuHuong winNavigation = new fDieuHuong(staffLogin);
 			this.setVisible(false);
-			f.setVisible(true);
+			winNavigation.setVisible(true);
 		} else if (o.equals(btnAdd)) {
 			String message = "";
 			if (validData()) {
@@ -300,11 +300,11 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 				if (insertResult) {
 					message = "Thêm " + name + " mới thành công";
 					txtRoomID.setText(room.getMaPhong());
-					int stt = tableRoom.getRowCount();
+					int stt = tblTableRoom.getRowCount();
 					addRow(stt, room);
-					int lastIndex = tableRoom.getRowCount() - 1;
-					tableRoom.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-					tableRoom.scrollRectToVisible(tableRoom.getCellRect(lastIndex, lastIndex, true));
+					int lastIndex = tblTableRoom.getRowCount() - 1;
+					tblTableRoom.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+					tblTableRoom.scrollRectToVisible(tblTableRoom.getCellRect(lastIndex, lastIndex, true));
 					btnAdd.setEnabledCustom(false);
 					btnUpdate.setEnabledCustom(true);
 				} else {
@@ -317,7 +317,7 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 				Phong newRoom = getRoomDataInForm();
 				Phong oldRoomType = PhongDAO.getInstance().getRoomByRoomId(newRoom.getMaPhong());
 				String message = "";
-				int selectedRow = tableRoom.getSelectedRow();
+				int selectedRow = tblTableRoom.getSelectedRow();
 				String name = "phòng";
 				if (selectedRow == -1) {
 					message = "Hãy chọn " + name + " mà bạn cần cập nhật thông tin";
@@ -335,8 +335,8 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 							updateRow(selectedRow, newRoom);
 							btnAdd.setEnabledCustom(false);
 							btnUpdate.setEnabledCustom(true);
-							tableRoom.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-							tableRoom.scrollRectToVisible(tableRoom.getCellRect(selectedRow, selectedRow, true));
+							tblTableRoom.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+							tblTableRoom.scrollRectToVisible(tblTableRoom.getCellRect(selectedRow, selectedRow, true));
 						} else {
 							message = "Cập nhật thông tin " + name + " thất bại";
 						}
@@ -397,16 +397,16 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 			cboRoomType.showPopup();
 		} else if (o.equals(txtBFieldRoomStatus)) {
 			cboRoomStatus.showPopup();
-		} else if (o.equals(tableRoom)) {
-			int selectedRow = tableRoom.getSelectedRow();
-			txtRoomID.setText(tableRoom.getValueAt(selectedRow, 1).toString().trim());
-			String roomStatusStr = tableRoom.getValueAt(selectedRow, 2).toString().trim();
+		} else if (o.equals(tblTableRoom)) {
+			int selectedRow = tblTableRoom.getSelectedRow();
+			txtRoomID.setText(tblTableRoom.getValueAt(selectedRow, 1).toString().trim());
+			String roomStatusStr = tblTableRoom.getValueAt(selectedRow, 2).toString().trim();
 			if (roomStatusStr.equalsIgnoreCase("Trống"))
 				cboRoomStatus.setSelectedIndex(0);
 			else
 				cboRoomStatus.setSelectedIndex(1);
-			txtLocation.setText(tableRoom.getValueAt(selectedRow, 3).toString().trim());
-			String roomTypeStr = tableRoom.getValueAt(selectedRow, 4).toString().trim();
+			txtLocation.setText(tblTableRoom.getValueAt(selectedRow, 3).toString().trim());
+			String roomTypeStr = tblTableRoom.getValueAt(selectedRow, 4).toString().trim();
 			cboRoomType.setSelectedItem(roomTypeStr);
 			btnAdd.setEnabledCustom(false);
 			btnUpdate.setEnabledCustom(true);
@@ -466,7 +466,7 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		Object key = e.getKeyCode();
 		if (o.equals(txtKeyWord)) {
 			if (key.equals(KeyEvent.VK_ENTER))
-				btnSearch.doClick();
+				searchEventUsingBtnSearch();
 		}
 	}
 
@@ -628,7 +628,7 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	 * Thay đổi kích thước cột
 	 */
 	private void reSizeColumnTable() {
-		TableColumnModel columnModel = tableRoom.getColumnModel();
+		TableColumnModel columnModel = tblTableRoom.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(70);
 		columnModel.getColumn(1).setPreferredWidth(130);
 		columnModel.getColumn(2).setPreferredWidth(250);
@@ -681,7 +681,7 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	 * Xóa bỏ dòng đang chọn
 	 */
 	private void removeSelectionInterval() {
-		int selectedRow = tableRoom.getSelectedRow();
-		tableRoom.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
+		int selectedRow = tblTableRoom.getSelectedRow();
+		tblTableRoom.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
 	}
 }

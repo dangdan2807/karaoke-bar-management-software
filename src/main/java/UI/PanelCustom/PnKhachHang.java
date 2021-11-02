@@ -12,20 +12,21 @@ import javax.swing.table.*;
 import DAO.ConvertTime;
 import DAO.KhachHangDAO;
 import DAO.NhanVienDAO;
+import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
 import entity.KhachHang;
 import entity.NhanVien;
 
 public class PnKhachHang extends JFrame
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
-	private JTable tableCustomer;
+	private JTable tblTableCustomer;
 	private DefaultTableModel modelTable;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 	int index = 1;
 	private JTextField txtCMND, txtPhoneNumber, txtCustomerName, txtCustomerID, txtBFieldSearch;
 	private JTextField txtKeyWord, txtBFieldSearchGender;
-	private JLabel lbCMND, lbBirthDay, lbGender, lpPhone, lbCustomerID, lbCustomerName, lpSearch;
+	private JLabel lblCMND, lblBirthDay, lblGender, lblPhone, lblCustomerID, lblCustomerName, lblSearch;
 	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch;
 	private kDatePicker dpBirthDay;
 	private JComboBox<String> cboSearch, cboSearchGender;
@@ -50,7 +51,7 @@ public class PnKhachHang extends JFrame
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		JPanel pnMain = new JPanel() {
+		JPanel pnlMain = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -62,11 +63,11 @@ public class PnKhachHang extends JFrame
 				g2.drawRoundRect(9, 49, 1240, 530, 20, 20);
 			}
 		};
-		pnMain.setLayout(null);
-		pnMain.setBounds(0, 0, 1270, 630);
-		getContentPane().add(pnMain);
+		pnlMain.setLayout(null);
+		pnlMain.setBounds(0, 0, 1270, 630);
+		getContentPane().add(pnlMain);
 
-		JPanel pnTitle = new JPanel() {
+		JPanel pnlTitle = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -75,28 +76,28 @@ public class PnKhachHang extends JFrame
 			}
 		};
 
-		pnTitle.setOpaque(false);
-		pnTitle.setBounds(0, 0, 1270, 50);
-		pnTitle.setLayout(null);
+		pnlTitle.setOpaque(false);
+		pnlTitle.setBounds(0, 0, 1270, 50);
+		pnlTitle.setLayout(null);
 
 		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19, 9, 5);
 		btnBack.setBounds(1150, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
-		pnTitle.add(btnBack);
-		pnMain.add(pnTitle);
+		pnlTitle.add(btnBack);
+		pnlMain.add(pnlTitle);
 
-		JLabel lbTitle = new JLabel("QUẢN LÝ KHÁCH HÀNG");
-		lbTitle.setFont(new Font("Dialog", Font.BOLD, 24));
-		lbTitle.setForeground(Color.WHITE);
-		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lbTitle.setBounds(0, 0, 1250, 45);
-		pnTitle.add(lbTitle);
+		JLabel lblTitle = new JLabel("QUẢN LÝ KHÁCH HÀNG");
+		lblTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lblTitle.setForeground(Color.WHITE);
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setBounds(0, 0, 1250, 45);
+		pnlTitle.add(lblTitle);
 
-		JPanel pnInfo = new JPanel();
-		pnInfo.setLayout(null);
-		pnInfo.setOpaque(false);
-		pnInfo.setBounds(0, 60, 1238, 140);
-		pnMain.add(pnInfo);
+		JPanel pnlInfo = new JPanel();
+		pnlInfo.setLayout(null);
+		pnlInfo.setOpaque(false);
+		pnlInfo.setBounds(0, 60, 1238, 140);
+		pnlMain.add(pnlInfo);
 
 		dpBirthDay = new kDatePicker(250, 20);
 		dpBirthDay.setBackgroundColor(new Color(255, 255, 255, 50));
@@ -104,113 +105,113 @@ public class PnKhachHang extends JFrame
 		dpBirthDay.setForegroundCustom(Color.white);
 		dpBirthDay.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
 		dpBirthDay.setOpaqueCustom(false);
-		pnInfo.add(dpBirthDay);
+		pnlInfo.add(dpBirthDay);
 		dpBirthDay.setBounds(965, 45, 250, 20);
 
 		txtCMND = new JTextField();
 		txtCMND.setBounds(965, 15, 250, 20);
 		txtCMND.setToolTipText("Nhập CMND gồm có 9 số hoặc CCCD gồm có 12 số");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtCMND);
-		pnInfo.add(txtCMND);
+		pnlInfo.add(txtCMND);
 
-		lbCMND = new JLabel("CMND/CCCD:");
-		lbCMND.setForeground(Color.WHITE);
-		lbCMND.setFont(new Font("Dialog", Font.BOLD, 12));
-		lbCMND.setBounds(845, 15, 105, 20);
-		pnInfo.add(lbCMND);
+		lblCMND = new JLabel("CMND/CCCD:");
+		lblCMND.setForeground(Color.WHITE);
+		lblCMND.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblCMND.setBounds(845, 15, 105, 20);
+		pnlInfo.add(lblCMND);
 
-		lbBirthDay = new JLabel("Ngày sinh:");
-		lbBirthDay.setForeground(Color.WHITE);
-		lbBirthDay.setFont(new Font("Dialog", Font.BOLD, 13));
-		lbBirthDay.setBounds(845, 45, 105, 20);
-		pnInfo.add(lbBirthDay);
+		lblBirthDay = new JLabel("Ngày sinh:");
+		lblBirthDay.setForeground(Color.WHITE);
+		lblBirthDay.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblBirthDay.setBounds(845, 45, 105, 20);
+		pnlInfo.add(lblBirthDay);
 
-		lbGender = new JLabel("Giới tính:");
-		lbGender.setForeground(Color.WHITE);
-		lbGender.setFont(new Font("Dialog", Font.BOLD, 13));
-		lbGender.setBounds(435, 15, 105, 20);
-		pnInfo.add(lbGender);
+		lblGender = new JLabel("Giới tính:");
+		lblGender.setForeground(Color.WHITE);
+		lblGender.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblGender.setBounds(435, 15, 105, 20);
+		pnlInfo.add(lblGender);
 
 		txtPhoneNumber = new JTextField();
 		txtPhoneNumber.setBounds(555, 45, 250, 20);
 		txtPhoneNumber.setToolTipText("Nhập số điện thoại của bạn gồm 10 số và bắt đầu bằng 03, 05, 07, 08, 09");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtPhoneNumber);
-		pnInfo.add(txtPhoneNumber);
+		pnlInfo.add(txtPhoneNumber);
 
 		radMale = new JRadioButton("Nam");
 		CustomUI.getInstance().setCustomRadioButton(radMale);
 		radMale.setBounds(551, 15, 115, 20);
 		radMale.setSelected(true);
-		pnInfo.add(radMale);
+		pnlInfo.add(radMale);
 
 		radFemale = new JRadioButton("Nữ");
 		CustomUI.getInstance().setCustomRadioButton(radFemale);
 		radFemale.setBounds(671, 15, 115, 20);
-		pnInfo.add(radFemale);
+		pnlInfo.add(radFemale);
 
 		ButtonGroup groupGender = new ButtonGroup();
 		groupGender.add(radMale);
 		groupGender.add(radFemale);
 
-		lpPhone = new JLabel("Số điện thoại:");
-		lpPhone.setForeground(Color.WHITE);
-		lpPhone.setFont(new Font("Dialog", Font.BOLD, 13));
-		lpPhone.setBounds(435, 45, 115, 16);
-		pnInfo.add(lpPhone);
+		lblPhone = new JLabel("Số điện thoại:");
+		lblPhone.setForeground(Color.WHITE);
+		lblPhone.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblPhone.setBounds(435, 45, 115, 16);
+		pnlInfo.add(lblPhone);
 
 		txtCustomerName = new JTextField();
 		txtCustomerName.setBounds(145, 45, 250, 20);
 		txtCustomerName.setToolTipText("Nhập tên của khách hàng, không quá 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtCustomerName);
-		pnInfo.add(txtCustomerName);
+		pnlInfo.add(txtCustomerName);
 
 		txtCustomerID = new JTextField();
 		txtCustomerID.setBounds(145, 15, 250, 20);
 		txtCustomerID.setToolTipText("Mã khách hàng");
 		CustomUI.getInstance().setCustomTextFieldOff(txtCustomerID);
-		pnInfo.add(txtCustomerID);
+		pnlInfo.add(txtCustomerID);
 
-		lbCustomerID = new JLabel("Mã khách hàng: ");
-		lbCustomerID.setFont(new Font("Dialog", Font.BOLD, 13));
-		lbCustomerID.setForeground(Color.WHITE);
-		lbCustomerID.setBackground(new Color(249, 249, 249));
-		lbCustomerID.setBounds(20, 15, 120, 20);
-		pnInfo.add(lbCustomerID);
+		lblCustomerID = new JLabel("Mã khách hàng: ");
+		lblCustomerID.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblCustomerID.setForeground(Color.WHITE);
+		lblCustomerID.setBackground(new Color(249, 249, 249));
+		lblCustomerID.setBounds(20, 15, 120, 20);
+		pnlInfo.add(lblCustomerID);
 
-		lbCustomerName = new JLabel("Tên khách hàng:");
-		lbCustomerName.setForeground(Color.WHITE);
-		lbCustomerName.setFont(new Font("Dialog", Font.BOLD, 13));
-		lbCustomerName.setBounds(20, 45, 120, 20);
-		pnInfo.add(lbCustomerName);
+		lblCustomerName = new JLabel("Tên khách hàng:");
+		lblCustomerName.setForeground(Color.WHITE);
+		lblCustomerName.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblCustomerName.setBounds(20, 45, 120, 20);
+		pnlInfo.add(lblCustomerName);
 
 		btnAdd = new MyButton(100, 35, "Thêm", gra, addIcon.getImage(), 39, 19, 18, 6);
 		btnAdd.setToolTipText("Thêm khách hàng mới sau khi đã điền đủ thông tin");
 		btnAdd.setBounds(20, 93, 100, 35);
-		pnInfo.add(btnAdd);
+		pnlInfo.add(btnAdd);
 
 		btnUpdate = new MyButton(100, 35, "Sửa", gra, updateIcon.getImage(), 43, 19, 22, 6);
 		btnUpdate.setToolTipText("Sửa thông tin khách hàng");
 		btnUpdate.setBounds(150, 93, 100, 35);
 		btnUpdate.setEnabledCustom(false);
-		pnInfo.add(btnUpdate);
+		pnlInfo.add(btnUpdate);
 
 		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 27, 19, 6, 5);
 		btnRefresh.setToolTipText("Làm mới form");
 		btnRefresh.setBounds(1118, 93, 100, 35);
-		pnInfo.add(btnRefresh);
+		pnlInfo.add(btnRefresh);
 
-		JPanel pnSearch = new JPanel();
-		pnSearch.setBounds(286, 83, 822, 53);
-		pnInfo.add(pnSearch);
-		pnSearch.setOpaque(false);
-		pnSearch.setLayout(null);
-		pnInfo.add(pnSearch);
+		JPanel pnlSearch = new JPanel();
+		pnlSearch.setBounds(286, 83, 822, 53);
+		pnlInfo.add(pnlSearch);
+		pnlSearch.setOpaque(false);
+		pnlSearch.setLayout(null);
+		pnlInfo.add(pnlSearch);
 
-		lpSearch = new JLabel("Lọc theo:");
-		lpSearch.setForeground(Color.WHITE);
-		lpSearch.setFont(new Font("Dialog", Font.BOLD, 13));
-		lpSearch.setBounds(30, 18, 100, 20);
-		pnSearch.add(lpSearch);
+		lblSearch = new JLabel("Lọc theo:");
+		lblSearch.setForeground(Color.WHITE);
+		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblSearch.setBounds(30, 18, 100, 20);
+		pnlSearch.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
 		cboSearch.addItem("Tất cả");
@@ -220,25 +221,24 @@ public class PnKhachHang extends JFrame
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(140, 18, 160, 20);
-
-		pnSearch.add(cboSearch);
+		pnlSearch.add(cboSearch);
 
 		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, searchIcon.getImage(), 26, 19, 5, 5);
 		btnSearch.setToolTipText("Tìm kiếm thông tin khách hàng theo từ khóa");
 		btnSearch.setBounds(702, 10, 100, 35);
-		pnSearch.add(btnSearch);
+		pnlSearch.add(btnSearch);
 
-		JLabel lpKeyWord = new JLabel("Từ khóa:");
-		lpKeyWord.setForeground(Color.WHITE);
-		lpKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
-		lpKeyWord.setBounds(364, 18, 76, 20);
-		pnSearch.add(lpKeyWord);
+		JLabel lblKeyWord = new JLabel("Từ khóa:");
+		lblKeyWord.setForeground(Color.WHITE);
+		lblKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblKeyWord.setBounds(364, 18, 76, 20);
+		pnlSearch.add(lblKeyWord);
 
 		txtKeyWord = new JTextField();
 		txtKeyWord.setBounds(440, 18, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
 		txtKeyWord.setEditable(false);
-		pnSearch.add(txtKeyWord);
+		pnlSearch.add(txtKeyWord);
 
 		cboSearchGender = new JComboBox<String>();
 		cboSearchGender.addItem("Nam");
@@ -247,13 +247,13 @@ public class PnKhachHang extends JFrame
 		txtBFieldSearchGender = CustomUI.getInstance().setCustomCBoxField(cboSearchGender);
 		cboSearchGender.setBounds(440, 18, 200, 20);
 		cboSearchGender.setVisible(false);
-		pnSearch.add(cboSearchGender);
+		pnlSearch.add(cboSearchGender);
 
-		JPanel pnTable = new JPanel();
-		pnTable.setBackground(Color.WHITE);
-		pnTable.setLayout(null);
-		pnTable.setBounds(8, 201, 1240, 384);
-		pnTable.setOpaque(false);
+		JPanel pnlTable = new JPanel();
+		pnlTable.setBackground(Color.WHITE);
+		pnlTable.setLayout(null);
+		pnlTable.setBounds(8, 201, 1240, 384);
+		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã khách hàng", "Tên khách hàng ", "CMND/CCCD", "Số điện thoại", "Ngày sinh",
 				"Giới tính" };
 
@@ -264,23 +264,23 @@ public class PnKhachHang extends JFrame
 			}
 		};
 
-		tableCustomer = new JTable(modelTable);
-		tableCustomer.setBackground(new Color(255, 255, 255, 0));
-		tableCustomer.setForeground(new Color(255, 255, 255));
-		tableCustomer.setRowHeight(21);
-		tableCustomer.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tableCustomer.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tableCustomer.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scpTable = new JScrollPane(tableCustomer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		tblTableCustomer = new JTable(modelTable);
+		tblTableCustomer.setBackground(new Color(255, 255, 255, 0));
+		tblTableCustomer.setForeground(new Color(255, 255, 255));
+		tblTableCustomer.setRowHeight(21);
+		tblTableCustomer.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tblTableCustomer.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
+		tblTableCustomer.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		JScrollPane scrTable = new JScrollPane(tblTableCustomer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scpTable.getViewport().setBackground(Color.WHITE);
-		scpTable.setBounds(10, 10, 1220, 350);
-		scpTable.setOpaque(false);
-		scpTable.getViewport().setOpaque(false);
+		scrTable.getViewport().setBackground(Color.WHITE);
+		scrTable.setBounds(10, 10, 1220, 350);
+		scrTable.setOpaque(false);
+		scrTable.getViewport().setOpaque(false);
 
-		pnTable.add(scpTable);
+		pnlTable.add(scrTable);
 
-		pnMain.add(pnTable);
+		pnlMain.add(pnlTable);
 		allLoaded();
 
 		btnSearch.addActionListener(this);
@@ -290,7 +290,7 @@ public class PnKhachHang extends JFrame
 		btnUpdate.addActionListener(this);
 
 		btnSearch.addMouseListener(this);
-		tableCustomer.addMouseListener(this);
+		tblTableCustomer.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
 		txtBFieldSearchGender.addMouseListener(this);
 
@@ -300,7 +300,8 @@ public class PnKhachHang extends JFrame
 		txtPhoneNumber.addFocusListener(this);
 		txtBFieldSearch.addFocusListener(this);
 		txtBFieldSearchGender.addFocusListener(this);
-
+		
+		txtCMND.addKeyListener(this);
 		txtKeyWord.addKeyListener(this);
 		txtPhoneNumber.addKeyListener(this);
 
@@ -320,8 +321,8 @@ public class PnKhachHang extends JFrame
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnBack)) {
-			fDieuHuong f = new fDieuHuong(staffLogin);
-			f.setVisible(true);
+			fDieuHuong winNavigation = new fDieuHuong(staffLogin);
+			winNavigation.setVisible(true);
 			this.setVisible(false);
 		} else if (o.equals(btnAdd)) {
 
@@ -376,15 +377,15 @@ public class PnKhachHang extends JFrame
 			cboSearch.showPopup();
 		} else if (o.equals(txtBFieldSearchGender)) {
 			cboSearchGender.showPopup();
-		} else if (o.equals(tableCustomer)) {
-			int selectedRow = tableCustomer.getSelectedRow();
-			txtCustomerID.setText(tableCustomer.getValueAt(selectedRow, 1).toString().trim());
-			txtCustomerName.setText(tableCustomer.getValueAt(selectedRow, 2).toString().trim());
-			txtCMND.setText(tableCustomer.getValueAt(selectedRow, 3).toString().trim());
-			txtPhoneNumber.setText(tableCustomer.getValueAt(selectedRow, 4).toString().trim());
-			String birthDayStr = tableCustomer.getValueAt(selectedRow, 5).toString().trim();
+		} else if (o.equals(tblTableCustomer)) {
+			int selectedRow = tblTableCustomer.getSelectedRow();
+			txtCustomerID.setText(tblTableCustomer.getValueAt(selectedRow, 1).toString().trim());
+			txtCustomerName.setText(tblTableCustomer.getValueAt(selectedRow, 2).toString().trim());
+			txtCMND.setText(tblTableCustomer.getValueAt(selectedRow, 3).toString().trim());
+			txtPhoneNumber.setText(tblTableCustomer.getValueAt(selectedRow, 4).toString().trim());
+			String birthDayStr = tblTableCustomer.getValueAt(selectedRow, 5).toString().trim();
 			dpBirthDay.setValue(birthDayStr);
-			String genderStr = tableCustomer.getValueAt(selectedRow, 6).toString().trim();
+			String genderStr = tblTableCustomer.getValueAt(selectedRow, 6).toString().trim();
 			if (genderStr.equalsIgnoreCase("Nam")) {
 				radMale.setSelected(true);
 			} else {
@@ -436,16 +437,19 @@ public class PnKhachHang extends JFrame
 	public void keyPressed(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
+		InputEventHandler handler = new InputEventHandler();
 		if (o.equals(txtKeyWord)) {
 			String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				searchEventUsingBtnSearch();
 			}
 			if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-				phoneNumberInputEvent(key, txtKeyWord);
+				handler.enterOnlyNumbers(key, txtKeyWord, 10);
 			}
 		} else if (o.equals(txtPhoneNumber)) {
-			phoneNumberInputEvent(key, txtPhoneNumber);
+			handler.enterOnlyNumbers(key, txtPhoneNumber, 10);
+		} else if (o.equals(txtCMND)) {
+			handler.enterOnlyNumbers(key, txtCMND, 12);
 		}
 	}
 
@@ -529,8 +533,9 @@ public class PnKhachHang extends JFrame
 		String birthDayStr = ConvertTime.getInstance().convertTimeToString(customer.getNgaySinh(), format);
 		String genderStr = customer.getGioiTinh() ? "Nữ" : "Nam";
 		String phoneNumberStr = customer.getSoDienThoai();
-		phoneNumberStr = phoneNumberStr.substring(0, 4) + "-" + phoneNumberStr.substring(4, 7) + "-"
-				+ phoneNumberStr.substring(7, 10);
+		// phoneNumberStr = phoneNumberStr.substring(0, 4) + "-" +
+		// phoneNumberStr.substring(4, 7) + "-"
+		// + phoneNumberStr.substring(7, 10);
 		modelTable.addRow(new Object[] { sttStr, addSpaceToString(customer.getMaKH()),
 				addSpaceToString(customer.getHoTen()), addSpaceToString(customer.getCmnd()),
 				addSpaceToString(phoneNumberStr), addSpaceToString(birthDayStr), addSpaceToString(genderStr) });
@@ -583,8 +588,8 @@ public class PnKhachHang extends JFrame
 	 * Thay đổi kích thước cột
 	 */
 	private void reSizeColumnTable() {
-		tableCustomer.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		TableColumnModel columnModel = tableCustomer.getColumnModel();
+		tblTableCustomer.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		TableColumnModel columnModel = tblTableCustomer.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(70);
 		columnModel.getColumn(1).setPreferredWidth(130);
 		columnModel.getColumn(2).setPreferredWidth(250);
@@ -607,33 +612,7 @@ public class PnKhachHang extends JFrame
 	 * Xóa bỏ dòng đang chọn
 	 */
 	private void removeSelectionInterval() {
-		int selectedRow = tableCustomer.getSelectedRow();
-		tableCustomer.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
-	}
-
-	/**
-	 * Thêm, xóa dấu {@code -} khi nhập số điện thoại tại các vị trí 4, 8
-	 * 
-	 * @param key {@code int}: mã số của phím được nhấn
-	 * @param txt {@code JTextField}: text field nhận sự kiện
-	 */
-	private void phoneNumberInputEvent(int key, JTextField txt) {
-		String phoneNumberStr = txt.getText();
-		int length = phoneNumberStr.length();
-		if (key >= 49 && key <= 57 || key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
-			if (!(key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE)) {
-				if (length == 4 || length == 8)
-					txt.setText(phoneNumberStr + "-");
-			} else {
-				if (length == 6 || length == 10) {
-					txt.setText(phoneNumberStr.substring(0, length - 1));
-				}
-			}
-			txt.setEditable(true);
-			if (length == 12 && key != KeyEvent.VK_BACK_SPACE && key != KeyEvent.VK_DELETE)
-				txt.setEditable(false);
-		} else {
-			txt.setEditable(false);
-		}
+		int selectedRow = tblTableCustomer.getSelectedRow();
+		tblTableCustomer.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
 	}
 }

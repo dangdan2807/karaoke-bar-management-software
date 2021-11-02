@@ -95,7 +95,7 @@ GO
 
 CREATE TABLE HoaDon
 (
-    maHoaDon INT IDENTITY(1, 1) PRIMARY KEY,
+    maHoaDon VARCHAR(15) PRIMARY KEY,
     ngayGioDat DATETIME NOT NULL DEFAULT(getdate()),
     ngayGioTra DATETIME,
     -- 0. chưa thanh toán | 1. đã thanh toán
@@ -114,7 +114,7 @@ GO
 CREATE TABLE CTDichVu
 (
     maDichVu VARCHAR(5) NOT NULL,
-    maHoaDon INT NOT NULL,
+    maHoaDon VARCHAR(15) NOT NULL,
     soLuongDat INT NOT NULL DEFAULT(1) CHECK(soLuongDat > 0),
     tienDichVu MONEY NOT NULL DEFAULT(0) CHECK(tienDichVu >= 0),
     PRIMARY KEY (maDichVu, maHoaDon),
@@ -307,37 +307,37 @@ VALUES
 GO
 
 INSERT INTO dbo.HoaDon
-    (ngayGioDat, ngayGioTra, tinhTrangHD, TongTien, maNhanVien, maKH, maPhong)
+    (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, TongTien, maNhanVien, maKH, maPhong)
 VALUES
-    ('2021-10-01 10:00:00', '2021-10-01 12:00:00', 1, 0.0, 'NV00000001', 'KH00000001', 'P0001'),
-    ('2021-10-01 15:00:00', '2021-10-01 17:00:00', 1, 0.0, 'NV00000003', 'KH00000003', 'P0002'),
-    ('2021-10-01 15:30:00', '2021-10-01 18:10:00', 1, 0.0, 'NV00000004', 'KH00000004', 'P0003'),
-    ('2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 0.0, 'NV00000002', 'KH00000002', 'P0004'),
-    ('2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 0.0, 'NV00000002', 'KH00000002', 'P0005')
+    ('HD2021100100001' , '2021-10-01 10:00:00', '2021-10-01 12:00:00', 1, 470000.0, 'NV00000001', 'KH00000001', 'P0001'),
+    ('HD2021100100002' , '2021-10-01 15:00:00', '2021-10-01 17:00:00', 1, 342000.0, 'NV00000003', 'KH00000003', 'P0002'),
+    ('HD2021100100003' , '2021-10-01 15:30:00', '2021-10-01 18:00:00', 1, 332000.0, 'NV00000004', 'KH00000004', 'P0003'),
+    ('HD2021100200001' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 300000.0, 'NV00000002', 'KH00000002', 'P0004'),
+    ('HD2021100200002' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 300000.0, 'NV00000002', 'KH00000002', 'P0005')
 GO
 
 INSERT INTO dbo.CTDichVu
     (maDichVu, maHoaDon, soLuongDat, tienDichVu)
 VALUES
-    ('DV001', 1, 1, 30000),
-    ('DV002', 1, 2, 70000),
-    ('DV003', 1, 2, 70000),
+    ('DV001', 'HD2021100100001', 1, 30000),
+    ('DV002', 'HD2021100100001', 2, 70000),
+    ('DV003', 'HD2021100100001', 2, 70000),
 
-    ('DV003', 2, 2, 70000),
-    ('DV002', 2, 6, 210000),
-    ('DV004', 2, 1, 42000),
+    ('DV003', 'HD2021100100002', 2, 70000),
+    ('DV002', 'HD2021100100002', 2, 70000),
+    ('DV004', 'HD2021100100002', 1, 42000),
 
-    ('DV001', 3, 1, 30000),
-    ('DV003', 3, 2, 70000),
-    ('DV007', 3, 1, 32000),
+    ('DV001', 'HD2021100100003', 1, 30000),
+    ('DV003', 'HD2021100100003', 2, 70000),
+    ('DV007', 'HD2021100100003', 1, 32000),
 
-    ('DV002', 4, 2, 70000),
-    ('DV001', 4, 4, 120000),
-    ('DV005', 4, 1, 30000),
+    ('DV002', 'HD2021100200001', 2, 70000),
+    ('DV001', 'HD2021100200001', 4, 120000),
+    ('DV005', 'HD2021100200001', 1, 30000),
 
-    ('DV002', 5, 2, 70000),
-    ('DV001', 5, 4, 120000),
-    ('DV005', 5, 1, 30000)
+    ('DV002', 'HD2021100200002', 2, 70000),
+    ('DV001', 'HD2021100200002', 4, 120000),
+    ('DV005', 'HD2021100200002', 1, 30000)
 GO
 
 
@@ -697,46 +697,28 @@ CREATE PROC USP_getUncheckBillByRoomId
     @roomId VARCHAR(5)
 AS
 BEGIN
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        p.maPhong, p.tinhTrangP, p.viTri,
-        lp.giaTien, lp.maLP, lp.sucChua, lp.tenLP,
-        kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH,
-        nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
-        nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
-        tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
-    FROM dbo.HoaDon hd, dbo.Phong p, dbo.LoaiPhong lp,
-        dbo.KhachHang kh, dbo.NhanVien nv, dbo.TaiKhoan tk
+    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+    FROM dbo.HoaDon hd, dbo.Phong p
     WHERE hd.maPhong = p.maPhong
-        AND p.maLP = lp.maLP
         AND p.maPhong = @roomId
         AND hd.tinhTrangHD = 0
 END
 GO
 
 CREATE PROC USP_getBillByBillId
-    @billId INT
+    @billId VARCHAR(15)
 AS
 BEGIN
     SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        p.maPhong, p.tinhTrangP, p.viTri,
-        lp.giaTien, lp.maLP, lp.sucChua, lp.tenLP,
-        kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH,
-        nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
-        nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
-        tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
-    FROM dbo.HoaDon hd, dbo.Phong p, dbo.LoaiPhong lp,
-        dbo.KhachHang kh, dbo.NhanVien nv, dbo.TaiKhoan tk
-    WHERE hd.maPhong = p.maPhong
-        AND p.maLP = lp.maLP
-        AND hd.maHoaDon = @billId
+        hd.TongTien
+    FROM dbo.HoaDon hd
+    WHERE hd.maHoaDon = @billId
 END
 GO
 
+
 CREATE PROC USP_insertBill
+    @billId VARCHAR(15),
     @orderDate DATETIME,
     @staffId VARCHAR(10),
     @customerId VARCHAR(10),
@@ -744,9 +726,9 @@ CREATE PROC USP_insertBill
 AS
 BEGIN
     INSERT INTO dbo.HoaDon
-        (ngayGioDat, ngayGioTra, tinhTrangHD, TongTien, maNhanVien, maKH, maPhong)
+        (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, TongTien, maNhanVien, maKH, maPhong)
     VALUES
-        (@orderDate, NULL, 0, 0.0, @staffId, @customerId, @roomId)
+        (@billId, @orderDate, NULL, 0, 0.0, @staffId, @customerId, @roomId)
 END
 GO
 
@@ -761,7 +743,7 @@ END
 GO
 
 CREATE PROC USP_payment
-    @billId INT,
+    @billId VARCHAR(15),
     @paymentDate DATETIME,
     @totalPrice MONEY
 AS
@@ -778,6 +760,87 @@ BEGIN
     UPDATE dbo.Phong
     SET tinhTrangP = 0
     WHERE maPhong = @roomID
+END
+GO
+
+CREATE PROC USP_getTotalPriceBill
+    @billId VARCHAR(15)
+AS
+BEGIN
+    SELECT TOP 1
+        hd.TongTien
+    FROM dbo.HoaDon hd
+    WHERE hd.maHoaDon = @billId
+END
+GO
+
+CREATE PROC USP_getBillListByDate
+    @startDate DATE,
+    @endDate DATE
+AS
+BEGIN
+    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+    FROM dbo.HoaDon hd
+    WHERE hd.tinhTrangHD = 1
+        AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+    GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+END
+GO
+
+CREATE PROC USP_getBillListByDateAndPhoneNumber
+    @phoneNumber VARCHAR(10),
+    @startDate DATE,
+    @endDate DATE
+AS
+BEGIN
+    DECLARE @keyword VARCHAR(12) = N'%' + @phoneNumber + N'%'
+    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        kh.maKH, kh.hoTen, kh.soDienThoai
+    FROM dbo.HoaDon hd, dbo.KhachHang kh
+    WHERE hd.tinhTrangHD = 1
+        AND hd.maKH = kh.maKH
+        AND kh.soDienThoai LIKE @keyword
+        AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+    GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+    kh.maKH, kh.hoTen, kh.soDienThoai
+END
+GO
+
+CREATE PROC USP_getBillListByDateAndCustomerName
+    @customerName NVARCHAR(100),
+    @startDate DATE,
+    @endDate DATE
+AS
+BEGIN
+    DECLARE @keyword NVARCHAR(102) = N'%' + @customerName + N'%'
+    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        kh.maKH, kh.hoTen, kh.soDienThoai
+    FROM dbo.HoaDon hd, dbo.KhachHang kh
+    WHERE hd.tinhTrangHD = 1
+        AND hd.maKH = kh.maKH
+        AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+        AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+    GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+    kh.maKH, kh.hoTen, kh.soDienThoai
+END
+GO
+
+CREATE PROC USP_getBillListByDateAndStaffName
+    @staffName NVARCHAR(100),
+    @startDate DATE,
+    @endDate DATE
+AS
+BEGIN
+    DECLARE @keyword NVARCHAR(102) = N'%' + @staffName + N'%'
+    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        nv.maNhanVien, nv.hoTen, nv.soDienThoai
+    FROM dbo.HoaDon hd, dbo.NhanVien nv
+    WHERE hd.tinhTrangHD = 1
+        AND hd.maNhanVien = nv.maNhanVien
+        AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+        AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+    GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+    nv.maNhanVien, nv.hoTen, nv.soDienThoai
 END
 GO
 
@@ -810,7 +873,7 @@ END
 GO
 
 CREATE PROC USP_getServiceDetailListByBillId
-    @billId INT
+    @billId VARCHAR(15)
 AS
 BEGIN
     SELECT cthd.soLuongDat, cthd.maHoaDon, cthd.tienDichVu,
@@ -826,7 +889,7 @@ END
 GO
 
 CREATE PROC USP_getServiceDetailByBillIdAndServiceId
-    @billId INT,
+    @billId VARCHAR(15),
     @serviceId VARCHAR(5)
 AS
 BEGIN
@@ -852,12 +915,12 @@ GO
 
 CREATE PROC USP_insertServiceDetail
     @serviceId VARCHAR(5),
-    @billId VARCHAR(5),
+    @billId VARCHAR(15),
     @quantityOrder INT,
     @price MONEY
 AS
 BEGIN
-    DECLARE @isExitsCTDichVu INT
+    DECLARE @isExitsCTDichVu VARCHAR(15)
     DECLARE @soLuongCu INT = 1
     DECLARE @tienDichVu MONEY = 0.0
     DECLARE @soLuongTon INT = 0
@@ -873,7 +936,7 @@ BEGIN
         AND ctdv.maDichVu = @serviceId
 
     -- hóa đơn tồn tại -> cập nhật
-    IF(@isExitsCTDichVu > 0)
+    IF(@isExitsCTDichVu IS NOT NULL)
         BEGIN
         DECLARE @soLuongMoi INT = @quantityOrder + @soLuongCu
         IF(@soLuongMoi > 0)
@@ -1070,6 +1133,18 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_getCustomerByBillId
+    @billId VARCHAR(15)
+AS
+BEGIN
+    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
+        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    FROM dbo.KhachHang kh, dbo.HoaDon hd
+    WHERE hd.maHoaDon = @billId
+        AND hd.maKH = kh.maKH
+END
+GO
+
 
 -- phòng
 CREATE PROC USP_getRoomList
@@ -1091,6 +1166,19 @@ BEGIN
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
         AND p.maPhong = @roomId
+END
+GO
+
+CREATE PROC USP_getRoomByBillId
+    @billId VARCHAR(15)
+AS
+BEGIN
+    SELECT p.maPhong, p.tinhTrangP, p.viTri,
+        lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+    FROM dbo.Phong p, dbo.LoaiPhong lp, dbo.HoaDon hd
+    WHERE hd.maHoaDon = @billId
+        AND hd.maPhong = p.maPhong
+        AND p.maLP = lp.maLP
 END
 GO
 
@@ -1160,7 +1248,7 @@ END
 GO
 
 CREATE PROC USP_switchRoom
-    @billId INT,
+    @billId VARCHAR(15),
     @oldRoomId VARCHAR(5),
     @newRoomId VARCHAR(5)
 AS
@@ -1203,7 +1291,7 @@ BEGIN
         lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
-        AND dbo.fuConvertToUnsign(p.viTri) like dbo.fuConvertToUnsign(@keyword)
+        AND dbo.fuConvertToUnsign(p.viTri) LIKE dbo.fuConvertToUnsign(@keyword)
 END
 GO
 
@@ -1451,15 +1539,31 @@ END
 GO
 
 CREATE PROC USP_getStaffByStaffID
-    @maNV VARCHAR(12)
+    @staffId VARCHAR(12)
 AS
 BEGIN
     SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
         nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.trangThaiNV
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
+        tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
     FROM dbo.TaiKhoan tk, dbo.NhanVien nv
     WHERE tk.tenDangNhap = nv.taiKhoan
-        AND nv.maNhanVien = @maNV
+        AND nv.maNhanVien = @staffId
+END
+GO
+
+CREATE PROC USP_getStaffByBillId
+    @billId VARCHAR(15)
+AS
+BEGIN
+    SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
+        nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
+        tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
+    FROM dbo.TaiKhoan tk, dbo.NhanVien nv, dbo.HoaDon hd
+    WHERE tk.tenDangNhap = nv.taiKhoan
+        AND nv.maNhanVien = hd.maNhanVien
+        AND hd.maHoaDon = @billId
 END
 GO
 

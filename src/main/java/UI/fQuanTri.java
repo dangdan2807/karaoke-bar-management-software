@@ -24,7 +24,7 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         return instance;
     }
 
-    private JTabbedPane tpTabMain;
+    private JTabbedPane tabMain;
     private NhanVien staffLogin = null;
 
     /**
@@ -47,28 +47,28 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
      * Khởi tạo giao diện và Tab menu
      */
     public void createTabControl() {
-        tpTabMain = new JTabbedPane();
-        tpTabMain.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        tpTabMain.setBorder(null);
-        tpTabMain.setFont(new Font("Dialog", Font.PLAIN, 14));
+        tabMain = new JTabbedPane();
+        tabMain.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        tabMain.setBorder(null);
+        tabMain.setFont(new Font("Dialog", Font.PLAIN, 14));
 
-        PnNhanVien pnNhanVien = new PnNhanVien(staffLogin);
-        PnKhachHang pnKhachHang = new PnKhachHang(staffLogin);
-        PnLoaiPhong pnLoaiPhong = new PnLoaiPhong(staffLogin);
-        PnPhong pnPhong = new PnPhong(staffLogin);
-        PnLoaiDichVu pnLoaiDichVu = new PnLoaiDichVu(staffLogin);
-        PnDichVu pnDichVu = new PnDichVu(staffLogin);
+        PnNhanVien pnlNhanVien = new PnNhanVien(staffLogin);
+        PnKhachHang pnlKhachHang = new PnKhachHang(staffLogin);
+        PnLoaiPhong pnlLoaiPhong = new PnLoaiPhong(staffLogin);
+        PnPhong pnlPhong = new PnPhong(staffLogin);
+        PnLoaiDichVu pnlLoaiDichVu = new PnLoaiDichVu(staffLogin);
+        PnDichVu pnlDichVu = new PnDichVu(staffLogin);
 
-        tpTabMain.addTab("Nhân viên", null, pnNhanVien, "Quản lý Nhân viên");
-        tpTabMain.addTab("Khách hàng", null, pnKhachHang, "Quản lý Khách hàng");
-        tpTabMain.addTab("Loại phòng", null, pnLoaiPhong, "Quản lý loại phòng");
-        tpTabMain.addTab("Phòng", null, pnPhong, "Quản lý Phòng");
-        tpTabMain.addTab("Loại dịch vụ", null, pnLoaiDichVu, "Quản lý loại dịch vụ");
-        tpTabMain.addTab("Dịch vụ", null, pnDichVu, "Quản lý dịch vụ");
-        tpTabMain.addTab("Hóa đơn", null, null, "Quản lý Hóa đơn");
-        this.add(tpTabMain);
+        tabMain.addTab("Nhân viên", null, pnlNhanVien, "Quản lý Nhân viên");
+        tabMain.addTab("Khách hàng", null, pnlKhachHang, "Quản lý Khách hàng");
+        tabMain.addTab("Loại phòng", null, pnlLoaiPhong, "Quản lý loại phòng");
+        tabMain.addTab("Phòng", null, pnlPhong, "Quản lý Phòng");
+        tabMain.addTab("Loại dịch vụ", null, pnlLoaiDichVu, "Quản lý loại dịch vụ");
+        tabMain.addTab("Dịch vụ", null, pnlDichVu, "Quản lý dịch vụ");
+        tabMain.addTab("Hóa đơn", null, null, "Quản lý Hóa đơn");
+        this.add(tabMain);
 
-        tpTabMain.addChangeListener(this);
+        tabMain.addChangeListener(this);
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,6 @@
 // Author : Pham Dang Dan - KayJuno
 // Date created   : April 23, 2021
-// Last update date: Oct 7, 2021
+// Last update date: Nov 1, 2021
 
 package UI.PanelCustom;
 
@@ -10,6 +10,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.*;
+import java.util.Calendar;
 import java.sql.Date;
 
 /**
@@ -202,7 +203,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
      * 
      * @return {@code String}: ngày được hiển thị
      */
-    public String getValue() {
+    public String getValueStr() {
         return txt.getText();
     }
 
@@ -225,6 +226,23 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     }
 
     /**
+     * Trả về ngày được hiển thị dạng {@code java.sql.Date}
+     * 
+     * @return {@code java.sql.Date}: trả bề ngày được hiển thị
+     */
+    public java.util.Date getValueUtilDate() {
+        String strDate = txt.getText().trim();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        java.util.Date date = null;
+        try {
+            date = sdf.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    /**
      * Cập nhật giá trị về ngày hiện tại
      */
     public void setValueToDay() {
@@ -243,6 +261,50 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
         java.util.Date date = null;
         try {
             date = sdf.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date sqlDate = new Date(date.getTime());
+        return sqlDate;
+    }
+
+    /**
+     * Lấy ra ngày kế tiếp của ngày được chọn
+     * 
+     * @return {@code java.sql.Date}: ngày tiếp theo
+     */
+    public Date getNextDay() {
+        String strDate = txt.getText().trim();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        java.util.Date date = null;
+        Calendar cal = Calendar.getInstance();
+        try {
+            date = sdf.parse(strDate);
+            cal.setTime(date);
+            cal.add(Calendar.DATE, 1);
+            date = cal.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date sqlDate = new Date(date.getTime());
+        return sqlDate;
+    }
+
+    /**
+     * Lấy ra ngày kề trước của ngày được chọn
+     * 
+     * @return {@code java.sql.Date}: ngày kề trước
+     */
+    public Date getYesterday() {
+        String strDate = txt.getText().trim();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        java.util.Date date = null;
+        Calendar cal = Calendar.getInstance();
+        try {
+            date = sdf.parse(strDate);
+            cal.setTime(date);
+            cal.add(Calendar.DATE, -1);
+            date = cal.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -273,24 +335,6 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
             e.printStackTrace();
         }
         txt.setText(sdf.format(date));
-    }
-
-    /**
-     * Lấy ra giá trị ngày dưới dạng {@code java.sql.Date}
-     * 
-     * @return {@code java.sql.Date} ngày được trả về
-     */
-    public Date getFullDate() {
-        String strDate = txt.getText();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        java.util.Date date = null;
-        try {
-            date = sdf.parse(strDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Date sqlDate = new Date(date.getTime());
-        return sqlDate;
     }
 
     /**

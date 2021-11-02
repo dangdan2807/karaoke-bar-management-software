@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 public class HoaDon {
-	private int maHoaDon;
+	private String maHoaDon;
 	private Timestamp ngayGioDat;
 	private Timestamp ngayGioTra;
 	private int tinhTrangHD;
@@ -22,18 +22,18 @@ public class HoaDon {
 	/**
 	 * Lấy mã hóa đơn
 	 * 
-	 * @return {@code int}: mã hóa đơn
+	 * @return {@code String}: mã hóa đơn
 	 */
-	public int getMaHoaDon() {
+	public String getMaHoaDon() {
 		return maHoaDon;
 	}
 
 	/**
 	 * Cập nhật mã hóa đơn
 	 * 
-	 * @param maHoaDon {@code int}: mã hóa đơn
+	 * @param maHoaDon {@code String}: mã hóa đơn
 	 */
-	public void setMaHoaDon(int maHoaDon) {
+	public void setMaHoaDon(String maHoaDon) {
 		this.maHoaDon = maHoaDon;
 	}
 
@@ -77,6 +77,10 @@ public class HoaDon {
 	 * Lấy tình trạng hóa đơn
 	 * 
 	 * @return {@code int}: tình trạng hóa đơn
+	 *         <ul>
+	 *         <li>Nếu chưa thanh toán thì trả về {@code 0}</li>
+	 *         <li>Nếu đã thanh toán thì trả về {@code 1}</li>
+	 *         </ul>
 	 */
 	public int getTinhTrangHD() {
 		return tinhTrangHD;
@@ -86,6 +90,10 @@ public class HoaDon {
 	 * Cập nhật tình trạng hóa đơn
 	 * 
 	 * @param tinhTrangHD {@code int}: tình trạng hóa đơn
+	 *                    <ul>
+	 *                    <li>Nếu chưa thanh toán thì truyền vào {@code 0}</li>
+	 *                    <li>Nếu đã thanh toán thì truyền vào {@code 1}</li>
+	 *                    </ul>
 	 */
 	public void setTinhTrangHD(int tinhTrangHD) {
 		this.tinhTrangHD = tinhTrangHD;
@@ -166,15 +174,19 @@ public class HoaDon {
 	/**
 	 * Tạo 1 {@code HoaDon} với các tham số sau:
 	 * 
-	 * @param maHoaDon    {@code int}: mã hóa đơn
+	 * @param maHoaDon    {@code String}: mã hóa đơn
 	 * @param ngayGioDat  {@code Timestamp}: ngày giờ đặt
 	 * @param ngayGioTra  {@code Timestamp}: ngày giờ trả
 	 * @param tinhTrangHD {@code int}: tình trạng hóa đơn
+	 *                    <ul>
+	 *                    <li>Nếu chưa thanh toán thì truyền vào {@code 0}</li>
+	 *                    <li>Nếu đã thanh toán thì truyền vào {@code 1}</li>
+	 *                    </ul>
 	 * @param nhanVien    {@code NhanVien}: nhân viên tạo hóa đơn
 	 * @param khachHang   {@code KhachHang}: khách hàng đặt phòng
 	 * @param phong       {@code Phong}: phòng được chọn
 	 */
-	public HoaDon(int maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD, NhanVien nhanVien,
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD, NhanVien nhanVien,
 			KhachHang khachHang, Phong phong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
@@ -191,13 +203,20 @@ public class HoaDon {
 	/**
 	 * Tạo 1 {@code HoaDon} với các tham số sau:
 	 * 
+	 * @param maHoaDon    {@code String}: mã hóa đơn
 	 * @param ngayGioDat  {@code Timestamp}: ngày giờ đặt
 	 * @param tinhTrangHD {@code int}: tình trạng hóa đơn
+	 *                    <ul>
+	 *                    <li>Nếu chưa thanh toán thì truyền vào {@code 0}</li>
+	 *                    <li>Nếu đã thanh toán thì truyền vào {@code 1}</li>
+	 *                    </ul>
 	 * @param nhanVien    {@code NhanVien}: nhân viên tạo hóa đơn
 	 * @param khachHang   {@code KhachHang}: khách hàng đặt phòng
 	 * @param phong       {@code Phong}: phòng được chọn
 	 */
-	public HoaDon(Timestamp ngayGioDat, int tinhTrangHD, NhanVien nhanVien, KhachHang khachHang, Phong phong) {
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, int tinhTrangHD, NhanVien nhanVien, KhachHang khachHang,
+			Phong phong) {
+		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
 		this.tinhTrangHD = tinhTrangHD;
 		this.nhanVien = nhanVien;
@@ -208,11 +227,46 @@ public class HoaDon {
 	}
 
 	/**
+	 * Tạo 1 {@code HoaDon} mới (tính trạng chưa thanh toán) với các tham số sau:
+	 * 
+	 * @param maHoaDon   {@code String}: mã hóa đơn
+	 * @param ngayGioDat {@code Timestamp}: ngày giờ đặt
+	 * @param nhanVien   {@code NhanVien}: nhân viên tạo hóa đơn
+	 * @param khachHang  {@code KhachHang}: khách hàng đặt phòng
+	 * @param phong      {@code Phong}: phòng được chọn
+	 */
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, NhanVien nhanVien, KhachHang khachHang, Phong phong) {
+		this.maHoaDon = maHoaDon;
+		this.ngayGioDat = ngayGioDat;
+		this.tinhTrangHD = 0;
+		this.nhanVien = nhanVien;
+		this.khachHang = khachHang;
+		this.phong = phong;
+
+		ctDSDichVu = new ArrayList<CTDichVu>();
+	}
+
+	/**
+	 * Tạo 1 {@code HoaDon} mới (tính trạng chưa thanh toán) với các tham số sau:
+	 * 
+	 * @param maHoaDon   {@code String}: mã hóa đơn
+	 * @param ngayGioDat {@code Timestamp}: ngày giờ đặt
+	 */
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD) {
+		this.maHoaDon = maHoaDon;
+		this.ngayGioDat = ngayGioDat;
+		this.ngayGioTra = ngayGioTra;
+		this.tinhTrangHD = tinhTrangHD;
+
+		ctDSDichVu = new ArrayList<CTDichVu>();
+	}
+
+	/**
 	 * Tạo 1 {@code HoaDon} với các tham số sau:
 	 * 
-	 * @param maHoaDon {@code int}: mã hóa đơn
+	 * @param maHoaDon {@code String}: mã hóa đơn
 	 */
-	public HoaDon(int maHoaDon) {
+	public HoaDon(String maHoaDon) {
 		this.maHoaDon = maHoaDon;
 
 		ctDSDichVu = new ArrayList<CTDichVu>();
@@ -232,8 +286,8 @@ public class HoaDon {
 	 * @throws SQLException {@code SQLException}: lỗi truy vấn
 	 */
 	public HoaDon(ResultSet rs) throws SQLException {
-		this(rs.getInt("maHoaDon"), rs.getTimestamp("ngayGioDat"), rs.getTimestamp("ngayGioTra"),
-				rs.getInt("tinhTrangHD"), new NhanVien(rs), new KhachHang(rs), new Phong(rs));
+		this(rs.getString("maHoaDon"), rs.getTimestamp("ngayGioDat"), rs.getTimestamp("ngayGioTra"),
+				rs.getInt("tinhTrangHD"));
 	}
 
 	@Override
@@ -253,6 +307,7 @@ public class HoaDon {
 		for (CTDichVu item : ctDSDichVu) {
 			tongTienDV += item.tinhTienDichVu();
 		}
+		tongTienDV += tinhTienPhong();
 		return tongTienDV;
 	}
 

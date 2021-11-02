@@ -14,17 +14,14 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	private JTextField txtUsername, txtPassword;
 	private JButton btnLogin;
 
-	private static String pathImg = "src/main/resources/images/";
-	// private ImageIcon logoIcon = new ImageIcon(
-	// 		CustomUI.USER_ICON_512.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
 	private ImageIcon logoIcon = new ImageIcon(
-			new ImageIcon(pathImg + "user_512.png").getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
-	private ImageIcon anhChen = new ImageIcon(
+			CustomUI.USER_ICON_512.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
+	private ImageIcon backgroundTop = new ImageIcon(
 			CustomUI.BACKGROUND_LOGIN.getImage().getScaledInstance(700, 300, Image.SCALE_SMOOTH));
 	private ImageIcon loginIcon = new ImageIcon(
 			CustomUI.LOGIN_ICON.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 
-	private GradientPaint gra = new GradientPaint(0, 0, Color.decode("#c22ed0"), 255, 0, Color.decode("#5ffae0"));
+	private GradientPaint gra = new GradientPaint(0, 0, Color.decode("#900a9c"), 250, 0, Color.decode("#00cccb"));
 	TaiKhoanDAO taiKhoanDAO = TaiKhoanDAO.getInstance();
 
 	/**
@@ -44,15 +41,15 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	 * Khởi tạo giao diện đăng nhập
 	 */
 	public void createFormLogin() {
-		JPanel pnMain = new JPanel();
-		pnMain.setBackground(Color.decode("#ffffff"));
+		JPanel pnlMain = new JPanel();
+		pnlMain.setBackground(Color.decode("#ffffff"));
 
-		JLabel lbUsername, lbPassword;
-		pnMain.setLayout(null);
+		JLabel lblUsername, lblPassword;
+		pnlMain.setLayout(null);
 
-		getContentPane().add(pnMain);
+		getContentPane().add(pnlMain);
 
-		JPanel pnMau = new JPanel() {
+		JPanel pnlMau = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -63,52 +60,53 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 				g2.fillRect(0, 0, getWidth(), getHeight());
 			}
 		};
-		pnMau.setBounds(0, 0, 455, 323);
-		pnMain.add(pnMau);
-		pnMau.setLayout(null);
-		JLabel lbAnhChen = new JLabel(anhChen);
-		lbAnhChen.setBounds(-18, 143, 473, 281);
-		pnMau.add(lbAnhChen);
+		pnlMau.setBounds(0, 0, 455, 323);
+		pnlMain.add(pnlMau);
+		pnlMau.setLayout(null);
 
-		JLabel lbLogo = new JLabel(logoIcon);
-		lbLogo.setBounds(0, 57, 455, 82);
-		pnMau.add(lbLogo);
-		lbLogo.setHorizontalAlignment(SwingConstants.CENTER);
+		JLabel lblBackgroundTop = new JLabel(backgroundTop);
+		lblBackgroundTop.setBounds(-18, 143, 473, 281);
+		pnlMau.add(lblBackgroundTop);
 
-		JLabel lbWelcome = new JLabel("Đăng nhập");
-		lbWelcome.setForeground(Color.WHITE);
-		lbWelcome.setFont(new Font("Dialog", Font.BOLD, 28));
-		lbWelcome.setBounds(0, 138, 455, 35);
-		pnMau.add(lbWelcome);
-		lbWelcome.setHorizontalAlignment(SwingConstants.CENTER);
+		JLabel lblLogo = new JLabel(logoIcon);
+		lblLogo.setBounds(0, 57, 455, 82);
+		pnlMau.add(lblLogo);
+		lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JPanel pnLogin = new JPanel();
-		pnLogin.setBackground(Color.WHITE);
+		JLabel lblWelcome = new JLabel("Đăng nhập");
+		lblWelcome.setForeground(Color.WHITE);
+		lblWelcome.setFont(new Font("Dialog", Font.BOLD, 28));
+		lblWelcome.setBounds(0, 138, 455, 35);
+		pnlMau.add(lblWelcome);
+		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 
-		pnLogin.setLayout(null);
-		pnLogin.setBounds(0, 325, 455, 273);
-		pnMain.add(pnLogin);
-		lbUsername = new JLabel("Tên đăng nhập: ");
-		lbUsername.setBounds(83, 12, 285, 25);
-		pnLogin.add(lbUsername);
-		lbUsername.setFont(new Font("Dialog", Font.BOLD, 14));
-		lbUsername.setForeground(Color.decode("#1a66e3"));
+		JPanel pnlLogin = new JPanel();
+		pnlLogin.setBackground(Color.WHITE);
+
+		pnlLogin.setLayout(null);
+		pnlLogin.setBounds(0, 325, 455, 273);
+		pnlMain.add(pnlLogin);
+		lblUsername = new JLabel("Tên đăng nhập: ");
+		lblUsername.setBounds(83, 12, 285, 25);
+		pnlLogin.add(lblUsername);
+		lblUsername.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblUsername.setForeground(Color.decode("#1a66e3"));
 
 		txtUsername = new JTextField("phamdangdan");
 		txtUsername.setBounds(83, 49, 285, 25);
-		pnLogin.add(txtUsername);
+		pnlLogin.add(txtUsername);
 		txtUsername.setFont(new Font("Dialog", Font.PLAIN, 14));
 		txtUsername.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
-		lbPassword = new JLabel("Mật khẩu: ");
-		lbPassword.setBounds(83, 86, 285, 25);
-		pnLogin.add(lbPassword);
-		lbPassword.setFont(new Font("Dialog", Font.BOLD, 14));
-		lbPassword.setForeground(Color.decode("#1a66e3"));
+		lblPassword = new JLabel("Mật khẩu: ");
+		lblPassword.setBounds(83, 86, 285, 25);
+		pnlLogin.add(lblPassword);
+		lblPassword.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblPassword.setForeground(Color.decode("#1a66e3"));
 
 		txtPassword = new JPasswordField("1234567");
 		txtPassword.setBounds(83, 123, 285, 25);
-		pnLogin.add(txtPassword);
+		pnlLogin.add(txtPassword);
 		txtPassword.setFont(new Font("Dialog", Font.PLAIN, 14));
 		txtPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 
@@ -118,9 +116,8 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 				colorFontDefault);
 		((MyButton) btnLogin).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		((MyButton) btnLogin).setColorHover(Color.WHITE);
-		// ((MyButton) btnLogin).setColorExit(Color.WHITE);
 		btnLogin.setBounds(83, 177, 285, 40);
-		pnLogin.add(btnLogin);
+		pnlLogin.add(btnLogin);
 
 		btnLogin.addActionListener(this);
 
@@ -142,16 +139,23 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		if (o.equals(btnLogin)) {
 			String username = txtUsername.getText().trim();
 			String password = txtPassword.getText().trim();
+			// xác thực dữ liệu trên form
 			if (validData()) {
-				if (login(username, password)) {
+				boolean loginResult = login(username, password);
+				// nếu tài khoản, mật khẩu hợp lệ và không bị vô hiệu hóa thì đăng nhập thành
+				// công
+				if (loginResult) {
 					NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername(username);
+					// kiểm tra tài khoản có bị vô hiệu hóa hay không
 					if (staff.getTaiKhoan().getTinhTrangTK() == true) {
-						fDieuHuong f = new fDieuHuong(staff);
+						fDieuHuong winDieuHuong = new fDieuHuong(staff);
 						this.setVisible(false);
-						f.setVisible(true);
+						winDieuHuong.setVisible(true);
+
 					} else {
 						showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
 					}
+
 				} else {
 					showMessage("Sai tài khoản hoặc mật khẩu");
 				}
@@ -243,19 +247,28 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	private boolean validData() {
 		String username = txtUsername.getText().trim();
 		String password = txtPassword.getText().trim();
-		if (!(username.length() >= 6 && username.matches("^[a-zA-Z0-9_@#]{6,}$"))) {
+		// username tối thiểu 6 ký tự và không được quá 100 ký tự
+		// username có thể chứa ký tự, số và @, !, #, _
+		if (!(username.length() >= 6 && password.length() <= 100 && username.matches("^[a-zA-Z0-9_@#]{6,100}$"))) {
 			if (username.length() < 6)
 				showMessage("Tên đăng nhập phải tối thiểu 6 ký tự");
+			else if (username.length() > 100)
+				showMessage("Tên đăng nhập không quá 100 ký tự");
 			else
 				showMessage("Tên đăng nhập chỉ có thể chứa các kỳ tự, số, @, #, _");
 			txtUsername.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
 			return false;
 		}
-		if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9_@#]{6,}$"))) {
+
+		// password tối thiểu 6 ký tự và không được quá 100 ký tự
+		// password có thể chứa ký tự, số và @, #
+		if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9@#]{6,100}$"))) {
 			if (password.length() < 6)
 				showMessage("Mật khẩu phải tối thiểu 6 ký tự");
+			else if (password.length() > 100)
+				showMessage("Mật khẩu không quá 100 ký tự");
 			else
-				showMessage("Mật khẩu chỉ có thể chứa các kỳ tự, số, @, #, _");
+				showMessage("Mật khẩu chỉ có thể chứa các kỳ tự, số, @, #");
 			txtPassword.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
 			return false;
 		}

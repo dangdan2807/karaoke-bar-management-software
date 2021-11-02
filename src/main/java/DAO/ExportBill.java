@@ -692,7 +692,7 @@ public class ExportBill {
      * @param billId {@code int}: mã hóa đơn
      * @param path   {@code String}: đường dẫn đến file excel
      */
-    public void exportBillToExcel(int billId, String path) {
+    public void exportBillToExcel(String billId, String path) {
         HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billId);
         workbook = new XSSFWorkbook();
 
@@ -715,7 +715,7 @@ public class ExportBill {
         writeFileExcel(path, rowIndex);
     }
 
-    private void exportBillToPdf(int billId, String path) {
+    public void exportBillToPdf(int billId, String path) {
         Document doc = new Document();
         try {
             PdfWriter.getInstance(doc, new FileOutputStream(path));

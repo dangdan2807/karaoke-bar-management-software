@@ -117,39 +117,96 @@ public class test {
 
     }
 
-    public static void main(String[] args) {
-        // testTime();
-        // System.out.println(createNewServiceID());
-        // ExportBill.getInstance().exportBillToExcel(1, "D:/hd.xlsx");
-        // ExportBill.getInstance().exportBillToPdf(1, "D:/hd.pdf");
-        // BigDecimal a = new BigDecimal("0.00");
-        // BigDecimal b = new BigDecimal("1.00");
-        // System.out.println(a.add(b));
-        // System.out.println(a.multiply(b));
-        // LoaiPhong roomType = new LoaiPhong("LP004", "1", 1, 2300.5);
-        // Boolean result = LoaiPhongDAO.getInstance().updateInfoRoomType(roomType);
-        // System.out.println(result);
-        // String data = "8000.0";
-        // System.out.println(data.replaceAll("\\.[0]+$", ""));
-        // JFrame frame = new JFrame("Test");
-        // JDialog jDialog = new JDialog();
-        // JPanel jPanel = new JPanel();
+    private static String createNewBillId(Timestamp date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        String dateStr = format.format(date);
+        String lastBillId = HoaDonDAO.getInstance().getLastBillId();
+        System.out.println(lastBillId);
+        String newIdStr = "HD" + dateStr;
+        int oldNumberBillId = 0;
+        // lấy 5 số cuối của hóa đơn
+        String lastBillIdStr = lastBillId.substring(0, 10);
+        if (lastBillId.equalsIgnoreCase("") == false || lastBillId != null) {
+            oldNumberBillId = Integer.parseInt(lastBillId.substring(10));
+        }
 
-        // test1((Component) frame);
-        // test1((Component) jDialog);
-        // test1((Component) jPanel);
-        // JTextField a = new JTextField();
-        // JCheckBox b = new JCheckBox();
-        // JSpinner c = new JSpinner();
-        // JLabel d = new JLabel();
-        // test2(a);
-        // test2(b);
-        // test2(c);
-        // test2(d);
-        String phone = "0303030303";
-        phone = phone.substring(0, 4) + "-" + phone.substring(4, 7) + "-" + phone.substring(7, 10);
-        System.out.println(phone);
-        phone = phone.replace("-", "");
-        System.out.println(phone);
+        // Nếu ngày hóa đơn là ngày hiện tại thì tăng thêm 1
+        // Nếu ngày hóa đơn là ngày hôm qua thì bắt đầu từ 1
+        if (lastBillIdStr.equalsIgnoreCase(newIdStr)) {
+            ++oldNumberBillId;
+        } else {
+            oldNumberBillId = 1;
+        }
+
+        int newStaffID = oldNumberBillId;
+        String newStaffIdStr = newIdStr + newStaffID;
+        boolean flag = true;
+        while (flag) {
+            newStaffIdStr = newStaffIdStr.replace(newIdStr, newIdStr + "0");
+            if (newStaffIdStr.length() > 14) {
+                flag = false;
+            }
+        }
+        return newStaffIdStr;
+    }
+
+    public static void main(String[] args) {
+        int key = 10;
+        switch (key) {
+        case 1:
+            testTime();
+            break;
+        case 2:
+            System.out.println(createNewServiceID());
+            break;
+        case 3:
+            ExportBill.getInstance().exportBillToExcel("HD2021010100001", "D:/hd.xlsx");
+            break;
+        case 4:
+            // ExportBill.getInstance().exportBillToPdf(1, "D:/hd.xlsx");
+            break;
+        case 5:
+            BigDecimal a = new BigDecimal("0.00");
+            BigDecimal b = new BigDecimal("1.00");
+            System.out.println(a.add(b));
+            System.out.println(a.multiply(b));
+            break;
+        case 6:
+            String data = "8000.0";
+            System.out.println(data.replaceAll("\\.[0]+$", ""));
+            break;
+        case 7:
+            JFrame frame = new JFrame("Test");
+            JDialog jDialog = new JDialog();
+            JPanel jPanel = new JPanel();
+            test1(frame);
+            test1(jDialog);
+            test1(jPanel);
+            break;
+        case 8:
+            JTextField txt = new JTextField();
+            JCheckBox chk = new JCheckBox();
+            JSpinner spin = new JSpinner();
+            JLabel ldl = new JLabel();
+            test2(txt);
+            test2(chk);
+            test2(spin);
+            test2(ldl);
+            break;
+        case 9:
+            String phone = "0303030303";
+            phone = phone.substring(0, 4) + "-" + phone.substring(4, 7) + "-" + phone.substring(7, 10);
+            System.out.println(phone);
+            phone = phone.replace("-", "");
+            System.out.println(phone);
+            break;
+        case 10:
+            String id = createNewBillId(Timestamp.valueOf("2021-10-02 00:00:00"));
+            System.out.println(id);
+            break;
+        default:
+            break;
+        }
+
     }
 }

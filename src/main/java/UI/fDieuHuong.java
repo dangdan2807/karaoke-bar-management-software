@@ -3,8 +3,8 @@ package UI;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import DAO.CheckPassword;
 import DAO.NhanVienDAO;
+import Event_Handlers.CheckPassword;
 import UI.PanelCustom.CustomUI;
 import entity.NhanVien;
 
@@ -47,12 +47,12 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
      * @param type {@code String}: chức vụ của nhân viên
      */
     public void createFormManage(String type) {
-        JPanel pnMain = new JPanel();
-        pnMain.setBackground(Color.WHITE);
-        getContentPane().add(pnMain, BorderLayout.CENTER);
-        pnMain.setLayout(null);
+        JPanel pnlMain = new JPanel();
+        pnlMain.setBackground(Color.WHITE);
+        getContentPane().add(pnlMain, BorderLayout.CENTER);
+        pnlMain.setLayout(null);
 
-        JPanel pnTitle = new JPanel() {
+        JPanel pnlTitle = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -63,32 +63,32 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
                 g2.fillRect(0, 0, getWidth(), getHeight());
             }
         };
-        pnTitle.setBounds(0, 0, 771, 32);
-        pnMain.add(pnTitle);
-        pnTitle.setLayout(null);
+        pnlTitle.setBounds(0, 0, 771, 32);
+        pnlMain.add(pnlTitle);
+        pnlTitle.setLayout(null);
 
-        JLabel lbTitle = new JLabel("CHÀO MỪNG BẠN ĐẾN VỚI PHẦN MỀM QUẢN LÝ QUÁN KARAOKE");
-        lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        lbTitle.setBounds(12, 5, 713, 22);
-        lbTitle.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lbTitle.setForeground(Color.WHITE);
-        pnTitle.add(lbTitle);
+        JLabel lblTitle = new JLabel("CHÀO MỪNG BẠN ĐẾN VỚI PHẦN MỀM QUẢN LÝ QUÁN KARAOKE");
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitle.setBounds(12, 5, 713, 22);
+        lblTitle.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblTitle.setForeground(Color.WHITE);
+        pnlTitle.add(lblTitle);
 
-        JPanel pnBottom = new JPanel();
-        pnBottom.setBounds(0, 296, 771, 32);
-        pnBottom.setBackground(Color.WHITE);
-        pnBottom.setPreferredSize(new Dimension(280, 40));
-        pnMain.add(pnBottom);
-        pnBottom.setLayout(null);
+        JPanel pnlBottom = new JPanel();
+        pnlBottom.setBounds(0, 296, 771, 32);
+        pnlBottom.setBackground(Color.WHITE);
+        pnlBottom.setPreferredSize(new Dimension(280, 40));
+        pnlMain.add(pnlBottom);
+        pnlBottom.setLayout(null);
 
         btnLogOut = new JButton("Đăng xuất", logoutIcon);
         btnLogOut.setBounds(645, 0, 108, 26);
         CustomUI.getInstance().setCustomBtn(btnLogOut);
-        pnBottom.add(btnLogOut);
+        pnlBottom.add(btnLogOut);
 
         btnBookingManagement = new JButton("Quản lý đặt phòng");
         btnBookingManagement.setBounds(261, 44, 240, 240);
-        pnMain.add(btnBookingManagement);
+        pnlMain.add(btnBookingManagement);
         btnBookingManagement.setFont(new Font("Dialog", Font.BOLD, 20));
         btnBookingManagement.setBorder(new LineBorder(Color.decode("#3EA1EC"), 2));
         btnBookingManagement.setPreferredSize(new Dimension(180, 150));
@@ -99,7 +99,7 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
 
         btnSystemManagement = new JButton("Quản Trị");
         btnSystemManagement.setBounds(10, 44, 240, 240);
-        pnMain.add(btnSystemManagement);
+        pnlMain.add(btnSystemManagement);
         btnSystemManagement.setFont(new Font("Dialog", Font.BOLD, 20));
         btnSystemManagement.setPreferredSize(new Dimension(180, 150));
         btnSystemManagement.setBorder(new LineBorder(Color.decode("#3EA1EC"), 2));
@@ -110,7 +110,7 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
 
         btnInfoManagement = new JButton("Thông Tin Cá Nhân");
         btnInfoManagement.setBounds(513, 44, 240, 240);
-        pnMain.add(btnInfoManagement);
+        pnlMain.add(btnInfoManagement);
         btnInfoManagement.setPreferredSize(new Dimension(180, 150));
         btnInfoManagement.setFont(new Font("Dialog", Font.BOLD, 20));
         btnInfoManagement.setBorder(new LineBorder(Color.decode("#3EA1EC"), 2));
@@ -143,21 +143,21 @@ public class fDieuHuong extends JFrame implements ActionListener, MouseListener 
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if (o.equals(btnLogOut)) {
-            fDangNhap f = new fDangNhap();
+            fDangNhap winLogin = new fDangNhap();
             this.setVisible(false);
-            f.setVisible(true);
+            winLogin.setVisible(true);
         } else if (o.equals(btnBookingManagement)) {
-            fQuanLyDatPhong f = new fQuanLyDatPhong(staff);
+            fQuanLyDatPhong winBookingManagement = new fQuanLyDatPhong(staff);
             this.setVisible(false);
-            f.setVisible(true);
+            winBookingManagement.setVisible(true);
         } else if (o.equals(btnSystemManagement)) {
-            fQuanTri f = new fQuanTri(staff);
+            fQuanTri winSystemManagement = new fQuanTri(staff);
             this.setVisible(false);
-            f.setVisible(true);
+            winSystemManagement.setVisible(true);
         } else if (o.equals(btnInfoManagement)) {
-            fThongTinCaNhan f = new fThongTinCaNhan(staff);
-            f.setModal(true);
-            f.setVisible(true);
+            fThongTinCaNhan winInfoManagement = new fThongTinCaNhan(staff);
+            winInfoManagement.setModal(true);
+            winInfoManagement.setVisible(true);
         }
     }
 

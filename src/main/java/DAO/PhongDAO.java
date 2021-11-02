@@ -265,4 +265,29 @@ public class PhongDAO {
         String roomId = obj != null ? obj.toString() : "";
         return roomId;
     }
+
+    /**
+     * Lấy phòng dựa trên mã hóa đơn
+     * 
+     * @param billId {@code String}: mã hóa đơn
+     * @return {@code Phong}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code Phong}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
+     *         </ul>
+     */
+    public Phong getRoomByBillId(String billId) {
+        String query = "{CALL USP_getRoomByBillId( ? )}";
+        Object[] parameter = new Object[] { billId };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        Phong phong = null;
+        try {
+            if (rs.next()) {
+                phong = new Phong(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return phong;
+    }
 }

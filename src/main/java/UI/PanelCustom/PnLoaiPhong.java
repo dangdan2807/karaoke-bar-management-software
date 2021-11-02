@@ -18,13 +18,13 @@ import entity.NhanVien;
 
 public class PnLoaiPhong extends JFrame
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
-	private JTable tableTypeRoom;
+	private JTable tblTableTypeRoom;
 	private DefaultTableModel modelTableTypeRoom;
 	private JTextField txtBFieldSearch, txtKeyWord, txtRoomTypeId, txtRoomTypeName;
-	private JLabel lbCapacity, lpSearch;
+	private JLabel lblCapacity, lblSearch;
 	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack;
 	private JComboBox<String> cboSearch;
-	private JSpinner spinCapacity, spinPrice, spinSearchPrice;
+	private JSpinner spnCapacity, spnPrice, spnSearchPrice;
 
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
@@ -46,7 +46,7 @@ public class PnLoaiPhong extends JFrame
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		JPanel pnMain = new JPanel() {
+		JPanel pnlMain = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -59,11 +59,11 @@ public class PnLoaiPhong extends JFrame
 				g2.drawRoundRect(9, 49, 1240, 530, 20, 20);
 			}
 		};
-		pnMain.setLayout(null);
-		pnMain.setBounds(0, 0, 1270, 630);
-		getContentPane().add(pnMain);
+		pnlMain.setLayout(null);
+		pnlMain.setBounds(0, 0, 1270, 630);
+		getContentPane().add(pnlMain);
 
-		JPanel pnTitle = new JPanel() {
+		JPanel pnlTitle = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -71,68 +71,68 @@ public class PnLoaiPhong extends JFrame
 				g2.setColor(new Color(255, 255, 255));
 			}
 		};
-		pnTitle.setBounds(0, 0, 1270, 50);
-		pnTitle.setOpaque(false);
-		pnTitle.setLayout(null);
+		pnlTitle.setBounds(0, 0, 1270, 50);
+		pnlTitle.setOpaque(false);
+		pnlTitle.setLayout(null);
 
 		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19);
 		btnBack.setBounds(1150, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
-		pnTitle.add(btnBack);
-		pnMain.add(pnTitle);
+		pnlTitle.add(btnBack);
+		pnlMain.add(pnlTitle);
 
-		JLabel lbTitle = new JLabel("QUẢN LÝ LOẠI PHÒNG");
-		lbTitle.setFont(new Font("Dialog", Font.BOLD, 24));
-		lbTitle.setForeground(Color.WHITE);
-		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lbTitle.setBounds(0, 0, 1250, 45);
-		pnTitle.add(lbTitle);
+		JLabel lblTitle = new JLabel("QUẢN LÝ LOẠI PHÒNG");
+		lblTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lblTitle.setForeground(Color.WHITE);
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setBounds(0, 0, 1250, 45);
+		pnlTitle.add(lblTitle);
 
-		JPanel pnInfo = new JPanel();
-		pnInfo.setLayout(null);
-		pnInfo.setOpaque(false);
-		pnInfo.setBounds(0, 60, 1238, 140);
-		pnMain.add(pnInfo);
+		JPanel pnlInfo = new JPanel();
+		pnlInfo.setLayout(null);
+		pnlInfo.setOpaque(false);
+		pnlInfo.setBounds(0, 60, 1238, 140);
+		pnlMain.add(pnlInfo);
 
-		spinCapacity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
-		CustomUI.getInstance().setCustomSpinner(spinCapacity);
-		spinCapacity.setBounds(763, 15, 180, 20);
-		pnInfo.add(spinCapacity);
+		spnCapacity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+		CustomUI.getInstance().setCustomSpinner(spnCapacity);
+		spnCapacity.setBounds(763, 15, 180, 20);
+		pnlInfo.add(spnCapacity);
 
-		lbCapacity = new JLabel("Sức chứa:");
-		lbCapacity.setForeground(Color.WHITE);
-		lbCapacity.setFont(new Font("Dialog", Font.BOLD, 13));
-		lbCapacity.setBounds(670, 15, 90, 20);
-		pnInfo.add(lbCapacity);
+		lblCapacity = new JLabel("Sức chứa:");
+		lblCapacity.setForeground(Color.WHITE);
+		lblCapacity.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblCapacity.setBounds(670, 15, 90, 20);
+		pnlInfo.add(lblCapacity);
 
 		btnAdd = new MyButton(100, 35, "Thêm", gra, addIcon.getImage(), 39, 19);
 		btnAdd.setToolTipText("Thêm loại phòng mới");
 		btnAdd.setBounds(20, 93, 100, 35);
-		pnInfo.add(btnAdd);
+		pnlInfo.add(btnAdd);
 
 		btnUpdate = new MyButton(100, 35, "Sửa", gra, updateIcon.getImage(), 43, 19);
 		btnUpdate.setToolTipText("Sửa thông tin loại phòng");
 		btnUpdate.setBounds(150, 93, 100, 35);
 		btnUpdate.setEnabledCustom(false);
-		pnInfo.add(btnUpdate);
+		pnlInfo.add(btnUpdate);
 
 		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 27, 19);
 		btnRefresh.setToolTipText("Làm mới form");
 		btnRefresh.setBounds(1118, 93, 100, 35);
-		pnInfo.add(btnRefresh);
+		pnlInfo.add(btnRefresh);
 
-		JPanel pnSearch = new JPanel();
-		pnSearch.setBounds(286, 83, 822, 53);
-		pnInfo.add(pnSearch);
-		pnSearch.setOpaque(false);
-		pnSearch.setLayout(null);
-		pnInfo.add(pnSearch);
+		JPanel pnlSearch = new JPanel();
+		pnlSearch.setBounds(286, 83, 822, 53);
+		pnlInfo.add(pnlSearch);
+		pnlSearch.setOpaque(false);
+		pnlSearch.setLayout(null);
+		pnlInfo.add(pnlSearch);
 
-		lpSearch = new JLabel("Lọc theo:");
-		lpSearch.setForeground(Color.WHITE);
-		lpSearch.setFont(new Font("Dialog", Font.BOLD, 13));
-		lpSearch.setBounds(30, 18, 100, 20);
-		pnSearch.add(lpSearch);
+		lblSearch = new JLabel("Lọc theo:");
+		lblSearch.setForeground(Color.WHITE);
+		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblSearch.setBounds(30, 18, 100, 20);
+		pnlSearch.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
 		cboSearch.addItem("Tất cả");
@@ -143,18 +143,18 @@ public class PnLoaiPhong extends JFrame
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(140, 18, 160, 20);
 
-		pnSearch.add(cboSearch);
+		pnlSearch.add(cboSearch);
 
 		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, searchIcon.getImage(), 26, 19);
 		btnSearch.setToolTipText("Tìm kiếm thông tin loại phòng theo từ khóa");
 		btnSearch.setBounds(702, 10, 100, 35);
-		pnSearch.add(btnSearch);
+		pnlSearch.add(btnSearch);
 
-		JLabel lpKeyWord = new JLabel("Từ khóa:");
-		lpKeyWord.setForeground(Color.WHITE);
-		lpKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
-		lpKeyWord.setBounds(364, 18, 76, 20);
-		pnSearch.add(lpKeyWord);
+		JLabel lblKeyWord = new JLabel("Từ khóa:");
+		lblKeyWord.setForeground(Color.WHITE);
+		lblKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblKeyWord.setBounds(364, 18, 76, 20);
+		pnlSearch.add(lblKeyWord);
 
 		txtKeyWord = new JTextField();
 		txtKeyWord.setText("");
@@ -162,57 +162,57 @@ public class PnLoaiPhong extends JFrame
 		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
-		pnSearch.add(txtKeyWord);
+		pnlSearch.add(txtKeyWord);
 
-		spinSearchPrice = new JSpinner(new SpinnerNumberModel(0f, 0f, Double.MAX_VALUE, 1000f));
-		CustomUI.getInstance().setCustomSpinner(spinSearchPrice);
-		spinSearchPrice.setBounds(440, 18, 200, 20);
-		spinSearchPrice.setToolTipText("Nhập giá phòng cần tìm kiếm");
-		spinSearchPrice.setVisible(false);
-		pnSearch.add(spinSearchPrice);
+		spnSearchPrice = new JSpinner(new SpinnerNumberModel(0f, 0f, Double.MAX_VALUE, 1000f));
+		CustomUI.getInstance().setCustomSpinner(spnSearchPrice);
+		spnSearchPrice.setBounds(440, 18, 200, 20);
+		spnSearchPrice.setToolTipText("Nhập giá phòng cần tìm kiếm");
+		spnSearchPrice.setVisible(false);
+		pnlSearch.add(spnSearchPrice);
 
-		JLabel lpPrice = new JLabel("Giá tiền:");
-		lpPrice.setForeground(Color.WHITE);
-		lpPrice.setFont(new Font("Dialog", Font.BOLD, 13));
-		lpPrice.setBounds(977, 15, 90, 20);
-		pnInfo.add(lpPrice);
+		JLabel lblPrice = new JLabel("Giá tiền:");
+		lblPrice.setForeground(Color.WHITE);
+		lblPrice.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblPrice.setBounds(977, 15, 90, 20);
+		pnlInfo.add(lblPrice);
 
-		spinPrice = new JSpinner(new SpinnerNumberModel(1000f, 0f, Double.MAX_VALUE, 1000f));
-		CustomUI.getInstance().setCustomSpinner(spinPrice);
-		spinPrice.setBounds(1063, 15, 165, 20);
-		pnInfo.add(spinPrice);
+		spnPrice = new JSpinner(new SpinnerNumberModel(1000f, 0f, Double.MAX_VALUE, 1000f));
+		CustomUI.getInstance().setCustomSpinner(spnPrice);
+		spnPrice.setBounds(1063, 15, 165, 20);
+		pnlInfo.add(spnPrice);
 
-		JLabel lbRoomTypeID = new JLabel("Mã loại phòng:");
-		lbRoomTypeID.setForeground(Color.WHITE);
-		lbRoomTypeID.setFont(new Font("Dialog", Font.BOLD, 13));
-		lbRoomTypeID.setBounds(20, 15, 120, 20);
-		pnInfo.add(lbRoomTypeID);
+		JLabel lblRoomTypeID = new JLabel("Mã loại phòng:");
+		lblRoomTypeID.setForeground(Color.WHITE);
+		lblRoomTypeID.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblRoomTypeID.setBounds(20, 15, 120, 20);
+		pnlInfo.add(lblRoomTypeID);
 
 		txtRoomTypeId = new JTextField();
 		txtRoomTypeId.setText("");
 		txtRoomTypeId.setBounds(145, 15, 165, 20);
 		txtRoomTypeId.setToolTipText("Mã loại phòng");
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomTypeId);
-		pnInfo.add(txtRoomTypeId);
+		pnlInfo.add(txtRoomTypeId);
 
-		JLabel lbRoomTypeName = new JLabel("Tên loại phòng:");
-		lbRoomTypeName.setForeground(Color.WHITE);
-		lbRoomTypeName.setFont(new Font("Dialog", Font.BOLD, 13));
-		lbRoomTypeName.setBounds(344, 15, 120, 20);
-		pnInfo.add(lbRoomTypeName);
+		JLabel lblRoomTypeName = new JLabel("Tên loại phòng:");
+		lblRoomTypeName.setForeground(Color.WHITE);
+		lblRoomTypeName.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblRoomTypeName.setBounds(344, 15, 120, 20);
+		pnlInfo.add(lblRoomTypeName);
 
 		txtRoomTypeName = new JTextField();
 		txtRoomTypeName.setText("");
 		txtRoomTypeName.setBounds(469, 15, 165, 20);
 		txtRoomTypeName.setToolTipText("Tên loại phòng");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtRoomTypeName);
-		pnInfo.add(txtRoomTypeName);
+		pnlInfo.add(txtRoomTypeName);
 
-		JPanel pnTable = new JPanel();
-		pnTable.setBackground(Color.WHITE);
-		pnTable.setLayout(null);
-		pnTable.setBounds(8, 201, 1240, 384);
-		pnTable.setOpaque(false);
+		JPanel pnlTable = new JPanel();
+		pnlTable.setBackground(Color.WHITE);
+		pnlTable.setLayout(null);
+		pnlTable.setBounds(8, 201, 1240, 384);
+		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã loại phòng", "Tên loại phòng ", "Sức chứa", "Giá tiền" };
 		modelTableTypeRoom = new DefaultTableModel(cols, 0) {
 			@Override
@@ -220,22 +220,22 @@ public class PnLoaiPhong extends JFrame
 				return false;
 			}
 		};
-		tableTypeRoom = new JTable(modelTableTypeRoom);
-		tableTypeRoom.setBackground(new Color(255, 255, 255, 0));
-		tableTypeRoom.setForeground(new Color(255, 255, 255));
-		tableTypeRoom.setRowHeight(21);
-		tableTypeRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tableTypeRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tableTypeRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scpTable = new JScrollPane(tableTypeRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		tblTableTypeRoom = new JTable(modelTableTypeRoom);
+		tblTableTypeRoom.setBackground(new Color(255, 255, 255, 0));
+		tblTableTypeRoom.setForeground(new Color(255, 255, 255));
+		tblTableTypeRoom.setRowHeight(21);
+		tblTableTypeRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tblTableTypeRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
+		tblTableTypeRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		JScrollPane scrTable = new JScrollPane(tblTableTypeRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scpTable.getViewport().setBackground(Color.WHITE);
-		scpTable.setBounds(10, 10, 1220, 350);
-		scpTable.setOpaque(false);
-		scpTable.getViewport().setOpaque(false);
+		scrTable.getViewport().setBackground(Color.WHITE);
+		scrTable.setBounds(10, 10, 1220, 350);
+		scrTable.setOpaque(false);
+		scrTable.getViewport().setOpaque(false);
 
-		pnTable.add(scpTable);
-		pnMain.add(pnTable);
+		pnlTable.add(scrTable);
+		pnlMain.add(pnlTable);
 
 		btnSearch.addActionListener(this);
 		btnBack.addActionListener(this);
@@ -243,19 +243,19 @@ public class PnLoaiPhong extends JFrame
 		btnUpdate.addActionListener(this);
 		btnRefresh.addActionListener(this);
 
-		tableTypeRoom.addMouseListener(this);
+		tblTableTypeRoom.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
 		cboSearch.addMouseListener(this);
 		txtRoomTypeName.addMouseListener(this);
 		txtKeyWord.addMouseListener(this);
 
 		txtRoomTypeName.addFocusListener(this);
-		((JSpinner.DefaultEditor) spinCapacity.getEditor()).getTextField().addFocusListener(this);
-		((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField().addFocusListener(this);
+		((JSpinner.DefaultEditor) spnCapacity.getEditor()).getTextField().addFocusListener(this);
+		((JSpinner.DefaultEditor) spnPrice.getEditor()).getTextField().addFocusListener(this);
 		txtKeyWord.addFocusListener(this);
 
 		txtKeyWord.addKeyListener(this);
-		((JSpinner.DefaultEditor) spinSearchPrice.getEditor()).getTextField().addKeyListener(this);
+		((JSpinner.DefaultEditor) spnSearchPrice.getEditor()).getTextField().addKeyListener(this);
 
 		cboSearch.addItemListener(this);
 
@@ -281,11 +281,11 @@ public class PnLoaiPhong extends JFrame
 				if (insertResult) {
 					message = "Thêm " + name + " mới thành công";
 					txtRoomTypeId.setText(roomType.getMaLP());
-					int stt = tableTypeRoom.getRowCount();
+					int stt = tblTableTypeRoom.getRowCount();
 					addRow(stt, roomType);
-					int lastIndex = tableTypeRoom.getRowCount() - 1;
-					tableTypeRoom.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-					tableTypeRoom.scrollRectToVisible(tableTypeRoom.getCellRect(lastIndex, lastIndex, true));
+					int lastIndex = tblTableTypeRoom.getRowCount() - 1;
+					tblTableTypeRoom.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+					tblTableTypeRoom.scrollRectToVisible(tblTableTypeRoom.getCellRect(lastIndex, lastIndex, true));
 					btnAdd.setEnabledCustom(false);
 					btnUpdate.setEnabledCustom(true);
 				} else {
@@ -294,23 +294,23 @@ public class PnLoaiPhong extends JFrame
 				JOptionPane.showMessageDialog(this, message);
 			}
 		} else if (o.equals(btnRefresh)) {
-			spinPrice.setValue((double) 1000l);
-			spinCapacity.setValue((int) 1);
+			spnPrice.setValue((double) 1000l);
+			spnCapacity.setValue((int) 1);
 			txtRoomTypeId.setText("");
 			txtRoomTypeName.setText("");
 			btnUpdate.setEnabledCustom(false);
 			btnAdd.setEnabledCustom(true);
 			removeSelectionInterval();
 		} else if (o.equals(btnBack)) {
-			fDieuHuong f = new fDieuHuong(staffLogin);
+			fDieuHuong winNavigation = new fDieuHuong(staffLogin);
 			this.setVisible(false);
-			f.setVisible(true);
+			winNavigation.setVisible(true);
 		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
 				LoaiPhong newRoomType = getRoomTypeDataInForm();
 				LoaiPhong oldRoomType = LoaiPhongDAO.getInstance().getRoomTypeById(newRoomType.getMaLP());
 				String message = "";
-				int selectedRow = tableTypeRoom.getSelectedRow();
+				int selectedRow = tblTableTypeRoom.getSelectedRow();
 				String name = "loại phòng";
 				if (selectedRow == -1) {
 					message = "Hãy chọn " + name + " mà bạn cần cập nhật thông tin";
@@ -328,9 +328,9 @@ public class PnLoaiPhong extends JFrame
 							updateRow(selectedRow, newRoomType);
 							btnAdd.setEnabledCustom(false);
 							btnUpdate.setEnabledCustom(true);
-							tableTypeRoom.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-							tableTypeRoom
-									.scrollRectToVisible(tableTypeRoom.getCellRect(selectedRow, selectedRow, true));
+							tblTableTypeRoom.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+							tblTableTypeRoom
+									.scrollRectToVisible(tblTableTypeRoom.getCellRect(selectedRow, selectedRow, true));
 						} else {
 							message = "Cập nhật thông tin " + name + " thất bại";
 						}
@@ -356,10 +356,10 @@ public class PnLoaiPhong extends JFrame
 			} else {
 				if (searchTypeName.equalsIgnoreCase("Giá cho thuê")) {
 					txtKeyWord.setVisible(false);
-					spinSearchPrice.setVisible(true);
+					spnSearchPrice.setVisible(true);
 				} else {
 					txtKeyWord.setVisible(true);
-					spinSearchPrice.setVisible(false);
+					spnSearchPrice.setVisible(false);
 				}
 				txtKeyWord.setEditable(true);
 				CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
@@ -373,24 +373,24 @@ public class PnLoaiPhong extends JFrame
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
 			cboSearch.showPopup();
-		} else if (o.equals(tableTypeRoom)) {
-			int selectedRow = tableTypeRoom.getSelectedRow();
-			txtRoomTypeId.setText(tableTypeRoom.getValueAt(selectedRow, 1).toString().trim());
-			txtRoomTypeName.setText(tableTypeRoom.getValueAt(selectedRow, 2).toString().trim());
+		} else if (o.equals(tblTableTypeRoom)) {
+			int selectedRow = tblTableTypeRoom.getSelectedRow();
+			txtRoomTypeId.setText(tblTableTypeRoom.getValueAt(selectedRow, 1).toString().trim());
+			txtRoomTypeName.setText(tblTableTypeRoom.getValueAt(selectedRow, 2).toString().trim());
 
-			String capacityStr = tableTypeRoom.getValueAt(selectedRow, 3).toString().trim().replace(",", "");
+			String capacityStr = tblTableTypeRoom.getValueAt(selectedRow, 3).toString().trim().replace(",", "");
 			int capacity = 1;
 			if (!capacityStr.equals("")) {
 				capacity = Integer.parseInt(capacityStr);
 			}
-			spinCapacity.setValue((int) capacity);
+			spnCapacity.setValue((int) capacity);
 
-			String priceStr = tableTypeRoom.getValueAt(selectedRow, 4).toString().trim().replace(",", "");
+			String priceStr = tblTableTypeRoom.getValueAt(selectedRow, 4).toString().trim().replace(",", "");
 			Double price = 0.0;
 			if (!priceStr.equals("")) {
 				price = Double.parseDouble(priceStr);
 			}
-			spinPrice.setValue((Double) price);
+			spnPrice.setValue((Double) price);
 			btnAdd.setEnabledCustom(false);
 			btnUpdate.setEnabledCustom(true);
 		}
@@ -432,7 +432,7 @@ public class PnLoaiPhong extends JFrame
 	public void keyPressed(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
-		if (o.equals(((JSpinner.DefaultEditor) spinSearchPrice.getEditor()).getTextField()) || o.equals(txtKeyWord)) {
+		if (o.equals(((JSpinner.DefaultEditor) spnSearchPrice.getEditor()).getTextField()) || o.equals(txtKeyWord)) {
 			if (key == KeyEvent.VK_ENTER)
 				searchEventUsingBtnSearch();
 		}
@@ -446,10 +446,10 @@ public class PnLoaiPhong extends JFrame
 	@Override
 	public void focusGained(FocusEvent e) {
 		Object o = e.getSource();
-		if (o.equals(((JSpinner.DefaultEditor) spinCapacity.getEditor()).getTextField())) {
-			spinCapacity.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-		} else if (o.equals(((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField())) {
-			spinPrice.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+		if (o.equals(((JSpinner.DefaultEditor) spnCapacity.getEditor()).getTextField())) {
+			spnCapacity.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+		} else if (o.equals(((JSpinner.DefaultEditor) spnPrice.getEditor()).getTextField())) {
+			spnPrice.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtRoomTypeName)) {
 			CustomUI.getInstance().setCustomTextFieldFocus(txtRoomTypeName);
 		} else if (o.equals(txtKeyWord)) {
@@ -460,10 +460,10 @@ public class PnLoaiPhong extends JFrame
 	@Override
 	public void focusLost(FocusEvent e) {
 		Object o = e.getSource();
-		if (o.equals(((JSpinner.DefaultEditor) spinCapacity.getEditor()).getTextField())) {
-			spinCapacity.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		} else if (o.equals(((JSpinner.DefaultEditor) spinPrice.getEditor()).getTextField())) {
-			spinPrice.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		if (o.equals(((JSpinner.DefaultEditor) spnCapacity.getEditor()).getTextField())) {
+			spnCapacity.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		} else if (o.equals(((JSpinner.DefaultEditor) spnPrice.getEditor()).getTextField())) {
+			spnPrice.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		} else if (o.equals(txtKeyWord)) {
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
 		} else if (o.equals(txtRoomTypeName)) {
@@ -526,8 +526,8 @@ public class PnLoaiPhong extends JFrame
 	private LoaiPhong getRoomTypeDataInForm() {
 		String roomTypeId = txtRoomTypeId.getText().trim();
 		String roomTypeName = txtRoomTypeName.getText().trim();
-		int capacity = Integer.parseInt(spinCapacity.getValue().toString());
-		Double price = Double.parseDouble(spinPrice.getValue().toString());
+		int capacity = Integer.parseInt(spnCapacity.getValue().toString());
+		Double price = Double.parseDouble(spnPrice.getValue().toString());
 		if (roomTypeId.equals("") || roomTypeId.length() <= 0) {
 			roomTypeId = createNewServiceTypeID();
 		}
@@ -590,7 +590,7 @@ public class PnLoaiPhong extends JFrame
 	 * Thay đổi kích thước cột
 	 */
 	private void reSizeColumnTable() {
-		TableColumnModel columnModel = tableTypeRoom.getColumnModel();
+		TableColumnModel columnModel = tblTableTypeRoom.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(70);
 		columnModel.getColumn(1).setPreferredWidth(130);
 		columnModel.getColumn(2).setPreferredWidth(250);
@@ -620,7 +620,7 @@ public class PnLoaiPhong extends JFrame
 			keyword = txtKeyWord.getText().trim();
 			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByName(keyword);
 		} else if (searchTypeName.equalsIgnoreCase("Giá cho thuê")) {
-			String priceStr = spinSearchPrice.getValue().toString().replaceAll("\\.[0]+$", "");
+			String priceStr = spnSearchPrice.getValue().toString().replaceAll("\\.[0]+$", "");
 			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByPrice(priceStr);
 		}
 		loadRoomTypeList(roomTypeList);
@@ -630,7 +630,7 @@ public class PnLoaiPhong extends JFrame
 	 * Xóa bỏ dòng đang chọn
 	 */
 	private void removeSelectionInterval() {
-		int selectedRow = tableTypeRoom.getSelectedRow();
-		tableTypeRoom.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
+		int selectedRow = tblTableTypeRoom.getSelectedRow();
+		tblTableTypeRoom.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
 	}
 }

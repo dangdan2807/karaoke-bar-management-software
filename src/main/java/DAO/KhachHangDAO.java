@@ -221,4 +221,29 @@ public class KhachHangDAO {
         }
         return dataList;
     }
+
+    /**
+     * Lấy thông tin khách hàng theo mã hóa đơn
+     * 
+     * @param billId {@code String}: mã hóa đơn
+     * @return {@code KhachHang}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code KhachHang}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
+     *         </ul>
+     */
+    public KhachHang getCustomerByBillId(String billId) {
+        KhachHang data = null;
+        String query = "{CALL USP_getCustomerByBillId( ? )}";
+        Object[] parameter = new Object[] { billId };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            if (rs.next()) {
+                data = new KhachHang(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
 }

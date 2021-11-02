@@ -17,13 +17,13 @@ public class CTDichVuDAO {
     /**
      * Lấy danh sách chi tiết dịch vụ theo mã phòng
      * 
-     * @param maPhong {@code String}: mã phòng cần tìm
+     * @param roomId {@code String}: mã phòng cần tìm
      * @return {@code ArrayList<CTDichVu>}: danh sách chi tiết dịch vụ
      */
-    public ArrayList<CTDichVu> getServiceDetailListByRoomId(String maPhong) {
+    public ArrayList<CTDichVu> getServiceDetailListByRoomId(String roomId) {
         ArrayList<CTDichVu> dataList = new ArrayList<CTDichVu>();
         String query = "{CALL USP_getServiceDetailListByRoomId( ? )}";
-        Object[] parameter = new Object[] { maPhong };
+        Object[] parameter = new Object[] { roomId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -38,10 +38,10 @@ public class CTDichVuDAO {
     /**
      * Lấy danh sách chi tiết dịch vụ theo mã hóa đơn
      * 
-     * @param billId {@code int}: mã hóa đơn cần tìm
+     * @param billId {@code String}: mã hóa đơn cần tìm
      * @return {@code ArrayList<CTDichVu>}: danh sách chi tiết dịch vụ
      */
-    public ArrayList<CTDichVu> getServiceDetailListByBillId(int billId) {
+    public ArrayList<CTDichVu> getServiceDetailListByBillId(String billId) {
         ArrayList<CTDichVu> dataList = new ArrayList<CTDichVu>();
         String query = "{CALL USP_getServiceDetailListByBillId( ? )}";
         Object[] parameter = new Object[] { billId };
@@ -59,18 +59,18 @@ public class CTDichVuDAO {
     /**
      * Lấy ra 1 chi tiết dịch vụ dựa trên mã hóa đơn và mã dịch vụ
      * 
-     * @param maHD {@code int}: mã hóa đơn cần tìm
-     * @param maDV {@code String}: mã dịch vụ cần tìm
+     * @param billId {@code String}: mã hóa đơn cần tìm
+     * @param serviceId {@code String}: mã dịch vụ cần tìm
      * @return {@code CTHoaDon}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu tìm thấy thì trả về {@code CTHoaDon}</li>
      *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
      *         </ul>
      */
-    public CTDichVu getServiceDetailByBillIdAndServiceId(int maHD, String maDV) {
+    public CTDichVu getServiceDetailByBillIdAndServiceId(String billId, String serviceId) {
         CTDichVu data = null;
         String query = "{CALL USP_getServiceDetailByBillIdAndServiceId( ? , ? )}";
-        Object[] parameter = new Object[] { maHD, maDV };
+        Object[] parameter = new Object[] { billId, serviceId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             if (rs.next()) {
@@ -85,19 +85,19 @@ public class CTDichVuDAO {
     /**
      * Thêm một chi tiết dịch vụ
      * 
-     * @param ctDichVu   {@code CTDichVu}: chi tiết dịch vụ cần thêm
-     * @param soLuongDat {@code int}: số lượng đặt
-     * @param maHoaDon   {@code String}: mã hóa đơn
+     * @param serviceInfo   {@code CTDichVu}: chi tiết dịch vụ cần thêm
+     * @param quantity {@code int}: số lượng đặt
+     * @param billId   {@code String}: mã hóa đơn
      * @return {@code boolean}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu thành công thì trả về {@code true}</li>
      *         <li>Nếu thất bại thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean insertServiceDetail(CTDichVu ctDichVu, int soLuongDat, int maHoaDon) {
+    public boolean insertServiceDetail(CTDichVu serviceInfo, int quantity, String billId) {
         String query = "{CALL USP_insertServiceDetail( ? , ? , ? , ? )}";
-        Object[] parameter = new Object[] { ctDichVu.getDichVu().getMaDichVu(), maHoaDon, soLuongDat,
-                ctDichVu.getDichVu().getGiaBan() };
+        Object[] parameter = new Object[] { serviceInfo.getDichVu().getMaDichVu(), billId, quantity,
+                serviceInfo.getDichVu().getGiaBan() };
         int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         return result > 0;
     }

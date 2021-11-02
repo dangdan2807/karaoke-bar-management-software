@@ -243,4 +243,29 @@ public class NhanVienDAO {
         String staffName = obj != null ? obj.toString() : "";
         return staffName;
     }
+
+    /**
+     * Lấy thông tin nhân viên theo mã hóa đơn
+     * 
+     * @param billId {@code String}: mã hóa đơn
+     * @return {@code NhanVien}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu tìm thấy thì trả về {@code NhanVien}</li>
+     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
+     *         </ul>
+     */
+    public NhanVien getStaffByBillId(String billId) {
+        String query = "{CALL USP_getStaffByBillId( ? )}";
+        Object[] parameter = new Object[] { billId };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        NhanVien staff = null;
+        try {
+            if (rs.next()) {
+                staff = new NhanVien(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return staff;
+    }
 }

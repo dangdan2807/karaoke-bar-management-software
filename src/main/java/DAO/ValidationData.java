@@ -152,7 +152,7 @@ public class ValidationData {
      */
     public boolean ValidPhoneNumber(Component component, JTextField txt) {
         String message = "";
-        String phoneNumber = txt.getText().trim().replace("-", "");
+        String phoneNumber = txt.getText().trim();
         if (!((phoneNumber.length() > 0 || phoneNumber.length() < 10) && phoneNumber.matches("^0[35789][\\d]{8}$"))) {
             message = "số điện thoại phải là 10 số và bắt đầu bằng 03, 05, 07, 08, 09";
             showMessage(component, txt, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
