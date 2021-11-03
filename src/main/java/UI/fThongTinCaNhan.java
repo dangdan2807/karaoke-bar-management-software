@@ -44,7 +44,7 @@ public class fThongTinCaNhan extends JDialog
         setSize(965, 500);
         setLocationRelativeTo(null);
         setResizable(false);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.staffLogin = staff;
         createFormAccountProfile();
     }
@@ -355,22 +355,12 @@ public class fThongTinCaNhan extends JDialog
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        Object o = e.getSource();
-        if (o.equals(btnUpdate)) {
-            CustomUI.getInstance().setCustomBtnHover(btnUpdate);
-        } else if (o.equals(btnBack)) {
-            CustomUI.getInstance().setCustomBtnHover(btnBack);
-        }
+        
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        Object o = e.getSource();
-        if (o.equals(btnUpdate)) {
-            CustomUI.getInstance().setCustomBtn(btnUpdate);
-        } else if (o.equals(btnBack)) {
-            CustomUI.getInstance().setCustomBtn(btnBack);
-        }
+        
     }
 
     @Override
@@ -395,17 +385,17 @@ public class fThongTinCaNhan extends JDialog
     public void focusLost(FocusEvent e) {
         Object o = e.getSource();
         if (o.equals(txtFullName)) {
-            txtFullName.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtFullName);
         } else if (o.equals(txtCMND)) {
-            txtCMND.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtCMND);
         } else if (o.equals(txtPhoneNumber)) {
-            txtPhoneNumber.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtPhoneNumber);
         } else if (o.equals(txtPassword)) {
-            txtPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtPassword);
         } else if (o.equals(txtNewPassword)) {
-            txtNewPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtNewPassword);
         } else if (o.equals(txtReNewPassword)) {
-            txtReNewPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtReNewPassword);
         }
     }
 
@@ -496,7 +486,7 @@ public class fThongTinCaNhan extends JDialog
             message = mess + " phải tối thiểu 6 ký tự";
             showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
         } else {
-            message = mess + " chỉ có thể chứa các kỳ tự, số, @, #, _, !, $";
+            message = mess + " chỉ có thể chứa các kỳ tự, số, @, #, !";
             showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -545,7 +535,7 @@ public class fThongTinCaNhan extends JDialog
             showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
             return false;
 
-        } else if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9@!#$_]{6,}$"))) {
+        } else if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9@!#]{6,}$"))) {
             checkPassword(password, "Mật khẩu");
             return false;
 
@@ -574,11 +564,11 @@ public class fThongTinCaNhan extends JDialog
                 showMessage(txtReNewPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
                 return false;
 
-            } else if (!(rePassword.length() >= 6 && rePassword.matches("^[a-zA-Z0-9_@#]{6,}$"))) {
+            } else if (!(rePassword.length() >= 6 && rePassword.matches("^[a-zA-Z0-9_@!#]{6,}$"))) {
                 checkPassword(rePassword, "Mật khẩu nhập lại");
                 return false;
 
-            } else if (!(newPassword.length() >= 6 && newPassword.matches("^[a-zA-Z0-9_@#]{6,}$"))) {
+            } else if (!(newPassword.length() >= 6 && newPassword.matches("^[a-zA-Z0-9_@!#]{6,}$"))) {
                 checkPassword(newPassword, "Mật khẩu mới");
                 return false;
 

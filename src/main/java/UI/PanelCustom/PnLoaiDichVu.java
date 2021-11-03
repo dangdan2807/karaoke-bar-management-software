@@ -16,7 +16,7 @@ import UI.fDieuHuong;
 import entity.LoaiDichVu;
 import entity.NhanVien;
 
-public class PnLoaiDichVu extends JFrame
+public class PnLoaiDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private static final long serialVersionUID = 1L;
 	private ImageIcon bg = new ImageIcon(
@@ -43,9 +43,9 @@ public class PnLoaiDichVu extends JFrame
 		this.staffLogin = staff;
 		setSize(1270, 630);
 		this.setLayout(null);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			@Override
@@ -237,7 +237,6 @@ public class PnLoaiDichVu extends JFrame
 		cboSearch.addItemListener(this);
 
 		btnAdd.addActionListener(this);
-		btnBack.addActionListener(this);
 		btnRefresh.addActionListener(this);
 		btnSearch.addActionListener(this);
 		btnUpdate.addActionListener(this);
@@ -569,5 +568,12 @@ public class PnLoaiDichVu extends JFrame
 	private void removeSelectionInterval() {
 		int selectedRow = tblTableServiceType.getSelectedRow();
 		tblTableServiceType.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
+	}
+
+	/**
+	 * Lấy nút quay lại
+	 */
+	public JButton getBtnBack() {
+		return btnBack;
 	}
 }

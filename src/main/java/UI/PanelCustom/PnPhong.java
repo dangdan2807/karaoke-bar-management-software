@@ -13,7 +13,7 @@ import DAO.*;
 import UI.fDieuHuong;
 import entity.*;
 
-public class PnPhong extends JFrame implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
+public class PnPhong extends JPanel implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private static final long serialVersionUID = 1L;
 	private JTable tblTableRoom;
 	private DefaultTableModel modelTableRoom;
@@ -39,10 +39,10 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	public PnPhong(NhanVien staff) {
 		this.staffLogin = staff;
 		setSize(1270, 630);
-		getContentPane().setLayout(null);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(null);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -61,11 +61,9 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		};
 		pnlMain.setLayout(null);
 		pnlMain.setBounds(0, 0, 1270, 630);
-		getContentPane().add(pnlMain);
+		this.add(pnlMain);
 
 		JPanel pnlTitle = new JPanel() {
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -245,7 +243,6 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		pnlMain.add(pnlTable);
 
 		btnAdd.addActionListener(this);
-		btnBack.addActionListener(this);
 		btnRefresh.addActionListener(this);
 		btnSearch.addActionListener(this);
 		btnUpdate.addActionListener(this);
@@ -683,5 +680,12 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	private void removeSelectionInterval() {
 		int selectedRow = tblTableRoom.getSelectedRow();
 		tblTableRoom.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
+	}
+
+	/**
+	 * Lấy nút quay lại
+	 */
+	public JButton getBtnBack() {
+		return btnBack;
 	}
 }

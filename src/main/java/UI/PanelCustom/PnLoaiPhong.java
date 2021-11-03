@@ -16,7 +16,7 @@ import UI.fDieuHuong;
 import entity.LoaiPhong;
 import entity.NhanVien;
 
-public class PnLoaiPhong extends JFrame
+public class PnLoaiPhong extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private JTable tblTableTypeRoom;
 	private DefaultTableModel modelTableTypeRoom;
@@ -41,10 +41,10 @@ public class PnLoaiPhong extends JFrame
 	public PnLoaiPhong(NhanVien staff) {
 		this.staffLogin = staff;
 		setSize(1270, 630);
-		getContentPane().setLayout(null);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(null);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			@Override
@@ -61,7 +61,7 @@ public class PnLoaiPhong extends JFrame
 		};
 		pnlMain.setLayout(null);
 		pnlMain.setBounds(0, 0, 1270, 630);
-		getContentPane().add(pnlMain);
+		this.add(pnlMain);
 
 		JPanel pnlTitle = new JPanel() {
 			@Override
@@ -238,7 +238,6 @@ public class PnLoaiPhong extends JFrame
 		pnlMain.add(pnlTable);
 
 		btnSearch.addActionListener(this);
-		btnBack.addActionListener(this);
 		btnAdd.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnRefresh.addActionListener(this);
@@ -632,5 +631,12 @@ public class PnLoaiPhong extends JFrame
 	private void removeSelectionInterval() {
 		int selectedRow = tblTableTypeRoom.getSelectedRow();
 		tblTableTypeRoom.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
+	}
+
+	/**
+	 * Lấy nút quay lại
+	 */
+	public JButton getBtnBack() {
+		return btnBack;
 	}
 }

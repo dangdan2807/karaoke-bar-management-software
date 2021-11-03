@@ -1,5 +1,6 @@
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.awt.*;
 import java.sql.*;
 import java.sql.Date;
@@ -19,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.bouncycastle.util.test.Test;
 
 import DAO.*;
 import entity.*;
@@ -105,18 +107,6 @@ public class test {
         }
     }
 
-    private void showMessage(JFrame jFrame) {
-
-    }
-
-    private void showMessage(JDialog jDialog) {
-
-    }
-
-    private void showMessage(JPanel jPanel) {
-
-    }
-
     private static String createNewBillId(Timestamp date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         String dateStr = format.format(date);
@@ -151,8 +141,15 @@ public class test {
     }
 
     public static void main(String[] args) {
-        int key = 10;
+        int key = 0;
         switch (key) {
+            case 0:
+            // final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
+            // System.out.println(workingDir + "");
+            // URL location = Test.class.getProtectionDomain().getCodeSource().getLocation();
+            // System.out.println(location.getFile());
+            System.out.println(Math.abs(0));
+            break;
         case 1:
             testTime();
             break;
@@ -160,10 +157,10 @@ public class test {
             System.out.println(createNewServiceID());
             break;
         case 3:
-            ExportBill.getInstance().exportBillToExcel("HD2021010100001", "D:/hd.xlsx");
+            ExportBill.getInstance().exportBillToExcel("HD2021010100001", "./hd.xlsx");
             break;
         case 4:
-            // ExportBill.getInstance().exportBillToPdf(1, "D:/hd.xlsx");
+            ExportBill.getInstance().exportBillToPdf(1, "./hd.xlsx");
             break;
         case 5:
             BigDecimal a = new BigDecimal("0.00");

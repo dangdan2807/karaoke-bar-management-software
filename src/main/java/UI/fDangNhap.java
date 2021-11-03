@@ -249,26 +249,26 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		String password = txtPassword.getText().trim();
 		// username tối thiểu 6 ký tự và không được quá 100 ký tự
 		// username có thể chứa ký tự, số và @, !, #, _
-		if (!(username.length() >= 6 && password.length() <= 100 && username.matches("^[a-zA-Z0-9_@#]{6,100}$"))) {
+		if (!(username.length() >= 6 && password.length() <= 100 && username.matches("^[a-zA-Z0-9_@#!]{6,100}$"))) {
 			if (username.length() < 6)
 				showMessage("Tên đăng nhập phải tối thiểu 6 ký tự");
 			else if (username.length() > 100)
 				showMessage("Tên đăng nhập không quá 100 ký tự");
 			else
-				showMessage("Tên đăng nhập chỉ có thể chứa các kỳ tự, số, @, #, _");
+				showMessage("Tên đăng nhập chỉ có thể chứa các kỳ tự, số, @, #, !");
 			txtUsername.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
 			return false;
 		}
 
 		// password tối thiểu 6 ký tự và không được quá 100 ký tự
 		// password có thể chứa ký tự, số và @, #
-		if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9@#]{6,100}$"))) {
+		if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9@#!]{6,100}$"))) {
 			if (password.length() < 6)
 				showMessage("Mật khẩu phải tối thiểu 6 ký tự");
 			else if (password.length() > 100)
 				showMessage("Mật khẩu không quá 100 ký tự");
 			else
-				showMessage("Mật khẩu chỉ có thể chứa các kỳ tự, số, @, #");
+				showMessage("Mật khẩu chỉ có thể chứa các kỳ tự, số, @, #, !");
 			txtPassword.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
 			return false;
 		}

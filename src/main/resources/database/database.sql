@@ -468,11 +468,13 @@ BEGIN
         (maLDV, tenLDV)
     VALUES
         (@servideTypeId, @serviceTypeName)
-
+    -- tìm mã loại dịch vụ vừa thêm
     SELECT @isExitsServiceTypeId = ldv.maLDV
     FROM dbo.LoaiDichVu ldv
     WHERE ldv.maLDV = @servideTypeId
 
+    -- Nếu có thì print 1 (thành công)
+    -- Nếu không có thì print 0 (thất bại)
     IF @isExitsServiceTypeId IS NULL
     BEGIN
         ROLLBACK
@@ -501,6 +503,7 @@ BEGIN
     FROM dbo.LoaiDichVu ldv
     WHERE ldv.maLDV = @servideTypeId
         AND ldv.tenLDV = @serviceTypeName
+    
     IF @isExitsId IS NULL
     BEGIN
         PRINT 0
@@ -787,7 +790,7 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getBillListByDateAndPhoneNumber
+CREATE PROC USP_getBillListByDateAndCustomerPhoneNumber
     @phoneNumber VARCHAR(10),
     @startDate DATE,
     @endDate DATE
@@ -895,10 +898,8 @@ AS
 BEGIN
     SELECT cthd.soLuongDat,
         dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
-        hd.maHoaDon, hd.maKH, hd.maNhanVien, hd.ngayGioDat,
-        hd.ngayGioTra, hd.tinhTrangHD,
         ldv.maLDV, ldv.tenLDV,
-        p.maLP, p.maPhong, p.tinhTrangP, p.viTri
+        hd.maHoaDon, p.maLP
     FROM dbo.CTDichVu cthd,
         dbo.HoaDon hd,
         dbo.DichVu dv,
@@ -916,16 +917,16 @@ GO
 CREATE PROC USP_insertServiceDetail
     @serviceId VARCHAR(5),
     @billId VARCHAR(15),
-    @quantityOrder INT,
-    @price MONEY
+    @quantityOrder INT
 AS
 BEGIN
     DECLARE @isExitsCTDichVu VARCHAR(15)
     DECLARE @soLuongCu INT = 1
     DECLARE @tienDichVu MONEY = 0.0
     DECLARE @soLuongTon INT = 0
+    DECLARE @price MONEY = 0
 
-    SELECT @soLuongTon = dv.soLuongTon
+    SELECT @soLuongTon = dv.soLuongTon, @price = dv.giaBan
     FROM dbo.DichVu dv
     WHERE dv.maDichVu = @serviceId
 
@@ -1077,6 +1078,10 @@ BEGIN
         ( @customerId , @cmnd , @customerName , @gender , @phoneNumber , @birthDay )
 
     DECLARE @isExitsId VARCHAR(10)
+    SELECT @isExitsId = kh.maKH
+    FROM dbo.KhachHang kh
+    WHERE kh.maKH = @customerId
+
     IF @isExitsId IS NULL
     BEGIN
         PRINT 0
@@ -1119,6 +1124,11 @@ BEGIN
     SELECT @isExitsId = kh.maKH
     FROM dbo.KhachHang kh
     WHERE kh.maKH = @customerId
+        AND kh.cmnd = @cmnd
+        AND kh.hoTen = @customerName
+        AND kh.gioiTinh = @gender
+        AND kh.soDienThoai = @phoneNumber
+        AND kh.ngaySinh = @birthDay
 
     IF @isExitsId IS NULL
     BEGIN
@@ -1426,7 +1436,6 @@ BEGIN
 END
 GO
 
-
 CREATE PROC USP_getLastRoomTypeId
 AS
 BEGIN
@@ -1477,13 +1486,13 @@ BEGIN
 
     IF @isExitsId IS NULL
     BEGIN
-        ROLLBACK
         PRINT 0
+        ROLLBACK
     END
     ELSE 
     BEGIN
-        COMMIT
         PRINT 1
+        COMMIT
     END
 END
 GO
@@ -1678,6 +1687,7 @@ BEGIN
         AND mucLuong = @salary
         AND trangThaiNV = @status
         AND gioiTinh = @gender
+        AND maNhanVien = @staffID
 
     IF @isExitsId IS NULL
     BEGIN
@@ -1742,6 +1752,7 @@ BEGIN
             AND mucLuong = @salary
             AND trangThaiNV = @status
             AND gioiTinh = @gender
+            AND maNhanVien = @staffID
 
         IF @isExitsStaffId IS NULL
         BEGIN

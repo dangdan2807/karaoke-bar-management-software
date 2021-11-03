@@ -18,7 +18,7 @@ import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class PnNhanVien extends JFrame
+public class PnNhanVien extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private JTable tblTableStaff;
 	private DefaultTableModel modelTableStaff;
@@ -54,9 +54,9 @@ public class PnNhanVien extends JFrame
 		setLayout(null);
 		setSize(1270, 630);
 		setLayout(new BorderLayout(0, 0));
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			@Override
@@ -347,7 +347,6 @@ public class PnNhanVien extends JFrame
 		pnlMain.add(pnlTable);
 
 		btnSearch.addActionListener(this);
-		btnBack.addActionListener(this);
 		btnAdd.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnRefresh.addActionListener(this);
@@ -644,15 +643,15 @@ public class PnNhanVien extends JFrame
 		if (staffID.equalsIgnoreCase("")) {
 			String username = txtUsername.getText().trim();
 			if ((username.equalsIgnoreCase("") || username.length() <= 0 || username.length() >= 100
-					|| username.length() < 6) && !username.matches("^[a-zA-Z@!#$_]{6,100}$")) {
+					|| username.length() < 6) && !username.matches("^[a-zA-Z@!#]{6,100}$")) {
 				if (username.equalsIgnoreCase("") || username.length() < 0) {
 					message = "tài khoản không được rỗng";
 				} else if (username.length() > 100) {
-					message = "tài khoản không được quá 100 ký tự, số và @, !, #, $, _";
+					message = "tài khoản không được quá 100 ký tự, số và @, !, #";
 				} else if (username.length() < 6)
-					message = "tài khoản tối thiểu có 6 ký tự, số và @, !, #, $, _";
+					message = "tài khoản tối thiểu có 6 ký tự, số và @, !, #";
 				else if (!username.matches("^[a-zA-Z@!#$_]{6,100}$"))
-					message = "tài khoản chỉ gồm 6-100 ký tự, số và @, !, #, $, _";
+					message = "tài khoản chỉ gồm 6-100 ký tự, số và @, !, #";
 				showMessage(txtUsername, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
@@ -941,5 +940,12 @@ public class PnNhanVien extends JFrame
 		fDieuHuong winNavigation = new fDieuHuong(staffLogin);
 		this.setVisible(false);
 		winNavigation.setVisible(true);
+	}
+
+	/**
+	 * Lấy nút quay lại
+	 */
+	public JButton getBtnBack() {
+		return btnBack;
 	}
 }

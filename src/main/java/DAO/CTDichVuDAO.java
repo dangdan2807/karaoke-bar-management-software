@@ -95,9 +95,8 @@ public class CTDichVuDAO {
      *         </ul>
      */
     public boolean insertServiceDetail(CTDichVu serviceInfo, int quantity, String billId) {
-        String query = "{CALL USP_insertServiceDetail( ? , ? , ? , ? )}";
-        Object[] parameter = new Object[] { serviceInfo.getDichVu().getMaDichVu(), billId, quantity,
-                serviceInfo.getDichVu().getGiaBan() };
+        String query = "{CALL USP_insertServiceDetail( ? , ? , ? )}";
+        Object[] parameter = new Object[] { serviceInfo.getDichVu().getMaDichVu(), billId, quantity };
         int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         return result > 0;
     }

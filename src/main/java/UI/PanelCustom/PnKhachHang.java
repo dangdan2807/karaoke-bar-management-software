@@ -17,7 +17,7 @@ import UI.fDieuHuong;
 import entity.KhachHang;
 import entity.NhanVien;
 
-public class PnKhachHang extends JFrame
+public class PnKhachHang extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private JTable tblTableCustomer;
 	private DefaultTableModel modelTable;
@@ -46,10 +46,10 @@ public class PnKhachHang extends JFrame
 	public PnKhachHang(NhanVien staff) {
 		this.staffLogin = staff;
 		setSize(1270, 630);
-		getContentPane().setLayout(null);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(null);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			@Override
@@ -65,7 +65,7 @@ public class PnKhachHang extends JFrame
 		};
 		pnlMain.setLayout(null);
 		pnlMain.setBounds(0, 0, 1270, 630);
-		getContentPane().add(pnlMain);
+		this.add(pnlMain);
 
 		JPanel pnlTitle = new JPanel() {
 			@Override
@@ -285,7 +285,6 @@ public class PnKhachHang extends JFrame
 
 		btnSearch.addActionListener(this);
 		btnAdd.addActionListener(this);
-		btnBack.addActionListener(this);
 		btnRefresh.addActionListener(this);
 		btnUpdate.addActionListener(this);
 
@@ -614,5 +613,12 @@ public class PnKhachHang extends JFrame
 	private void removeSelectionInterval() {
 		int selectedRow = tblTableCustomer.getSelectedRow();
 		tblTableCustomer.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
+	}
+
+	/**
+	 * Lấy nút quay lại
+	 */
+	public JButton getBtnBack() {
+		return btnBack;
 	}
 }

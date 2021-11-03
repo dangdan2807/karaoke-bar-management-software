@@ -4,11 +4,10 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import UI.fDieuHuong;
-
 /**
- * {@code CheckPassword} là 1 <code>Thread</code> dùng để kiểm tra mật khẩu
- * khi đăng nhập có phải và mặc định hay không và sẽ xuất thông báo yêu cầu đổi
- * mật khẩu mới
+ * {@code CheckPassword} là 1 <code>Thread</code> dùng để kiểm tra mật khẩu khi
+ * đăng nhập có phải và mặc định hay không và sẽ xuất thông báo yêu cầu đổi mật
+ * khẩu mới
  */
 public class CheckPassword extends Thread {
     private String password;
@@ -32,6 +31,23 @@ public class CheckPassword extends Thread {
         this.btn1 = btn1;
         this.btn2 = btn2;
         this.frame = frame;
+    }
+
+    /**
+     * Constructor {@code CheckPassword}
+     * <p>
+     * Khi mật khẩu được truyền vào giống mật khẩu mặc định sẽ xuất hiện thông báo
+     * yêu cầu đổi mật khẩu và sẽ vô hiệu xóa 2 nút quản trị và quá lý đặt phòng
+     * </p>
+     * 
+     * @param password {@code String}: mật khẩu cần kiểm tra
+     * @param btn1     {@code JButton}: nhận sự kiện
+     * @param btn2     {@code JButton}: nhận sự kiện
+     * @param frame    {@code fDieuHuong}: nhận sự kiện
+     */
+    public CheckPassword(String matKhau, JButton btnBookingManagement, JButton btnSystemManagement,
+            Trash.fDieuHuong frame) {
+
     }
 
     @Override

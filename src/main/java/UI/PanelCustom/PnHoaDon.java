@@ -15,12 +15,10 @@ import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
 import entity.*;
 
-public class PnHoaDon extends JFrame
+public class PnHoaDon extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 
 	private JTable tblTableBill, tblTableBillInfo;
 	private DefaultTableModel modelTableBill, modelTableBillInfo;
@@ -30,33 +28,36 @@ public class PnHoaDon extends JFrame
 	private JComboBox<String> cboSearch, cboSearchType;
 	private JTextField txtBFieldSearch, txtKeyWord, txtBFieldSearchType;
 
+	private ImageIcon bg = new ImageIcon(
+			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon backIcon = CustomUI.BACK_ICON;
+
 	private NhanVien staffLogin = null;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 
 	public PnHoaDon(NhanVien staff) {
 		this.staffLogin = staff;
 		setSize(1270, 630);
-		getContentPane().setLayout(null);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(null);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
-				Image bgMain = bg.getImage();
-				g2.drawImage(bgMain, 0, 0, null);
+				g2.drawImage(bg.getImage(), 0, 0, null);
 				setFont(new Font("Dialog", Font.BOLD, 24));
 				g2.setColor(Color.decode("#9B17EB"));
-				g2.drawRoundRect(10, 43, 1238, 543, 20, 20);
-				g2.drawRoundRect(9, 42, 1240, 543, 20, 20);
+				g2.drawRoundRect(10, 50, 1238, 530, 20, 20);
+				g2.drawRoundRect(9, 49, 1240, 530, 20, 20);
 			}
 		};
 		pnlMain.setLayout(null);
 		pnlMain.setBounds(0, 0, 1270, 630);
-		getContentPane().add(pnlMain);
+		this.add(pnlMain);
 
 		JPanel pnlTitle = new JPanel() {
 			@Override
@@ -64,19 +65,25 @@ public class PnHoaDon extends JFrame
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setColor(new Color(255, 255, 255));
-				setFont(new Font("Dialog", Font.BOLD, 20));
-				g2.drawString("QUẢN LÝ KHÁCH HÀNG", 500, 30);
 			}
 		};
 
-		pnlTitle.setBounds(0, 0, 1270, 41);
+		pnlTitle.setBounds(0, 0, 1270, 50);
 		pnlTitle.setOpaque(false);
 		pnlTitle.setLayout(null);
-		btnBack = new MyButton(100, 35, "Quay lại", gra, CustomUI.BACK_ICON.getImage(), 30, 19, 9, 5);
-		btnBack.setBounds(1150, 4, 100, 35);
+
+		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19, 9, 5);
+		btnBack.setBounds(1150, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
 		pnlTitle.add(btnBack);
 		pnlMain.add(pnlTitle);
+
+		JLabel lblTitle = new JLabel("QUẢN LÝ HÓA ĐƠN");
+		lblTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lblTitle.setForeground(Color.WHITE);
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setBounds(0, 0, 1250, 45);
+		pnlTitle.add(lblTitle);
 
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
@@ -200,7 +207,6 @@ public class PnHoaDon extends JFrame
 		pnlTable.add(scrTableBillInfo);
 		pnlMain.add(pnlTable);
 
-		btnBack.addActionListener(this);
 		btnRefresh.addActionListener(this);
 		btnSearch.addActionListener(this);
 
@@ -546,7 +552,7 @@ public class PnHoaDon extends JFrame
 			if (searchTypeName.equalsIgnoreCase("Tất cả")) {
 				billList = HoaDonDAO.getInstance().getBillListByDate(fromDate, toDate);
 			} else if (searchTypeName.equalsIgnoreCase("SĐT khách hàng")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndPhoneNumber(keyword, fromDate, toDate);
+				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerPhoneNumber(keyword, fromDate, toDate);
 			} else if (searchTypeName.equalsIgnoreCase("Tên khách hàng")) {
 				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerName(keyword, fromDate, toDate);
 			} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
@@ -554,5 +560,12 @@ public class PnHoaDon extends JFrame
 			}
 		}
 		loadBillList(billList);
+	}
+
+	/**
+	 * Lấy nút quay lại
+	 */
+	public JButton getBtnBack() {
+		return btnBack;
 	}
 }

@@ -4,8 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -15,9 +14,7 @@ import javax.swing.table.*;
 
 import DAO.*;
 import Event_Handlers.InputEventHandler;
-import UI.PanelCustom.DialogChonKhachHang;
-import UI.PanelCustom.CustomUI;
-import UI.PanelCustom.MyButton;
+import UI.PanelCustom.*;
 import entity.*;
 
 public class fQuanLyDatPhong extends JFrame
@@ -28,17 +25,18 @@ public class fQuanLyDatPhong extends JFrame
 
 	private JPanel pnlMain, pnlShowRoom;
 	private DefaultTableModel modelTableBill, modelTableService;
-	private JTable tableBill, tblTableService;
+	private JTable tblTableBill, tblTableService;
 	private JLabel lblStaffName;
 	private JButton btnSwitchRoom, btnRefreshRoom, btnBack, btnSearchService, btnPayment, btnOrderServices;
 	private JButton btnCannelServices, btnRentRoom, btnRefreshService, btnChooseCustomer;
 	private JTextField txtBillID, txtRoomID, txtTotalPriceBill, txtServiceName, txtRoomLocation;
 	private JTextField txtQuantityService, txtServicePrice, txtStartTime, txtEndTime, txtCustomerName;
 	private JTextField txtTotalPriceService, txtBFieldRoomID, txtBFieldRoomType, txtBFieldServiceType;
-	private JTextField txtRoomTypeName;
+	private JTextField txtRoomTypeName, txtOrderQuantity;
 	private JComboBox<String> cboRoomType, cboRoomID, cboServiceType;
 	private JCheckBox chkSearchService;
 	private JSpinner spnOrderQuantity;
+	private SpinnerNumberModel spnModel;
 	private JMenuBar mnuMenuBar;
 
 	private ImageIcon bg = new ImageIcon(
@@ -59,6 +57,7 @@ public class fQuanLyDatPhong extends JFrame
 	private NhanVien staffLogin = null;
 	private KhachHang selectedCustomer = null;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
+	private DichVu selectedService = null;
 
 	/**
 	 * Hàm khởi tạo form
@@ -66,12 +65,12 @@ public class fQuanLyDatPhong extends JFrame
 	 * @param staff {@code NhanVien}: nhân viên đăng nhập
 	 */
 	public fQuanLyDatPhong(NhanVien staff) {
+		this.staffLogin = staff;
 		setTitle("Phần Mềm Quản Lý Quán Karaoke");
 		setSize(1280, 700);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.staffLogin = staff;
 		createMenuBar();
 		createFrom();
 		setCloseAction(this);
@@ -249,15 +248,15 @@ public class fQuanLyDatPhong extends JFrame
 			}
 		};
 		pnlOrderList.setLayout(new BorderLayout(0, 0));
-		tableBill = new JTable(modelTableBill);
-		tableBill.setBackground(new Color(255, 255, 255, 0));
-		tableBill.setForeground(new Color(255, 255, 255));
-		tableBill.setRowHeight(21);
-		tableBill.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
-		tableBill.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		tableBill.getTableHeader().setBackground(new Color(255, 255, 255));
+		tblTableBill = new JTable(modelTableBill);
+		tblTableBill.setBackground(new Color(255, 255, 255, 0));
+		tblTableBill.setForeground(new Color(255, 255, 255));
+		tblTableBill.setRowHeight(21);
+		tblTableBill.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
+		tblTableBill.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		tblTableBill.getTableHeader().setBackground(new Color(255, 255, 255));
 
-		JScrollPane scrTableBill = new JScrollPane(tableBill, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		JScrollPane scrTableBill = new JScrollPane(tblTableBill, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrTableBill.setBackground(Color.WHITE);
 		scrTableBill.setOpaque(false);
@@ -321,6 +320,7 @@ public class fQuanLyDatPhong extends JFrame
 
 		btnRentRoom = new MyButton(100, 35, "Thuê ngay", new Dimension(67, 21), null, new Dimension(0, 0), gra);
 		((MyButton) btnRentRoom).setFontCustom(new Font("Dialog", Font.BOLD, 12));
+		((MyButton) btnRentRoom).setEnabledCustom(false);
 		btnRentRoom.setBounds(40, 165, 100, 35);
 		pnlBiffInfo.add(btnRentRoom);
 
@@ -390,6 +390,7 @@ public class fQuanLyDatPhong extends JFrame
 		btnChooseCustomer = new MyButton(105, 35, "Chọn khách hàng", new Dimension(103, 21), null, new Dimension(0, 0),
 				gra);
 		((MyButton) btnChooseCustomer).setFontCustom(new Font("Dialog", Font.BOLD, 12));
+		((MyButton) btnChooseCustomer).setEnabledCustom(false);
 		btnChooseCustomer.setBounds(340, 165, 105, 35);
 		pnlBiffInfo.add(btnChooseCustomer);
 
@@ -446,24 +447,27 @@ public class fQuanLyDatPhong extends JFrame
 		lblOrderQuantity.setBounds(12, 42, 90, 16);
 		pnlControlService.add(lblOrderQuantity);
 
-		spnOrderQuantity = new JSpinner();
-		spnOrderQuantity.setModel(new SpinnerNumberModel(1, 1, null, 1));
+		spnModel = new SpinnerNumberModel(1, 1, 100, 1);
+		spnOrderQuantity = new JSpinner(spnModel);
 		spnOrderQuantity.setBounds(110, 39, 170, 20);
 		spnOrderQuantity.setEnabled(false);
 		CustomUI.getInstance().setCustomSpinner(spnOrderQuantity);
-		CustomUI.getInstance()
-				.setCustomTextFieldOff(((JSpinner.DefaultEditor) spnOrderQuantity.getEditor()).getTextField());
+		txtOrderQuantity = ((JSpinner.DefaultEditor) spnOrderQuantity.getEditor()).getTextField();
+		CustomUI.getInstance().setCustomTextFieldOff(txtOrderQuantity);
+		txtOrderQuantity.setEditable(true);
 		pnlControlService.add(spnOrderQuantity);
 
 		btnOrderServices = new MyButton(90, 30, "Thêm", new Dimension(33, 16), addIcon.getImage(),
 				new Dimension(16, 18), gra);
 		((MyButton) btnOrderServices).setFontCustom(new Font("Dialog", Font.BOLD, 13));
 		btnOrderServices.setBounds(310, 42, 90, 30);
+		((MyButton) btnOrderServices).setEnabledCustom(false);
 		pnlControlService.add(btnOrderServices);
 
 		btnCannelServices = new MyButton(90, 30, "Hủy", new Dimension(25, 16), trashIcon.getImage(),
 				new Dimension(16, 18), gra);
 		((MyButton) btnCannelServices).setFontCustom(new Font("Dialog", Font.BOLD, 13));
+		((MyButton) btnCannelServices).setEnabledCustom(false);
 		btnCannelServices.setBounds(310, 78, 90, 30);
 		pnlControlService.add(btnCannelServices);
 
@@ -583,7 +587,7 @@ public class fQuanLyDatPhong extends JFrame
 		btnBack.addActionListener(this);
 
 		tblTableService.addMouseListener(this);
-		tableBill.addMouseListener(this);
+		tblTableBill.addMouseListener(this);
 		btnBack.addMouseListener(this);
 		txtBFieldRoomID.addMouseListener(this);
 		txtBFieldRoomType.addMouseListener(this);
@@ -602,6 +606,7 @@ public class fQuanLyDatPhong extends JFrame
 		chkSearchService.addItemListener(this);
 
 		txtServiceName.addKeyListener(this);
+		txtOrderQuantity.addKeyListener(this);
 
 		showStaffName(staffLogin);
 		LoadRoomList(PhongDAO.getInstance().getRoomList());
@@ -609,7 +614,8 @@ public class fQuanLyDatPhong extends JFrame
 		loadCboRoomType();
 		loadCboRoom("Tất cả");
 		loadDSServiceType();
-		loadServiceList(DichVuDAO.getInstance().getServiceList());
+		String serviceName = cboServiceType.getSelectedItem().toString();
+		loadServiceList(DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceName));
 		reSizeColumnTableService();
 	}
 
@@ -657,19 +663,20 @@ public class fQuanLyDatPhong extends JFrame
 					JOptionPane.showMessageDialog(this, "Cho thuê phòng thất bại");
 				}
 			}
-		} else if (o.equals(btnOrderServices) || o.equals(btnCannelServices)) {
-			int type = 1;
-			if (o.equals(btnCannelServices))
-				type = 0;
-			orderService(type);
-		} else if (o.equals(btnSearchService)) {
+		} else if (o.equals(btnOrderServices)) {
+			orderService();
+		} else if (o.equals(btnCannelServices)) {
+			cancelService();
+		} else if (o.equals(btnSearchService) || o.equals(btnRefreshService)) {
 			searchService(0);
-		} else if (o.equals(btnRefreshService)) {
-			searchService(1);
+			if (o.equals(btnRefreshService))
+				searchService(1);
 		} else if (o.equals(btnPayment)) {
 			String roomID = txtRoomID.getText().trim();
 			HoaDon bill = HoaDonDAO.getInstance().getUncheckBillByRoomId(roomID);
 			if (bill != null) {
+				Phong room = PhongDAO.getInstance().getRoomByBillId(bill.getMaHoaDon());
+				bill.setPhong(room);
 				String totalPriceStr = txtTotalPriceBill.getText().trim();
 				Double totalPriceService = Double.parseDouble(totalPriceStr.replace(",", ""));
 				long millis = System.currentTimeMillis();
@@ -680,7 +687,7 @@ public class fQuanLyDatPhong extends JFrame
 				int hoursInt = (int) hours;
 				String time = String.format("%d:%d", hoursInt, minutes);
 				Double totalPriceRoom = bill.tinhTienPhong();
-				Double totalPriceBill = totalPriceService * totalPriceRoom;
+				Double totalPriceBill = totalPriceService + totalPriceRoom;
 				DecimalFormat df = new DecimalFormat("#,###.##");
 				String message = String.format(
 						"Bạn có chắc chắn thanh toán hóa đơn cho phòng %s\nSố giờ thuê: %s\nTổng tiền dịch vụ: %s VND\nTổng tiền phòng: %s VND \nTiền khách cần thanh toán: %s VND",
@@ -736,12 +743,21 @@ public class fQuanLyDatPhong extends JFrame
 				}
 			}
 		} else if (o.equals(btnChooseCustomer)) {
-			DialogChonKhachHang chooseCustomer = new DialogChonKhachHang();
-			chooseCustomer.setModal(true);
-			chooseCustomer.setVisible(true);
-			selectedCustomer = chooseCustomer.getSelectedCustomer();
-			if (selectedCustomer != null)
-				txtCustomerName.setText(selectedCustomer.getHoTen());
+			String roomId = txtRoomID.getText().trim();
+			if (!roomId.equalsIgnoreCase("") || roomId.length() > 0) {
+				DialogChonKhachHang chooseCustomer = new DialogChonKhachHang();
+				chooseCustomer.setModal(true);
+				chooseCustomer.setVisible(true);
+				selectedCustomer = chooseCustomer.getSelectedCustomer();
+				if (selectedCustomer != null) {
+					txtCustomerName.setText(selectedCustomer.getHoTen());
+					((MyButton) btnRentRoom).setEnabledCustom(true);
+				}
+			} else {
+				String message = "Bạn cần chọn phòng trước";
+				JOptionPane.showConfirmDialog(this, message, "Thông báo chọn phòng", JOptionPane.OK_OPTION,
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 	}
 
@@ -752,20 +768,26 @@ public class fQuanLyDatPhong extends JFrame
 			int row = tblTableService.getSelectedRow();
 			String serviceName = modelTableService.getValueAt(row, 1).toString().trim();
 			DichVu service = DichVuDAO.getInstance().getServiceByName(serviceName);
+			selectedService = service;
+			int quantity = service.getSoLuongTon();
 			txtServiceName.setText(serviceName);
-			txtQuantityService.setText(df.format(service.getSoLuongTon()));
+			txtQuantityService.setText(df.format(quantity));
 			txtServicePrice.setText(df.format(service.getGiaBan()));
 			txtTotalPriceService.setText(df.format(service.getGiaBan()));
 			spnOrderQuantity.setEnabled(true);
-			spnOrderQuantity = new JSpinner(new SpinnerNumberModel(1, 1, service.getSoLuongTon(), 1));
+			spnOrderQuantity.setValue((int) 1);
+			((MyButton) btnCannelServices).setEnabledCustom(true);
+			((MyButton) btnOrderServices).setEnabledCustom(true);
 			if (e.getClickCount() == 2) {
-				orderService(1);
+				orderService();
 			}
-		} else if (o.equals(tableBill)) {
+		} else if (o.equals(tblTableBill)) {
 			spnOrderQuantity.setEnabled(true);
-			int row = tableBill.getSelectedRow();
+			int row = tblTableBill.getSelectedRow();
 			String serviceName = modelTableBill.getValueAt(row, 1).toString().trim();
 			txtServiceName.setText(serviceName);
+			DichVu service = DichVuDAO.getInstance().getServiceByName(serviceName);
+			selectedService = service;
 			String quantityStr = modelTableBill.getValueAt(row, 3).toString().trim();
 			int orderQuantity = Integer.parseInt(quantityStr);
 			String price = modelTableBill.getValueAt(row, 2).toString().trim();
@@ -773,8 +795,10 @@ public class fQuanLyDatPhong extends JFrame
 			int quantityService = DichVuDAO.getInstance().getQuantityByServiceName(serviceName);
 			txtQuantityService.setText(String.valueOf(quantityService));
 			spnOrderQuantity.setValue(Math.abs(orderQuantity));
+			((MyButton) btnCannelServices).setEnabledCustom(true);
+			((MyButton) btnOrderServices).setEnabledCustom(true);
 			if (e.getClickCount() == 2) {
-				orderService(0);
+				cancelService();
 			}
 		} else if (o.equals(txtBFieldRoomID)) {
 			cboRoomID.showPopup();
@@ -893,6 +917,8 @@ public class fQuanLyDatPhong extends JFrame
 				searchService(0);
 			}
 			handler.characterInputLimit(key, txtServiceName, 100);
+		} else if (o.equals(txtOrderQuantity)) {
+			handler.enterOnlyNumbers(key, txtOrderQuantity, 5);
 		}
 	}
 
@@ -963,7 +989,7 @@ public class fQuanLyDatPhong extends JFrame
 		switch (statusP) {
 		case "Trống":
 			btnRoomList[index].setBackground(Color.decode("#00a65a"));
-			((MyButton) btnRentRoom).setEnabledCustom(true);
+			((MyButton) btnRentRoom).setEnabledCustom(false);
 			((MyButton) btnPayment).setEnabledCustom(false);
 			((MyButton) btnChooseCustomer).setEnabledCustom(false);
 			((MyButton) btnSwitchRoom).setEnabledCustom(false);
@@ -972,7 +998,7 @@ public class fQuanLyDatPhong extends JFrame
 			btnRoomList[index].setBackground(Color.decode("#3c8dbc"));
 			((MyButton) btnRentRoom).setEnabledCustom(false);
 			((MyButton) btnPayment).setEnabledCustom(true);
-			((MyButton) btnChooseCustomer).setEnabledCustom(true);
+			((MyButton) btnChooseCustomer).setEnabledCustom(false);
 			((MyButton) btnSwitchRoom).setEnabledCustom(true);
 			break;
 		}
@@ -1056,7 +1082,7 @@ public class fQuanLyDatPhong extends JFrame
 					String status = convertRoomStatus(roomActiveE.getTinhTrangP());
 					switch (status) {
 					case "Trống":
-						((MyButton) btnRentRoom).setEnabledCustom(true);
+						((MyButton) btnRentRoom).setEnabledCustom(false);
 						((MyButton) btnPayment).setEnabledCustom(false);
 						((MyButton) btnChooseCustomer).setEnabledCustom(true);
 						((MyButton) btnSwitchRoom).setEnabledCustom(false);
@@ -1142,13 +1168,19 @@ public class fQuanLyDatPhong extends JFrame
 		modelTableBill.fireTableDataChanged();
 		Double totalPrice = 0.0;
 		for (CTDichVu item : dataList) {
+			DichVu service = item.getDichVu();
+			if (selectedService != null) {
+				if (selectedService.getMaDichVu().equalsIgnoreCase(service.getMaDichVu())) {
+					tblTableBill.getSelectionModel().addSelectionInterval(i - 1, i - 1);
+				}
+			}
 			Double totalPriceService = item.tinhTienDichVu();
-			totalPrice *= totalPriceService;
+			totalPrice += totalPriceService;
 			String stt = df.format(i++);
 			String totalPriceStr = df.format(totalPriceService);
-			String priceStr = df.format(item.getDichVu().getGiaBan());
+			String priceStr = df.format(service.getGiaBan());
 			String quantityStr = df.format(item.getSoLuongDat());
-			modelTableBill.addRow(new Object[] { stt, addSpaceToString(item.getDichVu().getTenDichVu()),
+			modelTableBill.addRow(new Object[] { stt, addSpaceToString(service.getTenDichVu()),
 					addSpaceToString(priceStr), addSpaceToString(quantityStr), addSpaceToString(totalPriceStr) });
 		}
 		txtTotalPriceBill.setText(df.format(totalPrice));
@@ -1204,7 +1236,6 @@ public class fQuanLyDatPhong extends JFrame
 	 */
 	private void loadDSServiceType() {
 		ArrayList<LoaiDichVu> serviceTypeList = LoaiDichVuDAO.getInstance().getServiceTypeList();
-		cboServiceType.addItem("Tất cả");
 		for (LoaiDichVu item : serviceTypeList) {
 			cboServiceType.addItem(item.getTenLDV());
 		}
@@ -1272,40 +1303,42 @@ public class fQuanLyDatPhong extends JFrame
 	 * Thay đổi kích thước các cột trong bảng chi tiết dịch vụ
 	 */
 	private void reSizeColumnTableBillInfo() {
-		tableBill.getColumnModel().getColumn(0).setPreferredWidth(15);
-		tableBill.getColumnModel().getColumn(1).setPreferredWidth(110);
-		tableBill.getColumnModel().getColumn(2).setPreferredWidth(70);
-		tableBill.getColumnModel().getColumn(3).setPreferredWidth(45);
-		tableBill.getColumnModel().getColumn(4).setPreferredWidth(80);
+		TableColumnModel tcm = tblTableBill.getColumnModel();
+		tcm.getColumn(0).setPreferredWidth(15);
+		tcm.getColumn(1).setPreferredWidth(110);
+		tcm.getColumn(2).setPreferredWidth(70);
+		tcm.getColumn(3).setPreferredWidth(45);
+		tcm.getColumn(4).setPreferredWidth(80);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
-		tableBill.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		tableBill.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
-		tableBill.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
-		tableBill.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+		tcm.getColumn(0).setCellRenderer(centerRenderer);
+		tcm.getColumn(2).setCellRenderer(rightRenderer);
+		tcm.getColumn(3).setCellRenderer(rightRenderer);
+		tcm.getColumn(4).setCellRenderer(rightRenderer);
 	}
 
 	/**
 	 * Thay đổi kích thước các cột trong bảng dịch vụ
 	 */
 	private void reSizeColumnTableService() {
-		tblTableService.getColumnModel().getColumn(0).setPreferredWidth(15);
-		tblTableService.getColumnModel().getColumn(1).setPreferredWidth(210);
-		tblTableService.getColumnModel().getColumn(2).setPreferredWidth(40);
-		tblTableService.getColumnModel().getColumn(3).setPreferredWidth(40);
+		TableColumnModel tcm = tblTableService.getColumnModel();
+		tcm.getColumn(0).setPreferredWidth(15);
+		tcm.getColumn(1).setPreferredWidth(210);
+		tcm.getColumn(2).setPreferredWidth(40);
+		tcm.getColumn(3).setPreferredWidth(40);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
-		tblTableService.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		tblTableService.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
-		tblTableService.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+		tcm.getColumn(0).setCellRenderer(centerRenderer);
+		tcm.getColumn(2).setCellRenderer(rightRenderer);
+		tcm.getColumn(3).setCellRenderer(rightRenderer);
 	}
 
 	/**
@@ -1318,7 +1351,6 @@ public class fQuanLyDatPhong extends JFrame
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 		String dateStr = format.format(date);
 		String lastBillId = HoaDonDAO.getInstance().getLastBillId();
-		System.out.println(lastBillId);
 		String newIdStr = "HD" + dateStr;
 		int oldNumberBillId = 0;
 		// lấy 5 số cuối của hóa đơn
@@ -1356,7 +1388,7 @@ public class fQuanLyDatPhong extends JFrame
 	 *             <li>hủy dịch vụ: truyền vao {@code 0}</li>
 	 *             </ul>
 	 */
-	private void orderService(int type) {
+	private void orderService() {
 		if (txtBillID.getText().trim().equals("")) {
 			JOptionPane.showMessageDialog(this, "Phòng này chưa được cho thuê");
 		} else if (txtRoomID.getText().trim().equals("")) {
@@ -1365,44 +1397,54 @@ public class fQuanLyDatPhong extends JFrame
 			JOptionPane.showMessageDialog(this, "Bạn cần phải chọn sản phẩm");
 		} else {
 			int orderQuantity = (int) spnOrderQuantity.getValue();
-			int quantity = Integer.parseInt(txtQuantityService.getText());
-			if (orderQuantity > quantity) {
-				orderQuantity = quantity;
-				JOptionPane.showMessageDialog(this, "Số lượng dịch vụ đặt lớn hơn số lượng hiện có", "Cảnh bảo",
-						JOptionPane.ERROR_MESSAGE);
-			} else if (quantity <= 0) {
-				JOptionPane.showMessageDialog(this, "Dịch vụ đã hết", "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
+			String quantityInStockStr = txtQuantityService.getText().replace(",", "").trim();
+			int quantityInStock = Integer.parseInt(quantityInStockStr);
+			String message = "";
+
+			// số lượng đặt lớn hơn số lượng trong kho
+			if (orderQuantity > quantityInStock) {
+				orderQuantity = quantityInStock;
+				message = "Số lượng dịch vụ đặt lớn hơn số lượng hiện có";
+				JOptionPane.showMessageDialog(this, message, "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
+
+				// Số lượng trong kho bé hơn không
+			} else if (quantityInStock <= 0) {
+				message = "Dịch vụ đã hết";
+				JOptionPane.showMessageDialog(this, message, "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
+
+				// Số lượng đặt bé hơn không
 			} else if (orderQuantity <= 0) {
-				JOptionPane.showMessageDialog(this, "Số lượng dịch vụ đặt phải lớn hơn 0", "Cảnh bảo",
-						JOptionPane.ERROR_MESSAGE);
+				message = "Số lượng dịch vụ đặt phải lớn hơn 0";
+				JOptionPane.showMessageDialog(this, message, "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
+
+				// trường hợp khác
 			} else {
 				String typeMessage = "Thêm";
-				if (type == 0) {
-					orderQuantity *= -1;
-					typeMessage = "Xóa";
-				}
 				String serviceName = txtServiceName.getText().trim();
 				DichVu service = DichVuDAO.getInstance().getServiceByName(serviceName);
 				String roomID = txtRoomID.getText().trim();
 				String billID = txtBillID.getText().trim();
 				HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billID);
 				boolean result = false;
-				String message = typeMessage + " dịch vụ thất bại";
+				message = typeMessage + " dịch vụ thất bại";
 				if (!billID.equalsIgnoreCase("")) {
 					CTDichVu serviceInfo = CTDichVuDAO.getInstance().getServiceDetailByBillIdAndServiceId(billID,
 							service.getMaDichVu());
 					// nếu ctDichVu đã tồn tại thì cập nhật
 					// nếu ctDichVu không tồn tại thì thêm mới
+
+					// cập nhật
 					if (serviceInfo != null) {
-						int newQuantity = quantity - orderQuantity;
-						if (serviceInfo.getSoLuongDat() > 0 && newQuantity > 0) {
+						int newQuantity = quantityInStock - orderQuantity;
+						if (serviceInfo.getSoLuongDat() > 0 && newQuantity >= 0) {
 							int newOrderQuantity = serviceInfo.getSoLuongDat() + orderQuantity;
 							serviceInfo.setSoLuongDat(newOrderQuantity);
 							result = CTDichVuDAO.getInstance().insertServiceDetail(serviceInfo, orderQuantity,
 									bill.getMaHoaDon());
 						} else {
-							message = "Dịch vụ chưa được thêm nên không thể hủy";
+							message = "Số lượng đặt phải nhỏ hơn số lượng hiện có. Vui lòng nhập lại";
 						}
+						// Thêm mới
 					} else {
 						serviceInfo = new CTDichVu(orderQuantity, service);
 						result = CTDichVuDAO.getInstance().insertServiceDetail(serviceInfo, orderQuantity,
@@ -1410,21 +1452,80 @@ public class fQuanLyDatPhong extends JFrame
 					}
 					// kiểm tra kết quả thêm, cập nhật
 					if (result) {
-						int newQuantity = quantity - orderQuantity;
-						if (newQuantity > 0) {
+						int newQuantity = quantityInStock - orderQuantity;
+						if (newQuantity >= 0) {
 							showBillInfo(roomID);
 							searchService(1);
 							spnOrderQuantity.setValue(1);
-							txtQuantityService.setText(String.valueOf(Math.abs(newQuantity)));
+							txtQuantityService.setText(String.valueOf(newQuantity));
 							txtBillID.setText(String.valueOf(billID));
 						} else {
-							message = "Dịch vụ chưa được thêm nên không thể hủy";
+							message = "Số lượng đặt phải nhỏ hơn số lượng hiện có. Vui lòng nhập lại";
 						}
 					} else {
 						JOptionPane.showMessageDialog(this, message);
 					}
 				} else {
 					message = "Hóa đơn không tồn tại";
+					JOptionPane.showMessageDialog(this, message);
+				}
+			}
+		}
+	}
+
+	private void cancelService() {
+		int selectedRow = tblTableBill.getSelectedRow();
+		if (txtBillID.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(this, "Phòng này chưa được cho thuê");
+		} else if (txtRoomID.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(this, "Bạn cần phải chọn phòng trước");
+		} else if (txtServiceName.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(this, "Bạn cần phải chọn dịch vụ");
+		} else {
+			int cancelQuantity = (int) spnOrderQuantity.getValue();
+			String orderQuantityStr = tblTableBill.getValueAt(selectedRow, 3).toString().replace(",", "").trim();
+			int orderQuantity = Integer.parseInt(orderQuantityStr);
+			String message = "";
+			if (cancelQuantity <= 0) {
+				message = "Số lượng dịch vụ cần hủy phải lớn hơn 0";
+				JOptionPane.showMessageDialog(this, message, "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
+			} else if (cancelQuantity > orderQuantity) {
+				message = "Số lượng dịch vụ cần hủy phải nhỏ hơn hoặc bằng số lượng đã đặt";
+				JOptionPane.showMessageDialog(this, message, "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
+			} else {
+				String serviceName = txtServiceName.getText().trim();
+				DichVu service = DichVuDAO.getInstance().getServiceByName(serviceName);
+				String roomID = txtRoomID.getText().trim();
+				String billID = txtBillID.getText().trim();
+				HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billID);
+				boolean result = false;
+				if (!billID.equalsIgnoreCase("")) {
+					CTDichVu serviceDetail = CTDichVuDAO.getInstance().getServiceDetailByBillIdAndServiceId(billID,
+							service.getMaDichVu());
+					// nếu ctDichVu đã tồn tại thì cập nhật
+					// nếu ctDichVu không tồn tại thì thông báo lỗi
+					if (serviceDetail != null) {
+						int newOrderQuantity = serviceDetail.getSoLuongDat() - cancelQuantity;
+						serviceDetail.setSoLuongDat(newOrderQuantity);
+						int quantityInStock = service.getSoLuongTon();
+						service.setSoLuongTon(quantityInStock + cancelQuantity);
+						result = CTDichVuDAO.getInstance().insertServiceDetail(serviceDetail, (-1) * cancelQuantity,
+								bill.getMaHoaDon());
+					} else {
+						message = "Dịch vụ này chưa được đặt";
+					}
+					// kiểm tra kết quả thêm, cập nhật
+					if (result) {
+						showBillInfo(roomID);
+						searchService(1);
+						spnOrderQuantity.setValue(1);
+						txtQuantityService.setText(String.valueOf(service.getSoLuongTon()));
+						txtBillID.setText(String.valueOf(billID));
+					} else {
+						JOptionPane.showMessageDialog(this, message);
+					}
+				} else {
+					message = "Hóa đơn không tồn tại, vui lòng thử lại";
 					JOptionPane.showMessageDialog(this, message);
 				}
 			}

@@ -9,6 +9,7 @@ import javax.swing.border.*;
 
 import DAO.ConvertTime;
 import DAO.KhachHangDAO;
+import Event_Handlers.InputEventHandler;
 import entity.KhachHang;
 
 public class DialogChonKhachHang extends JDialog
@@ -270,13 +271,14 @@ public class DialogChonKhachHang extends JDialog
 		Object o = e.getSource();
 		int key = e.getKeyCode();
 		// bắt sự kiện nhấn phím enter tự nhấn btnLogin
+		InputEventHandler handler = new InputEventHandler();
 		if (o.equals(txtKeyword)) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				searchCustomer();
 			}
 			String searchTypeName = cboSearch.getSelectedItem().toString();
 			if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-				enterOnlyNumbers(key, txtKeyword, 10);
+				handler.enterOnlyNumbers(key, txtKeyword, 10);
 			}
 		}
 	}
@@ -494,24 +496,5 @@ public class DialogChonKhachHang extends JDialog
 	 */
 	public KhachHang getSelectedCustomer() {
 		return khachHang;
-	}
-
-	/**
-	 * Giới hạn số lượng ký tự nhập vào và chỉ cho phép nhập số
-	 * 
-	 * @param key       {@code int}: mã số của phím được nhấn
-	 * @param txt       {@code JTextField}: text field nhận sự kiện
-	 * @param maxLength {@code int}: số lượng ký tự tối đa có thể nhập được
-	 */
-	private void enterOnlyNumbers(int key, JTextField txt, int maxLength) {
-		String phoneNumberStr = txt.getText();
-		int length = phoneNumberStr.length();
-		if (key >= 49 && key <= 57 || key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
-			txt.setEditable(true);
-			if (length == maxLength && key != KeyEvent.VK_BACK_SPACE && key != KeyEvent.VK_DELETE)
-				txt.setEditable(false);
-		} else {
-			txt.setEditable(false);
-		}
 	}
 }

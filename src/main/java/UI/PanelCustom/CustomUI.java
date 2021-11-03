@@ -201,9 +201,11 @@ public class CustomUI {
         spn.setBackground(Color.WHITE);
         spn.setBorder(BORDER_BOTTOM_UN_FOCUS);
         spn.setOpaque(false);
+        spn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         ((JSpinner.DefaultEditor) spn.getEditor()).getTextField().setCaretColor(Color.WHITE);
         ((JSpinner.DefaultEditor) spn.getEditor()).getTextField().setForeground(Color.WHITE);
         ((JSpinner.DefaultEditor) spn.getEditor()).getTextField().setBackground(new Color(246, 210, 255, 50));
+        ((JSpinner.DefaultEditor) spn.getEditor()).getTextField().setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     /**

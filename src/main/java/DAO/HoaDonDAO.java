@@ -172,9 +172,9 @@ public class HoaDonDAO {
      * @param endDate     {@code java.sql.Date}: ngày kết thúc
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
-    public ArrayList<HoaDon> getBillListByDateAndPhoneNumber(String phoneNumber, Date startDate, Date endDate) {
+    public ArrayList<HoaDon> getBillListByDateAndCustomerPhoneNumber(String phoneNumber, Date startDate, Date endDate) {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
-        String query = "{CALL USP_getBillListByDateAndPhoneNumber( ? , ? , ? )}";
+        String query = "{CALL USP_getBillListByDateAndCustomerPhoneNumber( ? , ? , ? )}";
         Object[] parameter = new Object[] { phoneNumber, startDate, endDate };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
