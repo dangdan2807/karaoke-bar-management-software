@@ -247,7 +247,7 @@ public class PnLoaiDichVu extends JPanel
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new PnLoaiDichVu(staff).setVisible(true);
+			new fDieuHuong(staff).setVisible(true);
 		});
 	}
 

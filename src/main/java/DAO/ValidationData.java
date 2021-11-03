@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
 import java.awt.Component;
+
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -22,17 +24,17 @@ public class ValidationData {
     }
 
     /**
-     * Hiển thị popup thông báo của 1 {@code JTextField}
+     * Hiển thị popup thông báo của 1 {@code JComponent}
      * 
      * @param component {@code Component} component hiển thị popup thông báo:
      *                  ({@code JPane}, {@code JDialog}, {@code JFrame}, ...)
-     * @param txt       {@code JTextField} được trỏ đến khi cần thông báo
+     * @param txt       {@code JComponent} được trỏ đến khi cần thông báo
      * @param type      {@code int} mã dạng thông báo (Nếu 1. là lỗi)
      * @param message   {@code String} Tin nhắn được hiển thị
      * @param title     {@code String} Tiêu đề thông báo
      * @param option    {@code int} loại thông báo (icon)
      */
-    private void showMessage(Component component, JTextField txt, int type, String message, String title, int option) {
+    private void showMessage(Component component, JComponent txt, int type, String message, String title, int option) {
         if (type == 1) {
             txt.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
         }
@@ -144,7 +146,7 @@ public class ValidationData {
      * @param component {@code Component} component hiển thị popup thông báo:
      *                  ({@code JPane}, {@code JDialog}, {@code JFrame}, ...)
      * @param txt       {@code JTextField}: text field nhận thông báo
-     * @return {@code boolean} {@code boolean}: kết quả trả về xác thực
+     * @return {@code boolean}: kết quả trả về xác thực
      *         <ul>
      *         <li>Nếu đúng thì trả về {@code true}</li>
      *         <li>Nếu sai thì trả về {@code false}</li>

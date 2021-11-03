@@ -35,6 +35,7 @@ public class CustomUI {
     public static ImageIcon PROFILE_ICON = new ImageIcon(pathImg + "profile_512.png");
     public static ImageIcon SELL_ICON = new ImageIcon(pathImg + "money_512.png");
     public static ImageIcon MANAGER_ICON = new ImageIcon(pathImg + "administration_512.png");
+    public static ImageIcon UPDATE_PROFILE_ICON = new ImageIcon(pathImg + "update_profile_16.png");
 
     /**
      * singleton {@code CustomUI}
@@ -80,7 +81,7 @@ public class CustomUI {
      * @param lbl {@code JLabel}: label cần tùy chỉnh
      */
     public void setCustomLabel(JLabel lbl) {
-        lbl.setFont(new Font("Dialog", Font.BOLD, 14));
+        lbl.setFont(new Font("Dialog", Font.PLAIN, 14));
         lbl.setForeground(Color.WHITE);
     }
 
@@ -214,13 +215,14 @@ public class CustomUI {
      * @param btn {@code JTable}: table cần tùy chỉnh
      */
     public void setCustomTable(JTable tbl) {
+        tbl.setFont(new Font("Dialog", Font.PLAIN, 14));
         tbl.setBackground(new Color(255, 255, 255, 0));
         tbl.setForeground(new Color(255, 255, 255));
-        tbl.setFont(new Font("Dialog", Font.PLAIN, 14));
         tbl.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
         tbl.getTableHeader().setForeground(Color.decode("#9B17EB"));
+        tbl.getTableHeader().setBackground(new Color(255, 255, 255));
     }
-    
+
     /**
      * tùy chỉnh nhanh {@code JScrollPane}
      * 
@@ -228,10 +230,23 @@ public class CustomUI {
      */
     public JScrollPane setCustomScrollPane(JTable tbl) {
         JScrollPane src = new JScrollPane(tbl, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		src.getViewport().setBackground(Color.WHITE);
-		src.setOpaque(false);
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        src.setOpaque(false);
         src.getViewport().setOpaque(false);
+        src.getViewport().setBackground(Color.WHITE);
         return src;
+    }
+
+    /**
+     * tùy chỉnh nhanh {@code kDatePicker}
+     * 
+     * @param dp: {@code kDatePicker} cần tùy chỉnh
+     */
+    public void setCustomKDatePicker(kDatePicker dp) {
+        dp.setBackgroundColor(new Color(255, 255, 255, 50));
+        dp.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+        dp.setForegroundCustom(Color.white);
+        dp.setOpaqueCustom(false);
+        dp.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
     }
 }

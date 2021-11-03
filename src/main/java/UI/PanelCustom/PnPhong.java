@@ -268,7 +268,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new PnPhong(staff).setVisible(true);
+			new fDieuHuong(staff).setVisible(true);
 		});
 	}
 

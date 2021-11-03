@@ -224,7 +224,7 @@ public class PnHoaDon extends JPanel
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new PnHoaDon(staff).setVisible(true);
+			new fDieuHuong(staff).setVisible(true);
 		});
 	}
 

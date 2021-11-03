@@ -390,8 +390,10 @@ public class PnNhanVien extends JPanel
 	}
 
 	public static void main(String[] args) {
-		NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-		new PnNhanVien(staff).setVisible(true);
+		SwingUtilities.invokeLater(() -> {
+			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+			new fDieuHuong(staff).setVisible(true);
+		});
 	}
 
 	@Override

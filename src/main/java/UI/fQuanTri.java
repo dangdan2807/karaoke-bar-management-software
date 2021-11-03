@@ -85,8 +85,10 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
     }
 
     public static void main(String[] args) {
-        NhanVien staffLogin = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-        new fQuanTri(staffLogin).setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+            new fDieuHuong(staff).setVisible(true);
+        });
     }
 
     @Override

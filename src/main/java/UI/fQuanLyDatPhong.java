@@ -183,8 +183,7 @@ public class fQuanLyDatPhong extends JFrame
 		pnlRoomControl.add(cboRoomID);
 
 		JLabel lblRoomTypeRoomCtrl = new JLabel("Loại phòng: ");
-		lblRoomTypeRoomCtrl.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblRoomTypeRoomCtrl.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblRoomTypeRoomCtrl);
 		lblRoomTypeRoomCtrl.setBounds(10, 38, 83, 16);
 		pnlRoomControl.add(lblRoomTypeRoomCtrl);
 
@@ -195,8 +194,7 @@ public class fQuanLyDatPhong extends JFrame
 		pnlRoomControl.add(cboRoomType);
 
 		JLabel lblRoom = new JLabel("Phòng: ");
-		lblRoom.setForeground(Color.WHITE);
-		lblRoom.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblRoom);
 		lblRoom.setBounds(10, 5, 83, 16);
 		pnlRoomControl.add(lblRoom);
 
@@ -249,66 +247,50 @@ public class fQuanLyDatPhong extends JFrame
 		};
 		pnlOrderList.setLayout(new BorderLayout(0, 0));
 		tblTableBill = new JTable(modelTableBill);
-		tblTableBill.setBackground(new Color(255, 255, 255, 0));
-		tblTableBill.setForeground(new Color(255, 255, 255));
-		tblTableBill.setRowHeight(21);
-		tblTableBill.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
-		tblTableBill.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		tblTableBill.getTableHeader().setBackground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableBill);
 
-		JScrollPane scrTableBill = new JScrollPane(tblTableBill, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrTableBill.setBackground(Color.WHITE);
-		scrTableBill.setOpaque(false);
-		scrTableBill.getViewport().setOpaque(false);
-		scrTableBill.getViewport().setBackground(Color.WHITE);
+		JScrollPane scrTableBill = CustomUI.getInstance().setCustomScrollPane(tblTableBill);
 		pnlOrderList.add(scrTableBill, BorderLayout.CENTER);
 		pnlBill.setLayout(new BorderLayout(0, 0));
 
 		pnlBill.add(pnlBiffInfo, BorderLayout.NORTH);
 
 		JLabel lblBillID = new JLabel("Mã hóa đơn: ");
-		lblBillID.setForeground(Color.WHITE);
-		lblBillID.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblBillID);
 		lblBillID.setBounds(12, 20, 85, 20);
 		pnlBiffInfo.add(lblBillID);
 
 		txtBillID = new JTextField();
 		txtBillID.setForeground(Color.WHITE);
-		txtBillID.setBounds(85, 20, 157, 20);
+		txtBillID.setBounds(100, 20, 142, 20);
 		txtBillID.setColumns(10);
 		CustomUI.getInstance().setCustomTextFieldOff(txtBillID);
 		pnlBiffInfo.add(txtBillID);
 
 		JLabel lblRoomID = new JLabel("Mã phòng:");
-		lblRoomID.setForeground(Color.WHITE);
-		lblRoomID.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblRoomID);
 		lblRoomID.setBounds(248, 20, 82, 20);
 		pnlBiffInfo.add(lblRoomID);
 
 		txtRoomID = new JTextField();
-		txtRoomID.setForeground(Color.WHITE);
-		txtRoomID.setBounds(328, 21, 150, 20);
+		txtRoomID.setBounds(332, 21, 145, 20);
 		txtRoomID.setColumns(10);
 		txtRoomID.setText("");
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomID);
 		pnlBiffInfo.add(txtRoomID);
 
 		JLabel lblStartTime = new JLabel("Giờ vào:");
-		lblStartTime.setForeground(Color.WHITE);
-		lblStartTime.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblStartTime);
 		lblStartTime.setBounds(12, 51, 85, 16);
 		pnlBiffInfo.add(lblStartTime);
 
 		JLabel lblEndTime = new JLabel("Giờ ra:");
-		lblEndTime.setForeground(Color.WHITE);
-		lblEndTime.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblEndTime);
 		lblEndTime.setBounds(12, 78, 85, 16);
 		pnlBiffInfo.add(lblEndTime);
 
 		txtStartTime = new JTextField("");
-		txtStartTime.setForeground(Color.WHITE);
-		txtStartTime.setBounds(85, 49, 157, 20);
+		txtStartTime.setBounds(100, 49, 142, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtStartTime);
 		pnlBiffInfo.add(txtStartTime);
 
@@ -325,8 +307,7 @@ public class fQuanLyDatPhong extends JFrame
 		pnlBiffInfo.add(btnRentRoom);
 
 		JLabel lblTotalPriceBill = new JLabel("Tổng tiền: ");
-		lblTotalPriceBill.setForeground(Color.WHITE);
-		lblTotalPriceBill.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblTotalPriceBill);
 		lblTotalPriceBill.setBounds(12, 105, 85, 20);
 		pnlBiffInfo.add(lblTotalPriceBill);
 
@@ -334,56 +315,49 @@ public class fQuanLyDatPhong extends JFrame
 		txtTotalPriceBill.setForeground(Color.WHITE);
 		txtTotalPriceBill.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtTotalPriceBill.setText("0.0");
-		txtTotalPriceBill.setBounds(85, 105, 157, 20);
+		txtTotalPriceBill.setBounds(100, 105, 142, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtTotalPriceBill);
 		txtTotalPriceBill.setColumns(10);
 		pnlBiffInfo.add(txtTotalPriceBill);
 
 		JLabel lblVND = new JLabel("(VND)");
-		lblVND.setForeground(Color.WHITE);
-		lblVND.setFont(new Font("Dialog", Font.BOLD, 11));
+		CustomUI.getInstance().setCustomLabel(lblVND);
 		lblVND.setBounds(248, 105, 43, 20);
 		pnlBiffInfo.add(lblVND);
 
 		txtEndTime = new JTextField("");
 		txtEndTime.setForeground(Color.WHITE);
-		txtEndTime.setBounds(85, 76, 157, 20);
+		txtEndTime.setBounds(100, 76, 142, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtEndTime);
 		pnlBiffInfo.add(txtEndTime);
 
 		JLabel lblRoomLocation = new JLabel("Vị Trí Phòng:");
-		lblRoomLocation.setForeground(Color.WHITE);
-		lblRoomLocation.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblRoomLocation);
 		lblRoomLocation.setBounds(248, 49, 82, 20);
 		pnlBiffInfo.add(lblRoomLocation);
 
 		txtRoomLocation = new JTextField();
-		txtRoomLocation.setForeground(Color.WHITE);
 		txtRoomLocation.setColumns(10);
-		txtRoomLocation.setBounds(328, 50, 150, 20);
+		txtRoomLocation.setBounds(332, 50, 145, 20);
 		txtRoomLocation.setText("");
 		;
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomLocation);
 		pnlBiffInfo.add(txtRoomLocation);
 
 		JLabel lblRoomTypeBillInfo = new JLabel("Loại phòng:");
-		lblRoomTypeBillInfo.setForeground(Color.WHITE);
-		lblRoomTypeBillInfo.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblRoomTypeBillInfo);
 		lblRoomTypeBillInfo.setBounds(248, 76, 82, 20);
 		pnlBiffInfo.add(lblRoomTypeBillInfo);
 
 		txtRoomTypeName = new JTextField();
-		txtRoomTypeName.setForeground(Color.WHITE);
 		txtRoomTypeName.setColumns(10);
-		txtRoomTypeName.setBounds(328, 77, 150, 20);
+		txtRoomTypeName.setBounds(332, 77, 145, 20);
 		txtRoomTypeName.setText("");
-		;
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomTypeName);
 		pnlBiffInfo.add(txtRoomTypeName);
 
 		JLabel lblCustomerName = new JLabel("Tên KH:");
-		lblCustomerName.setForeground(Color.WHITE);
-		lblCustomerName.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblCustomerName);
 		lblCustomerName.setBounds(12, 136, 85, 20);
 		pnlBiffInfo.add(lblCustomerName);
 
@@ -395,9 +369,8 @@ public class fQuanLyDatPhong extends JFrame
 		pnlBiffInfo.add(btnChooseCustomer);
 
 		txtCustomerName = new JTextField();
-		txtCustomerName.setForeground(Color.WHITE);
 		txtCustomerName.setColumns(10);
-		txtCustomerName.setBounds(85, 136, 157, 20);
+		txtCustomerName.setBounds(100, 136, 142, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtCustomerName);
 		pnlBiffInfo.add(txtCustomerName);
 
@@ -422,13 +395,11 @@ public class fQuanLyDatPhong extends JFrame
 		pnlControlService.setLayout(null);
 
 		JLabel lblServiceName = new JLabel("Tên dịch vụ:");
-		lblServiceName.setForeground(Color.WHITE);
-		lblServiceName.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblServiceName);
 		lblServiceName.setBounds(12, 12, 90, 16);
 		pnlControlService.add(lblServiceName);
 
 		txtServiceName = new JTextField();
-		txtServiceName.setForeground(Color.WHITE);
 		txtServiceName.setBounds(110, 10, 170, 20);
 		txtServiceName.setColumns(10);
 		txtServiceName.setText("");
@@ -441,9 +412,8 @@ public class fQuanLyDatPhong extends JFrame
 		btnSearchService.setBounds(310, 6, 90, 30);
 		pnlControlService.add(btnSearchService);
 
-		JLabel lblOrderQuantity = new JLabel("Số lượng đặt: ");
-		lblOrderQuantity.setForeground(Color.WHITE);
-		lblOrderQuantity.setFont(new Font("Dialog", Font.BOLD, 12));
+		JLabel lblOrderQuantity = new JLabel("SL đặt: ");
+		CustomUI.getInstance().setCustomLabel(lblOrderQuantity);
 		lblOrderQuantity.setBounds(12, 42, 90, 16);
 		pnlControlService.add(lblOrderQuantity);
 
@@ -452,6 +422,7 @@ public class fQuanLyDatPhong extends JFrame
 		spnOrderQuantity.setBounds(110, 39, 170, 20);
 		spnOrderQuantity.setEnabled(false);
 		CustomUI.getInstance().setCustomSpinner(spnOrderQuantity);
+
 		txtOrderQuantity = ((JSpinner.DefaultEditor) spnOrderQuantity.getEditor()).getTextField();
 		CustomUI.getInstance().setCustomTextFieldOff(txtOrderQuantity);
 		txtOrderQuantity.setEditable(true);
@@ -471,34 +442,28 @@ public class fQuanLyDatPhong extends JFrame
 		btnCannelServices.setBounds(310, 78, 90, 30);
 		pnlControlService.add(btnCannelServices);
 
-		JLabel lblQuantityService = new JLabel("Số lượng còn: ");
-		lblQuantityService.setForeground(Color.WHITE);
-		lblQuantityService.setFont(new Font("Dialog", Font.BOLD, 12));
+		JLabel lblQuantityService = new JLabel("SL còn: ");
+		CustomUI.getInstance().setCustomLabel(lblQuantityService);
 		lblQuantityService.setBounds(12, 69, 90, 16);
 		pnlControlService.add(lblQuantityService);
 
 		JLabel lblServicePrice = new JLabel("Giá bán: ");
-		lblServicePrice.setForeground(Color.WHITE);
-		lblServicePrice.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblServicePrice);
 		lblServicePrice.setBounds(12, 98, 90, 16);
 		pnlControlService.add(lblServicePrice);
 
 		txtQuantityService = new JTextField();
-		txtQuantityService.setForeground(Color.WHITE);
 		txtQuantityService.setColumns(10);
 		txtQuantityService.setBounds(110, 67, 170, 20);
 		txtQuantityService.setText("");
-		;
 		txtQuantityService.setHorizontalAlignment(SwingConstants.RIGHT);
 		CustomUI.getInstance().setCustomTextFieldOff(txtQuantityService);
 		pnlControlService.add(txtQuantityService);
 
 		txtServicePrice = new JTextField();
-		txtServicePrice.setForeground(Color.WHITE);
 		txtServicePrice.setColumns(10);
 		txtServicePrice.setBounds(110, 96, 170, 20);
 		txtServicePrice.setText("");
-		;
 		txtServicePrice.setHorizontalAlignment(SwingConstants.RIGHT);
 		CustomUI.getInstance().setCustomTextFieldOff(txtServicePrice);
 		pnlControlService.add(txtServicePrice);
@@ -510,13 +475,11 @@ public class fQuanLyDatPhong extends JFrame
 		pnlControlService.add(btnRefreshService);
 
 		JLabel lblTotalPriceService = new JLabel("Tổng tiền: ");
-		lblTotalPriceService.setForeground(Color.WHITE);
-		lblTotalPriceService.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblTotalPriceService);
 		lblTotalPriceService.setBounds(12, 127, 90, 16);
 		pnlControlService.add(lblTotalPriceService);
 
 		txtTotalPriceService = new JTextField();
-		txtTotalPriceService.setForeground(Color.WHITE);
 		txtTotalPriceService.setText("0.0");
 		txtTotalPriceService.setColumns(10);
 		txtTotalPriceService.setBounds(110, 125, 170, 20);
@@ -525,8 +488,9 @@ public class fQuanLyDatPhong extends JFrame
 		pnlControlService.add(txtTotalPriceService);
 
 		JLabel lblServiceType = new JLabel("Loại dịch vụ: ");
+		CustomUI.getInstance().setCustomLabel(lblTotalPriceService);
 		lblServiceType.setForeground(Color.WHITE);
-		lblServiceType.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblServiceType.setFont(new Font("Dialog", Font.PLAIN, 14));
 		lblServiceType.setBounds(12, 156, 90, 16);
 		pnlControlService.add(lblServiceType);
 
@@ -561,18 +525,10 @@ public class fQuanLyDatPhong extends JFrame
 		};
 		pnlServiceList.setLayout(new BorderLayout(0, 0));
 		tblTableService = new JTable(modelTableService);
-		tblTableService.setBackground(new Color(255, 255, 255, 0));
-		tblTableService.setForeground(new Color(255, 255, 255));
 		tblTableService.setRowHeight(21);
-		tblTableService.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
-		tblTableService.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		tblTableService.getTableHeader().setBackground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableService);
 
-		JScrollPane scrProductList = new JScrollPane(tblTableService, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrProductList.setOpaque(false);
-		scrProductList.getViewport().setOpaque(false);
-		scrProductList.getViewport().setBackground(Color.WHITE);
+		JScrollPane scrProductList = CustomUI.getInstance().setCustomScrollPane(tblTableService);
 		pnlServiceList.add(scrProductList);
 
 		btnSwitchRoom.addActionListener(this);

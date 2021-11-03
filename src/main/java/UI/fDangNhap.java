@@ -86,23 +86,24 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		pnlLogin.setLayout(null);
 		pnlLogin.setBounds(0, 325, 455, 273);
 		pnlMain.add(pnlLogin);
+
 		lblUsername = new JLabel("Tên đăng nhập: ");
 		lblUsername.setBounds(83, 12, 285, 25);
-		pnlLogin.add(lblUsername);
 		lblUsername.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblUsername.setForeground(Color.decode("#1a66e3"));
+		pnlLogin.add(lblUsername);
 
 		txtUsername = new JTextField("phamdangdan");
 		txtUsername.setBounds(83, 49, 285, 25);
-		pnlLogin.add(txtUsername);
 		txtUsername.setFont(new Font("Dialog", Font.PLAIN, 14));
 		txtUsername.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		pnlLogin.add(txtUsername);
 
 		lblPassword = new JLabel("Mật khẩu: ");
 		lblPassword.setBounds(83, 86, 285, 25);
-		pnlLogin.add(lblPassword);
 		lblPassword.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblPassword.setForeground(Color.decode("#1a66e3"));
+		pnlLogin.add(lblPassword);
 
 		txtPassword = new JPasswordField("1234567");
 		txtPassword.setBounds(83, 123, 285, 25);

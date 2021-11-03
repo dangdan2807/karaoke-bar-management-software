@@ -414,7 +414,7 @@ public class DialogChonKhachHang extends JDialog
 	 *                     hiển thị
 	 */
 	private void LoadCustomerList(ArrayList<KhachHang> customerList) {
-		heightTable = KhachHangDAO.TABLE_HEIGHT;
+		heightTable = KhachHangDAO.TABLE_HEIGHT + 7;
 		pnlShowCustomer.removeAll();
 		pnlShowCustomer.revalidate();
 		pnlShowCustomer.repaint();
@@ -430,7 +430,7 @@ public class DialogChonKhachHang extends JDialog
 			loadBtnCustomer(maKH);
 			btnCustomerList[selection].setBorder(lineGray);
 			if ((i + 1) % 2 == 0) {
-				heightTable += KhachHangDAO.TABLE_HEIGHT;
+				heightTable += KhachHangDAO.TABLE_HEIGHT + 7;
 				pnlShowCustomer.setPreferredSize(new Dimension(pnShowTableWidth, heightTable));
 			}
 			btnCustomerList[selection].addActionListener(new ActionListener() {
