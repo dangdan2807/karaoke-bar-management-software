@@ -228,7 +228,7 @@ GO
 INSERT INTO dbo.TaiKhoan
     (tenDangNhap, matKhau, tinhTrangTK)
 VALUES
-    ('phamdangdan', '1234567', 1),
+    ('phamdangdan', '123456', 1),
     ('huynhtuananh', '1234567', 1),
     ('langnhapsang', '1234567', 1),
     ('vominhhieu', '1234567', 1),

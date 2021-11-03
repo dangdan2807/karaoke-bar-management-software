@@ -84,8 +84,7 @@ public class fThongTinCaNhan extends JDialog
         pnlPersonalInfo.setLayout(null);
 
         JLabel lblMaNV = new JLabel("Mã nhân viên: ");
-        lblMaNV.setForeground(Color.WHITE);
-        lblMaNV.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblMaNV);
         lblMaNV.setBounds(40, 30, 120, 25);
         pnlPersonalInfo.add(lblMaNV);
 
@@ -587,5 +586,9 @@ public class fThongTinCaNhan extends JDialog
             message = "Cập nhật thông tin thất bại";
             JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    public NhanVien getNewStaffInfo() {
+        return staffLogin;
     }
 }

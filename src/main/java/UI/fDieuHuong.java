@@ -14,8 +14,8 @@ import java.awt.event.*;
 public class fDieuHuong extends JFrame implements ActionListener {
 
     private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
-    private NhanVien staff = null;
-    private String STAFF = "Nhân viên", MANAGER = "Quản lý";
+    private NhanVien staffLogin = null;
+    private String STAFF = "Nhân viên", MANAGER = "Chủ quán";
     private ImageIcon profileIcon = new ImageIcon(
             CustomUI.PROFILE_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
     private ImageIcon sellIcon = new ImageIcon(
@@ -29,17 +29,17 @@ public class fDieuHuong extends JFrame implements ActionListener {
     /**
      * Constructor form điều hướng
      * 
-     * @param staff {@code NhanVien}: nhân viên truy cập
+     * @param staffLogin {@code NhanVien}: nhân viên truy cập
      */
-    public fDieuHuong(NhanVien nhanVienLogin) {
+    public fDieuHuong(NhanVien staff) {
         setTitle("Điều hướng quản lý");
         setSize(776, 370);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-        staff = nhanVienLogin;
-        createFormManage(staff.getChucVu());
+        staffLogin = staff;
+        createFormManage(staffLogin.getChucVu());
         setCloseAction(this);
     }
 
@@ -103,8 +103,8 @@ public class fDieuHuong extends JFrame implements ActionListener {
         btnSystemManagement.addActionListener(this);
 
         checkPermission(type);
-        CheckPassword t = new CheckPassword(staff.getTaiKhoan().getMatKhau(), btnBookingManagement, btnSystemManagement,
-                this);
+        CheckPassword t = new CheckPassword(staffLogin.getTaiKhoan().getMatKhau(), btnBookingManagement,
+                btnSystemManagement, this);
         t.start();
     }
 
@@ -121,17 +121,25 @@ public class fDieuHuong extends JFrame implements ActionListener {
             this.setVisible(false);
             winLogin.setVisible(true);
         } else if (o.equals(btnBookingManagement)) {
-            fQuanLyDatPhong winBookingManagement = new fQuanLyDatPhong(staff);
+            fQuanLyDatPhong winBookingManagement = new fQuanLyDatPhong(staffLogin);
             this.setVisible(false);
             winBookingManagement.setVisible(true);
         } else if (o.equals(btnSystemManagement)) {
-            fQuanTri winSystemManagement = new fQuanTri(staff);
+            fQuanTri winSystemManagement = new fQuanTri(staffLogin);
             this.setVisible(false);
             winSystemManagement.setVisible(true);
         } else if (o.equals(btnInfoManagement)) {
-            fThongTinCaNhan winInfoManagement = new fThongTinCaNhan(staff);
+            fThongTinCaNhan winInfoManagement = new fThongTinCaNhan(staffLogin);
             winInfoManagement.setModal(true);
             winInfoManagement.setVisible(true);
+            staffLogin = winInfoManagement.getNewStaffInfo();
+            if (staffLogin != null) {
+                String password = staffLogin.getTaiKhoan().getMatKhau();
+                if (!password.equalsIgnoreCase("123456") && password.matches("^[a-zA-Z0-9_@!#]{6,}$")) {
+                    btnBookingManagement.setEnabled(true);
+                    checkPermission(staffLogin.getChucVu());
+                }
+            }
         }
     }
 

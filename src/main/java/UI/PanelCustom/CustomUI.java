@@ -13,29 +13,29 @@ public class CustomUI {
     public static Border BORDER_BOTTOM_ERROR = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED);
 
     private static String pathImg = "src/main/resources/images/";
-    public static ImageIcon ADD_ICON = new ImageIcon(pathImg + "blueAdd_16.png");
-    public static ImageIcon TRASH_ICON = new ImageIcon(pathImg + "trash_16.png");
-    public static ImageIcon REFRESH_ICON = new ImageIcon(pathImg + "refresh_16.png");
-    public static ImageIcon ANALYTICS_ICON = new ImageIcon(pathImg + "analytics_16.png");
-    public static ImageIcon BACK_ICON = new ImageIcon(pathImg + "back_16.png");
-    public static ImageIcon SEARCH_ICON = new ImageIcon(pathImg + "search_16.png");
-    public static ImageIcon LOGOUT_ICON = new ImageIcon(pathImg + "logout_16.png");
-    public static ImageIcon LOGIN_ICON = new ImageIcon(pathImg + "login_16.png");
-    public static ImageIcon UPDATE_ICON = new ImageIcon(pathImg + "update_16.png");
-    public static ImageIcon TRANSFER_ICON = new ImageIcon(pathImg + "transfer_16.png");
-    public static ImageIcon PAYMENT_ICON = new ImageIcon(pathImg + "payment_16.png");
-    public static ImageIcon ERROR_ICON = new ImageIcon(pathImg + "cancel_16.png");
-    public static ImageIcon USER_ICON = new ImageIcon(pathImg + "user_16.png");
-    public static ImageIcon USER_ICON_512 = new ImageIcon(pathImg + "user_512.png");
-    public static ImageIcon MAN_ICON = new ImageIcon(pathImg + "man_512.png");
-    public static ImageIcon WOMAN_ICON = new ImageIcon(pathImg + "woman_512.png");
-    public static ImageIcon BACKGROUND = new ImageIcon(pathImg + "bgBlue.jpg");
-    public static ImageIcon BACKGROUND_LOGIN = new ImageIcon(pathImg + "anhChen_400.png");
-    public static ImageIcon ROOM_ICON = new ImageIcon(pathImg + "micro_32.png");
-    public static ImageIcon PROFILE_ICON = new ImageIcon(pathImg + "profile_512.png");
-    public static ImageIcon SELL_ICON = new ImageIcon(pathImg + "money_512.png");
-    public static ImageIcon MANAGER_ICON = new ImageIcon(pathImg + "administration_512.png");
-    public static ImageIcon UPDATE_PROFILE_ICON = new ImageIcon(pathImg + "update_profile_16.png");
+    public static final ImageIcon ADD_ICON = new ImageIcon(pathImg + "blueAdd_16.png");
+    public static final ImageIcon TRASH_ICON = new ImageIcon(pathImg + "trash_16.png");
+    public static final ImageIcon REFRESH_ICON = new ImageIcon(pathImg + "refresh_16.png");
+    public static final ImageIcon ANALYTICS_ICON = new ImageIcon(pathImg + "analytics_16.png");
+    public static final ImageIcon BACK_ICON = new ImageIcon(pathImg + "back_16.png");
+    public static final ImageIcon SEARCH_ICON = new ImageIcon(pathImg + "search_16.png");
+    public static final ImageIcon LOGOUT_ICON = new ImageIcon(pathImg + "logout_16.png");
+    public static final ImageIcon LOGIN_ICON = new ImageIcon(pathImg + "login_16.png");
+    public static final ImageIcon UPDATE_ICON = new ImageIcon(pathImg + "update_16.png");
+    public static final ImageIcon TRANSFER_ICON = new ImageIcon(pathImg + "transfer_16.png");
+    public static final ImageIcon PAYMENT_ICON = new ImageIcon(pathImg + "payment_16.png");
+    public static final ImageIcon ERROR_ICON = new ImageIcon(pathImg + "cancel_16.png");
+    public static final ImageIcon USER_ICON = new ImageIcon(pathImg + "user_16.png");
+    public static final ImageIcon USER_ICON_512 = new ImageIcon(pathImg + "user_512.png");
+    public static final ImageIcon MAN_ICON = new ImageIcon(pathImg + "man_512.png");
+    public static final ImageIcon WOMAN_ICON = new ImageIcon(pathImg + "woman_512.png");
+    public static final ImageIcon BACKGROUND = new ImageIcon(pathImg + "bgBlue.jpg");
+    public static final ImageIcon BACKGROUND_LOGIN = new ImageIcon(pathImg + "anhChen_400.png");
+    public static final ImageIcon ROOM_ICON = new ImageIcon(pathImg + "micro_32.png");
+    public static final ImageIcon PROFILE_ICON = new ImageIcon(pathImg + "profile_512.png");
+    public static final ImageIcon SELL_ICON = new ImageIcon(pathImg + "money_512.png");
+    public static final ImageIcon MANAGER_ICON = new ImageIcon(pathImg + "administration_512.png");
+    public static final ImageIcon UPDATE_PROFILE_ICON = new ImageIcon(pathImg + "update_profile_16.png");
 
     /**
      * singleton {@code CustomUI}

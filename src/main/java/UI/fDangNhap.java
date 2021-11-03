@@ -156,7 +156,6 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 					} else {
 						showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
 					}
-
 				} else {
 					showMessage("Sai tài khoản hoặc mật khẩu");
 				}

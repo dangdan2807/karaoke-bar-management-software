@@ -38,7 +38,7 @@ public class fQuanLyDatPhong extends JFrame
 	private JSpinner spnOrderQuantity;
 	private SpinnerNumberModel spnModel;
 	private JMenuBar mnuMenuBar;
-
+	
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon transferIcon = CustomUI.TRANSFER_ICON;
