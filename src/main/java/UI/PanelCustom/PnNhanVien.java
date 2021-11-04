@@ -9,6 +9,7 @@ import DAO.TaiKhoanDAO;
 import DAO.ValidationData;
 import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
+import UI.fQuanTri;
 import entity.NhanVien;
 import entity.TaiKhoan;
 
@@ -24,7 +25,7 @@ public class PnNhanVien extends JPanel
 	private DefaultTableModel modelTableStaff;
 	private JTextField txtCMND, txtPhoneNumber, txtStaffName, txtStaffID, txtBFieldSearch, txtKeyWord;
 	private JTextField txtBFieldSearchPosition, txtBFieldPosition, txtUsername;
-	private JComboBox<String> cboSearch, cboSearchPosition, cboPosition;
+	private JComboBox<String> cboSearch, cboSearchType, cboPosition;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPosition, lblSalary, lblPhoneNumber, lbStaffID;
 	private JLabel lblStaffName, lblStatus, lblSearch;
 	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch;
@@ -245,7 +246,7 @@ public class PnNhanVien extends JPanel
 		pnlSearch.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
-		cboSearch.addItem("Tất cả");
+		cboSearch.addItem("Trạng thái làm việc");
 		cboSearch.addItem("Tên nhân viên");
 		cboSearch.addItem("Số điện thoại");
 		cboSearch.addItem("Chức vụ");
@@ -269,18 +270,17 @@ public class PnNhanVien extends JPanel
 		txtKeyWord.setBounds(707, 10, 190, 20);
 		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
-		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
+		txtKeyWord.setVisible(false);
 		pnlSearch.add(txtKeyWord);
 
-		cboSearchPosition = new JComboBox<String>();
-		cboSearchPosition.addItem("Nhân viên");
-		cboSearchPosition.addItem("Chủ quán");
-		CustomUI.getInstance().setCustomComboBox(cboSearchPosition);
-		txtBFieldSearchPosition = CustomUI.getInstance().setCustomCBoxField(cboSearchPosition);
-		cboSearchPosition.setToolTipText("Chọn chức vụ muốn lọc");
-		cboSearchPosition.setVisible(false);
-		cboSearchPosition.setBounds(707, 11, 190, 20);
-		pnlSearch.add(cboSearchPosition);
+		cboSearchType = new JComboBox<String>();
+		cboSearchType.addItem("Đang làm");
+		cboSearchType.addItem("Đã nghỉ");
+		CustomUI.getInstance().setCustomComboBox(cboSearchType);
+		txtBFieldSearchPosition = CustomUI.getInstance().setCustomCBoxField(cboSearchType);
+		cboSearchType.setToolTipText("Chọn chức vụ muốn lọc");
+		cboSearchType.setBounds(707, 11, 190, 20);
+		pnlSearch.add(cboSearchType);
 
 		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 31, 19, 10, 5);
 		btnRefresh.setBounds(1106, 5, 100, 35);
@@ -361,7 +361,7 @@ public class PnNhanVien extends JPanel
 		txtBFieldPosition.addMouseListener(this);
 		cboPosition.addMouseListener(this);
 		cboSearch.addMouseListener(this);
-		cboSearchPosition.addMouseListener(this);
+		cboSearchType.addMouseListener(this);
 
 		txtStaffName.addFocusListener(this);
 		txtKeyWord.addFocusListener(this);
@@ -369,13 +369,13 @@ public class PnNhanVien extends JPanel
 		txtCMND.addFocusListener(this);
 		cboPosition.addFocusListener(this);
 		cboSearch.addFocusListener(this);
-		cboSearchPosition.addFocusListener(this);
+		cboSearchType.addFocusListener(this);
 		dpBirthDay.addFocusListener(this);
 		txtUsername.addFocusListener(this);
 		((JSpinner.DefaultEditor) spnSalary.getEditor()).getTextField().addFocusListener(this);
 
 		cboSearch.addItemListener(this);
-		cboSearchPosition.addItemListener(this);
+		cboSearchType.addItemListener(this);
 
 		txtPhoneNumber.addKeyListener(this);
 		txtKeyWord.addKeyListener(this);
@@ -392,7 +392,7 @@ public class PnNhanVien extends JPanel
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new fDieuHuong(staff).setVisible(true);
+			new fQuanTri(staff).setVisible(true);
 		});
 	}
 
@@ -418,23 +418,24 @@ public class PnNhanVien extends JPanel
 		if (o.equals(cboSearch)) {
 			String searchTypeName = cboSearch.getSelectedItem().toString();
 			txtKeyWord.setText("");
-			if (searchTypeName.equalsIgnoreCase("Chức vụ")) {
-				cboSearchPosition.setVisible(true);
+			if (searchTypeName.equalsIgnoreCase("Chức vụ") || searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
+				cboSearchType.setVisible(true);
 				txtKeyWord.setVisible(false);
-			} else {
-				if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-					txtKeyWord.setEditable(false);
-					CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
-				} else {
-					txtKeyWord.setEditable(true);
-					CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
+				cboSearchType.removeAllItems();
+				if (searchTypeName.equalsIgnoreCase("Chức vụ")) {
+					cboSearchType.addItem("Nhân viên");
+					cboSearchType.addItem("Chủ quán");
+				} else if (searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
+					cboSearchType.addItem("Đang làm");
+					cboSearchType.addItem("Đã nghỉ");
 				}
-				cboSearchPosition.setVisible(false);
+			} else {
+				txtKeyWord.setEditable(true);
+				CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
+				cboSearchType.setVisible(false);
 				txtKeyWord.setVisible(true);
 			}
-			removeSelectionInterval();
-			searchEventUsingBtnSearch();
-		} else if (o.equals(cboSearchPosition)) {
+		} else if (o.equals(cboSearchType)) {
 			removeSelectionInterval();
 			searchEventUsingBtnSearch();
 		}
@@ -446,7 +447,7 @@ public class PnNhanVien extends JPanel
 		if (o.equals(txtBFieldSearch)) {
 			cboSearch.showPopup();
 		} else if (o.equals(txtBFieldSearchPosition)) {
-			cboSearchPosition.showPopup();
+			cboSearchType.showPopup();
 		} else if (o.equals(txtBFieldPosition)) {
 			cboPosition.showPopup();
 		} else if (o.equals(tblTableStaff)) {
@@ -498,8 +499,8 @@ public class PnNhanVien extends JPanel
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 			cboSearch.showPopup();
 		} else if (o.equals(txtBFieldSearchPosition)) {
-			cboSearchPosition.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-			cboSearchPosition.showPopup();
+			cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+			cboSearchType.showPopup();
 		} else if (o.equals(txtBFieldPosition)) {
 			cboPosition.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 			cboPosition.showPopup();
@@ -512,7 +513,7 @@ public class PnNhanVien extends JPanel
 		if (o.equals(txtBFieldSearch)) {
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		} else if (o.equals(txtBFieldSearchPosition)) {
-			cboSearchPosition.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+			cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		} else if (o.equals(txtBFieldPosition)) {
 			cboPosition.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		}
@@ -589,7 +590,8 @@ public class PnNhanVien extends JPanel
 	 */
 	private void allLoaded() {
 		reSizeColumnTable();
-		loadStaffList(NhanVienDAO.getInstance().getStaffList());
+		String workingStatus = cboSearchType.getSelectedItem().toString().trim();
+		loadStaffList(NhanVienDAO.getInstance().getStaffListByWorkingStatus(workingStatus));
 	}
 
 	/**
@@ -822,8 +824,12 @@ public class PnNhanVien extends JPanel
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		ArrayList<NhanVien> staffList = null;
 		String keyword = "";
-		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			staffList = NhanVienDAO.getInstance().getStaffList();
+		if (searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
+			keyword = "Đang làm";
+			if (cboSearchType.getSelectedItem() != null) {
+				keyword = cboSearchType.getSelectedItem().toString().trim();
+			}
+			staffList = NhanVienDAO.getInstance().getStaffListByWorkingStatus(keyword);
 		} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
 			keyword = txtKeyWord.getText().trim();
 			staffList = NhanVienDAO.getInstance().getStaffListByStaffName(keyword);
@@ -836,7 +842,10 @@ public class PnNhanVien extends JPanel
 				showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (searchTypeName.equalsIgnoreCase("Chức vụ")) {
-			keyword = cboSearchPosition.getSelectedItem().toString().trim();
+			keyword = "Nhân viên";
+			if (cboSearchType.getSelectedItem() != null) {
+				keyword = cboSearchType.getSelectedItem().toString().trim();
+			}
 			staffList = NhanVienDAO.getInstance().getStaffListByPosition(keyword);
 		}
 		loadStaffList(staffList);

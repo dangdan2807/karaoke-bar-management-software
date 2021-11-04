@@ -37,6 +37,27 @@ public class NhanVienDAO {
     }
 
     /**
+     * Lấy danh sách tất cả khách hàng đang làm việc
+     * 
+     * @param workingStatus {@code String}: trạng thái làm việc của nhân viên
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     */
+    public ArrayList<NhanVien> getStaffListByWorkingStatus(String workingStatus) {
+        String query = "{CALL USP_getStaffListByWorkingStatus( ? )}";
+        Object[] parameter = new Object[] { workingStatus };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
+        try {
+            while (rs.next()) {
+                staffList.add(new NhanVien(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return staffList;
+    }
+
+    /**
      * Lấy thông tin nhân viên theo tên đăng nhập
      * 
      * @param username {@code String}: tên đăng nhập

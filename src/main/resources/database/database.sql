@@ -1588,6 +1588,20 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_getStaffListByWorkingStatus
+    @workingStatus NVARCHAR(100)
+AS
+BEGIN
+    SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
+        nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
+        tk.tinhTrangTK, tk.tenDangNhap, tk.matKhau
+    FROM dbo.NhanVien nv, dbo.TaiKhoan tk
+    WHERE nv.taiKhoan = tk.tenDangNhap
+        AND nv.trangThaiNV = @workingStatus
+END
+GO
+
 CREATE PROC USP_getLastStaffID
 AS
 BEGIN
