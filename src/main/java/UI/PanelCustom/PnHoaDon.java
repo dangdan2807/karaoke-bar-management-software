@@ -13,6 +13,7 @@ import javax.swing.table.*;
 import DAO.*;
 import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
+import UI.fQuanTri;
 import entity.*;
 
 public class PnHoaDon extends JPanel
@@ -102,8 +103,7 @@ public class PnHoaDon extends JPanel
 		pnlInfo.add(dpToDate);
 
 		lblToDate = new JLabel("Đến ngày:");
-		lblToDate.setForeground(Color.WHITE);
-		lblToDate.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblToDate);
 		lblToDate.setBounds(642, 26, 105, 20);
 		pnlInfo.add(lblToDate);
 
@@ -118,8 +118,7 @@ public class PnHoaDon extends JPanel
 		pnlInfo.add(dpFromDate);
 
 		lblFromDate = new JLabel("Từ ngày:");
-		lblFromDate.setForeground(Color.WHITE);
-		lblFromDate.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblFromDate);
 		lblFromDate.setBounds(187, 26, 105, 20);
 		pnlInfo.add(lblFromDate);
 
@@ -134,10 +133,9 @@ public class PnHoaDon extends JPanel
 		pnlInfo.add(btnSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
+		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(187, 70, 105, 20);
 		pnlInfo.add(lblSearch);
-		lblSearch.setForeground(Color.WHITE);
-		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
 
 		cboSearch = new JComboBox<String>();
 		cboSearch.addItem("Tất cả");
@@ -150,10 +148,9 @@ public class PnHoaDon extends JPanel
 		pnlInfo.add(cboSearch);
 
 		JLabel lpKeyWord = new JLabel("Từ khóa:");
+		CustomUI.getInstance().setCustomLabel(lpKeyWord);
 		lpKeyWord.setBounds(642, 70, 105, 20);
 		pnlInfo.add(lpKeyWord);
-		lpKeyWord.setForeground(Color.WHITE);
-		lpKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
 
 		txtKeyWord = new JTextField();
 		txtKeyWord.setBounds(747, 70, 250, 20);
@@ -224,7 +221,7 @@ public class PnHoaDon extends JPanel
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new fDieuHuong(staff).setVisible(true);
+			new fQuanTri(staff).setVisible(true);
 		});
 	}
 

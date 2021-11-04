@@ -13,6 +13,7 @@ import DAO.LoaiPhongDAO;
 import DAO.NhanVienDAO;
 import DAO.ValidationData;
 import UI.fDieuHuong;
+import UI.fQuanTri;
 import entity.LoaiPhong;
 import entity.NhanVien;
 
@@ -100,8 +101,7 @@ public class PnLoaiPhong extends JPanel
 		pnlInfo.add(spnCapacity);
 
 		lblCapacity = new JLabel("Sức chứa:");
-		lblCapacity.setForeground(Color.WHITE);
-		lblCapacity.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblCapacity);
 		lblCapacity.setBounds(670, 15, 90, 20);
 		pnlInfo.add(lblCapacity);
 
@@ -129,8 +129,7 @@ public class PnLoaiPhong extends JPanel
 		pnlInfo.add(pnlSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
-		lblSearch.setForeground(Color.WHITE);
-		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(30, 18, 100, 20);
 		pnlSearch.add(lblSearch);
 
@@ -151,8 +150,7 @@ public class PnLoaiPhong extends JPanel
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
-		lblKeyWord.setForeground(Color.WHITE);
-		lblKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblKeyWord);
 		lblKeyWord.setBounds(364, 18, 76, 20);
 		pnlSearch.add(lblKeyWord);
 
@@ -172,8 +170,7 @@ public class PnLoaiPhong extends JPanel
 		pnlSearch.add(spnSearchPrice);
 
 		JLabel lblPrice = new JLabel("Giá tiền:");
-		lblPrice.setForeground(Color.WHITE);
-		lblPrice.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblPrice);
 		lblPrice.setBounds(977, 15, 90, 20);
 		pnlInfo.add(lblPrice);
 
@@ -183,8 +180,7 @@ public class PnLoaiPhong extends JPanel
 		pnlInfo.add(spnPrice);
 
 		JLabel lblRoomTypeID = new JLabel("Mã loại phòng:");
-		lblRoomTypeID.setForeground(Color.WHITE);
-		lblRoomTypeID.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblRoomTypeID);
 		lblRoomTypeID.setBounds(20, 15, 120, 20);
 		pnlInfo.add(lblRoomTypeID);
 
@@ -196,8 +192,7 @@ public class PnLoaiPhong extends JPanel
 		pnlInfo.add(txtRoomTypeId);
 
 		JLabel lblRoomTypeName = new JLabel("Tên loại phòng:");
-		lblRoomTypeName.setForeground(Color.WHITE);
-		lblRoomTypeName.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblRoomTypeName);
 		lblRoomTypeName.setBounds(344, 15, 120, 20);
 		pnlInfo.add(lblRoomTypeName);
 
@@ -264,7 +259,7 @@ public class PnLoaiPhong extends JPanel
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new fDieuHuong(staff).setVisible(true);
+			new fQuanTri(staff).setVisible(true);
 		});
 	}
 

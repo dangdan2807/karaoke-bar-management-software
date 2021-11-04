@@ -125,22 +125,22 @@ public class PnNhanVien extends JPanel
 		pnlInfo.add(txtCMND);
 
 		lblCMND = new JLabel("CMND/CCCD:");
-		lblCMND.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblCMND);
 		lblCMND.setBounds(845, 29, 105, 20);
 		pnlInfo.add(lblCMND);
 
 		lblBirthDay = new JLabel("Ngày sinh:");
-		lblBirthDay.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblBirthDay);
 		lblBirthDay.setBounds(845, 54, 105, 20);
 		pnlInfo.add(lblBirthDay);
 
 		lblGender = new JLabel("Giới tính:");
-		lblGender.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblGender);
 		lblGender.setBounds(845, 79, 105, 20);
 		pnlInfo.add(lblGender);
 
 		txtPhoneNumber = new JTextField();
-		txtPhoneNumber.setBounds(555, 79, 250, 20);
+		txtPhoneNumber.setBounds(554, 79, 250, 20);
 		txtPhoneNumber.setToolTipText("Nhập số điện thoại của nhân viên gồm 10 số và bắt đầu bằng 03, 05, 07, 08, 09");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtPhoneNumber);
 		pnlInfo.add(txtPhoneNumber);
@@ -167,17 +167,17 @@ public class PnNhanVien extends JPanel
 		groupGender.add(radFemale);
 
 		lblPosition = new JLabel("Chức vụ:");
-		lblPosition.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblPosition);
 		lblPosition.setBounds(435, 29, 115, 20);
 		pnlInfo.add(lblPosition);
 
 		lblSalary = new JLabel("Mức lương:");
-		lblSalary.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblSalary);
 		lblSalary.setBounds(435, 54, 115, 16);
 		pnlInfo.add(lblSalary);
 
 		lblPhoneNumber = new JLabel("Số điện thoại:");
-		lblPhoneNumber.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblPhoneNumber);
 		lblPhoneNumber.setBounds(435, 79, 115, 16);
 		pnlInfo.add(lblPhoneNumber);
 
@@ -194,18 +194,17 @@ public class PnNhanVien extends JPanel
 		pnlInfo.add(txtStaffID);
 
 		lbStaffID = new JLabel("Mã nhân viên: ");
-		lbStaffID.setForeground(Color.WHITE);
-		lbStaffID.setBackground(new Color(249, 249, 249));
+		CustomUI.getInstance().setCustomLabel(lbStaffID);
 		lbStaffID.setBounds(20, 29, 120, 20);
 		pnlInfo.add(lbStaffID);
 
 		lblStaffName = new JLabel("Tên nhân viên:");
-		lblStaffName.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblStaffName);
 		lblStaffName.setBounds(20, 54, 120, 20);
 		pnlInfo.add(lblStaffName);
 
 		lblStatus = new JLabel("Trạng thái:");
-		lblStatus.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblStatus);
 		lblStatus.setBounds(20, 79, 120, 20);
 		pnlInfo.add(lblStatus);
 
@@ -230,7 +229,7 @@ public class PnNhanVien extends JPanel
 		CustomUI.getInstance().setCustomComboBox(cboPosition);
 		cboPosition.setToolTipText("Chọn chức vụ của nhân viên");
 		txtBFieldPosition = CustomUI.getInstance().setCustomCBoxField(cboPosition);
-		cboPosition.setBounds(555, 28, 250, 20);
+		cboPosition.setBounds(554, 28, 250, 20);
 		pnlInfo.add(cboPosition);
 
 		JPanel pnlSearch = new JPanel();
@@ -241,7 +240,7 @@ public class PnNhanVien extends JPanel
 		pnlInfo.add(pnlSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
-		lblSearch.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(285, 10, 100, 20);
 		pnlSearch.add(lblSearch);
 
@@ -262,7 +261,7 @@ public class PnNhanVien extends JPanel
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
-		lblKeyWord.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblKeyWord);
 		lblKeyWord.setBounds(641, 10, 73, 20);
 		pnlSearch.add(lblKeyWord);
 
@@ -300,7 +299,7 @@ public class PnNhanVien extends JPanel
 		pnlSearch.add(btnAdd);
 
 		JLabel lbUsername = new JLabel("Tài khoản:");
-		lbUsername.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lbUsername);
 		lbUsername.setBounds(20, 104, 120, 20);
 		pnlInfo.add(lbUsername);
 
@@ -497,13 +496,13 @@ public class PnNhanVien extends JPanel
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-			cboSearch.showPopup();
+			// cboSearch.showPopup();
 		} else if (o.equals(txtBFieldSearchPosition)) {
 			cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-			cboSearchType.showPopup();
+			// cboSearchType.showPopup();
 		} else if (o.equals(txtBFieldPosition)) {
 			cboPosition.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-			cboPosition.showPopup();
+			// cboPosition.showPopup();
 		}
 	}
 

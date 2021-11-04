@@ -13,6 +13,7 @@ import DAO.LoaiDichVuDAO;
 import DAO.NhanVienDAO;
 import DAO.ValidationData;
 import UI.fDieuHuong;
+import UI.fQuanTri;
 import entity.LoaiDichVu;
 import entity.NhanVien;
 
@@ -121,8 +122,7 @@ public class PnLoaiDichVu extends JPanel
 		pnlInfo.add(pnlSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
-		lblSearch.setForeground(Color.WHITE);
-		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(30, 18, 100, 20);
 		pnlSearch.add(lblSearch);
 
@@ -141,8 +141,7 @@ public class PnLoaiDichVu extends JPanel
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
-		lblKeyWord.setForeground(Color.WHITE);
-		lblKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblKeyWord);
 		lblKeyWord.setBounds(364, 18, 76, 20);
 		pnlSearch.add(lblKeyWord);
 
@@ -164,8 +163,7 @@ public class PnLoaiDichVu extends JPanel
 		pnlSearch.add(cboSearchType);
 
 		JLabel lblServiceTypeID = new JLabel("Mã loại dịch vụ:");
-		lblServiceTypeID.setForeground(Color.WHITE);
-		lblServiceTypeID.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblServiceTypeID);
 		lblServiceTypeID.setBounds(133, 30, 120, 20);
 		pnlInfo.add(lblServiceTypeID);
 
@@ -180,8 +178,7 @@ public class PnLoaiDichVu extends JPanel
 		pnlInfo.add(txtServiceTypeID);
 
 		JLabel lblServiceTypeName = new JLabel("Tên loại dịch vụ:");
-		lblServiceTypeName.setForeground(Color.WHITE);
-		lblServiceTypeName.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblServiceTypeName);
 		lblServiceTypeName.setBounds(746, 30, 120, 20);
 		pnlInfo.add(lblServiceTypeName);
 
@@ -247,7 +244,7 @@ public class PnLoaiDichVu extends JPanel
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new fDieuHuong(staff).setVisible(true);
+			new fQuanTri(staff).setVisible(true);
 		});
 	}
 

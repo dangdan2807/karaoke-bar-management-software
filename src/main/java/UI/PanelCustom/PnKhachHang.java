@@ -14,6 +14,7 @@ import DAO.KhachHangDAO;
 import DAO.NhanVienDAO;
 import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
+import UI.fQuanTri;
 import entity.KhachHang;
 import entity.NhanVien;
 
@@ -115,20 +116,17 @@ public class PnKhachHang extends JPanel
 		pnlInfo.add(txtCMND);
 
 		lblCMND = new JLabel("CMND/CCCD:");
-		lblCMND.setForeground(Color.WHITE);
-		lblCMND.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblCMND);
 		lblCMND.setBounds(845, 15, 105, 20);
 		pnlInfo.add(lblCMND);
 
 		lblBirthDay = new JLabel("Ngày sinh:");
-		lblBirthDay.setForeground(Color.WHITE);
-		lblBirthDay.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblBirthDay);
 		lblBirthDay.setBounds(845, 45, 105, 20);
 		pnlInfo.add(lblBirthDay);
 
 		lblGender = new JLabel("Giới tính:");
-		lblGender.setForeground(Color.WHITE);
-		lblGender.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblGender);
 		lblGender.setBounds(435, 15, 105, 20);
 		pnlInfo.add(lblGender);
 
@@ -154,8 +152,7 @@ public class PnKhachHang extends JPanel
 		groupGender.add(radFemale);
 
 		lblPhone = new JLabel("Số điện thoại:");
-		lblPhone.setForeground(Color.WHITE);
-		lblPhone.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblPhone);
 		lblPhone.setBounds(435, 45, 115, 16);
 		pnlInfo.add(lblPhone);
 
@@ -172,15 +169,12 @@ public class PnKhachHang extends JPanel
 		pnlInfo.add(txtCustomerID);
 
 		lblCustomerID = new JLabel("Mã khách hàng: ");
-		lblCustomerID.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblCustomerID.setForeground(Color.WHITE);
-		lblCustomerID.setBackground(new Color(249, 249, 249));
+		CustomUI.getInstance().setCustomLabel(lblCustomerID);
 		lblCustomerID.setBounds(20, 15, 120, 20);
 		pnlInfo.add(lblCustomerID);
 
 		lblCustomerName = new JLabel("Tên khách hàng:");
-		lblCustomerName.setForeground(Color.WHITE);
-		lblCustomerName.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblCustomerName);
 		lblCustomerName.setBounds(20, 45, 120, 20);
 		pnlInfo.add(lblCustomerName);
 
@@ -208,8 +202,7 @@ public class PnKhachHang extends JPanel
 		pnlInfo.add(pnlSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
-		lblSearch.setForeground(Color.WHITE);
-		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(30, 18, 100, 20);
 		pnlSearch.add(lblSearch);
 
@@ -229,8 +222,7 @@ public class PnKhachHang extends JPanel
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
-		lblKeyWord.setForeground(Color.WHITE);
-		lblKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblKeyWord);
 		lblKeyWord.setBounds(364, 18, 76, 20);
 		pnlSearch.add(lblKeyWord);
 
@@ -312,7 +304,7 @@ public class PnKhachHang extends JPanel
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new fDieuHuong(staff).setVisible(true);
+			new fQuanTri(staff).setVisible(true);
 		});
 	}
 

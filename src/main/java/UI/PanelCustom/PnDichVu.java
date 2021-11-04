@@ -11,6 +11,7 @@ import javax.swing.table.*;
 
 import DAO.*;
 import UI.fDieuHuong;
+import UI.fQuanTri;
 import entity.*;
 
 public class PnDichVu extends JPanel
@@ -102,14 +103,12 @@ public class PnDichVu extends JPanel
 		pnlInfo.add(txtServiceName);
 
 		lblServiceType = new JLabel("Loại dịch vụ:");
-		lblServiceType.setForeground(Color.WHITE);
-		lblServiceType.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblServiceType);
 		lblServiceType.setBounds(845, 15, 105, 20);
 		pnlInfo.add(lblServiceType);
 
 		lblServiceName = new JLabel("Tên dịch vụ:");
-		lblServiceName.setForeground(Color.WHITE);
-		lblServiceName.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblServiceName);
 		lblServiceName.setBounds(435, 15, 105, 20);
 		pnlInfo.add(lblServiceName);
 
@@ -121,8 +120,7 @@ public class PnDichVu extends JPanel
 		pnlInfo.add(cboServiceType);
 
 		lblQuantityInStock = new JLabel("Số lượng tồn:");
-		lblQuantityInStock.setForeground(Color.WHITE);
-		lblQuantityInStock.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblQuantityInStock);
 		lblQuantityInStock.setBounds(435, 45, 115, 16);
 		pnlInfo.add(lblQuantityInStock);
 
@@ -141,15 +139,12 @@ public class PnDichVu extends JPanel
 		pnlInfo.add(txtServiceID);
 
 		lblServiceID = new JLabel("Mã dịch vụ: ");
-		lblServiceID.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblServiceID.setForeground(Color.WHITE);
-		lblServiceID.setBackground(new Color(249, 249, 249));
+		CustomUI.getInstance().setCustomLabel(lblServiceID);
 		lblServiceID.setBounds(20, 15, 120, 20);
 		pnlInfo.add(lblServiceID);
 
 		lblPrice = new JLabel("Giá bán:");
-		lblPrice.setForeground(Color.WHITE);
-		lblPrice.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblPrice);
 		lblPrice.setBounds(20, 45, 120, 20);
 		pnlInfo.add(lblPrice);
 
@@ -177,8 +172,7 @@ public class PnDichVu extends JPanel
 		pnlInfo.add(pnlSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
-		lblSearch.setForeground(Color.WHITE);
-		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(30, 18, 100, 20);
 		pnlSearch.add(lblSearch);
 
@@ -198,8 +192,7 @@ public class PnDichVu extends JPanel
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
-		lblKeyWord.setForeground(Color.WHITE);
-		lblKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblKeyWord);
 		lblKeyWord.setBounds(364, 18, 76, 20);
 		pnlSearch.add(lblKeyWord);
 
@@ -276,7 +269,7 @@ public class PnDichVu extends JPanel
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new fDieuHuong(staff).setVisible(true);
+			new fQuanTri(staff).setVisible(true);
 		});
 	}
 

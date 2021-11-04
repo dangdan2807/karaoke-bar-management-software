@@ -11,6 +11,7 @@ import javax.swing.table.*;
 
 import DAO.*;
 import UI.fDieuHuong;
+import UI.fQuanTri;
 import entity.*;
 
 public class PnPhong extends JPanel implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
@@ -83,8 +84,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		pnlMain.add(pnlTitle);
 
 		JLabel lblTitle = new JLabel("QUẢN LÝ PHÒNG");
-		lblTitle.setFont(new Font("Dialog", Font.BOLD, 24));
-		lblTitle.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblTitle);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setBounds(0, 0, 1250, 45);
 		pnlTitle.add(lblTitle);
@@ -102,8 +102,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		pnlInfo.add(txtLocation);
 
 		lblLocation = new JLabel("Vị trí:");
-		lblLocation.setForeground(Color.WHITE);
-		lblLocation.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblLocation);
 		lblLocation.setBounds(660, 15, 70, 20);
 		pnlInfo.add(lblLocation);
 
@@ -130,8 +129,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		pnlInfo.add(pnlSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
-		lblSearch.setForeground(Color.WHITE);
-		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(30, 18, 100, 20);
 		pnlSearch.add(lblSearch);
 
@@ -153,8 +151,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
-		lblKeyWord.setForeground(Color.WHITE);
-		lblKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblKeyWord);
 		lblKeyWord.setBounds(364, 18, 76, 20);
 		pnlSearch.add(lblKeyWord);
 
@@ -174,14 +171,12 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		pnlSearch.add(cboSearchType);
 
 		JLabel lblRoomType = new JLabel("Loại phòng:");
-		lblRoomType.setForeground(Color.WHITE);
-		lblRoomType.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblRoomType);
 		lblRoomType.setBounds(955, 15, 90, 20);
 		pnlInfo.add(lblRoomType);
 
 		JLabel lblRoomID = new JLabel("Mã phòng:");
-		lblRoomID.setForeground(Color.WHITE);
-		lblRoomID.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblRoomID);
 		lblRoomID.setBounds(25, 15, 90, 20);
 		pnlInfo.add(lblRoomID);
 
@@ -192,8 +187,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		pnlInfo.add(txtRoomID);
 
 		JLabel lblStatusRoom = new JLabel("Tình trạng:");
-		lblStatusRoom.setForeground(Color.WHITE);
-		lblStatusRoom.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblStatusRoom);
 		lblStatusRoom.setBounds(340, 15, 90, 20);
 		pnlInfo.add(lblStatusRoom);
 
@@ -268,7 +262,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new fDieuHuong(staff).setVisible(true);
+			new fQuanTri(staff).setVisible(true);
 		});
 	}
 
@@ -649,27 +643,29 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		ArrayList<Phong> roomList = null;
 		Object keyword = "";
-		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
+		switch (searchTypeName) {
+		case "Tất cả":
 			roomList = PhongDAO.getInstance().getRoomList();
-
-		} else if (searchTypeName.equalsIgnoreCase("Tình trạng phòng")) {
+			break;
+		case "Tình trạng phòng":
 			keyword = cboSearchType.getSelectedItem();
 			int roomStatus = 0;
 			if (keyword != null) {
 				roomStatus = keyword.toString().equalsIgnoreCase("Phòng trống") ? 0 : 1;
 			}
 			roomList = PhongDAO.getInstance().getRoomListByStatus(roomStatus);
-
-		} else if (searchTypeName.equalsIgnoreCase("Loại phòng")) {
+			break;
+		case "Loại phòng":
 			keyword = cboSearchType.getSelectedItem();
 			if (keyword == null) {
 				keyword = cboRoomStatus.getItemAt(0).toString().trim();
 			}
 			roomList = PhongDAO.getInstance().getRoomListByRoomTypeName(keyword.toString());
-
-		} else if (searchTypeName.equalsIgnoreCase("Vị trí")) {
+			break;
+		case "Vị trí":
 			keyword = txtKeyWord.getText().trim();
 			roomList = PhongDAO.getInstance().getRoomListByLocation(keyword.toString());
+			break;
 		}
 		loadRoomList(roomList);
 	}

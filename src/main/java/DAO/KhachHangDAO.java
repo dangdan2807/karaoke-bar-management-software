@@ -118,6 +118,69 @@ public class KhachHangDAO {
     }
 
     /**
+     * Lấy ra danh sách tất cả khách hàng chưa đặt phòng theo tên
+     * 
+     * @param customerName {@code String}: tên khách hàng
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng chưa đặt phòng
+     */
+    public ArrayList<KhachHang> getCustomerListUnBookedByName(String customerName) {
+        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
+        String query = "{CALL USP_getCustomerListUnBookedByName( ? )}";
+        Object[] parameter = new Object[] { customerName };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new KhachHang(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy ra danh sách tất cả khách hàng chưa đặt phòng theo CMND/CCCD
+     * 
+     * @param cmnd {@code String}: CMND/CCCD của khách hàng
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng chưa đặt phòng
+     */
+    public ArrayList<KhachHang> getCustomerListUnBookedByCMND(String cmnd) {
+        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
+        String query = "{CALL USP_getCustomerListUnBookedByCMND( ? )}";
+        Object[] parameter = new Object[] { cmnd };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new KhachHang(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy ra danh sách tất cả khách hàng chưa đặt phòng theo CMND/CCCD
+     * 
+     * @param phoneNumber {@code String}: số điện thoại của khách hàng
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng chưa đặt phòng
+     */
+    public ArrayList<KhachHang> getCustomerListUnBookedByPhoneNumber(String phoneNumber) {
+        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
+        String query = "{CALL USP_getCustomerListUnBookedByPhoneNumber( ? )}";
+        Object[] parameter = new Object[] { phoneNumber };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new KhachHang(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
      * Lấy thông tin khách hàng theo mã khách hàng
      * 
      * @param customerId {@code String}: mã khách hàng
