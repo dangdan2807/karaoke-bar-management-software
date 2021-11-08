@@ -386,13 +386,10 @@ public class PnDichVu extends JPanel
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSerType)) {
-			cboServiceType.showPopup();
 			cboServiceType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldSearch)) {
-			cboSearch.showPopup();
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldSearchSerType)) {
-			cboSearchServiceType.showPopup();
 			cboSearchServiceType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
@@ -545,7 +542,7 @@ public class PnDichVu extends JPanel
 		boolean flag = true;
 		while (flag) {
 			newStaffIdStr = newStaffIdStr.replace(idStr, idStr + "0");
-			if (newStaffIdStr.length() > 4) {
+			if (newStaffIdStr.length() > 5) {
 				flag = false;
 			}
 		}

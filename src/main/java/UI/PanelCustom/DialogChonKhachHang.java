@@ -316,10 +316,7 @@ public class DialogChonKhachHang extends JDialog
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		Object object = e.getSource();
-		if (object.equals(txtBFieldSearch)) {
-			cboSearch.showPopup();
-		}
+		
 	}
 
 	@Override

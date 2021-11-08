@@ -401,10 +401,8 @@ public class PnKhachHang extends JPanel
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
-			cboSearch.showPopup();
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldSearchGender)) {
-			cboSearchGender.showPopup();
 			cboSearchGender.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}

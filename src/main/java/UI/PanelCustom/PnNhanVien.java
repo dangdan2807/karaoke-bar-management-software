@@ -496,13 +496,10 @@ public class PnNhanVien extends JPanel
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-			// cboSearch.showPopup();
 		} else if (o.equals(txtBFieldSearchPosition)) {
 			cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-			// cboSearchType.showPopup();
 		} else if (o.equals(txtBFieldPosition)) {
 			cboPosition.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-			// cboPosition.showPopup();
 		}
 	}
 
@@ -833,7 +830,7 @@ public class PnNhanVien extends JPanel
 			keyword = txtKeyWord.getText().trim();
 			staffList = NhanVienDAO.getInstance().getStaffListByStaffName(keyword);
 		} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-			keyword = txtKeyWord.getText().trim().replace("-", "");
+			keyword = txtKeyWord.getText().trim();
 			if (keyword.matches("^[\\d]{0,10}$")) {
 				staffList = NhanVienDAO.getInstance().getStaffListByPhoneNumber(keyword);
 			} else {

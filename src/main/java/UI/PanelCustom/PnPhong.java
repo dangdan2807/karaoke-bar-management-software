@@ -134,7 +134,6 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		pnlSearch.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
-		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tình trạng phòng");
 		cboSearch.addItem("Loại phòng");
 		cboSearch.addItem("Vị trí");
@@ -158,16 +157,19 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		txtKeyWord = new JTextField();
 		txtKeyWord.setToolTipText("Nhập từ khoá cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
-		txtKeyWord.setBounds(440, 18, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
+		txtKeyWord.setBounds(440, 18, 200, 20);
+		txtKeyWord.setVisible(false);
 		pnlSearch.add(txtKeyWord);
 
 		cboSearchType = new JComboBox<String>();
 		cboSearchType.setToolTipText("Loại phòng cần tìm");
+		cboSearchType.addItem("Phòng trống");
+		cboSearchType.addItem("Phòng đang sử dụng");
 		CustomUI.getInstance().setCustomComboBox(cboSearchType);
 		txtBFieldSearchType = CustomUI.getInstance().setCustomCBoxField(cboSearchType);
 		cboSearchType.setBounds(440, 18, 200, 20);
-		cboSearchType.setVisible(false);
+		cboSearchType.setVisible(true);
 		pnlSearch.add(cboSearchType);
 
 		JLabel lblRoomType = new JLabel("Loại phòng:");
@@ -418,16 +420,12 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
-			cboSearch.showPopup();
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldSearchType)) {
-			cboSearchType.showPopup();
 			cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldRoomType)) {
-			cboRoomType.showPopup();
 			cboRoomType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldRoomStatus)) {
-			cboRoomStatus.showPopup();
 			cboRoomStatus.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
@@ -491,8 +489,10 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	 */
 	public void allLoaded() {
 		reSizeColumnTable();
-		loadRoomList(PhongDAO.getInstance().getRoomList());
 		loadRoomTypeList();
+		String roomStatusStr = cboRoomStatus.getSelectedItem().toString().trim();
+		int roomStatus = roomStatusStr.equalsIgnoreCase("Phòng Trống") ? 0 : 1;
+		loadRoomList(PhongDAO.getInstance().getRoomListByStatus(roomStatus));
 	}
 
 	/**
@@ -632,8 +632,6 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
 		columnModel.getColumn(0).setCellRenderer(centerRenderer);
-		columnModel.getColumn(3).setCellRenderer(rightRenderer);
-		columnModel.getColumn(4).setCellRenderer(rightRenderer);
 	}
 
 	/**
@@ -644,9 +642,6 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		ArrayList<Phong> roomList = null;
 		Object keyword = "";
 		switch (searchTypeName) {
-		case "Tất cả":
-			roomList = PhongDAO.getInstance().getRoomList();
-			break;
 		case "Tình trạng phòng":
 			keyword = cboSearchType.getSelectedItem();
 			int roomStatus = 0;

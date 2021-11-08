@@ -1,29 +1,15 @@
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.awt.*;
 import java.sql.*;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-import java.awt.Component;
+import java.awt.*;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.*;
 
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.bouncycastle.util.test.Test;
 
 import DAO.*;
-import entity.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -144,11 +130,10 @@ public class test {
         int key = 0;
         switch (key) {
             case 0:
-            // final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
-            // System.out.println(workingDir + "");
-            // URL location = Test.class.getProtectionDomain().getCodeSource().getLocation();
-            // System.out.println(location.getFile());
-            System.out.println(Math.abs(0));
+            final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
+            System.out.println(workingDir + "");
+            URL location = Test.class.getProtectionDomain().getCodeSource().getLocation();
+            System.out.println(location.getFile());
             break;
         case 1:
             testTime();
