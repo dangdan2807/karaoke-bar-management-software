@@ -417,14 +417,14 @@ public class PnHoaDon extends JPanel
 		String endTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioTra(), format);
 
 		KhachHang customer = KhachHangDAO.getInstance().getCustomerByBillId(billId);
+		Double totalPrice = HoaDonDAO.getInstance().getTotalPriceBill(billId);
 		NhanVien staff = NhanVienDAO.getInstance().getStaffByBillId(billId);
 		Phong room = PhongDAO.getInstance().getRoomByBillId(billId);
-		Double totalPrice = HoaDonDAO.getInstance().getTotalPriceBill(billId);
 
 		modelTableBill.addRow(new Object[] { sttStr, addSpaceToString(String.valueOf(billId)),
-				addSpaceToString(startTimeStr), addSpaceToString(endTimeStr), addSpaceToString(room.getMaPhong()),
-				addSpaceToString(customer.getHoTen()), addSpaceToString(staff.getHoTen()),
-				addSpaceToString(df.format(totalPrice)) });
+				addSpaceToString(startTimeStr), addSpaceToString(endTimeStr),
+				addSpaceToString(room.getMaPhong()), addSpaceToString(customer.getHoTen()),
+				addSpaceToString(staff.getHoTen()), addSpaceToString(df.format(totalPrice)) });
 		modelTableBill.fireTableDataChanged();
 	}
 
@@ -438,7 +438,7 @@ public class PnHoaDon extends JPanel
 		DichVu service = serviceDetail.getDichVu();
 		String sttStr = df.format(stt);
 		String quantityStr = df.format(serviceDetail.getSoLuongDat());
-		String priceStr = df.format(service.getGiaBan());
+		String priceStr = df.format(serviceDetail.getDonGia());
 		String totalPrice = df.format(serviceDetail.tinhTienDichVu());
 		modelTableBillInfo.addRow(new Object[] { sttStr, addSpaceToString(service.getTenDichVu()),
 				addSpaceToString(quantityStr), addSpaceToString(priceStr), addSpaceToString(totalPrice) });
@@ -482,14 +482,14 @@ public class PnHoaDon extends JPanel
 	private void reSizeColumnTableBill() {
 		tblTableBill.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		TableColumnModel columnModelTableBill = tblTableBill.getColumnModel();
-		columnModelTableBill.getColumn(0).setPreferredWidth(70);
-		columnModelTableBill.getColumn(1).setPreferredWidth(150);
+		columnModelTableBill.getColumn(0).setPreferredWidth(50);
+		columnModelTableBill.getColumn(1).setPreferredWidth(140);
 		columnModelTableBill.getColumn(2).setPreferredWidth(160);
 		columnModelTableBill.getColumn(3).setPreferredWidth(160);
 		columnModelTableBill.getColumn(4).setPreferredWidth(100);
 		columnModelTableBill.getColumn(5).setPreferredWidth(210);
 		columnModelTableBill.getColumn(6).setPreferredWidth(210);
-		columnModelTableBill.getColumn(7).setPreferredWidth(140);
+		columnModelTableBill.getColumn(7).setPreferredWidth(170);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -497,8 +497,6 @@ public class PnHoaDon extends JPanel
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
 		columnModelTableBill.getColumn(0).setCellRenderer(centerRenderer);
-		columnModelTableBill.getColumn(1).setCellRenderer(centerRenderer);
-		columnModelTableBill.getColumn(4).setCellRenderer(centerRenderer);
 		columnModelTableBill.getColumn(7).setCellRenderer(rightRenderer);
 	}
 

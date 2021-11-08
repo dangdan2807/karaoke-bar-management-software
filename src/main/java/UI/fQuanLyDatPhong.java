@@ -38,7 +38,7 @@ public class fQuanLyDatPhong extends JFrame
 	private JSpinner spnOrderQuantity;
 	private SpinnerNumberModel spnModel;
 	private JMenuBar mnuMenuBar;
-	
+
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon transferIcon = CustomUI.TRANSFER_ICON;
@@ -779,13 +779,10 @@ public class fQuanLyDatPhong extends JFrame
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldRoomID)) {
-			// cboRoomID.showPopup();
 			cboRoomID.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldRoomType)) {
-			// cboRoomType.showPopup();
 			cboRoomType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldServiceType)) {
-			// cboServiceType.showPopup();
 			cboServiceType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
@@ -987,8 +984,8 @@ public class fQuanLyDatPhong extends JFrame
 				heightTable += PhongDAO.ROOM_HEIGHT;
 				pnlShowRoom.setPreferredSize(new Dimension(pnShowTableWidth, heightTable));
 			}
-			String roomID2 = txtRoomID.getText();
-			if (roomID.equalsIgnoreCase(roomID2)) {
+			String roomName = txtRoomID.getText();
+			if (roomID.equalsIgnoreCase(roomName)) {
 				location = i;
 			}
 			btnRoomList[selection].addActionListener(new ActionListener() {
@@ -1134,7 +1131,7 @@ public class fQuanLyDatPhong extends JFrame
 			totalPrice += totalPriceService;
 			String stt = df.format(i++);
 			String totalPriceStr = df.format(totalPriceService);
-			String priceStr = df.format(service.getGiaBan());
+			String priceStr = df.format(item.getDonGia());
 			String quantityStr = df.format(item.getSoLuongDat());
 			modelTableBill.addRow(new Object[] { stt, addSpaceToString(service.getTenDichVu()),
 					addSpaceToString(priceStr), addSpaceToString(quantityStr), addSpaceToString(totalPriceStr) });
@@ -1336,13 +1333,7 @@ public class fQuanLyDatPhong extends JFrame
 	}
 
 	/**
-	 * Thêm hoặc hủy dịch vụ
-	 * 
-	 * @param type {@code int}: loại event
-	 *             <ul>
-	 *             <li>thêm dịch vụ: truyền vao {@code 1}</li>
-	 *             <li>hủy dịch vụ: truyền vao {@code 0}</li>
-	 *             </ul>
+	 * Thêm hoặc cập nhật dịch vụ
 	 */
 	private void orderService() {
 		if (txtBillID.getText().trim().equals("")) {
@@ -1402,7 +1393,8 @@ public class fQuanLyDatPhong extends JFrame
 						}
 						// Thêm mới
 					} else {
-						serviceInfo = new CTDichVu(orderQuantity, service);
+						double servicePrice = service.getGiaBan();
+						serviceInfo = new CTDichVu(orderQuantity, servicePrice, service);
 						result = CTDichVuDAO.getInstance().insertServiceDetail(serviceInfo, orderQuantity,
 								bill.getMaHoaDon());
 					}
@@ -1429,6 +1421,9 @@ public class fQuanLyDatPhong extends JFrame
 		}
 	}
 
+	/**
+	 * Hủy hoặc cập nhật dịch vụ
+	 */
 	private void cancelService() {
 		int selectedRow = tblTableBill.getSelectedRow();
 		if (txtBillID.getText().trim().equals("")) {

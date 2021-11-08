@@ -271,6 +271,8 @@ public class DialogChonKhachHang extends JDialog
 			String searchTypeName = cboSearch.getSelectedItem().toString();
 			if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
 				handler.enterOnlyNumbers(key, txtKeyword, 10);
+			} else if (searchTypeName.equalsIgnoreCase("CMND/CCCD")) {
+				handler.enterOnlyNumbers(key, txtKeyword, 12);
 			}
 		}
 	}
@@ -316,7 +318,7 @@ public class DialogChonKhachHang extends JDialog
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		
+
 	}
 
 	@Override
@@ -352,11 +354,8 @@ public class DialogChonKhachHang extends JDialog
 		txtPhoneNumber.setText(customer.getSoDienThoai());
 		String ngaySinhStr = ConvertTime.getInstance().convertTimeToString(customer.getNgaySinh(), "dd-MM-yyyy");
 		txtBirthDay.setText(ngaySinhStr);
-		boolean gender = customer.getGioiTinh();
-		txtGender.setText("Nữ");
-		if (gender == false) {
-			txtGender.setText("Nam");
-		}
+		String genderStr = customer.getGioiTinh() ? "Nữ" : "Nam";
+		txtGender.setText(genderStr);
 	}
 
 	/**

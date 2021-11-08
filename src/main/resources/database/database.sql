@@ -113,7 +113,7 @@ GO
 
 CREATE TABLE CTDichVu
 (
-    maDichVu VARCHAR(5) NOT NULL,
+    maDichVu VARCHAR(6) NOT NULL,
     maHoaDon VARCHAR(15) NOT NULL,
     soLuongDat INT NOT NULL DEFAULT(1) CHECK(soLuongDat > 0),
     donGia MONEY NOT NULL DEFAULT(0) CHECK(donGia >= 0),
@@ -369,7 +369,7 @@ GO
 INSERT INTO dbo.TaiKhoan
     (tenDangNhap, matKhau, tinhTrangTK)
 VALUES
-    ('phamdangdan', '123456', 1),
+    ('phamdangdan', '1234567', 1),
     ('huynhtuananh', '1234567', 1),
     ('langnhapsang', '1234567', 1),
     ('vominhhieu', '1234567', 1),
@@ -460,25 +460,25 @@ GO
 INSERT INTO dbo.CTDichVu
     (maDichVu, maHoaDon, soLuongDat, donGia, tienDichVu)
 VALUES
-    ('DV001', 'HD2021100100001', 1, 30000, 30000),
-    ('DV002', 'HD2021100100001', 2, 35000, 70000),
-    ('DV003', 'HD2021100100001', 2, 35000, 70000),
+    ('DV0001', 'HD2021100100001', 1, 30000, 30000),
+    ('DV0002', 'HD2021100100001', 2, 35000, 70000),
+    ('DV0003', 'HD2021100100001', 2, 35000, 70000),
 
-    ('DV003', 'HD2021100100002', 2, 35000, 70000),
-    ('DV002', 'HD2021100100002', 2, 35000, 70000),
-    ('DV004', 'HD2021100100002', 1, 42000, 42000),
+    ('DV0003', 'HD2021100100002', 2, 35000, 70000),
+    ('DV0002', 'HD2021100100002', 2, 35000, 70000),
+    ('DV0004', 'HD2021100100002', 1, 42000, 42000),
 
-    ('DV001', 'HD2021100100003', 1, 30000, 30000),
-    ('DV003', 'HD2021100100003', 2, 75000, 70000),
-    ('DV007', 'HD2021100100003', 1, 32000, 32000),
+    ('DV0001', 'HD2021100100003', 1, 30000, 30000),
+    ('DV0003', 'HD2021100100003', 2, 75000, 70000),
+    ('DV0007', 'HD2021100100003', 1, 32000, 32000),
 
-    ('DV002', 'HD2021100200001', 2, 35000, 70000),
-    ('DV001', 'HD2021100200001', 4, 30000, 120000),
-    ('DV005', 'HD2021100200001', 1, 30000, 30000),
+    ('DV0002', 'HD2021100200001', 2, 35000, 70000),
+    ('DV0001', 'HD2021100200001', 4, 30000, 120000),
+    ('DV0005', 'HD2021100200001', 1, 30000, 30000),
 
-    ('DV002', 'HD2021100200002', 2, 35000, 70000),
-    ('DV001', 'HD2021100200002', 4, 30000, 120000),
-    ('DV005', 'HD2021100200002', 1, 30000, 30000)
+    ('DV0002', 'HD2021100200002', 2, 35000, 70000),
+    ('DV0001', 'HD2021100200002', 4, 30000, 120000),
+    ('DV0005', 'HD2021100200002', 1, 30000, 30000)
 GO
 
 
@@ -1029,6 +1029,8 @@ BEGIN
         AND dv.maLDV = ldv.maLDV
 END
 GO
+-- exec USP_getServiceDetailListByBillId 'HD2021100100001'
+-- go
 
 CREATE PROC USP_getServiceDetailByBillIdAndServiceId
     @billId VARCHAR(15),
@@ -1054,10 +1056,10 @@ END
 GO
 
 CREATE PROC USP_insertServiceDetail
-    @serviceId VARCHAR(5),
+    @serviceId VARCHAR(6),
     @billId VARCHAR(15),
-    @price MONEY,
-    @quantityOrder INT
+    @quantityOrder INT,
+    @price MONEY
 AS
 BEGIN
     DECLARE @isExitsCTDichVu VARCHAR(15)
@@ -1109,7 +1111,7 @@ BEGIN
             (@billId, @serviceId, @quantityOrder, @price, @totalPriceService)
 
         UPDATE dbo.DichVu
-                SET soLuongTon = @soLuongTon - @quantityOrder
+                SET soLuongTon = @quantityInStock - @quantityOrder
                 WHERE maDichVu = @serviceId
     END
 END

@@ -168,13 +168,9 @@ public class PnLoaiDichVu extends JPanel
 		pnlInfo.add(lblServiceTypeID);
 
 		txtServiceTypeID = new JTextField();
-		txtServiceTypeID.setEditable(false);
-		txtServiceTypeID.setForeground(Color.WHITE);
-		txtServiceTypeID.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtServiceTypeID.setBounds(258, 30, 250, 20);
 		txtServiceTypeID.setToolTipText("Mã loại dịch vụ");
 		CustomUI.getInstance().setCustomTextFieldOff(txtServiceTypeID);
-		txtServiceTypeID.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		pnlInfo.add(txtServiceTypeID);
 
 		JLabel lblServiceTypeName = new JLabel("Tên loại dịch vụ:");

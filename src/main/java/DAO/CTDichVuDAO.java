@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import entity.CTDichVu;
+import entity.DichVu;
 
 public class CTDichVuDAO {
     private static CTDichVuDAO instance = new CTDichVuDAO();
@@ -85,7 +86,7 @@ public class CTDichVuDAO {
     /**
      * Thêm một chi tiết dịch vụ
      * 
-     * @param serviceInfo   {@code CTDichVu}: chi tiết dịch vụ cần thêm
+     * @param serviceDetail   {@code CTDichVu}: chi tiết dịch vụ cần thêm
      * @param quantity {@code int}: số lượng đặt
      * @param billId   {@code String}: mã hóa đơn
      * @return {@code boolean}: kết quả trả về của câu truy vấn
@@ -94,9 +95,10 @@ public class CTDichVuDAO {
      *         <li>Nếu thất bại thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean insertServiceDetail(CTDichVu serviceInfo, int quantity, String billId) {
-        String query = "{CALL USP_insertServiceDetail( ? , ? , ? )}";
-        Object[] parameter = new Object[] { serviceInfo.getDichVu().getMaDichVu(), billId, quantity };
+    public boolean insertServiceDetail(CTDichVu serviceDetail, int quantity, String billId) {
+        String query = "{CALL USP_insertServiceDetail( ? , ? , ? , ? )}";
+        DichVu service = serviceDetail.getDichVu();
+        Object[] parameter = new Object[] { service.getMaDichVu(), billId, quantity, serviceDetail.getDonGia() };
         int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         return result > 0;
     }

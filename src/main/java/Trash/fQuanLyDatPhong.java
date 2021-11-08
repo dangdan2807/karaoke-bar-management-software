@@ -722,7 +722,8 @@ public class fQuanLyDatPhong extends JFrame
 								message = "Dịch vụ chưa được thêm nên không thể hủy";
 							}
 						} else {
-							serviceInfo = new CTDichVu(orderQuantity, service);
+							double servicePrice = service.getGiaBan();
+							serviceInfo = new CTDichVu(orderQuantity, servicePrice, service);
 							result = CTDichVuDAO.getInstance().insertServiceDetail(serviceInfo, orderQuantity,
 									bill.getMaHoaDon());
 						}
