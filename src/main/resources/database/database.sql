@@ -116,6 +116,7 @@ CREATE TABLE CTDichVu
     maDichVu VARCHAR(5) NOT NULL,
     maHoaDon VARCHAR(15) NOT NULL,
     soLuongDat INT NOT NULL DEFAULT(1) CHECK(soLuongDat > 0),
+    donGia MONEY NOT NULL DEFAULT(0) CHECK(donGia >= 0),
     tienDichVu MONEY NOT NULL DEFAULT(0) CHECK(tienDichVu >= 0),
     PRIMARY KEY (maDichVu, maHoaDon),
     FOREIGN KEY (maDichVU) REFERENCES dbo.DichVu (maDichVu),
@@ -457,27 +458,27 @@ VALUES
 GO
 
 INSERT INTO dbo.CTDichVu
-    (maDichVu, maHoaDon, soLuongDat, tienDichVu)
+    (maDichVu, maHoaDon, soLuongDat, donGia, tienDichVu)
 VALUES
-    ('DV001', 'HD2021100100001', 1, 30000),
-    ('DV002', 'HD2021100100001', 2, 70000),
-    ('DV003', 'HD2021100100001', 2, 70000),
+    ('DV001', 'HD2021100100001', 1, 30000, 30000),
+    ('DV002', 'HD2021100100001', 2, 35000, 70000),
+    ('DV003', 'HD2021100100001', 2, 35000, 70000),
 
-    ('DV003', 'HD2021100100002', 2, 70000),
-    ('DV002', 'HD2021100100002', 2, 70000),
-    ('DV004', 'HD2021100100002', 1, 42000),
+    ('DV003', 'HD2021100100002', 2, 35000, 70000),
+    ('DV002', 'HD2021100100002', 2, 35000, 70000),
+    ('DV004', 'HD2021100100002', 1, 42000, 42000),
 
-    ('DV001', 'HD2021100100003', 1, 30000),
-    ('DV003', 'HD2021100100003', 2, 70000),
-    ('DV007', 'HD2021100100003', 1, 32000),
+    ('DV001', 'HD2021100100003', 1, 30000, 30000),
+    ('DV003', 'HD2021100100003', 2, 75000, 70000),
+    ('DV007', 'HD2021100100003', 1, 32000, 32000),
 
-    ('DV002', 'HD2021100200001', 2, 70000),
-    ('DV001', 'HD2021100200001', 4, 120000),
-    ('DV005', 'HD2021100200001', 1, 30000),
+    ('DV002', 'HD2021100200001', 2, 35000, 70000),
+    ('DV001', 'HD2021100200001', 4, 30000, 120000),
+    ('DV005', 'HD2021100200001', 1, 30000, 30000),
 
-    ('DV002', 'HD2021100200002', 2, 70000),
-    ('DV001', 'HD2021100200002', 4, 120000),
-    ('DV005', 'HD2021100200002', 1, 30000)
+    ('DV002', 'HD2021100200002', 2, 35000, 70000),
+    ('DV001', 'HD2021100200002', 4, 30000, 120000),
+    ('DV005', 'HD2021100200002', 1, 30000, 30000)
 GO
 
 
@@ -993,21 +994,19 @@ CREATE PROC USP_getServiceDetailListByRoomId
     @roomId VARCHAR(5)
 AS
 BEGIN
-    SELECT cthd.soLuongDat,
+    SELECT ctdv.soLuongDat, ctdv.donGia,
         dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
-        hd.maHoaDon, hd.maKH, hd.maNhanVien, hd.ngayGioDat,
-        hd.ngayGioTra, hd.tinhTrangHD,
         ldv.maLDV, ldv.tenLDV,
-        p.maLP, p.maPhong, p.tinhTrangP, p.viTri
-    FROM dbo.CTDichVu cthd,
+        p.maPhong
+    FROM dbo.CTDichVu ctdv,
         dbo.HoaDon hd,
         dbo.DichVu dv,
         dbo.LoaiDichVu ldv,
         dbo.Phong p,
         dbo.LoaiPhong lp
-    WHERE cthd.maHoaDon = hd.maHoaDon
+    WHERE ctdv.maHoaDon = hd.maHoaDon
         AND hd.maPhong = p.maPhong
-        AND cthd.maDichVu = dv.maDichVu
+        AND ctdv.maDichVu = dv.maDichVu
         AND dv.maLDV = ldv.maLDV
         AND p.maPhong = @roomId
         AND p.maLP = lp.maLP
@@ -1019,14 +1018,14 @@ CREATE PROC USP_getServiceDetailListByBillId
     @billId VARCHAR(15)
 AS
 BEGIN
-    SELECT cthd.soLuongDat, cthd.maHoaDon, cthd.tienDichVu,
+    SELECT ctdv.soLuongDat, ctdv.maHoaDon, ctdv.tienDichVu, ctdv.donGia,
         dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
         ldv.maLDV, ldv.tenLDV
-    FROM dbo.CTDichVu cthd,
+    FROM dbo.CTDichVu ctdv,
         dbo.DichVu dv,
         dbo.LoaiDichVu ldv
-    WHERE cthd.maHoaDon = @billId
-        AND cthd.maDichVu = dv.maDichVu
+    WHERE ctdv.maHoaDon = @billId
+        AND ctdv.maDichVu = dv.maDichVu
         AND dv.maLDV = ldv.maLDV
 END
 GO
@@ -1036,17 +1035,17 @@ CREATE PROC USP_getServiceDetailByBillIdAndServiceId
     @serviceId VARCHAR(5)
 AS
 BEGIN
-    SELECT cthd.soLuongDat,
+    SELECT ctdv.soLuongDat, ctdv.donGia,
         dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
         ldv.maLDV, ldv.tenLDV,
         hd.maHoaDon, p.maLP
-    FROM dbo.CTDichVu cthd,
+    FROM dbo.CTDichVu ctdv,
         dbo.HoaDon hd,
         dbo.DichVu dv,
         dbo.LoaiDichVu ldv,
         dbo.Phong p
-    WHERE cthd.maHoaDon = hd.maHoaDon
-        AND cthd.maDichVu = dv.maDichVu
+    WHERE ctdv.maHoaDon = hd.maHoaDon
+        AND ctdv.maDichVu = dv.maDichVu
         AND dv.maLDV = ldv.maLDV
         AND hd.maPhong = p.maPhong
         AND hd.maHoaDon = @billId
@@ -1057,20 +1056,20 @@ GO
 CREATE PROC USP_insertServiceDetail
     @serviceId VARCHAR(5),
     @billId VARCHAR(15),
+    @price MONEY,
     @quantityOrder INT
 AS
 BEGIN
     DECLARE @isExitsCTDichVu VARCHAR(15)
-    DECLARE @soLuongCu INT = 1
-    DECLARE @tienDichVu MONEY = 0.0
-    DECLARE @soLuongTon INT = 0
-    DECLARE @price MONEY = 0
+    DECLARE @oldQuantity INT = 0
+    DECLARE @totalPriceService MONEY = 0.0
+    DECLARE @quantityInStock INT = 0
 
-    SELECT @soLuongTon = dv.soLuongTon, @price = dv.giaBan
+    SELECT @quantityInStock = dv.soLuongTon
     FROM dbo.DichVu dv
     WHERE dv.maDichVu = @serviceId
 
-    SELECT @isExitsCTDichVu = ctdv.maHoaDon , @soLuongCu = ctdv.soLuongDat
+    SELECT @isExitsCTDichVu = ctdv.maHoaDon , @oldQuantity = ctdv.soLuongDat
     FROM dbo.CTDichVu ctdv, dbo.DichVu dv
     WHERE ctdv.maDichVu = dv.maDichVu
         AND ctdv.maHoaDon = @billId
@@ -1079,13 +1078,14 @@ BEGIN
     -- hóa đơn tồn tại -> cập nhật
     IF(@isExitsCTDichVu IS NOT NULL)
         BEGIN
-        DECLARE @soLuongMoi INT = @quantityOrder + @soLuongCu
-        IF(@soLuongMoi > 0)
-            BEGIN
-            SET @tienDichVu = @soLuongMoi * @price
+        DECLARE @newQuantity INT = @quantityOrder + @oldQuantity
+        IF(@newQuantity > 0)
+        BEGIN
+            SET @totalPriceService = @newQuantity * @price
             UPDATE dbo.CTDichVu
-                SET soLuongDat = @soLuongMoi,
-                    tienDichVu = @tienDichVu
+                SET soLuongDat = @newQuantity,
+                    tienDichVu = @totalPriceService,
+                    donGia = @price
                 WHERE maHoaDon = @billId
                 AND maDichVu = @serviceId
         END
@@ -1096,17 +1096,17 @@ BEGIN
                 AND maDichVu = @serviceId
         END
         UPDATE dbo.DichVu
-            SET soLuongTon = @soLuongTon - @quantityOrder
+            SET soLuongTon = @quantityInStock - @quantityOrder
             WHERE maDichVu = @serviceId
     END
     -- hóa đơn không tồn tại -> tạo mới
     ELSE
         BEGIN
-        SET @tienDichVu = @quantityOrder * @price
+        SET @totalPriceService = @quantityOrder * @price
         INSERT INTO dbo.CTDichVu
-            (maHoaDon, maDichVu, soLuongDat, tienDichVu)
+            (maHoaDon, maDichVu, soLuongDat, donGia, tienDichVu)
         VALUES
-            (@billId, @serviceId, @quantityOrder, @tienDichVu)
+            (@billId, @serviceId, @quantityOrder, @price, @totalPriceService)
 
         UPDATE dbo.DichVu
                 SET soLuongTon = @soLuongTon - @quantityOrder

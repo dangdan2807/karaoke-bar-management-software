@@ -315,6 +315,7 @@ public class HoaDon {
 	 * Thêm một chi tiết dịch vụ vào hóa đơn
 	 * 
 	 * @param dichVu     {@code DichVu}: dịch vụ được thêm
+	 * @param donGia     {@code double}: Giá bán tại thời điểm tạo hóa đơn
 	 * @param soLuongDat {@code int}: số lượng đặt
 	 * @return {@code boolean}: kết quả trả về của câu truy vấn
 	 *         <ul>
@@ -322,8 +323,8 @@ public class HoaDon {
 	 *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
 	 *         </ul>
 	 */
-	public boolean themCTDichVu(DichVu dichVu, int soLuongDat) {
-		CTDichVu ctDV = new CTDichVu(soLuongDat, dichVu);
+	public boolean themCTDichVu(DichVu dichVu, int soLuongDat, double donGia) {
+		CTDichVu ctDV = new CTDichVu(soLuongDat, donGia, dichVu);
 		if (ctDSDichVu.contains(ctDV)) {
 			return false;
 		}
