@@ -144,91 +144,13 @@ VALUES
     ('LDV010', N'Mì'),
     ('LDV011', N'Món gà'),
     ('LDV012', N'Món bò'),
-    ('LDV013', N'Món heo')
+    ('LDV013', N'Món heo'),
+    ('LDV014', N'Khác')
 GO
 
 INSERT INTO dbo.DichVu
     (maDichVu, tenDichVu, giaBan, soLuongTon, maLDV)
 VALUES
-    -- ('DV001', N'Thạch Dừa Nha Đam', 30000, 10, 'LDV001'),
-    -- ('DV002', N'Thạch Dừa Dâu', 35000, 50, 'LDV001'),
-    -- ('DV003', N'Thạch Dừa Bạc Hà', 35000, 30, 'LDV001'),
-    -- ('DV004', N'Thạch Dừa Cam tươi', 42000, 20, 'LDV001'),
-    -- ('DV005', N'Thạch Dừa Xoài', 30000, 15, 'LDV001'),
-    -- ('DV006', N'Thạch Dừa Yaourt', 42000, 10, 'LDV001'),
-
-    -- ('DV007', N'Iron man', 32000, 26, 'LDV001'),
-    -- ('DV008', N'Moscow Beer', 32000, 84, 'LDV001'),
-    -- ('DV009', N'Long Island iced Tea', 32000, 2, 'LDV001'),
-
-    -- ('DV010', N'Heineken (Pháp)', 50000, 84, 'LDV001'),
-    -- ('DV011', N'Heineken (Lon)', 30000, 85, 'LDV001'),
-    -- ('DV012', N'Heineken (Chai)', 27000, 72, 'LDV001'),
-    -- ('DV013', N'Spy', 65000, 83, 'LDV001'),
-    -- ('DV014', N'Budweiser (Lon/Chai)', 33000, 62, 'LDV001'),
-    -- ('DV015', N'Tiger (Chai)', 24000, 82, 'LDV001'),
-    -- ('DV016', N'Tiger Crystal (Chai)', 27000, 75, 'LDV001'),
-
-    -- ('DV017', N'Sinh tố Yaourt Đá', 35000, 72, 'LDV001'),
-    -- ('DV018', N'Sinh tố Yaourt Lô Hội Cam', 60000, 63, 'LDV001'),
-
-    -- ('DV019', N'SoDa', 30000, 28, 'LDV001'),
-    -- ('DV020', N'SoDa Xí Muội', 45000, 100, 'LDV001'),
-    -- ('DV021', N'SoDa Chanh Đường', 45000, 100, 'LDV001'),
-    -- ('DV022', N'Pepsi', 30000, 100, 'LDV001'),
-    -- ('DV023', N'7 Up', 30000, 83, 'LDV001'),
-    -- ('DV024', N'Mirinda(Sarsi)', 30000, 83, 'LDV001'),
-    -- ('DV025', N'Sting', 30000, 83, 'LDV001'),
-    -- ('DV026', N'Red Bull', 25000, 83, 'LDV001'),
-    -- ('DV027', N'Red Bull', 25000, 83, 'LDV001'),
-
-    -- ('DV028', N'Gỏi Bưởi Hải Sản', 130000, 46, 'LDV002'),
-    -- ('DV029', N'Gỏi Miến Thái Lan', 130000, 35, 'LDV002'),
-    -- ('DV030', N'Gỏi Sứa Tôm Thịt', 130000, 28, 'LDV002'),
-
-    -- ('DV031', N'Soup Bắp Cua Gà Xé', 40000, 28, 'LDV002'),
-    -- ('DV032', N'Soup Hải Sản Thái Lan', 40000, 92, 'LDV002'),
-
-    -- ('DV033', N'Salad Thập cẩm', 110000, 18, 'LDV002'),
-    -- ('DV034', N'Salad Cá Ngừ', 130000, 29, 'LDV002'),
-    -- ('DV035', N'Salad Trộn Thịt Bò', 130000, 83, 'LDV002'),
-
-    -- ('DV036', N'Cà Ri Tôm', 260000, 28, 'LDV002'),
-    -- ('DV037', N'Tôm Rang Me', 260000, 28, 'LDV002'),
-    -- ('DV038', N'Tôm Sú Hấp Bia / Nước Dừa', 260000, 88, 'LDV002'),
-
-    -- ('DV039', N'Cua Hấp Bia / Nước Dừa', 300000, 83, 'LDV002'),
-    -- ('DV040', N'Cua Lột Chiên Giòn', 250000, 15, 'LDV002'),
-    -- ('DV041', N'Cua Rang Me', 310000, 18, 'LDV002'),
-
-    -- ('DV042', N'Bò Cuộn Phô Mai', 160000, 18, 'LDV002'),
-    -- ('DV043', N'Bò Lúc Lắc', 190000, 93, 'LDV002'),
-
-    -- ('DV044', N'Heo Rừng Nướng Muối Ớt', 140000, 26, 'LDV002'),
-
-    -- ('DV045', N'Lẫu Cá Diêu Hồng', 275000, 26, 'LDV002'),
-    -- ('DV046', N'Lẫu Hải Sản', 330000, 26, 'LDV002'),
-    -- ('DV047', N'Lẫu Thái Lan', 330000, 73, 'LDV002'),
-
-    -- ('DV048', N'Cánh Gà Chiên Nước Mắm', 120000, 24, 'LDV002'),
-    -- ('DV049', N'Gà Hấp Thái Lan', 350000, 47, 'LDV002'),
-    -- ('DV050', N'Gà Quay Tứ Xuyên', 350000, 23, 'LDV002'),
-
-    -- ('DV051', N'Mì Xào Bò', 150000, 29, 'LDV001'),
-    -- ('DV052', N'Hũ Tiếu Xào Bò', 150000, 38, 'LDV001'),
-    -- ('DV053', N'Miến Xào Tôm', 150000, 34, 'LDV001'),
-
-    -- ('DV054', N'Mực Nướng Muối Ớt', 160000, 34, 'LDV002'),
-    -- ('DV055', N'Khô Mực Nướng', 130000, 47, 'LDV002'),
-    -- ('DV056', N'Mực Xào Sa Tế', 160000, 8, 'LDV002'),
-    -- ('DV057', N'Mực Chiên Xù', 160000, 6, 'LDV002'),
-    -- ('DV058', N'Khô Chiên Giòn', 160000, 76, 'LDV002'),
-
-    -- ('DV059', N'Cháo Hải Sản', 250000, 65, 'LDV002'),
-    -- ('DV060', N'Cháo Mực', 250000, 89, 'LDV002'),
-    -- ('DV061', N'Cháo Tôm Tươi', 200000, 67, 'LDV002'),
-    -- ('DV062', N'Cháo Cá', 220000, 8, 'LDV002')
-
     -- thạch dừa
     ('DV0001', N'Thạch Dừa Nha Đam', 30000, 10, 'LDV001'),
     ('DV0002', N'Thạch Dừa Dâu', 35000, 50, 'LDV001'),
@@ -363,7 +285,10 @@ VALUES
     ('DV0109', N'Sườn Heo Chiên Ngũ Vị', 120000, 45, 'LDV013'),
     ('DV0110', N'Bào Tử Xào Cải Chua', 120000, 85, 'LDV013'),
     ('DV0111', N'Bào Tử Xào Sa Tế', 120000, 85, 'LDV013'),
-    ('DV0112', N'Bào Tử Hấp Gừng', 120000, 85, 'LDV013')
+    ('DV0112', N'Bào Tử Hấp Gừng', 120000, 85, 'LDV013'),
+
+    -- Khác
+    ('DV0113', N'Khăn Ướt', 5000, 200, 'LDV014')
 GO
 
 INSERT INTO dbo.TaiKhoan
@@ -463,6 +388,7 @@ VALUES
     ('DV0001', 'HD2021100100001', 1, 30000, 30000),
     ('DV0002', 'HD2021100100001', 2, 35000, 70000),
     ('DV0003', 'HD2021100100001', 2, 35000, 70000),
+    ('DV0113', 'HD2021100100001', 3, 5000, 150000),
 
     ('DV0003', 'HD2021100100002', 2, 35000, 70000),
     ('DV0002', 'HD2021100100002', 2, 35000, 70000),
@@ -859,7 +785,6 @@ BEGIN
     WHERE hd.maHoaDon = @billId
 END
 GO
-
 
 CREATE PROC USP_insertBill
     @billId VARCHAR(15),

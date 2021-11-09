@@ -10,6 +10,7 @@ import javax.swing.*;
 import org.bouncycastle.util.test.Test;
 
 import DAO.*;
+import entity.HoaDon;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -127,7 +128,8 @@ public class test {
     }
 
     public static void main(String[] args) {
-        int key = 0;
+        int key = 3;
+        String billId = "HD2021100100001";
         switch (key) {
             case 0:
             final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
@@ -142,10 +144,12 @@ public class test {
             System.out.println(createNewServiceID());
             break;
         case 3:
-            ExportBill.getInstance().exportBillToExcel("HD2021010100001", "./hd.xlsx");
+            ExportBill.getInstance().exportBillToExcel(billId, "D:/hd.xlsx");
             break;
         case 4:
-            ExportBill.getInstance().exportBillToPdf(1, "./hd.xlsx");
+            ExportBill.getInstance().exportBillToPdf(billId, "D:/hd.pdf");
+            // HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billId);
+            // System.out.println(bill);
             break;
         case 5:
             BigDecimal a = new BigDecimal("0.00");
