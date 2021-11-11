@@ -18,9 +18,13 @@ import entity.*;
 
 public class PnHoaDon extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7158582925692848950L;
+
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
-
 	private JTable tblTableBill, tblTableBillInfo;
 	private DefaultTableModel modelTableBill, modelTableBillInfo;
 	private MyButton btnSearch, btnRefresh, btnBack;

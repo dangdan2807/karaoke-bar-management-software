@@ -10,7 +10,6 @@ import javax.swing.*;
 import org.bouncycastle.util.test.Test;
 
 import DAO.*;
-import entity.HoaDon;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -127,11 +126,27 @@ public class test {
         return newStaffIdStr;
     }
 
+    /**
+     * tính số giờ thuê phòng
+     * 
+     * @return {@code Double}: số giờ thuê phòng
+     */
+    public static Double tinhGioThue(Timestamp ngayGioDat, Timestamp ngayGioTra) {
+        int minutes = 0;
+        if (ngayGioTra != null && ngayGioDat != null) {
+            long difference = ngayGioTra.getTime() - ngayGioDat.getTime();
+            minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
+        }
+        
+        minutes = (int) minutes / 30;
+        return minutes * 1.0 / 2;
+    }
+
     public static void main(String[] args) {
-        int key = 3;
-        String billId = "HD2021100100001";
+        int key = 12;
+        String billId = "HD2021100200002";
         switch (key) {
-            case 0:
+        case 0:
             final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
             System.out.println(workingDir + "");
             URL location = Test.class.getProtectionDomain().getCodeSource().getLocation();
@@ -144,18 +159,18 @@ public class test {
             System.out.println(createNewServiceID());
             break;
         case 3:
-            ExportBill.getInstance().exportBillToExcel(billId, "D:/hd.xlsx");
+            ExportBill.getInstance().exportBillToExcel(billId, "D:");
             break;
         case 4:
-            ExportBill.getInstance().exportBillToPdf(billId, "D:/hd.pdf");
-            // HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billId);
-            // System.out.println(bill);
+            ExportBill.getInstance().exportBillToPdf(billId, "D:/");
             break;
         case 5:
-            BigDecimal a = new BigDecimal("0.00");
-            BigDecimal b = new BigDecimal("1.00");
-            System.out.println(a.add(b));
-            System.out.println(a.multiply(b));
+            BigDecimal a = new BigDecimal("1.00");
+            BigDecimal b = new BigDecimal("2.00");
+            System.out.println("a + b = "+ a.add(b));
+            System.out.println("a - b = "+ a.subtract(b));
+            System.out.println("a * b = " + a.multiply(b));
+            System.out.println("a / b = " + a.divide(b));
             break;
         case 6:
             String data = "8000.0";
@@ -189,6 +204,29 @@ public class test {
         case 10:
             String id = createNewBillId(Timestamp.valueOf("2021-10-02 00:00:00"));
             System.out.println(id);
+            break;
+        case 11:
+            String demoPath1 = "D:/123";
+            // D:/123 -> D:/123/
+            // D:/123/ -> D:/123/
+            // D:/123\\ -> D:/123\
+
+            String demoPath2 = demoPath1;
+            // ^.+[^\\\/]$
+            if (!demoPath1.matches("^.+[\\\\/]$")) {
+                demoPath1 += "/";
+            }
+            boolean result = false;
+            if (demoPath1.equalsIgnoreCase(demoPath2 + "/") && !demoPath1.endsWith("\\/")
+                    || demoPath1.equalsIgnoreCase(demoPath2)) {
+                result = true;
+            }
+            System.out.println(demoPath2 + " -> " + demoPath1 + " : " + result);
+            break;
+        case 12:
+            Timestamp ngayGioDat = Timestamp.valueOf("2021-10-02 00:00:00");
+            Timestamp ngayGioTra = Timestamp.valueOf("2021-10-03 00:00:00");
+            System.out.println(tinhGioThue(ngayGioDat, ngayGioTra));
             break;
         default:
             break;

@@ -19,7 +19,10 @@ import entity.NhanVien;
 
 public class PnLoaiDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7128176687439599864L;
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon addIcon = CustomUI.ADD_ICON;

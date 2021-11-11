@@ -15,7 +15,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class fDieuHuong extends JFrame implements ActionListener, MouseListener {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8033841194327699528L;
     protected JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
     private NhanVien staff = null;
     private String STAFF = "Nhân viên", MANAGER = "Quản lý";

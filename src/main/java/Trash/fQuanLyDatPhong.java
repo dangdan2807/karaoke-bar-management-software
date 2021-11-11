@@ -21,6 +21,10 @@ import entity.*;
 
 public class fQuanLyDatPhong extends JFrame
 		implements ActionListener, MouseListener, ItemListener, ChangeListener, FocusListener, KeyListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7935621774047432226L;
 	private JButton[] btnRoomList;
 	private int pnShowTableWidth = 310;
 	private int heightTable = 140;

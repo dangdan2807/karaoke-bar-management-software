@@ -9,6 +9,10 @@ import java.awt.event.*;
  * Tạo 1 {@code JButton} tự tùy chỉnh theo ý muốn
  */
 public class MyButton extends JButton implements MouseListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2799320686797730968L;
 	private String Label;
 	private Color colorShadow, colorFont;
 	private Image icon;

@@ -151,8 +151,8 @@ public class ExportBill {
      * @param merge     {@code CellRangeAddress}: hợp nhất dải ô
      * @param align     {@code HorizontalAlignment}: căn lề ô
      */
-    private void createRow(String textCell, int rowIndex, int cellIndex, int rowHeight, int fontSize,
-            boolean bold, boolean italic, boolean wrapText, CellRangeAddress merge, HorizontalAlignment align) {
+    private void createRow(String textCell, int rowIndex, int cellIndex, int rowHeight, int fontSize, boolean bold,
+            boolean italic, boolean wrapText, CellRangeAddress merge, HorizontalAlignment align) {
         XSSFFont font = workbook.createFont();
         font.setBold(bold);
         font.setItalic(italic);
@@ -322,8 +322,8 @@ public class ExportBill {
         ++rowIndex; // 1
 
         // địa chỉ
-        String address = "12 Nguyễn Văn Bảo, Phường 4, Gò Vấp \nThành phố Hồ Chí Minh";
-        createRow(address, rowIndex, cellIndex, rowHeight + 300, fontSize, false, false, true,
+        String address = "12 Nguyễn Văn Bảo, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh";
+        createRow(address, rowIndex, cellIndex, rowHeight + 50, fontSize, false, false, true,
                 new CellRangeAddress(rowIndex, rowIndex, 0, 3), alignCenter);
         removeBorders(cellIndex);
         ++rowIndex; // 2
@@ -687,9 +687,9 @@ public class ExportBill {
     }
 
     /**
-     * Xuất file excel đã tạo
+     * Tạo file excel
      * 
-     * @param path     {@code String}: đường dẫn đến file excel
+     * @param path     {@code String}: đường dẫn đến thư mục nơi lưu file excel
      * @param rowIndex {@code int}: vị trí của dòng cuối hóa đơn
      */
     private void writeFileExcel(String path, int rowIndex) {
@@ -722,12 +722,18 @@ public class ExportBill {
     }
 
     /**
-     * Tạo file excel
+     * Xuất file excel đến thư mục đã chỉ định, tên file sẽ là mã hóa đơn
      * 
      * @param billId {@code int}: mã hóa đơn
-     * @param path   {@code String}: đường dẫn đến file excel
+     * @param path   {@code String}: đường dẫn đến thư mục nơi lưu file excel
      */
     public void exportBillToExcel(String billId, String path) {
+        String fileName = billId + ".xlsx";
+        if (!path.matches("^.+[\\\\/]$")) {
+            path += "/";
+        }
+        String filePath = path + fileName;
+
         HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billId);
         Phong room = PhongDAO.getInstance().getRoomByBillId(billId);
         bill.setPhong(room);
@@ -754,7 +760,7 @@ public class ExportBill {
         rowIndex = showServiceOrderExcel(bill, rowIndex);
         rowIndex = showTotalPriceExcel(bill, rowIndex);
         rowIndex = showFooterExcel(rowIndex, bill.getPhong());
-        writeFileExcel(path, rowIndex);
+        writeFileExcel(filePath, rowIndex);
     }
 
     /**
@@ -764,19 +770,23 @@ public class ExportBill {
      * @param path   {@code String}: đường dẫn đến file pdf
      */
     public void exportBillToPdf(String billId, String path) {
-        Document doc = new Document();
+        String fileName = billId + ".pdf";
+        if (!path.matches("^.+[\\\\/]$")) {
+            path += "/";
+        }
+        String filePath = path + fileName;
+        Document document = new Document();
         try {
-            PdfWriter.getInstance(doc, new FileOutputStream(path));
-            doc.open();
-            Paragraph paraKaraokeName = new Paragraph("KARAOKE DASH");
-            paraKaraokeName.setAlignment(Element.ALIGN_CENTER);
-            Font font = new Font();
-            font.setSize(100);
-            font.setStyle(Font.BOLD);
-            paraKaraokeName.setFont(font);
+            PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
 
-            doc.add(paraKaraokeName);
-            doc.close();
+            Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+            Chunk chunk = new Chunk("KARAOKE DASH", font);
+            document.add(chunk);
+            // Paragraph paraKaraokeName = new Paragraph("KARAOKE DASH");
+            // document.add(paraKaraokeName);
+
+            document.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (DocumentException e) {

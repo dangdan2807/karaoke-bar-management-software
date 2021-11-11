@@ -20,6 +20,10 @@ import entity.NhanVien;
 
 public class PnKhachHang extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8761327929735598729L;
 	private JTable tblTableCustomer;
 	private DefaultTableModel modelTable;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,

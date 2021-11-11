@@ -11,7 +11,11 @@ import UI.PanelCustom.*;
 import entity.NhanVien;
 
 public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
-    private static fQuanTri instance;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2840284348303179625L;
+	private static fQuanTri instance;
     private JButton btnBackStaff, btnBackCustomer, btnBackRoomType, btnBackRoom, btnBackServiceType;
     private JButton btnBackService, btnBackBill;
 
@@ -31,7 +35,7 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
      */
     public fQuanTri(NhanVien staff) {
         setTitle("Quản Lý Hệ Thống");
-        setSize(1275, 655);
+        setSize(1280, 655);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

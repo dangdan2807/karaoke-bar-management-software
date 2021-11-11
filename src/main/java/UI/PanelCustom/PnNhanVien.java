@@ -21,6 +21,10 @@ import java.util.ArrayList;
 
 public class PnNhanVien extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5815784686959486363L;
 	private JTable tblTableStaff;
 	private DefaultTableModel modelTableStaff;
 	private JTextField txtCMND, txtPhoneNumber, txtStaffName, txtStaffID, txtBFieldSearch, txtKeyWord;

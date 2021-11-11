@@ -11,6 +11,10 @@ import UI.PanelCustom.MyButton;
 import entity.NhanVien;
 
 public class fDangNhap extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4368075097887104646L;
 	private JTextField txtUsername, txtPassword;
 	private JButton btnLogin;
 

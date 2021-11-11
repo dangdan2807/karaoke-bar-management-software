@@ -17,7 +17,11 @@ import java.sql.Date;
  * {@code kDatePicker} dùng để tạo 1 {@code JPanel} có thể dùng để chọn ngày
  */
 public class kDatePicker extends JPanel implements ActionListener, MouseListener {
-    private JTextField txt;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2154011239157650194L;
+	private JTextField txt;
     private JButton btn;
     private int widthDefault = 150;
     private int heightDefault = 20;

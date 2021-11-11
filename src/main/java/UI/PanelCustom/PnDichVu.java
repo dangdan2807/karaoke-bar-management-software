@@ -16,7 +16,10 @@ import entity.*;
 
 public class PnDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -356436856151590278L;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 	private ImageIcon bg = new ImageIcon(

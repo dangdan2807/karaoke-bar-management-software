@@ -13,7 +13,11 @@ import java.awt.event.*;
 
 public class fDieuHuong extends JFrame implements ActionListener {
 
-    private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8033841194327699528L;
+	private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
     private NhanVien staffLogin = null;
     private String STAFF = "Nhân viên", MANAGER = "Chủ quán";
     private ImageIcon profileIcon = new ImageIcon(

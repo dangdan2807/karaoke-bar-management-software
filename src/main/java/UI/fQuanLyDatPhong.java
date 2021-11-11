@@ -19,6 +19,10 @@ import entity.*;
 
 public class fQuanLyDatPhong extends JFrame
 		implements ActionListener, MouseListener, ItemListener, ChangeListener, FocusListener, KeyListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7935621774047432226L;
 	private JButton[] btnRoomList;
 	private int pnShowTableWidth = 310;
 	private int heightTable = 140;
@@ -68,6 +72,8 @@ public class fQuanLyDatPhong extends JFrame
 		this.staffLogin = staff;
 		setTitle("Phần Mềm Quản Lý Quán Karaoke");
 		setSize(1280, 700);
+		// setExtendedState(MAXIMIZED_BOTH);
+		// setMinimumSize(new Dimension(1280, 700));
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -106,7 +112,7 @@ public class fQuanLyDatPhong extends JFrame
 		pnlMain.setLayout(null);
 
 		JPanel pnlTitle = new JPanel();
-		pnlTitle.setBounds(0, 0, 1264, 39);
+		pnlTitle.setBounds(0, 0, 1280, 39);
 		pnlTitle.setLayout(null);
 		pnlTitle.setOpaque(false);
 		pnlMain.add(pnlTitle);
@@ -331,7 +337,7 @@ public class fQuanLyDatPhong extends JFrame
 		CustomUI.getInstance().setCustomTextFieldOff(txtEndTime);
 		pnlBiffInfo.add(txtEndTime);
 
-		JLabel lblRoomLocation = new JLabel("Vị Trí Phòng:");
+		JLabel lblRoomLocation = new JLabel("Vị Trí:");
 		CustomUI.getInstance().setCustomLabel(lblRoomLocation);
 		lblRoomLocation.setBounds(248, 49, 82, 20);
 		pnlBiffInfo.add(lblRoomLocation);

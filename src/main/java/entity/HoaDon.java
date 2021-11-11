@@ -347,7 +347,8 @@ public class HoaDon {
 			long difference = ngayGioTra.getTime() - ngayGioDat.getTime();
 			minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
 		}
-		return minutes * 1.0 / 60;
+		minutes = (int) minutes / 15;
+		return minutes * 1.0 / 4;
 	}
 
 	/**

@@ -15,7 +15,10 @@ import UI.fQuanTri;
 import entity.*;
 
 public class PnPhong extends JPanel implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8410052847174456849L;
 	private JTable tblTableRoom;
 	private DefaultTableModel modelTableRoom;
 	private ImageIcon bg = new ImageIcon(

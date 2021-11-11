@@ -16,7 +16,11 @@ import javax.swing.border.TitledBorder;
 
 public class fThongTinCaNhan extends JDialog
         implements ActionListener, KeyListener, MouseListener, FocusListener, ItemListener {
-    private JLabel lblUsername, lblFullName, lblPassword, lblNewPassword, lblReNewPassword, lblGender;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7162277696412530687L;
+	private JLabel lblUsername, lblFullName, lblPassword, lblNewPassword, lblReNewPassword, lblGender;
     private JLabel lblSalary;
     private JTextField txtUsername, txtFullName, txtPassword, txtNewPassword, txtReNewPassword;
     private JTextField txtCMND, txtPhoneNumber, txtPosition, txtSalary, txtEmpID;

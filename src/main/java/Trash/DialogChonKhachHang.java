@@ -18,6 +18,10 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 
 public class DialogChonKhachHang extends JDialog
         implements ActionListener, MouseListener, FocusListener, KeyListener, ItemListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2630390669224093490L;
     private JButton[] btnCustomerList;
     private int pnShowTableWidth = 310;
     private int heightTable = 300;

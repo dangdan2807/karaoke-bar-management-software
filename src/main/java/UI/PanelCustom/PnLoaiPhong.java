@@ -19,6 +19,10 @@ import entity.NhanVien;
 
 public class PnLoaiPhong extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8227831825791723961L;
 	private JTable tblTableTypeRoom;
 	private DefaultTableModel modelTableTypeRoom;
 	private JTextField txtBFieldSearch, txtKeyWord, txtRoomTypeId, txtRoomTypeName;
