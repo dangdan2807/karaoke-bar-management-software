@@ -44,7 +44,7 @@ public class fQuanLyDatPhong extends JFrame
 	private JMenuBar mnuMenuBar;
 
 	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+			CustomUI.BACKGROUND.getImage().getScaledInstance(1280, 650, Image.SCALE_SMOOTH));
 	private ImageIcon transferIcon = CustomUI.TRANSFER_ICON;
 	private ImageIcon refreshIcon = CustomUI.REFRESH_ICON;
 	private ImageIcon paymentIcon = CustomUI.PAYMENT_ICON;

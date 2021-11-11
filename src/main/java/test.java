@@ -16,9 +16,9 @@ import java.text.SimpleDateFormat;
 
 public class test {
     public static void testTime() {
-        String start = "2021/10/01 15:30:00";
-        String end = "2021/10/01 15:30:05";
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String start = "2021/10/01 23:30:00";
+        String end = "2021/10/01 00:30:05";
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy kk:mm:ss");
         java.util.Date date1 = null;
         try {
             date1 = format.parse(start);
@@ -32,6 +32,8 @@ public class test {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        System.out.println();
 
         long difference = date2.getTime() - date1.getTime();
         int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
@@ -137,13 +139,13 @@ public class test {
             long difference = ngayGioTra.getTime() - ngayGioDat.getTime();
             minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
         }
-        
+
         minutes = (int) minutes / 30;
         return minutes * 1.0 / 2;
     }
 
     public static void main(String[] args) {
-        int key = 12;
+        int key = -1;
         String billId = "HD2021100200002";
         switch (key) {
         case 0:
@@ -167,8 +169,8 @@ public class test {
         case 5:
             BigDecimal a = new BigDecimal("1.00");
             BigDecimal b = new BigDecimal("2.00");
-            System.out.println("a + b = "+ a.add(b));
-            System.out.println("a - b = "+ a.subtract(b));
+            System.out.println("a + b = " + a.add(b));
+            System.out.println("a - b = " + a.subtract(b));
             System.out.println("a * b = " + a.multiply(b));
             System.out.println("a / b = " + a.divide(b));
             break;
@@ -229,6 +231,16 @@ public class test {
             System.out.println(tinhGioThue(ngayGioDat, ngayGioTra));
             break;
         default:
+            String end = "12/12/11 23:22:09";
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            java.util.Date date = null;
+            try {
+                date = format.parse(end);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Time in 24Hours =" + new SimpleDateFormat("HH:mm").format(date));
+
             break;
         }
 
