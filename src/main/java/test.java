@@ -161,10 +161,10 @@ public class test {
             System.out.println(createNewServiceID());
             break;
         case 3:
-            ExportBill.getInstance().exportBillToExcel(billId, "D:");
+            // ExportBill.getInstance().exportBillToExcel(billId, "D:");
             break;
         case 4:
-            ExportBill.getInstance().exportBillToPdf(billId, "D:/");
+            // ExportBill.getInstance().exportBillToPdf(billId, "D:/");
             break;
         case 5:
             BigDecimal a = new BigDecimal("1.00");

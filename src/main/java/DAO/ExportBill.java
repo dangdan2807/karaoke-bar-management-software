@@ -2,7 +2,6 @@ package DAO;
 
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.*;
 import java.util.List;
 
 import com.itextpdf.text.*;
@@ -731,23 +730,12 @@ public class ExportBill {
      * @param billId {@code int}: mã hóa đơn
      * @param path   {@code String}: đường dẫn đến thư mục nơi lưu file excel
      */
-    public boolean exportBillToExcel(String billId, String path) {
-        String fileName = billId + ".xlsx";
+    public boolean exportBillToExcel(HoaDon bill, String path) {
+        String fileName = bill.getMaHoaDon() + ".xlsx";
         if (!path.matches("^.+[\\\\/]$")) {
             path += "/";
         }
         String filePath = path + fileName;
-
-        HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billId);
-        if(bill == null) {
-            return false;
-        }
-        Phong room = PhongDAO.getInstance().getRoomByBillId(billId);
-        bill.setPhong(room);
-        NhanVien staff = NhanVienDAO.getInstance().getStaffByBillId(billId);
-        bill.setNhanVien(staff);
-        KhachHang customer = KhachHangDAO.getInstance().getCustomerByBillId(billId);
-        bill.setKhachHang(customer);
         workbook = new XSSFWorkbook();
 
         sheet = workbook.createSheet("Hóa Đơn");
@@ -762,8 +750,6 @@ public class ExportBill {
         rowIndex = showHeaderExcel(rowIndex);
         rowIndex = showBillInfoExcel(bill, rowIndex);
         rowIndex = showServiceOrderHeaderExcel(rowIndex);
-        ArrayList<CTDichVu> billInfoList = CTDichVuDAO.getInstance().getServiceDetailListByBillId(billId);
-        bill.setDsCTDichVu(billInfoList);
         rowIndex = showServiceOrderExcel(bill, rowIndex);
         rowIndex = showTotalPriceExcel(bill, rowIndex);
         rowIndex = showFooterExcel(rowIndex);
@@ -1079,23 +1065,11 @@ public class ExportBill {
      * @param billId {@code String}: mã hóa đơn
      * @param path   {@code String}: đường dẫn đến file pdf
      */
-    public boolean exportBillToPdf(String billId, String path) {
-        String fileName = billId + ".pdf";
+    public boolean exportBillToPdf(HoaDon bill, String path) {
+        String fileName = bill.getMaHoaDon() + ".pdf";
         if (!path.matches("^.+[\\\\/]$")) {
             path += "/";
         }
-        HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billId);
-        if(bill == null) {
-            return false;
-        }
-        Phong room = PhongDAO.getInstance().getRoomByBillId(billId);
-        bill.setPhong(room);
-        NhanVien staff = NhanVienDAO.getInstance().getStaffByBillId(billId);
-        bill.setNhanVien(staff);
-        KhachHang customer = KhachHangDAO.getInstance().getCustomerByBillId(billId);
-        bill.setKhachHang(customer);
-        ArrayList<CTDichVu> billInfoList = CTDichVuDAO.getInstance().getServiceDetailListByBillId(billId);
-        bill.setDsCTDichVu(billInfoList);
 
         String filePath = path + fileName;
         Document document = new Document(PageSize.A4, 50, 50, 50, 50);

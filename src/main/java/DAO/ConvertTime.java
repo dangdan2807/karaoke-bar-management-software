@@ -31,13 +31,13 @@ public class ConvertTime {
      * chuỗi
      * 
      * @param date   {@code java.sql.Date}: ngày cần chuyển đổi ở kiểu dữ liệu
-     * @param format {@code String}: định dạng cần format. Ví dụ: {@code dd/MM/yyyy},
+     * @param formatTime {@code String}: định dạng cần format. Ví dụ: {@code dd/MM/yyyy},
      *               {@code hh:mm:ss}, {@code dd/MM/yyyy hh:mm:ss}, ...
      * @return {@code String}: chuỗi ngày giờ đã định dạng
      */
-    public String convertTimeToString(Date date, String format) {
+    public String convertTimeToString(Date date, String formatTime) {
         java.util.Date utilDate = new java.util.Date(date.getTime());
-        DateFormat df = new SimpleDateFormat(format);
+        DateFormat df = new SimpleDateFormat(formatTime);
         return df.format(utilDate);
     }
 
@@ -46,13 +46,13 @@ public class ConvertTime {
      * dạng chuỗi
      * 
      * @param date   {@code java.sql.Timestamp}: ngày cần chuyển đổi ở kiểu dữ liệu
-     * @param format {@code String}: định dạng cần format. Ví dụ: {@code dd/MM/yyyy},
+     * @param formatTime {@code String}: định dạng cần format. Ví dụ: {@code dd/MM/yyyy},
      *               {@code hh:mm:ss}, {@code dd/MM/yyyy hh:mm:ss}, ...
      * @return {@code String}: chuỗi ngày giờ đã định dạng
      */
-    public String convertTimeToString(Timestamp date, String format) {
+    public String convertTimeToString(Timestamp date, String formatTime) {
         java.util.Date utilDate = new java.util.Date(date.getTime());
-        DateFormat df = new SimpleDateFormat(format);
+        DateFormat df = new SimpleDateFormat(formatTime);
         return df.format(utilDate);
     }
 }

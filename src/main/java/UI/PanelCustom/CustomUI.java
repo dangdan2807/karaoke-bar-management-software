@@ -104,10 +104,10 @@ public class CustomUI {
      */
     public void setCustomTextFieldBill(JTextField txt) {
         txt.setEditable(false);
-        txt.setFont(new Font("Dialog", Font.PLAIN, 16));
         txt.setForeground(Color.WHITE);
         txt.setBorder(new EmptyBorder(0, 0, 0, 0));
         txt.setOpaque(false);
+        txt.setFont(new Font("Dialog", Font.PLAIN, 16));
     }
 
     /**
