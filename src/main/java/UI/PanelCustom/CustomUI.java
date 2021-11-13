@@ -36,6 +36,9 @@ public class CustomUI {
     public static final ImageIcon SELL_ICON = new ImageIcon(pathImg + "money_512.png");
     public static final ImageIcon MANAGER_ICON = new ImageIcon(pathImg + "administration_512.png");
     public static final ImageIcon UPDATE_PROFILE_ICON = new ImageIcon(pathImg + "update_profile_16.png");
+    public static final ImageIcon RENT_ROOM_ICON = new ImageIcon(pathImg + "rent_room_16.png");
+    public static final ImageIcon PDF_ICON = new ImageIcon(pathImg + "pdf_16.png");
+    public static final ImageIcon EXCEL_ICON = new ImageIcon(pathImg + "excel_16.png");
     public static final ImageIcon LOGO_ICON = new ImageIcon(pathImg + "Logo.png");
 
     /**
@@ -94,7 +97,7 @@ public class CustomUI {
     public void setCustomLabelBill(JLabel lbl) {
         lbl.setBackground(Color.WHITE);
         lbl.setForeground(Color.WHITE);
-        lbl.setFont(new Font("Dialog", Font.PLAIN, 16));
+        lbl.setFont(new Font("Dialog", Font.PLAIN, 14));
     }
 
     /**
@@ -107,7 +110,7 @@ public class CustomUI {
         txt.setForeground(Color.WHITE);
         txt.setBorder(new EmptyBorder(0, 0, 0, 0));
         txt.setOpaque(false);
-        txt.setFont(new Font("Dialog", Font.PLAIN, 16));
+        txt.setFont(new Font("Dialog", Font.PLAIN, 14));
     }
 
     /**

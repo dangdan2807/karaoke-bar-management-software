@@ -353,7 +353,6 @@ VALUES
     ('KH00000029', '200000029', N'Nguyễn Thái Huấn', 0, '0966904885', '1996-11-14'),
     ('KH00000030', '200000030', N'Phan Văn Học', 0, '0368232307', '1984-08-17'),
     ('KH00000031', '200000031', N'Vương Ánh Nga', 1, '0973704864', '1992-03-23'),
-    ('KH00000031', '200000031', N'Trần Anh Lâm', 0, '0393575926', '1993-09-20'),
     ('KH00000032', '200000032', N'Võ Trần Ngọc Nguyên', 1, '0942221798', '1999-03-16'),
     ('KH00000033', '200000033', N'Nguyễn Thành Nhất', 0, '0907498803', '1998-05-27'),
     ('KH00000034', '200000034', N'Hà Danh Phú', 0, '0342409371', '1997-01-19'),
@@ -416,14 +415,15 @@ VALUES
     ('KH00000091', '200000091', N'Đặng Tấn Duy', 0, '0986439811', '1986-01-22'),
     ('KH00000092', '200000092', N'Lê Tuấn Tín', 0, '0908725223', '1985-10-05'),
     ('KH00000093', '200000093', N'Lê Văn Tú', 0, '0944708156', '1981-09-22'),
-    ('KH00000093', '200000093', N'Võ Hửu Tường', 0, '0917190242', '1994-09-12'),
     ('KH00000094', '200000094', N'Nguyễn Thị Hồng', 1, '0964505419', '2000-04-25'),
     ('KH00000095', '200000095', N'Đoàn Thị Uyên Linh', 1, '0902642649', '2001-07-26'),
     ('KH00000096', '200000096', N'Cao Thị Vân Mây', 1, '0984218383', '2000-03-17'),
     ('KH00000097', '200000097', N'Trần Thị Hà My', 1, '0833352762', '2000-05-17'),
     ('KH00000098', '200000098', N'Đinh Thị Phương', 1, '0983860448', '1986-06-01'),
     ('KH00000099', '200000099', N'Nguyễn Thị Ngọc Châu', 1, '0978763637', '1986-04-21'),
-    ('KH00000100', '200000100', N'Hà Thị Tố Uyên', 1, '0374805996', '2000-05-14')
+    ('KH00000100', '200000100', N'Hà Thị Tố Uyên', 1, '0374805996', '2000-05-14'),
+    ('KH00000101', '200000101', N'Trần Anh Lâm', 0, '0393575926', '1993-09-20'),
+    ('KH00000102', '200000102', N'Võ Hửu Tường', 0, '0917190242', '1994-09-12')
 GO
 
 INSERT INTO dbo.LoaiPhong
@@ -652,7 +652,7 @@ BEGIN
     FROM dbo.LoaiDichVu ldv
     WHERE ldv.maLDV = @servideTypeId
         AND ldv.tenLDV = @serviceTypeName
-    
+
     IF @isExitsId IS NULL
     BEGIN
         PRINT 0
@@ -876,10 +876,34 @@ CREATE PROC USP_insertBill
     @roomId VARCHAR(5)
 AS
 BEGIN
+    DECLARE @isExitsBillId VARCHAR(15)
+    BEGIN TRANSACTION
     INSERT INTO dbo.HoaDon
         (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, TongTien, maNhanVien, maKH, maPhong)
     VALUES
         (@billId, @orderDate, NULL, 0, 0.0, @staffId, @customerId, @roomId)
+
+    SELECT @isExitsBillId = hd.maHoaDon
+    FROM dbo.HoaDon hd
+    WHERE hd.maHoaDon = @billId
+        AND hd.ngayGioDat = @orderDate
+        AND hd.maNhanVien = @staffId
+        AND hd.maKH = @customerId
+        AND hd.maPhong = @roomId
+        AND hd.tinhTrangHD = 0
+        AND hd.TongTien = 0.0
+        AND hd.ngayGioTra IS NULL
+
+    IF @isExitsBillId IS NULL
+    BEGIN
+        PRINT 0
+        ROLLBACK
+    END
+    ELSE
+    BEGIN
+        PRINT 1
+        COMMIT
+    END
 END
 GO
 
@@ -899,18 +923,38 @@ CREATE PROC USP_payment
     @totalPrice MONEY
 AS
 BEGIN
-    UPDATE dbo.HoaDon 
-    SET tinhTrangHD = 1 , TongTien = @totalPrice, ngayGioTra = @paymentDate
-    WHERE maHoaDon = @billId
-
     DECLARE @roomId VARCHAR(5)
-    SELECT @roomID = hd.maPhong
+    DECLARE @isExitsBillId VARCHAR(15) = NULL
+    BEGIN TRANSACTION
+    UPDATE dbo.HoaDon 
+        SET tinhTrangHD = 1 , TongTien = @totalPrice, ngayGioTra = @paymentDate
+        WHERE maHoaDon = @billId
+
+    SELECT @isExitsBillId = hd.maHoaDon
     FROM dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
+        AND hd.TongTien = @totalPrice
+        AND hd.tinhTrangHD = 1
+        AND hd.ngayGioTra = @paymentDate
 
-    UPDATE dbo.Phong
-    SET tinhTrangP = 0
-    WHERE maPhong = @roomID
+    IF (@isExitsBillId IS NULL)
+        BEGIN
+        PRINT 0
+        ROLLBACK
+    END
+        ELSE
+        BEGIN
+        SELECT @roomID = hd.maPhong
+        FROM dbo.HoaDon hd
+        WHERE hd.maHoaDon = @billId
+
+        UPDATE dbo.Phong
+            SET tinhTrangP = 0
+            WHERE maPhong = @roomID
+
+        PRINT 1
+        COMMIT
+    END
 END
 GO
 
@@ -1004,19 +1048,15 @@ BEGIN
     SELECT ctdv.soLuongDat, ctdv.donGia,
         dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
         ldv.maLDV, ldv.tenLDV,
-        p.maPhong
+        hd.maPhong
     FROM dbo.CTDichVu ctdv,
         dbo.HoaDon hd,
         dbo.DichVu dv,
-        dbo.LoaiDichVu ldv,
-        dbo.Phong p,
-        dbo.LoaiPhong lp
+        dbo.LoaiDichVu ldv
     WHERE ctdv.maHoaDon = hd.maHoaDon
-        AND hd.maPhong = p.maPhong
+        AND hd.maPhong = @roomId
         AND ctdv.maDichVu = dv.maDichVu
         AND dv.maLDV = ldv.maLDV
-        AND p.maPhong = @roomId
-        AND p.maLP = lp.maLP
         AND hd.tinhTrangHD = 0
 END
 GO
@@ -1062,6 +1102,7 @@ BEGIN
 END
 GO
 
+-- @quantityOrder có thể là số âm
 CREATE PROC USP_insertServiceDetail
     @serviceId VARCHAR(6),
     @billId VARCHAR(15),
@@ -1118,8 +1159,8 @@ BEGIN
             (@billId, @serviceId, @quantityOrder, @price, @totalPriceService)
 
         UPDATE dbo.DichVu
-                SET soLuongTon = @quantityInStock - @quantityOrder
-                WHERE maDichVu = @serviceId
+            SET soLuongTon = @quantityInStock - @quantityOrder
+            WHERE maDichVu = @serviceId
     END
 END
 GO
@@ -1224,9 +1265,9 @@ BEGIN
         SELECT hd.maKH
         FROM dbo.HoaDon hd, dbo.KhachHang kh1
         WHERE hd.maKH = kh1.maKH
-        AND hd.tinhTrangHD = 0
+            AND hd.tinhTrangHD = 0
     )
-    AND dbo.fuConvertToUnsign(kh.cmnd) LIKE dbo.fuConvertToUnsign(@keyword)
+        AND dbo.fuConvertToUnsign(kh.cmnd) LIKE dbo.fuConvertToUnsign(@keyword)
     GROUP BY kh.maKH, kh.hoTen, kh.cmnd, kh.gioiTinh, 
     kh.ngaySinh, kh.soDienThoai
 END
@@ -1245,9 +1286,9 @@ BEGIN
         SELECT hd.maKH
         FROM dbo.HoaDon hd, dbo.KhachHang kh1
         WHERE hd.maKH = kh1.maKH
-        AND hd.tinhTrangHD = 0
+            AND hd.tinhTrangHD = 0
     )
-    AND dbo.fuConvertToUnsign(kh.soDienThoai) LIKE dbo.fuConvertToUnsign(@keyword)
+        AND dbo.fuConvertToUnsign(kh.soDienThoai) LIKE dbo.fuConvertToUnsign(@keyword)
     GROUP BY kh.maKH, kh.hoTen, kh.cmnd, kh.gioiTinh, 
     kh.ngaySinh, kh.soDienThoai
 END
@@ -1429,7 +1470,7 @@ BEGIN
     SET tinhTrangP = @status 
     WHERE maPhong = @roomId
 
-    DECLARE @isExitsId VARCHAR(6)
+    DECLARE @isExitsId VARCHAR(5)
     SELECT @isExitsId = p.maPhong
     FROM dbo.Phong p
     WHERE p.maPhong = @roomId
@@ -1454,9 +1495,22 @@ CREATE PROC USP_switchRoom
     @newRoomId VARCHAR(5)
 AS
 BEGIN
+    DECLARE @isExitsOldRoomId VARCHAR(6)
+    DECLARE @isExitsNewRoomId VARCHAR(6)
     BEGIN TRANSACTION
     EXEC USP_updateRoomStatus 0, @oldRoomId
     EXEC USP_updateRoomStatus 1, @newRoomId
+
+
+    SELECT @isExitsOldRoomId = p.maPhong
+    FROM dbo.Phong p
+    where p.maPhong = @oldRoomId
+        AND p.tinhTrangP = 0
+
+    SELECT @isExitsNewRoomId = p.maPhong
+    FROM dbo.Phong p
+    where p.maPhong = @newRoomId
+        AND p.tinhTrangP = 1
 
     UPDATE dbo.HoaDon
     SET maPhong = @newRoomId
@@ -1464,13 +1518,15 @@ BEGIN
         AND maHoaDon = @billId
         AND tinhTrangHD = 0
 
-    DECLARE @isExitsId VARCHAR(6)
-    SELECT @isExitsId = hd.maHoaDon
+    DECLARE @isExitsBillId VARCHAR(15)
+    SELECT @isExitsBillId = hd.maHoaDon
     FROM dbo.HoaDon hd
     WHERE hd.maPhong = @newRoomId
         AND hd.maHoaDon = @billId
 
-    IF @isExitsId IS NULL
+    IF @isExitsBillId IS NULL 
+        OR @isExitsOldRoomId IS NULL 
+        OR @isExitsNewRoomId IS NULL
     BEGIN
         PRINT 0
         ROLLBACK

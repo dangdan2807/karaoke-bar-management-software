@@ -43,7 +43,7 @@ public class ExportBill {
     private String formatTime = "HH:mm:ss dd/MM/yyyy";
     private String karaokeName = "KARAOKE DASH";
     private String address = "12 Nguyễn Văn Bảo, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh";
-    private String phoneNumber = "0303030303";
+    private String phoneNumber = "0303.030.303";
 
     private static ExportBill instance = new ExportBill();
 
@@ -53,6 +53,12 @@ public class ExportBill {
         return instance;
     }
 
+    /**
+	 * Chuyển số giờ thuê thành chuỗi dạng {@code x giờ y phút}
+	 * 
+	 * @param hours {@code double}: số giờ thuê
+	 * @return {@code String}: chuỗi dạng {@code x giờ y phút}
+	 */
     private String convertRentalTime(double hours) {
         int minutes = (int) (hours % 1 * 60);
         int hoursInt = (int) hours;

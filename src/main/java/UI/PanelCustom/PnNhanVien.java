@@ -330,21 +330,11 @@ public class PnNhanVien extends JPanel
 		};
 
 		tblTableStaff = new JTable(modelTableStaff);
-		tblTableStaff.setBackground(new Color(255, 255, 255, 0));
-		tblTableStaff.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableStaff);
 		tblTableStaff.setRowHeight(21);
-		tblTableStaff.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tblTableStaff.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tblTableStaff.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		tblTableStaff.getTableHeader().setBackground(new Color(255, 255, 255));
 
-		tblTableStaff.getTableHeader().setBackground(new Color(255, 255, 255));
-		JScrollPane scrTable = new JScrollPane(tblTableStaff, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrTable.getViewport().setBackground(Color.WHITE);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableStaff);
 		scrTable.setBounds(10, 10, 1220, 330);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);

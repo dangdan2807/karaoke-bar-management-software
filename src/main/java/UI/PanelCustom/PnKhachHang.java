@@ -261,18 +261,10 @@ public class PnKhachHang extends JPanel
 		};
 
 		tblTableCustomer = new JTable(modelTable);
-		tblTableCustomer.setBackground(new Color(255, 255, 255, 0));
-		tblTableCustomer.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableCustomer);
 		tblTableCustomer.setRowHeight(21);
-		tblTableCustomer.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tblTableCustomer.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tblTableCustomer.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scrTable = new JScrollPane(tblTableCustomer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrTable.getViewport().setBackground(Color.WHITE);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableCustomer);
 		scrTable.setBounds(10, 10, 1220, 350);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 

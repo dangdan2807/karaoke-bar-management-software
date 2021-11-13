@@ -189,9 +189,6 @@ public class PnLoaiDichVu extends JPanel
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtServiceTypeName);
 		pnlInfo.add(txtServiceTypeName);
 		cboSearchType.setVisible(false);
-		btnSearch.addActionListener(this);
-		btnSearch.addMouseListener(this);
-		cboSearch.addActionListener(this);
 
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
@@ -206,22 +203,15 @@ public class PnLoaiDichVu extends JPanel
 			}
 		};
 		tblTableServiceType = new JTable(modelTable);
-		tblTableServiceType.setBackground(new Color(255, 255, 255, 0));
-		tblTableServiceType.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableServiceType);
 		tblTableServiceType.setRowHeight(21);
-		tblTableServiceType.setFont(new Font("Dialog", Font.PLAIN, 13));
-		tblTableServiceType.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
-		tblTableServiceType.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scrTable = new JScrollPane(tblTableServiceType, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrTable.getViewport().setBackground(Color.WHITE);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableServiceType);
 		scrTable.setBounds(10, 10, 1220, 350);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
 
+		btnSearch.addMouseListener(this);
 		tblTableServiceType.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
 
@@ -232,6 +222,7 @@ public class PnLoaiDichVu extends JPanel
 
 		cboSearch.addItemListener(this);
 
+		cboSearch.addActionListener(this);
 		btnAdd.addActionListener(this);
 		btnRefresh.addActionListener(this);
 		btnSearch.addActionListener(this);
@@ -268,7 +259,8 @@ public class PnLoaiDichVu extends JPanel
 						addRow(stt, serviceType);
 						int lastIndex = tblTableServiceType.getRowCount() - 1;
 						tblTableServiceType.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-						tblTableServiceType.scrollRectToVisible(tblTableServiceType.getCellRect(lastIndex, lastIndex, true));
+						tblTableServiceType
+								.scrollRectToVisible(tblTableServiceType.getCellRect(lastIndex, lastIndex, true));
 						JOptionPane.showMessageDialog(this, message);
 						btnAdd.setEnabledCustom(false);
 						btnUpdate.setEnabledCustom(true);
@@ -309,8 +301,8 @@ public class PnLoaiDichVu extends JPanel
 							btnAdd.setEnabledCustom(false);
 							btnUpdate.setEnabledCustom(true);
 							tblTableServiceType.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-							tblTableServiceType
-									.scrollRectToVisible(tblTableServiceType.getCellRect(selectedRow, selectedRow, true));
+							tblTableServiceType.scrollRectToVisible(
+									tblTableServiceType.getCellRect(selectedRow, selectedRow, true));
 						} else {
 							message = "Cập nhật thông tin " + name + " thất bại";
 						}

@@ -225,18 +225,10 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 				return false;
 			}
 		};
-		tblTableRoom.setBackground(new Color(255, 255, 255, 0));
-		tblTableRoom.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableRoom);
 		tblTableRoom.setRowHeight(21);
-		tblTableRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tblTableRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tblTableRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scrTable = new JScrollPane(tblTableRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrTable.getViewport().setBackground(Color.WHITE);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableRoom);
 		scrTable.setBounds(10, 10, 1220, 350);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);

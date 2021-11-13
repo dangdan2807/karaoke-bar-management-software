@@ -220,18 +220,10 @@ public class PnLoaiPhong extends JPanel
 			}
 		};
 		tblTableTypeRoom = new JTable(modelTableTypeRoom);
-		tblTableTypeRoom.setBackground(new Color(255, 255, 255, 0));
-		tblTableTypeRoom.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableTypeRoom);
 		tblTableTypeRoom.setRowHeight(21);
-		tblTableTypeRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tblTableTypeRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tblTableTypeRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scrTable = new JScrollPane(tblTableTypeRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrTable.getViewport().setBackground(Color.WHITE);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableTypeRoom);
 		scrTable.setBounds(10, 10, 1220, 350);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
