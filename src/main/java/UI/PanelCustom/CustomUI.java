@@ -43,8 +43,10 @@ public class CustomUI {
 	public static final ImageIcon PDF_ICON = new ImageIcon(pathImg + "pdf_16.png");
 	public static final ImageIcon EXCEL_ICON = new ImageIcon(pathImg + "excel_16.png");
 	public static final ImageIcon LOGO_ICON = new ImageIcon(pathImg + "Logo.png");
-	public static final ImageIcon NEXT_ICON = new ImageIcon(pathImg + "1.png");
-	public static final ImageIcon DOUBLE_NEXT_ICON = new ImageIcon(pathImg + "2.png");
+	public static final ImageIcon NEXTRIGHT_ICON = new ImageIcon(pathImg + "2.png");
+	public static final ImageIcon DOUBLENEXTRIGHT_ICON = new ImageIcon(pathImg + "1.png");
+	public static final ImageIcon NEXTLEFT_ICON = new ImageIcon(pathImg + "4.png");
+	public static final ImageIcon DOUBLENEXTLEFT_ICON = new ImageIcon(pathImg + "3.png");
 
 	/**
 	 * singleton {@code CustomUI}

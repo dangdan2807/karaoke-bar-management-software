@@ -1,13 +1,43 @@
 package UI.PanelCustom;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 import DAO.ConvertTime;
 import DAO.KhachHangDAO;
@@ -32,7 +62,8 @@ public class PnKhachHang extends JPanel
 	private JTextField txtCMND, txtPhoneNumber, txtCustomerName, txtCustomerID, txtBFieldSearch;
 	private JTextField txtKeyWord, txtBFieldSearchGender;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPhone, lblCustomerID, lblCustomerName, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch,btnNextRight,
+	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
 	private kDatePicker dpBirthDay;
 	private JComboBox<String> cboSearch, cboSearchGender;
 	private JRadioButton radMale, radFemale;
@@ -44,9 +75,17 @@ public class PnKhachHang extends JPanel
 	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
-
+	private ImageIcon nextIconRight = new ImageIcon(
+			CustomUI.NEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(
+			CustomUI.DOUBLENEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(
+			CustomUI.NEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(
+			CustomUI.DOUBLENEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
+	private JTextField txtIndex;
 
 	public PnKhachHang(NhanVien staff) {
 		this.staffLogin = staff;
@@ -101,7 +140,7 @@ public class PnKhachHang extends JPanel
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(0, 60, 1238, 177);
+		pnlInfo.setBounds(10, 70, 1238, 180);
 		pnlMain.add(pnlInfo);
 
 		dpBirthDay = new kDatePicker(250, 20);
@@ -111,22 +150,22 @@ public class PnKhachHang extends JPanel
 		dpBirthDay.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
 		dpBirthDay.setOpaqueCustom(false);
 		pnlInfo.add(dpBirthDay);
-		dpBirthDay.setBounds(145, 85, 250, 20);
+		dpBirthDay.setBounds(165, 85, 250, 20);
 
 		txtCMND = new JTextField();
-		txtCMND.setBounds(145, 50, 250, 20);
+		txtCMND.setBounds(165, 50, 250, 20);
 		txtCMND.setToolTipText("Nhập CMND gồm có 9 số hoặc CCCD gồm có 12 số");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtCMND);
 		pnlInfo.add(txtCMND);
 
 		lblCMND = new JLabel("CMND/CCCD:");
 		CustomUI.getInstance().setCustomLabel(lblCMND);
-		lblCMND.setBounds(20, 50, 105, 20);
+		lblCMND.setBounds(40, 50, 105, 20);
 		pnlInfo.add(lblCMND);
 
 		lblBirthDay = new JLabel("Ngày sinh:");
 		CustomUI.getInstance().setCustomLabel(lblBirthDay);
-		lblBirthDay.setBounds(20, 85, 105, 20);
+		lblBirthDay.setBounds(40, 85, 105, 20);
 		pnlInfo.add(lblBirthDay);
 
 		lblGender = new JLabel("Giới tính:");
@@ -167,14 +206,14 @@ public class PnKhachHang extends JPanel
 		pnlInfo.add(txtCustomerName);
 
 		txtCustomerID = new JTextField();
-		txtCustomerID.setBounds(145, 15, 250, 20);
+		txtCustomerID.setBounds(165, 15, 250, 20);
 		txtCustomerID.setToolTipText("Mã khách hàng");
 		CustomUI.getInstance().setCustomTextFieldOff(txtCustomerID);
 		pnlInfo.add(txtCustomerID);
 
 		lblCustomerID = new JLabel("Mã khách hàng: ");
 		CustomUI.getInstance().setCustomLabel(lblCustomerID);
-		lblCustomerID.setBounds(20, 15, 120, 20);
+		lblCustomerID.setBounds(40, 15, 120, 20);
 		pnlInfo.add(lblCustomerID);
 
 		lblCustomerName = new JLabel("Tên khách hàng:");
@@ -199,7 +238,7 @@ public class PnKhachHang extends JPanel
 		pnlInfo.add(btnRefresh);
 
 		JPanel pnlSearch = new JPanel();
-		pnlSearch.setBounds(175, 127, 867, 40);
+		pnlSearch.setBounds(175, 135, 867, 40);
 		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
@@ -248,7 +287,10 @@ public class PnKhachHang extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(10, 236, 1240, 340);
+		Border borderTitleTable = CustomUI.BORDER_TITLE_TABLE;
+		((TitledBorder) borderTitleTable).setTitle("Danh sách nhân viên");
+		pnlTable.setBorder(borderTitleTable);
+		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã khách hàng", "Tên khách hàng ", "CMND/CCCD", "Số điện thoại", "Ngày sinh",
 				"Giới tính" };
@@ -270,13 +312,33 @@ public class PnKhachHang extends JPanel
 		JScrollPane scrTable = new JScrollPane(tblTableCustomer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 10, 1220, 320);
+		scrTable.setBounds(10, 20, 1200, 230);
 		scrTable.setOpaque(false);
 		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
-
 		pnlMain.add(pnlTable);
+
+		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextRight.setBounds(680, 540, 70, 35);
+		pnlMain.add(btnNextRight);
+
+		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextRight.setBounds(760, 540, 70, 35);
+		pnlMain.add(btnDoubleNextRight);
+
+		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextLeft.setBounds(520, 540, 70, 35);
+		pnlMain.add(btnNextLeft);
+
+		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextLeft.setBounds(440, 540, 70, 35);
+		pnlMain.add(btnDoubleNextLeft);
+
+		txtIndex = new MyTextField("12");
+		txtIndex.setBounds(600, 540, 70, 35);
+		pnlMain.add(txtIndex);
+
 		allLoaded();
 
 		btnSearch.addActionListener(this);
@@ -295,7 +357,7 @@ public class PnKhachHang extends JPanel
 		txtPhoneNumber.addFocusListener(this);
 		txtBFieldSearch.addFocusListener(this);
 		txtBFieldSearchGender.addFocusListener(this);
-		
+
 		txtCMND.addKeyListener(this);
 		txtKeyWord.addKeyListener(this);
 		txtPhoneNumber.addKeyListener(this);
@@ -585,8 +647,8 @@ public class PnKhachHang extends JPanel
 		TableColumnModel columnModel = tblTableCustomer.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(70);
 		columnModel.getColumn(1).setPreferredWidth(130);
-		columnModel.getColumn(2).setPreferredWidth(250);
-		columnModel.getColumn(3).setPreferredWidth(200);
+		columnModel.getColumn(2).setPreferredWidth(240);
+		columnModel.getColumn(3).setPreferredWidth(190);
 		columnModel.getColumn(4).setPreferredWidth(200);
 		columnModel.getColumn(5).setPreferredWidth(200);
 		columnModel.getColumn(6).setPreferredWidth(152);

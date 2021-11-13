@@ -34,7 +34,8 @@ public class PnNhanVien extends JPanel
 	private JComboBox<String> cboSearch, cboSearchType, cboPosition;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPosition, lblSalary, lblPhoneNumber, lbStaffID;
 	private JLabel lblStaffName, lblStatus, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnRefreshPass, btnNext;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnRefreshPass, btnNextRight,
+			btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
 	private JRadioButton radWorking, radRetired, radMale, radFemale;
 	private kDatePicker dpBirthDay;
 	private JSpinner spnSalary;
@@ -46,12 +47,20 @@ public class PnNhanVien extends JPanel
 	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
-	private ImageIcon nextIcon = CustomUI.NEXT_ICON;
-	private ImageIcon doubleNextIcon = CustomUI.DOUBLE_NEXT_ICON;
+	private ImageIcon nextIconRight = new ImageIcon(
+			CustomUI.NEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(
+			CustomUI.DOUBLENEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(
+			CustomUI.NEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(
+			CustomUI.DOUBLENEXTLEFT_ICON.getImage()
+			.getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
+	private UI.PanelCustom.MyTextField txtIndex;
 
 	/**
 	 * Constructor form quản lý nhân viên
@@ -68,6 +77,11 @@ public class PnNhanVien extends JPanel
 		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -85,6 +99,11 @@ public class PnNhanVien extends JPanel
 		this.add(pnlMain);
 
 		JPanel pnlTitle = new JPanel() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -353,6 +372,11 @@ public class PnNhanVien extends JPanel
 		String[] cols = { "STT", "Mã nhân viên", "Tên nhân viên", "CMND/CCCD", "Chức vụ", "SDT", "Ngày sinh",
 				"Mức lương", "Giới tính", "Trạng thái", "Tài khoản" };
 		modelTableStaff = new DefaultTableModel(cols, 0) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public boolean isCellEditable(int i, int i1) {
 				return false;
@@ -379,16 +403,26 @@ public class PnNhanVien extends JPanel
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
 
-		// btnNext = new MyButton(150, 35, "Tìm kiếm", gra, nextIcon.getImage(), 50, 19,
-		// 10, 5);
-		// btnNext.setBounds(328, 549, 150, 35);
-		// pnlMain.add(btnNext);
-		//// btnNext.setEnabledCustom(false);
-		// btnNext.setToolTipText("Cập nhật thông tin nhân viên");
+		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextRight.setBounds(680, 540, 70, 35);
+		pnlMain.add(btnNextRight);
 
-		JLabel aJLabel = new JLabel(nextIcon);
-		aJLabel.setBounds(328, 549, 150, 35);
-		pnlMain.add(aJLabel);
+		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextRight.setBounds(760, 540, 70, 35);
+		pnlMain.add(btnDoubleNextRight);
+		
+		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextLeft.setBounds(520, 540, 70, 35);
+		pnlMain.add(btnNextLeft);
+
+		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextLeft.setBounds(440, 540, 70, 35);
+		pnlMain.add(btnDoubleNextLeft);
+
+		txtIndex = new MyTextField("12");
+		txtIndex.setBounds(600, 540, 70, 35);
+		pnlMain.add(txtIndex);
+
 
 		btnSearch.addActionListener(this);
 		btnAdd.addActionListener(this);
@@ -843,7 +877,7 @@ public class PnNhanVien extends JPanel
 		columnModel.getColumn(7).setPreferredWidth(100);
 		columnModel.getColumn(8).setPreferredWidth(80);
 		columnModel.getColumn(9).setPreferredWidth(130);
-		columnModel.getColumn(10).setPreferredWidth(160);
+		columnModel.getColumn(10).setPreferredWidth(140);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
