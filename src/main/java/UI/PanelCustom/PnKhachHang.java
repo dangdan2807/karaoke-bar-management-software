@@ -3,6 +3,7 @@ package UI.PanelCustom;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ import javax.swing.table.*;
 import DAO.ConvertTime;
 import DAO.KhachHangDAO;
 import DAO.NhanVienDAO;
+import DAO.ValidationData;
 import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
 import UI.fQuanTri;
@@ -350,7 +352,7 @@ public class PnKhachHang extends JPanel
 			winNavigation.setVisible(true);
 			this.setVisible(false);
 		} else if (o.equals(btnAdd)) {
-
+			addNewCustomer();
 		} else if (o.equals(btnRefresh)) {
 			txtCustomerID.setText("");
 			txtCustomerName.setText("");
@@ -364,7 +366,7 @@ public class PnKhachHang extends JPanel
 		} else if (o.equals(btnSearch)) {
 			searchEventUsingBtnSearch();
 		} else if (o.equals(btnUpdate)) {
-
+				updateStaffInfo();
 		}
 	}
 
@@ -515,6 +517,162 @@ public class PnKhachHang extends JPanel
 	private void allLoaded() {
 		reSizeColumnTable();
 		loadCustomerList(KhachHangDAO.getInstance().getCustomerList());
+	}
+
+	/**
+	 * Kiểm tra thông tin trong form
+	 * 
+	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra thông tin
+	 *         <ul>
+	 *         <li>Nếu hợp lệ thì trả về {@code true}</li>
+	 *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
+	 *         </ul>
+	 */
+	private boolean validData() {
+		boolean valid = ValidationData.getInstance().ValidName(this, txtCustomerName, "Tên khách hàng", 100, 0);
+		if (!valid) {
+			return valid;
+		}
+
+		valid = ValidationData.getInstance().ValidCmnd(this, txtCMND);
+		if (!valid) {
+			return valid;
+		}
+
+		valid = ValidationData.getInstance().ValidPhoneNumber(this, txtPhoneNumber);
+		if (!valid) {
+			return valid;
+		}
+
+		valid = ValidationData.getInstance().ValidBirthDay(this, dpBirthDay, "khách hàng", 16);
+		if (!valid) {
+			return valid;
+		}
+		return true;
+	}
+
+	/**
+	 * Tự động tạo mã khách hàng mới tăng theo thứ tự tăng dần
+	 * 
+	 * @return {@code String}: mã khách hàng mới
+	 */
+	private String createNewStaffID() {
+		String lastCustomerId = KhachHangDAO.getInstance().getLastCustomerId();
+		String idStr = "KH";
+		int oldNumberCustomerID = 0;
+		if (lastCustomerId.equalsIgnoreCase("") == false || lastCustomerId != null) {
+			oldNumberCustomerID = Integer.parseInt(lastCustomerId.replace(idStr, ""));
+		}
+
+		int newCustomerID = ++oldNumberCustomerID;
+		String newCustomerIdStr = idStr + newCustomerID;
+		boolean flag = true;
+		while (flag) {
+			newCustomerIdStr = newCustomerIdStr.replace(idStr, idStr + "0");
+			if (newCustomerIdStr.length() > 9) {
+				flag = false;
+			}
+		}
+		return newCustomerIdStr;
+	}
+
+	/**
+	 * chuyển đổi thông tin trong form thành đối tượng {@code KhachHang}
+	 * 
+	 * @return {@code KhachHang}: khách hàng được chuyển đổi thông tin từ form
+	 */
+	private KhachHang getCustomerDataInForm() {
+		String customerId = txtCustomerID.getText().trim();
+		String customerName = txtCustomerName.getText().trim();
+		String phoneNumber = txtPhoneNumber.getText().trim();
+		String cmnd = txtCMND.getText().trim();
+		Date birthDay = dpBirthDay.getValueSqlDate();
+		boolean gender = radMale.isSelected() ? false : true;
+		if (customerId.equals("") || customerId.length() <= 0)
+			customerId = createNewStaffID();
+		return new KhachHang(customerId, cmnd, customerName, phoneNumber, birthDay, gender);
+	}
+
+	/**
+	 * Thêm một khách hàng mới
+	 */
+	private void addNewCustomer() {
+		String message = "";
+		if (validData()) {
+			KhachHang customer = getCustomerDataInForm();
+			Boolean result = KhachHangDAO.getInstance().insertCustomer(customer);
+			String name = "khách hàng";
+			if (result) {
+				message = "Thêm " + name + " mới thành công";
+				txtCustomerID.setText(customer.getMaKH());
+				int stt = tblTableCustomer.getRowCount();
+				addRow(stt, customer);
+				int lastIndex = tblTableCustomer.getRowCount() - 1;
+				tblTableCustomer.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+				tblTableCustomer.scrollRectToVisible(tblTableCustomer.getCellRect(lastIndex, lastIndex, true));
+				btnAdd.setEnabledCustom(false);
+				btnUpdate.setEnabledCustom(true);
+			} else {
+				message = "Thêm " + name + " thất bại";
+			}
+			JOptionPane.showMessageDialog(this, message);
+		}
+	}
+
+	/**
+	 * cập nhật thông tin của khách hàng
+	 */
+	private void updateStaffInfo() {
+		if (validData()) {
+			KhachHang customer = getCustomerDataInForm();
+			String staffName = KhachHangDAO.getInstance().getCustomerById(customer.getMaKH()).getHoTen();
+			String message = "";
+			int selectedRow = tblTableCustomer.getSelectedRow();
+			String name = "khách hàng";
+			if (selectedRow == -1) {
+				message = "Hãy chọn " + name + " mà bạn cần cập nhật thông tin";
+				JOptionPane.showConfirmDialog(this, message, "Thông báo", JOptionPane.OK_OPTION,
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				message = "Xác nhận cập nhật thông tin " + name + " " + staffName;
+				int choose = JOptionPane.showConfirmDialog(this, message, "Xác nhận cập nhật thông tin " + name + "",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (choose == JOptionPane.OK_OPTION) {
+					Boolean result = KhachHangDAO.getInstance().updateCustomerInfo(customer);
+					if (result) {
+						message = "Cập nhật thông tin " + name + " thành công";
+						updateRow(selectedRow, customer);
+						btnAdd.setEnabledCustom(false);
+						btnUpdate.setEnabledCustom(true);
+						tblTableCustomer.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+						tblTableCustomer.scrollRectToVisible(tblTableCustomer.getCellRect(selectedRow, selectedRow, true));
+					} else {
+						message = "Cập nhật thông tin " + name + " thất bại";
+					}
+					JOptionPane.showMessageDialog(this, message);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Cập nhật thông tin một dòng khi biết dòng mà thông tin khách hàng
+	 * 
+	 * @param selectedRow {@code int}: dòng được chọn
+	 * @param staff       {@code KhachHang}: khách hàng cần cập nhật
+	 */
+	private void updateRow(int selectedRow, KhachHang staff) {
+		boolean gender = staff.getGioiTinh();
+		String genderStr = gender ? "Nữ" : "Nam";
+		String format = "dd-MM-yyyy";
+		String birthDayStr = ConvertTime.getInstance().convertTimeToString(staff.getNgaySinh(), format);
+		String phoneNumberStr = staff.getSoDienThoai();
+		modelTable.setValueAt(addSpaceToString(staff.getHoTen()), selectedRow, 2);
+		modelTable.setValueAt(addSpaceToString(staff.getCmnd()), selectedRow, 3);
+		modelTable.setValueAt(addSpaceToString(phoneNumberStr), selectedRow, 4);
+		modelTable.setValueAt(addSpaceToString(birthDayStr), selectedRow, 5);
+		modelTable.setValueAt(addSpaceToString(genderStr), selectedRow, 6);
+		modelTable.fireTableDataChanged();
 	}
 
 	/**
