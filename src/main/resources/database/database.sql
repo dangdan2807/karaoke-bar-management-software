@@ -718,28 +718,6 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getServiceByName
-    @serviceName NVARCHAR(100)
-AS
-BEGIN
-    SELECT dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
-        ldv.tenLDV, ldv.maLDV
-    FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
-    WHERE dv.maLDV = ldv.maLDV
-        AND dv.tenDichVu = @serviceName
-END
-GO
-
-CREATE PROC USP_getQuantityByServiceName
-    @serviceName NVARCHAR(100)
-AS
-BEGIN
-    SELECT dv.soLuongTon
-    FROM dbo.DichVu dv
-    WHERE dv.tenDichVu = @serviceName
-END
-GO
-
 CREATE PROC USP_getLastServiceId
 AS
 BEGIN
@@ -747,18 +725,6 @@ BEGIN
         dv.maDichVu
     FROM dbo.DichVu dv
     ORDER BY dv.maDichVu DESC
-END
-GO
-
-CREATE PROC USP_getServiceById
-    @serviceId VARCHAR(5)
-AS
-BEGIN
-    SELECT dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
-        ldv.tenLDV, ldv.maLDV
-    FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
-    WHERE dv.maLDV = ldv.maLDV
-        AND dv.maDichVu = @serviceId
 END
 GO
 
@@ -1180,18 +1146,6 @@ BEGIN
     SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
         kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
     FROM dbo.KhachHang kh
-END
-GO
-
-CREATE PROC USP_getCustomerListById
-    @customerId VARCHAR(10)
-AS
-BEGIN
-    DECLARE @keyword NVARCHAR(12) = N'%' + @customerId + N'%'
-    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
-    FROM dbo.KhachHang kh
-    WHERE kh.maKH LIKE @keyword
 END
 GO
 
@@ -1801,20 +1755,6 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getStaffByStaffID
-    @staffId VARCHAR(12)
-AS
-BEGIN
-    SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
-        nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
-        tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
-    FROM dbo.TaiKhoan tk, dbo.NhanVien nv
-    WHERE tk.tenDangNhap = nv.taiKhoan
-        AND nv.maNhanVien = @staffId
-END
-GO
-
 CREATE PROC USP_getStaffByBillId
     @billId VARCHAR(15)
 AS
@@ -1827,18 +1767,6 @@ BEGIN
     WHERE tk.tenDangNhap = nv.taiKhoan
         AND nv.maNhanVien = hd.maNhanVien
         AND hd.maHoaDon = @billId
-END
-GO
-
-CREATE PROC USP_getStaffList
-AS
-BEGIN
-    SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
-        nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
-        tk.tinhTrangTK, tk.tenDangNhap, tk.matKhau
-    FROM dbo.NhanVien nv, dbo.TaiKhoan tk
-    WHERE nv.taiKhoan = tk.tenDangNhap
 END
 GO
 

@@ -36,27 +36,6 @@ public class KhachHangDAO {
     }
 
     /**
-     * Lấy danh sách tất cả khách hàng dựa trên mã khách hàng
-     * 
-     * @param customerId {@code String}: mã khách hàng
-     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
-     */
-    public ArrayList<KhachHang> getCustomerListById(String customerId) {
-        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "{CALL USP_getCustomerListById( ? )}";
-        Object[] parameter = new Object[] { customerId };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        try {
-            while (rs.next()) {
-                dataList.add(new KhachHang(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return dataList;
-    }
-
-    /**
      * Lấy danh sách tất cả khách hàng có tên khách hàng phù hợp điều kiện
      * 
      * @param customerName {@code String}: tên khách hàng
@@ -234,7 +213,7 @@ public class KhachHangDAO {
      *         </ul>
      */
     public String getLastCustomerId() {
-        String query = "{CALL USP_getLastCustomerId}";
+        String query = "{CALL USP_getLastCustomerId()}";
         Object[] parameter = new Object[] {};
         Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
         String result = obj != null ? result = obj.toString() : "";

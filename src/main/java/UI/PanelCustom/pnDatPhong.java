@@ -629,7 +629,6 @@ public class pnDatPhong extends JPanel
 				winPayment.setModal(true);
 				winPayment.setVisible(true);
 				Boolean isPaid = winPayment.getPaid();
-				System.out.println(isPaid);
 				if (isPaid) {
 					LoadRoomList(PhongDAO.getInstance().getRoomList());
 					String endTimeStr = ConvertTime.getInstance().convertTimeToString(endTime, formatTime);
@@ -713,16 +712,11 @@ public class pnDatPhong extends JPanel
 			String serviceName = modelTableBill.getValueAt(selectedRow, 1).toString().trim();
 			txtServiceName.setText(serviceName);
 			selectedServiceOrderIndex = selectedRow;
-			System.out.println(selectedServiceOrderIndex);
-			System.out.println(serviceOrderList.get(selectedServiceOrderIndex).getMaDichVu());
-			serviceOrderList.forEach((i) -> {
-				System.out.println(i.getMaDichVu());
-			});
 			String quantityStr = modelTableBill.getValueAt(selectedRow, 2).toString().trim();
 			int orderQuantity = Integer.parseInt(quantityStr);
 			String price = modelTableBill.getValueAt(selectedRow, 3).toString().trim();
 			txtServicePrice.setText(price);
-			int quantityService = DichVuDAO.getInstance().getQuantityByServiceName(serviceName);
+			int quantityService = serviceOrderList.get(selectedRow).getSoLuongTon();
 			txtQuantityService.setText(String.valueOf(quantityService));
 			spnOrderQuantity.setValue(Math.abs(orderQuantity));
 			((MyButton) btnCannelServices).setEnabledCustom(true);
@@ -1079,11 +1073,12 @@ public class pnDatPhong extends JPanel
 		modelTableBill.getDataVector().removeAllElements();
 		modelTableBill.fireTableDataChanged();
 		Double totalPrice = 0.0;
+		serviceOrderList.clear();
 		for (CTDichVu item : dataList) {
 			DichVu service = item.getDichVu();
 			serviceOrderList.add(service);
-			if (selectedServiceIndex <= -1) {
-				if (selectedServiceIndex == i) {
+			if (selectedServiceOrderIndex <= -1) {
+				if (selectedServiceOrderIndex == i) {
 					tblTableBill.getSelectionModel().addSelectionInterval(i - 1, i - 1);
 				}
 			}
@@ -1399,7 +1394,8 @@ public class pnDatPhong extends JPanel
 			JOptionPane.showMessageDialog(this, "Bạn cần phải chọn dịch vụ");
 		} else {
 			int cancelQuantity = (int) spnOrderQuantity.getValue();
-			String orderQuantityStr = tblTableBill.getValueAt(selectedServiceOrderIndex, 3).toString().replace(",", "").trim();
+			String orderQuantityStr = tblTableBill.getValueAt(selectedServiceOrderIndex, 3).toString().replace(",", "")
+					.trim();
 			int orderQuantity = Integer.parseInt(orderQuantityStr);
 			String message = "";
 			if (cancelQuantity <= 0) {
@@ -1410,7 +1406,6 @@ public class pnDatPhong extends JPanel
 				JOptionPane.showMessageDialog(this, message, "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
 			} else {
 				DichVu service = serviceOrderList.get(selectedServiceOrderIndex);
-				System.out.println(service.getMaDichVu() + " " + service.getTenDichVu());
 				String roomID = txtRoomID.getText().trim();
 				String billID = txtBillID.getText().trim();
 				HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billID);

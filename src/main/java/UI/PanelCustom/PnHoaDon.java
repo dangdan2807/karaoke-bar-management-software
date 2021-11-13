@@ -359,8 +359,6 @@ public class PnHoaDon extends JPanel
 	public void allLoaded() {
 		reSizeColumnTableBill();
 		reSizeColumnTableBillInfo();
-		dpFromDate.setValue("01-10-2021");
-		dpToDate.setValue("01-10-2021");
 		Date startDate = dpFromDate.getValueSqlDate();
 		Date endDate = dpToDate.getNextDay();
 		loadBillList(HoaDonDAO.getInstance().getBillListByDate(startDate, endDate));

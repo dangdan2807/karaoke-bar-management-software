@@ -17,26 +17,6 @@ public class NhanVienDAO {
     }
 
     /**
-     * Lấy danh sách tất cả khách hàng
-     * 
-     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
-     */
-    public ArrayList<NhanVien> getStaffList() {
-        String query = "{CALL USP_getStaffList}";
-        Object[] parameter = new Object[] {};
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
-        try {
-            while (rs.next()) {
-                staffList.add(new NhanVien(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return staffList;
-    }
-
-    /**
      * Lấy danh sách tất cả khách hàng đang làm việc
      * 
      * @param workingStatus {@code String}: trạng thái làm việc của nhân viên
@@ -70,31 +50,6 @@ public class NhanVienDAO {
     public NhanVien getStaffByUsername(String username) {
         String query = "{CALL USP_getStaffByUsername( ? )}";
         Object[] parameter = new Object[] { username };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        NhanVien staff = null;
-        try {
-            if (rs.next()) {
-                staff = new NhanVien(rs);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return staff;
-    }
-
-    /**
-     * Lấy thông tin nhân viên theo mã nhân viên
-     * 
-     * @param maNhanVien {@code String}: mã nhân viên
-     * @return {@code NhanVien}: kết quả trả về của câu truy vấn
-     *         <ul>
-     *         <li>Nếu tìm thấy thì trả về {@code NhanVien}</li>
-     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
-     *         </ul>
-     */
-    public NhanVien getStaffByStaffID(String maNhanVien) {
-        String query = "{CALL USP_getStaffByStaffID( ? )}";
-        Object[] parameter = new Object[] { maNhanVien };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         NhanVien staff = null;
         try {
