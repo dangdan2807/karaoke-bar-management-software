@@ -364,9 +364,7 @@ public class PnNhanVien extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		Border borderTitleTable = CustomUI.BORDER_TITLE_TABLE;
-		((TitledBorder) borderTitleTable).setTitle("Danh sách nhân viên");
-		pnlTable.setBorder(borderTitleTable);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách nhân viên");
 		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã nhân viên", "Tên nhân viên", "CMND/CCCD", "Chức vụ", "SDT", "Ngày sinh",

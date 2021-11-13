@@ -287,9 +287,7 @@ public class PnKhachHang extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		Border borderTitleTable = CustomUI.BORDER_TITLE_TABLE;
-		((TitledBorder) borderTitleTable).setTitle("Danh sách nhân viên");
-		pnlTable.setBorder(borderTitleTable);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách khách hàng");
 		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã khách hàng", "Tên khách hàng ", "CMND/CCCD", "Số điện thoại", "Ngày sinh",

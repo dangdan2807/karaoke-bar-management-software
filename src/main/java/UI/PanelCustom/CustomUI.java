@@ -11,9 +11,7 @@ public class CustomUI {
 	public static Border BORDER_BOTTOM_UN_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0,
 			new Color(255, 161, 32, 100));
 	public static Border BORDER_BOTTOM_ERROR = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED);
-	public static Border BORDER_TITLE_TABLE = BorderFactory.createTitledBorder(
-			BorderFactory.createLineBorder(Color.decode("#9B17EB"), 2), "", TitledBorder.LEADING, TitledBorder.TOP,
-			new Font("Dialog", Font.BOLD, 14), Color.white);
+	
 
 	private static String pathImg = "src/main/resources/images/";
 	public static final ImageIcon ADD_ICON = new ImageIcon(pathImg + "blueAdd_16.png");
@@ -258,6 +256,13 @@ public class CustomUI {
 		tbl.getTableHeader().setBackground(new Color(255, 255, 255));
 	}
 
+	public void setBorderTitlePanelTable(JPanel pnl,String title) {
+		Border border = BorderFactory.createTitledBorder(
+				BorderFactory.createLineBorder(Color.decode("#9B17EB"), 2), title, TitledBorder.LEADING, TitledBorder.TOP,
+				new Font("Dialog", Font.BOLD, 14), Color.white);
+		pnl.setBorder(border);
+	}
+	
 	/**
 	 * tùy chỉnh nhanh {@code JScrollPane}
 	 * 

@@ -7,6 +7,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
 
 import DAO.LoaiDichVuDAO;
@@ -30,18 +32,28 @@ public class PnLoaiDichVu extends JPanel
 	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
+	private ImageIcon nextIconRight = new ImageIcon(
+			CustomUI.NEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(
+			CustomUI.DOUBLENEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(
+			CustomUI.NEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(
+			CustomUI.DOUBLENEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
 	private JTable tblTableServiceType;
 	private DefaultTableModel modelTable;
-	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack;
+	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack,btnNextRight,
+	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
 	private JComboBox<String> cboSearch, cboSearchType;
 	private JLabel lblSearch;
 	private JTextField txtBFieldSearch, txtKeyWord, txtBFieldSearchType, txtServiceTypeID;
 	private JTextField txtServiceTypeName;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
+	private MyTextField txtIndex;
 
 	public PnLoaiDichVu(NhanVien staff) {
 		this.staffLogin = staff;
@@ -98,7 +110,7 @@ public class PnLoaiDichVu extends JPanel
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(0, 60, 1238, 165);
+		pnlInfo.setBounds(10, 60, 1238, 165);
 		pnlMain.add(pnlInfo);
 
 		btnAdd = new MyButton(130, 35, "Thêm", gra, addIcon.getImage(), 50, 19, 10, 6);
@@ -193,7 +205,8 @@ public class PnLoaiDichVu extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(8, 224, 1240, 361);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách loại dịch vụ");
+		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã loại dịch vụ", "Tên loại dịch vụ " };
 		modelTable = new DefaultTableModel(cols, 0) {
@@ -212,12 +225,34 @@ public class PnLoaiDichVu extends JPanel
 		JScrollPane scrTable = new JScrollPane(tblTableServiceType, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 10, 1220, 321);
+		scrTable.setBounds(10, 20, 1200, 230);
 		scrTable.setOpaque(false);
 		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
+		
+		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextRight.setBounds(680, 540, 70, 35);
+		pnlMain.add(btnNextRight);
+
+		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextRight.setBounds(760, 540, 70, 35);
+		pnlMain.add(btnDoubleNextRight);
+
+		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextLeft.setBounds(520, 540, 70, 35);
+		pnlMain.add(btnNextLeft);
+
+		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextLeft.setBounds(440, 540, 70, 35);
+		pnlMain.add(btnDoubleNextLeft);
+
+		txtIndex = new MyTextField("12");
+		txtIndex.setBounds(600, 540, 70, 35);
+		pnlMain.add(txtIndex);
+
+		
 
 		btnSearch.addMouseListener(this);
 		tblTableServiceType.addMouseListener(this);

@@ -25,18 +25,27 @@ public class PnDichVu extends JPanel
 			Color.decode("#FAFFD1"));
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-
+	private ImageIcon nextIconRight = new ImageIcon(
+			CustomUI.NEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(
+			CustomUI.DOUBLENEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(
+			CustomUI.NEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(
+			CustomUI.DOUBLENEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private JTable tblTableService;
 	private DefaultTableModel modelTableService;
 	private JTextField txtServiceName, txtServiceID, txtBFieldSerType, txtBFieldSearch;
 	private JTextField txtBFieldSearchSerType, txtKeyWord;
 	private JLabel lblServiceType, lblServiceName, lblQuantityInStock, lblServiceID, lblPrice, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch,btnNextRight,
+	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
 	private JComboBox<String> cboServiceType, cboSearch, cboSearchServiceType;
 	private JSpinner spnQuantity, spnPrice;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 
 	private NhanVien staffLogin = null;
+	private MyTextField txtIndex;
 
 	/**
 	 * Constructor mặc định của panel Dịch vụ
@@ -229,7 +238,8 @@ public class PnDichVu extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(10, 249, 1240, 352);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách dịch vụ");
+		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã dịch vụ", "Tên dịch vụ", "Giá bán", "Số lượng", "Loại dịch vụ" };
 		modelTableService = new DefaultTableModel(cols, 0);
@@ -244,12 +254,32 @@ public class PnDichVu extends JPanel
 		JScrollPane scrTable = new JScrollPane(tblTableService, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 10, 1220, 315);
+		scrTable.setBounds(10, 20, 1200, 230);
 		scrTable.setOpaque(false);
 		scrTable.getViewport().setOpaque(false);
-		scrTable.setBorder(new TitledBorder(null, "Danh s\u00E1ch d\u1ECBch v\u1EE5", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
+		
+		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextRight.setBounds(680, 540, 70, 35);
+		pnlMain.add(btnNextRight);
+
+		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextRight.setBounds(760, 540, 70, 35);
+		pnlMain.add(btnDoubleNextRight);
+
+		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextLeft.setBounds(520, 540, 70, 35);
+		pnlMain.add(btnNextLeft);
+
+		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextLeft.setBounds(440, 540, 70, 35);
+		pnlMain.add(btnDoubleNextLeft);
+
+		txtIndex = new MyTextField("12");
+		txtIndex.setBounds(600, 540, 70, 35);
+		pnlMain.add(txtIndex);
+
 
 		tblTableService.addMouseListener(this);
 		txtBFieldSerType.addMouseListener(this);

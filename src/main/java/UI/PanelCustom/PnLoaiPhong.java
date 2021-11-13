@@ -7,6 +7,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
 
 import DAO.LoaiPhongDAO;
@@ -27,7 +29,8 @@ public class PnLoaiPhong extends JPanel
 	private DefaultTableModel modelTableTypeRoom;
 	private JTextField txtBFieldSearch, txtKeyWord, txtRoomTypeId, txtRoomTypeName;
 	private JLabel lblCapacity, lblSearch;
-	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack;
+	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack,btnNextRight,
+	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
 	private JComboBox<String> cboSearch;
 	private JSpinner spnCapacity, spnPrice, spnSearchPrice;
 
@@ -38,10 +41,19 @@ public class PnLoaiPhong extends JPanel
 	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
+	private ImageIcon nextIconRight = new ImageIcon(
+			CustomUI.NEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(
+			CustomUI.DOUBLENEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(
+			CustomUI.NEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(
+			CustomUI.DOUBLENEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
+	private MyTextField txtIndex;
 
 	public PnLoaiPhong(NhanVien staff) {
 		this.staffLogin = staff;
@@ -96,17 +108,17 @@ public class PnLoaiPhong extends JPanel
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(0, 60, 1238, 184);
+		pnlInfo.setBounds(10, 70, 1238, 184);
 		pnlMain.add(pnlInfo);
 
 		spnCapacity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 		CustomUI.getInstance().setCustomSpinner(spnCapacity);
-		spnCapacity.setBounds(225, 50, 180, 20);
+		spnCapacity.setBounds(185, 65, 180, 20);
 		pnlInfo.add(spnCapacity);
 
 		lblCapacity = new JLabel("Sức chứa:");
 		CustomUI.getInstance().setCustomLabel(lblCapacity);
-		lblCapacity.setBounds(100, 50, 90, 20);
+		lblCapacity.setBounds(60, 65, 90, 20);
 		pnlInfo.add(lblCapacity);
 
 		btnAdd = new MyButton(130, 35, "Thêm", gra, addIcon.getImage(), 50, 19, 10, 6);
@@ -126,7 +138,7 @@ public class PnLoaiPhong extends JPanel
 		pnlInfo.add(btnRefresh);
 
 		JPanel pnlSearch = new JPanel();
-		pnlSearch.setBounds(152, 131, 871, 53);
+		pnlSearch.setBounds(152, 125, 871, 53);
 		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
@@ -175,34 +187,34 @@ public class PnLoaiPhong extends JPanel
 
 		JLabel lblPrice = new JLabel("Giá tiền:");
 		CustomUI.getInstance().setCustomLabel(lblPrice);
-		lblPrice.setBounds(594, 50, 90, 20);
+		lblPrice.setBounds(520, 65, 90, 20);
 		pnlInfo.add(lblPrice);
 
 		spnPrice = new JSpinner(new SpinnerNumberModel(1000f, 0f, Double.MAX_VALUE, 1000f));
 		CustomUI.getInstance().setCustomSpinner(spnPrice);
-		spnPrice.setBounds(713, 50, 180, 20);
+		spnPrice.setBounds(639, 65, 180, 20);
 		pnlInfo.add(spnPrice);
 
 		JLabel lblRoomTypeID = new JLabel("Mã loại phòng:");
 		CustomUI.getInstance().setCustomLabel(lblRoomTypeID);
-		lblRoomTypeID.setBounds(100, 20, 120, 20);
+		lblRoomTypeID.setBounds(60, 35, 120, 20);
 		pnlInfo.add(lblRoomTypeID);
 
 		txtRoomTypeId = new JTextField();
 		txtRoomTypeId.setText("");
-		txtRoomTypeId.setBounds(225, 20, 180, 20);
+		txtRoomTypeId.setBounds(185, 35, 180, 20);
 		txtRoomTypeId.setToolTipText("Mã loại phòng");
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomTypeId);
 		pnlInfo.add(txtRoomTypeId);
 
 		JLabel lblRoomTypeName = new JLabel("Tên loại phòng:");
 		CustomUI.getInstance().setCustomLabel(lblRoomTypeName);
-		lblRoomTypeName.setBounds(594, 20, 120, 20);
+		lblRoomTypeName.setBounds(520, 35, 120, 20);
 		pnlInfo.add(lblRoomTypeName);
 
 		txtRoomTypeName = new JTextField();
 		txtRoomTypeName.setText("");
-		txtRoomTypeName.setBounds(713, 20, 180, 20);
+		txtRoomTypeName.setBounds(639, 35, 180, 20);
 		txtRoomTypeName.setToolTipText("Tên loại phòng");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtRoomTypeName);
 		pnlInfo.add(txtRoomTypeName);
@@ -210,7 +222,8 @@ public class PnLoaiPhong extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(0, 242, 1240, 336);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách loại phòng");
+		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã loại phòng", "Tên loại phòng ", "Sức chứa", "Giá tiền" };
 		modelTableTypeRoom = new DefaultTableModel(cols, 0) {
@@ -229,13 +242,35 @@ public class PnLoaiPhong extends JPanel
 		JScrollPane scrTable = new JScrollPane(tblTableTypeRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 10, 1220, 316);
+		scrTable.setBounds(10, 20, 1200, 230);
 		scrTable.setOpaque(false);
 		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
 
+		
+		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextRight.setBounds(680, 540, 70, 35);
+		pnlMain.add(btnNextRight);
+
+		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextRight.setBounds(760, 540, 70, 35);
+		pnlMain.add(btnDoubleNextRight);
+
+		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextLeft.setBounds(520, 540, 70, 35);
+		pnlMain.add(btnNextLeft);
+
+		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextLeft.setBounds(440, 540, 70, 35);
+		pnlMain.add(btnDoubleNextLeft);
+
+		txtIndex = new MyTextField("12");
+		txtIndex.setBounds(600, 540, 70, 35);
+		pnlMain.add(txtIndex);
+		
+		
 		btnSearch.addActionListener(this);
 		btnAdd.addActionListener(this);
 		btnUpdate.addActionListener(this);
