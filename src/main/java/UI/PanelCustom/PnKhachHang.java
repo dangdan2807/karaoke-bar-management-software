@@ -101,7 +101,7 @@ public class PnKhachHang extends JPanel
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(0, 60, 1238, 140);
+		pnlInfo.setBounds(0, 60, 1238, 177);
 		pnlMain.add(pnlInfo);
 
 		dpBirthDay = new kDatePicker(250, 20);
@@ -111,44 +111,44 @@ public class PnKhachHang extends JPanel
 		dpBirthDay.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
 		dpBirthDay.setOpaqueCustom(false);
 		pnlInfo.add(dpBirthDay);
-		dpBirthDay.setBounds(965, 45, 250, 20);
+		dpBirthDay.setBounds(145, 85, 250, 20);
 
 		txtCMND = new JTextField();
-		txtCMND.setBounds(965, 15, 250, 20);
+		txtCMND.setBounds(145, 50, 250, 20);
 		txtCMND.setToolTipText("Nhập CMND gồm có 9 số hoặc CCCD gồm có 12 số");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtCMND);
 		pnlInfo.add(txtCMND);
 
 		lblCMND = new JLabel("CMND/CCCD:");
 		CustomUI.getInstance().setCustomLabel(lblCMND);
-		lblCMND.setBounds(845, 15, 105, 20);
+		lblCMND.setBounds(20, 50, 105, 20);
 		pnlInfo.add(lblCMND);
 
 		lblBirthDay = new JLabel("Ngày sinh:");
 		CustomUI.getInstance().setCustomLabel(lblBirthDay);
-		lblBirthDay.setBounds(845, 45, 105, 20);
+		lblBirthDay.setBounds(20, 85, 105, 20);
 		pnlInfo.add(lblBirthDay);
 
 		lblGender = new JLabel("Giới tính:");
 		CustomUI.getInstance().setCustomLabel(lblGender);
-		lblGender.setBounds(435, 15, 105, 20);
+		lblGender.setBounds(539, 85, 105, 20);
 		pnlInfo.add(lblGender);
 
 		txtPhoneNumber = new JTextField();
-		txtPhoneNumber.setBounds(555, 45, 250, 20);
+		txtPhoneNumber.setBounds(659, 50, 250, 20);
 		txtPhoneNumber.setToolTipText("Nhập số điện thoại của bạn gồm 10 số và bắt đầu bằng 03, 05, 07, 08, 09");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtPhoneNumber);
 		pnlInfo.add(txtPhoneNumber);
 
 		radMale = new JRadioButton("Nam");
 		CustomUI.getInstance().setCustomRadioButton(radMale);
-		radMale.setBounds(551, 15, 115, 20);
+		radMale.setBounds(655, 85, 115, 20);
 		radMale.setSelected(true);
 		pnlInfo.add(radMale);
 
 		radFemale = new JRadioButton("Nữ");
 		CustomUI.getInstance().setCustomRadioButton(radFemale);
-		radFemale.setBounds(671, 15, 115, 20);
+		radFemale.setBounds(775, 85, 115, 20);
 		pnlInfo.add(radFemale);
 
 		ButtonGroup groupGender = new ButtonGroup();
@@ -157,11 +157,11 @@ public class PnKhachHang extends JPanel
 
 		lblPhone = new JLabel("Số điện thoại:");
 		CustomUI.getInstance().setCustomLabel(lblPhone);
-		lblPhone.setBounds(435, 45, 115, 16);
+		lblPhone.setBounds(539, 54, 115, 16);
 		pnlInfo.add(lblPhone);
 
 		txtCustomerName = new JTextField();
-		txtCustomerName.setBounds(145, 45, 250, 20);
+		txtCustomerName.setBounds(659, 15, 250, 20);
 		txtCustomerName.setToolTipText("Nhập tên của khách hàng, không quá 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtCustomerName);
 		pnlInfo.add(txtCustomerName);
@@ -179,35 +179,35 @@ public class PnKhachHang extends JPanel
 
 		lblCustomerName = new JLabel("Tên khách hàng:");
 		CustomUI.getInstance().setCustomLabel(lblCustomerName);
-		lblCustomerName.setBounds(20, 45, 120, 20);
+		lblCustomerName.setBounds(539, 15, 120, 20);
 		pnlInfo.add(lblCustomerName);
 
-		btnAdd = new MyButton(100, 35, "Thêm", gra, addIcon.getImage(), 39, 19, 18, 6);
+		btnAdd = new MyButton(130, 35, "Thêm", gra, addIcon.getImage(), 50, 19, 10, 6);
 		btnAdd.setToolTipText("Thêm khách hàng mới sau khi đã điền đủ thông tin");
-		btnAdd.setBounds(20, 93, 100, 35);
+		btnAdd.setBounds(1030, 10, 130, 35);
 		pnlInfo.add(btnAdd);
 
-		btnUpdate = new MyButton(100, 35, "Sửa", gra, updateIcon.getImage(), 43, 19, 22, 6);
+		btnUpdate = new MyButton(130, 35, "Sửa", gra, updateIcon.getImage(), 55, 19, 10, 6);
 		btnUpdate.setToolTipText("Sửa thông tin khách hàng");
-		btnUpdate.setBounds(150, 93, 100, 35);
+		btnUpdate.setBounds(1030, 50, 130, 35);
 		btnUpdate.setEnabledCustom(false);
 		pnlInfo.add(btnUpdate);
 
-		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 27, 19, 6, 5);
+		btnRefresh = new MyButton(130, 35, "Làm mới", gra, refreshIcon.getImage(), 40, 19, 10, 5);
 		btnRefresh.setToolTipText("Làm mới form");
-		btnRefresh.setBounds(1118, 93, 100, 35);
+		btnRefresh.setBounds(1030, 90, 130, 35);
 		pnlInfo.add(btnRefresh);
 
 		JPanel pnlSearch = new JPanel();
-		pnlSearch.setBounds(286, 83, 822, 53);
+		pnlSearch.setBounds(175, 127, 867, 40);
 		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
 		pnlInfo.add(pnlSearch);
 
-		lblSearch = new JLabel("Lọc theo:");
+		lblSearch = new JLabel("Tìm theo:");
 		CustomUI.getInstance().setCustomLabel(lblSearch);
-		lblSearch.setBounds(30, 18, 100, 20);
+		lblSearch.setBounds(25, 11, 100, 20);
 		pnlSearch.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
@@ -217,21 +217,21 @@ public class PnKhachHang extends JPanel
 		cboSearch.addItem("Giới tính");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
-		cboSearch.setBounds(140, 18, 160, 20);
+		cboSearch.setBounds(91, 11, 200, 20);
 		pnlSearch.add(cboSearch);
 
-		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, searchIcon.getImage(), 26, 19, 5, 5);
+		btnSearch = new MyButton(130, 35, "Tìm kiếm", gra, searchIcon.getImage(), 40, 19, 10, 5);
 		btnSearch.setToolTipText("Tìm kiếm thông tin khách hàng theo từ khóa");
-		btnSearch.setBounds(702, 10, 100, 35);
+		btnSearch.setBounds(697, 3, 130, 35);
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
 		CustomUI.getInstance().setCustomLabel(lblKeyWord);
-		lblKeyWord.setBounds(364, 18, 76, 20);
+		lblKeyWord.setBounds(374, 11, 76, 20);
 		pnlSearch.add(lblKeyWord);
 
 		txtKeyWord = new JTextField();
-		txtKeyWord.setBounds(440, 18, 200, 20);
+		txtKeyWord.setBounds(448, 11, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
 		txtKeyWord.setEditable(false);
 		pnlSearch.add(txtKeyWord);
@@ -241,14 +241,14 @@ public class PnKhachHang extends JPanel
 		cboSearchGender.addItem("Nữ");
 		CustomUI.getInstance().setCustomComboBox(cboSearchGender);
 		txtBFieldSearchGender = CustomUI.getInstance().setCustomCBoxField(cboSearchGender);
-		cboSearchGender.setBounds(440, 18, 200, 20);
+		cboSearchGender.setBounds(448, 11, 200, 20);
 		cboSearchGender.setVisible(false);
 		pnlSearch.add(cboSearchGender);
 
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(8, 201, 1240, 384);
+		pnlTable.setBounds(10, 236, 1240, 340);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã khách hàng", "Tên khách hàng ", "CMND/CCCD", "Số điện thoại", "Ngày sinh",
 				"Giới tính" };
@@ -261,10 +261,18 @@ public class PnKhachHang extends JPanel
 		};
 
 		tblTableCustomer = new JTable(modelTable);
-		CustomUI.getInstance().setCustomTable(tblTableCustomer);
+		tblTableCustomer.setBackground(new Color(255, 255, 255, 0));
+		tblTableCustomer.setForeground(new Color(255, 255, 255));
 		tblTableCustomer.setRowHeight(21);
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableCustomer);
-		scrTable.setBounds(10, 10, 1220, 350);
+		tblTableCustomer.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tblTableCustomer.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
+		tblTableCustomer.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		JScrollPane scrTable = new JScrollPane(tblTableCustomer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrTable.getViewport().setBackground(Color.WHITE);
+		scrTable.setBounds(10, 10, 1220, 320);
+		scrTable.setOpaque(false);
+		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 

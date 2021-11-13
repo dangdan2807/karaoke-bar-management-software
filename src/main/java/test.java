@@ -2,6 +2,7 @@
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.awt.*;
 
@@ -145,14 +146,23 @@ public class test {
     }
 
     public static void main(String[] args) {
-        int key = -1;
+        int key = 0;
         String billId = "HD2021100200002";
         switch (key) {
         case 0:
-            final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
-            System.out.println(workingDir + "");
-            URL location = Test.class.getProtectionDomain().getCodeSource().getLocation();
-            System.out.println(location.getFile());
+            // final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
+            // System.out.println(workingDir + "");
+            // URL location = Test.class.getProtectionDomain().getCodeSource().getLocation();
+            // System.out.println(location.getFile());
+            ArrayList<String> list = new ArrayList<>();
+            list.add("1");
+            list.add("2");
+            list.add("3");
+            list.add("4");
+
+            System.out.println(list.get(0));
+            // list.remove(2);
+            System.out.println(list.get(2));
             break;
         case 1:
             testTime();

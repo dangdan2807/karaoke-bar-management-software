@@ -13,6 +13,7 @@ import DAO.*;
 import UI.fDieuHuong;
 import UI.fQuanTri;
 import entity.*;
+import javax.swing.border.*;
 
 public class PnDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
@@ -95,47 +96,47 @@ public class PnDichVu extends JPanel
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(0, 60, 1238, 140);
+		pnlInfo.setBounds(0, 60, 1238, 191);
 		pnlMain.add(pnlInfo);
 
 		txtServiceName = new JTextField();
 		txtServiceName.setForeground(Color.WHITE);
-		txtServiceName.setBounds(555, 15, 250, 20);
+		txtServiceName.setBounds(685, 21, 250, 20);
 		txtServiceName.setToolTipText("Nhập tên dịch vụ, không quá 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtServiceName);
 		pnlInfo.add(txtServiceName);
 
 		lblServiceType = new JLabel("Loại dịch vụ:");
 		CustomUI.getInstance().setCustomLabel(lblServiceType);
-		lblServiceType.setBounds(845, 15, 105, 20);
+		lblServiceType.setBounds(89, 91, 105, 20);
 		pnlInfo.add(lblServiceType);
 
 		lblServiceName = new JLabel("Tên dịch vụ:");
 		CustomUI.getInstance().setCustomLabel(lblServiceName);
-		lblServiceName.setBounds(435, 15, 105, 20);
+		lblServiceName.setBounds(565, 21, 105, 20);
 		pnlInfo.add(lblServiceName);
 
 		cboServiceType = new JComboBox<String>();
 		CustomUI.getInstance().setCustomComboBox(cboServiceType);
 		cboServiceType.setToolTipText("Loại dịch vụ");
 		txtBFieldSerType = CustomUI.getInstance().setCustomCBoxField(cboServiceType);
-		cboServiceType.setBounds(965, 15, 250, 20);
+		cboServiceType.setBounds(214, 91, 250, 20);
 		pnlInfo.add(cboServiceType);
 
 		lblQuantityInStock = new JLabel("Số lượng tồn:");
 		CustomUI.getInstance().setCustomLabel(lblQuantityInStock);
-		lblQuantityInStock.setBounds(435, 45, 115, 16);
+		lblQuantityInStock.setBounds(565, 56, 115, 16);
 		pnlInfo.add(lblQuantityInStock);
 
 		spnPrice = new JSpinner(new SpinnerNumberModel(1000f, 0f, Double.MAX_VALUE, 1000f));
-		spnPrice.setBounds(145, 45, 250, 20);
+		spnPrice.setBounds(214, 56, 250, 20);
 		CustomUI.getInstance().setCustomSpinner(spnPrice);
 		spnPrice.setToolTipText("Nhập giá bán của dịch vụ và phải là một số dương lớn hơn 0");
 		pnlInfo.add(spnPrice);
 
 		txtServiceID = new JTextField();
 		txtServiceID.setForeground(Color.WHITE);
-		txtServiceID.setBounds(145, 15, 250, 20);
+		txtServiceID.setBounds(214, 21, 250, 20);
 		txtServiceID.setToolTipText("Mã dịch vụ");
 		CustomUI.getInstance().setCustomTextFieldOff(txtServiceID);
 
@@ -143,32 +144,35 @@ public class PnDichVu extends JPanel
 
 		lblServiceID = new JLabel("Mã dịch vụ: ");
 		CustomUI.getInstance().setCustomLabel(lblServiceID);
-		lblServiceID.setBounds(20, 15, 120, 20);
+		lblServiceID.setBounds(89, 21, 120, 20);
 		pnlInfo.add(lblServiceID);
 
 		lblPrice = new JLabel("Giá bán:");
 		CustomUI.getInstance().setCustomLabel(lblPrice);
-		lblPrice.setBounds(20, 45, 120, 20);
+		lblPrice.setBounds(89, 56, 120, 20);
 		pnlInfo.add(lblPrice);
 
-		btnAdd = new MyButton(100, 35, "Thêm", gra, CustomUI.ADD_ICON.getImage(), 39, 19);
-		btnAdd.setToolTipText("Thêm dịch vụ mới");
-		btnAdd.setBounds(20, 93, 100, 35);
+		
+		btnAdd = new MyButton(130, 35, "Thêm", gra, CustomUI.ADD_ICON.getImage(), 50, 19, 10, 6);
+		btnAdd.setToolTipText("Thêm loại dịch vụ mới sau khi đã điền đủ thông tin");
+		btnAdd.setBounds(1023, 10, 130, 35);
 		pnlInfo.add(btnAdd);
 
-		btnUpdate = new MyButton(100, 35, "Sửa", gra, CustomUI.UPDATE_ICON.getImage(), 43, 19);
-		btnUpdate.setToolTipText("Sửa thông tin nhân viên");
-		btnUpdate.setBounds(150, 93, 100, 35);
+		btnUpdate = new MyButton(130, 35, "Sửa", gra, CustomUI.UPDATE_ICON.getImage(), 55, 19, 10, 6);
+		btnUpdate.setToolTipText("Sửa thông tin loại dịch vụ");
+		btnUpdate.setBounds(1023, 50, 130, 35);
 		btnUpdate.setEnabledCustom(false);
 		pnlInfo.add(btnUpdate);
 
-		btnRefresh = new MyButton(100, 35, "Làm mới", gra, CustomUI.REFRESH_ICON.getImage(), 27, 19);
+		btnRefresh = new MyButton(130, 35, "Làm mới", gra, CustomUI.REFRESH_ICON.getImage(), 40, 19, 10, 5);
 		btnRefresh.setToolTipText("Làm mới form");
-		btnRefresh.setBounds(1118, 93, 100, 35);
+		btnRefresh.setBounds(1023, 90, 130, 35);
 		pnlInfo.add(btnRefresh);
+		
+		
 
 		JPanel pnlSearch = new JPanel();
-		pnlSearch.setBounds(286, 83, 822, 53);
+		pnlSearch.setBounds(190, 138, 851, 53);
 		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
@@ -189,9 +193,9 @@ public class PnDichVu extends JPanel
 		cboSearch.setBounds(140, 18, 160, 20);
 		pnlSearch.add(cboSearch);
 
-		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(), 30, 19);
+		btnSearch = new MyButton(130, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(),40, 19, 10, 5);
 		btnSearch.setToolTipText("Tìm kiếm thông tin dịch vụ theo từ khóa");
-		btnSearch.setBounds(702, 10, 100, 35);
+		btnSearch.setBounds(702, 10, 130, 35);
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
@@ -219,23 +223,32 @@ public class PnDichVu extends JPanel
 		spnQuantity = new JSpinner();
 		spnQuantity.setModel(new SpinnerNumberModel(1, 0, Integer.MAX_VALUE, 1));
 		CustomUI.getInstance().setCustomSpinner(spnQuantity);
-		spnQuantity.setBounds(555, 45, 250, 20);
+		spnQuantity.setBounds(685, 56, 250, 20);
 		pnlInfo.add(spnQuantity);
 
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(8, 201, 1240, 384);
+		pnlTable.setBounds(10, 249, 1240, 352);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã dịch vụ", "Tên dịch vụ", "Giá bán", "Số lượng", "Loại dịch vụ" };
 		modelTableService = new DefaultTableModel(cols, 0);
 		tblTableService = new JTable(modelTableService);
-		CustomUI.getInstance().setCustomTable(tblTableService);
+		tblTableService.setBackground(new Color(255, 255, 255, 0));
+		tblTableService.setForeground(new Color(255, 255, 255));
 		tblTableService.setRowHeight(21);
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableService);
-		scrTable.setBounds(10, 10, 1220, 350);
+		tblTableService.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tblTableService.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
+		tblTableService.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		
+		JScrollPane scrTable = new JScrollPane(tblTableService, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrTable.getViewport().setBackground(Color.WHITE);
+		scrTable.setBounds(10, 10, 1220, 315);
+		scrTable.setOpaque(false);
+		scrTable.getViewport().setOpaque(false);
+		scrTable.setBorder(new TitledBorder(null, "Danh s\u00E1ch d\u1ECBch v\u1EE5", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		pnlTable.add(scrTable);
-
 		pnlMain.add(pnlTable);
 
 		tblTableService.addMouseListener(this);

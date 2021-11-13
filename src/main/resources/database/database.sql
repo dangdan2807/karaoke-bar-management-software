@@ -763,14 +763,14 @@ END
 GO
 
 CREATE PROC USP_insertService
-    @servideId VARCHAR(5),
+    @servideId VARCHAR(6),
     @serviceName NVARCHAR(100),
     @price MONEY,
     @quantityInStock INT,
     @serviceTypeId VARCHAR(6)
 AS
 BEGIN
-    DECLARE @isExitsServiceId VARCHAR(5)
+    DECLARE @isExitsServiceId VARCHAR(6)
     BEGIN TRANSACTION
     INSERT INTO dbo.DichVu
         (maDichVu, tenDichVu, giaBan, soLuongTon, maLDV)
@@ -796,7 +796,7 @@ END
 GO
 
 CREATE PROC USP_getServiceNameById
-    @servideId VARCHAR(5)
+    @servideId VARCHAR(6)
 AS
 BEGIN
     SELECT dv.tenDichVu
@@ -806,7 +806,7 @@ END
 GO
 
 CREATE PROC USP_updateInfoService
-    @servideId VARCHAR(5),
+    @servideId VARCHAR(6),
     @serviceName NVARCHAR(100),
     @price MONEY,
     @quantityInStock INT,
@@ -1079,9 +1079,9 @@ GO
 -- exec USP_getServiceDetailListByBillId 'HD2021100100001'
 -- go
 
-CREATE PROC USP_getServiceDetailByBillIdAndServiceId
+ALTER PROC USP_getServiceDetailByBillIdAndServiceId
     @billId VARCHAR(15),
-    @serviceId VARCHAR(5)
+    @serviceId VARCHAR(6)
 AS
 BEGIN
     SELECT ctdv.soLuongDat, ctdv.donGia,
@@ -1103,7 +1103,7 @@ END
 GO
 
 -- @quantityOrder có thể là số âm
-CREATE PROC USP_insertServiceDetail
+ALTER PROC USP_insertServiceDetail
     @serviceId VARCHAR(6),
     @billId VARCHAR(15),
     @quantityOrder INT,
@@ -1162,8 +1162,15 @@ BEGIN
             SET soLuongTon = @quantityInStock - @quantityOrder
             WHERE maDichVu = @serviceId
     END
+    PRINT 1
 END
 GO
+
+-- select * 
+-- from dbo.CTDichVu ctdv, dbo.DichVu dv
+-- where maHoaDon = 'HD2021111300006'
+--     AND dv.maDichVu = ctdv.maDichVu
+-- go
 
 
 -- khách hàng

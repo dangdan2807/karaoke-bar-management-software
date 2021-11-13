@@ -15,7 +15,7 @@ import javax.swing.table.*;
 import DAO.*;
 import entity.*;
 
-public class DialogHoaDon extends JFrame implements ActionListener {
+public class DialogHoaDon extends JDialog implements ActionListener {
 	private JTextField txtBillId, txtStaffName, txtCustomerName, txtRoomId, txtRoomTypeName, txtRoomPrice, txtStartTime,
 			txtEndTime, txtUsedTime, txtTotalPriceService, txtTotalPriceRoom, txtVAT, txtTotalPriceBill;
 	private JTable tblTableBillInfo;

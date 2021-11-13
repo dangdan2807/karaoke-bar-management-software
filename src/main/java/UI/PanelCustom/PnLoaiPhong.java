@@ -96,37 +96,37 @@ public class PnLoaiPhong extends JPanel
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(0, 60, 1238, 140);
+		pnlInfo.setBounds(0, 60, 1238, 184);
 		pnlMain.add(pnlInfo);
 
 		spnCapacity = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 		CustomUI.getInstance().setCustomSpinner(spnCapacity);
-		spnCapacity.setBounds(763, 15, 180, 20);
+		spnCapacity.setBounds(225, 50, 180, 20);
 		pnlInfo.add(spnCapacity);
 
 		lblCapacity = new JLabel("Sức chứa:");
 		CustomUI.getInstance().setCustomLabel(lblCapacity);
-		lblCapacity.setBounds(670, 15, 90, 20);
+		lblCapacity.setBounds(100, 50, 90, 20);
 		pnlInfo.add(lblCapacity);
 
-		btnAdd = new MyButton(100, 35, "Thêm", gra, addIcon.getImage(), 39, 19);
-		btnAdd.setToolTipText("Thêm loại phòng mới");
-		btnAdd.setBounds(20, 93, 100, 35);
+		btnAdd = new MyButton(130, 35, "Thêm", gra, addIcon.getImage(), 50, 19, 10, 6);
+		btnAdd.setToolTipText("Thêm loại dịch vụ mới sau khi đã điền đủ thông tin");
+		btnAdd.setBounds(1023, 10, 130, 35);
 		pnlInfo.add(btnAdd);
 
-		btnUpdate = new MyButton(100, 35, "Sửa", gra, updateIcon.getImage(), 43, 19);
-		btnUpdate.setToolTipText("Sửa thông tin loại phòng");
-		btnUpdate.setBounds(150, 93, 100, 35);
+		btnUpdate = new MyButton(130, 35, "Sửa", gra, updateIcon.getImage(), 55, 19, 10, 6);
+		btnUpdate.setToolTipText("Sửa thông tin loại dịch vụ");
+		btnUpdate.setBounds(1023, 50, 130, 35);
 		btnUpdate.setEnabledCustom(false);
 		pnlInfo.add(btnUpdate);
 
-		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 27, 19);
+		btnRefresh = new MyButton(130, 35, "Làm mới", gra, refreshIcon.getImage(), 40, 19, 10, 5);
 		btnRefresh.setToolTipText("Làm mới form");
-		btnRefresh.setBounds(1118, 93, 100, 35);
+		btnRefresh.setBounds(1023, 90, 130, 35);
 		pnlInfo.add(btnRefresh);
 
 		JPanel pnlSearch = new JPanel();
-		pnlSearch.setBounds(286, 83, 822, 53);
+		pnlSearch.setBounds(152, 131, 871, 53);
 		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
@@ -134,7 +134,7 @@ public class PnLoaiPhong extends JPanel
 
 		lblSearch = new JLabel("Lọc theo:");
 		CustomUI.getInstance().setCustomLabel(lblSearch);
-		lblSearch.setBounds(30, 18, 100, 20);
+		lblSearch.setBounds(30, 15, 66, 20);
 		pnlSearch.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
@@ -144,23 +144,23 @@ public class PnLoaiPhong extends JPanel
 		cboSearch.setToolTipText("Loại tìm kiếm");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
-		cboSearch.setBounds(140, 18, 160, 20);
+		cboSearch.setBounds(95, 15, 200, 20);
 
 		pnlSearch.add(cboSearch);
 
-		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, searchIcon.getImage(), 26, 19);
+		btnSearch = new MyButton(130, 35, "Tìm kiếm", gra, searchIcon.getImage(), 40, 19, 10, 5);
 		btnSearch.setToolTipText("Tìm kiếm thông tin loại phòng theo từ khóa");
-		btnSearch.setBounds(702, 10, 100, 35);
+		btnSearch.setBounds(728, 8, 130, 35);
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
 		CustomUI.getInstance().setCustomLabel(lblKeyWord);
-		lblKeyWord.setBounds(364, 18, 76, 20);
+		lblKeyWord.setBounds(387, 15, 76, 20);
 		pnlSearch.add(lblKeyWord);
 
 		txtKeyWord = new JTextField();
 		txtKeyWord.setText("");
-		txtKeyWord.setBounds(440, 18, 200, 20);
+		txtKeyWord.setBounds(470, 15, 200, 20);
 		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
@@ -168,41 +168,41 @@ public class PnLoaiPhong extends JPanel
 
 		spnSearchPrice = new JSpinner(new SpinnerNumberModel(0f, 0f, Double.MAX_VALUE, 1000f));
 		CustomUI.getInstance().setCustomSpinner(spnSearchPrice);
-		spnSearchPrice.setBounds(440, 18, 200, 20);
+		spnSearchPrice.setBounds(470, 16, 200, 20);
 		spnSearchPrice.setToolTipText("Nhập giá phòng cần tìm kiếm");
 		spnSearchPrice.setVisible(false);
 		pnlSearch.add(spnSearchPrice);
 
 		JLabel lblPrice = new JLabel("Giá tiền:");
 		CustomUI.getInstance().setCustomLabel(lblPrice);
-		lblPrice.setBounds(977, 15, 90, 20);
+		lblPrice.setBounds(594, 50, 90, 20);
 		pnlInfo.add(lblPrice);
 
 		spnPrice = new JSpinner(new SpinnerNumberModel(1000f, 0f, Double.MAX_VALUE, 1000f));
 		CustomUI.getInstance().setCustomSpinner(spnPrice);
-		spnPrice.setBounds(1063, 15, 165, 20);
+		spnPrice.setBounds(713, 50, 180, 20);
 		pnlInfo.add(spnPrice);
 
 		JLabel lblRoomTypeID = new JLabel("Mã loại phòng:");
 		CustomUI.getInstance().setCustomLabel(lblRoomTypeID);
-		lblRoomTypeID.setBounds(20, 15, 120, 20);
+		lblRoomTypeID.setBounds(100, 20, 120, 20);
 		pnlInfo.add(lblRoomTypeID);
 
 		txtRoomTypeId = new JTextField();
 		txtRoomTypeId.setText("");
-		txtRoomTypeId.setBounds(145, 15, 165, 20);
+		txtRoomTypeId.setBounds(225, 20, 180, 20);
 		txtRoomTypeId.setToolTipText("Mã loại phòng");
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomTypeId);
 		pnlInfo.add(txtRoomTypeId);
 
 		JLabel lblRoomTypeName = new JLabel("Tên loại phòng:");
 		CustomUI.getInstance().setCustomLabel(lblRoomTypeName);
-		lblRoomTypeName.setBounds(344, 15, 120, 20);
+		lblRoomTypeName.setBounds(594, 20, 120, 20);
 		pnlInfo.add(lblRoomTypeName);
 
 		txtRoomTypeName = new JTextField();
 		txtRoomTypeName.setText("");
-		txtRoomTypeName.setBounds(469, 15, 165, 20);
+		txtRoomTypeName.setBounds(713, 20, 180, 20);
 		txtRoomTypeName.setToolTipText("Tên loại phòng");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtRoomTypeName);
 		pnlInfo.add(txtRoomTypeName);
@@ -210,7 +210,7 @@ public class PnLoaiPhong extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(8, 201, 1240, 384);
+		pnlTable.setBounds(0, 242, 1240, 336);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã loại phòng", "Tên loại phòng ", "Sức chứa", "Giá tiền" };
 		modelTableTypeRoom = new DefaultTableModel(cols, 0) {
@@ -220,10 +220,18 @@ public class PnLoaiPhong extends JPanel
 			}
 		};
 		tblTableTypeRoom = new JTable(modelTableTypeRoom);
-		CustomUI.getInstance().setCustomTable(tblTableTypeRoom);
+		tblTableTypeRoom.setBackground(new Color(255, 255, 255, 0));
+		tblTableTypeRoom.setForeground(new Color(255, 255, 255));
 		tblTableTypeRoom.setRowHeight(21);
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableTypeRoom);
-		scrTable.setBounds(10, 10, 1220, 350);
+		tblTableTypeRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tblTableTypeRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
+		tblTableTypeRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		JScrollPane scrTable = new JScrollPane(tblTableTypeRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrTable.getViewport().setBackground(Color.WHITE);
+		scrTable.setBounds(10, 10, 1220, 316);
+		scrTable.setOpaque(false);
+		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);

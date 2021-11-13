@@ -95,45 +95,45 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(0, 60, 1238, 140);
+		pnlInfo.setBounds(0, 60, 1238, 188);
 		pnlMain.add(pnlInfo);
 
 		txtLocation = new JTextField();
-		txtLocation.setBounds(725, 15, 180, 20);
+		txtLocation.setBounds(206, 65, 180, 20);
 		txtLocation.setToolTipText("Nhập vị trí của phòng");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtLocation);
 		pnlInfo.add(txtLocation);
 
 		lblLocation = new JLabel("Vị trí:");
 		CustomUI.getInstance().setCustomLabel(lblLocation);
-		lblLocation.setBounds(660, 15, 70, 20);
+		lblLocation.setBounds(116, 65, 70, 20);
 		pnlInfo.add(lblLocation);
 
-		btnAdd = new MyButton(100, 35, "Thêm", gra, addIcon.getImage(), 39, 19);
-		btnAdd.setToolTipText("Thêm nhân viên mới sau khi đã điền đủ thông tin");
-		btnAdd.setBounds(20, 93, 100, 35);
+		btnAdd = new MyButton(130, 35, "Thêm", gra, addIcon.getImage(), 50, 19, 10, 6);
+		btnAdd.setToolTipText("Thêm loại dịch vụ mới sau khi đã điền đủ thông tin");
+		btnAdd.setBounds(1005, 10, 130, 35);
 		pnlInfo.add(btnAdd);
 
-		btnUpdate = new MyButton(100, 35, "Sửa", gra, updateIcon.getImage(), 43, 19);
-		btnUpdate.setToolTipText("Sửa thông tin nhân viên");
-		btnUpdate.setBounds(150, 93, 100, 35);
+		btnUpdate = new MyButton(130, 35, "Sửa", gra, updateIcon.getImage(), 55, 19, 10, 6);
+		btnUpdate.setToolTipText("Sửa thông tin loại dịch vụ");
+		btnUpdate.setBounds(1005, 50, 130, 35);
 		btnUpdate.setEnabledCustom(false);
 		pnlInfo.add(btnUpdate);
 
-		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 27, 19);
+		btnRefresh = new MyButton(130, 35, "Làm mới", gra, refreshIcon.getImage(), 40, 19, 10, 5);
 		btnRefresh.setToolTipText("Làm mới form");
-		btnRefresh.setBounds(1118, 93, 100, 35);
+		btnRefresh.setBounds(1005, 90, 130, 35);
 		pnlInfo.add(btnRefresh);
 
 		JPanel pnlSearch = new JPanel();
-		pnlSearch.setBounds(286, 83, 822, 53);
+		pnlSearch.setBounds(186, 135, 822, 53);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
 		pnlInfo.add(pnlSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
 		CustomUI.getInstance().setCustomLabel(lblSearch);
-		lblSearch.setBounds(30, 18, 100, 20);
+		lblSearch.setBounds(30, 18, 76, 20);
 		pnlSearch.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
@@ -143,7 +143,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		cboSearch.setToolTipText("Loại tìm kiếm");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
-		cboSearch.setBounds(140, 18, 160, 20);
+		cboSearch.setBounds(105, 18, 200, 20);
 
 		pnlSearch.add(cboSearch);
 
@@ -177,23 +177,23 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 
 		JLabel lblRoomType = new JLabel("Loại phòng:");
 		CustomUI.getInstance().setCustomLabel(lblRoomType);
-		lblRoomType.setBounds(955, 15, 90, 20);
+		lblRoomType.setBounds(562, 65, 90, 20);
 		pnlInfo.add(lblRoomType);
 
 		JLabel lblRoomID = new JLabel("Mã phòng:");
 		CustomUI.getInstance().setCustomLabel(lblRoomID);
-		lblRoomID.setBounds(25, 15, 90, 20);
+		lblRoomID.setBounds(116, 25, 90, 20);
 		pnlInfo.add(lblRoomID);
 
 		txtRoomID = new JTextField();
-		txtRoomID.setBounds(115, 15, 180, 20);
+		txtRoomID.setBounds(206, 25, 180, 20);
 		txtRoomID.setToolTipText("Mã phòng");
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomID);
 		pnlInfo.add(txtRoomID);
 
 		JLabel lblStatusRoom = new JLabel("Tình trạng:");
 		CustomUI.getInstance().setCustomLabel(lblStatusRoom);
-		lblStatusRoom.setBounds(340, 15, 90, 20);
+		lblStatusRoom.setBounds(562, 27, 90, 20);
 		pnlInfo.add(lblStatusRoom);
 
 		cboRoomStatus = new JComboBox<String>();
@@ -202,20 +202,20 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		cboRoomStatus.setToolTipText("Tình trạng phòng");
 		CustomUI.getInstance().setCustomComboBox(cboRoomStatus);
 		txtBFieldRoomStatus = CustomUI.getInstance().setCustomCBoxField(cboRoomStatus);
-		cboRoomStatus.setBounds(430, 15, 180, 20);
+		cboRoomStatus.setBounds(657, 27, 180, 20);
 		pnlInfo.add(cboRoomStatus);
 
 		cboRoomType = new JComboBox<String>();
 		cboRoomType.setToolTipText("Chọn loại phòng");
 		CustomUI.getInstance().setCustomComboBox(cboRoomType);
 		txtBFieldRoomType = CustomUI.getInstance().setCustomCBoxField(cboRoomType);
-		cboRoomType.setBounds(1050, 15, 180, 20);
+		cboRoomType.setBounds(657, 65, 180, 20);
 		pnlInfo.add(cboRoomType);
 
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(8, 201, 1240, 384);
+		pnlTable.setBounds(8, 247, 1240, 338);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã phòng", "Tình trạng ", "Vị trí", "Loại phòng" };
 		modelTableRoom = new DefaultTableModel(cols, 0);
@@ -225,10 +225,18 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 				return false;
 			}
 		};
-		CustomUI.getInstance().setCustomTable(tblTableRoom);
+		tblTableRoom.setBackground(new Color(255, 255, 255, 0));
+		tblTableRoom.setForeground(new Color(255, 255, 255));
 		tblTableRoom.setRowHeight(21);
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableRoom);
-		scrTable.setBounds(10, 10, 1220, 350);
+		tblTableRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tblTableRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
+		tblTableRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		JScrollPane scrTable = new JScrollPane(tblTableRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrTable.getViewport().setBackground(Color.WHITE);
+		scrTable.setBounds(10, 10, 1220, 308);
+		scrTable.setOpaque(false);
+		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);

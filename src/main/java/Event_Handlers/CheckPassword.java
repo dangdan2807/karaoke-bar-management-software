@@ -33,23 +33,6 @@ public class CheckPassword extends Thread {
         this.frame = frame;
     }
 
-    /**
-     * Constructor {@code CheckPassword}
-     * <p>
-     * Khi mật khẩu được truyền vào giống mật khẩu mặc định sẽ xuất hiện thông báo
-     * yêu cầu đổi mật khẩu và sẽ vô hiệu xóa 2 nút quản trị và quá lý đặt phòng
-     * </p>
-     * 
-     * @param password {@code String}: mật khẩu cần kiểm tra
-     * @param btn1     {@code JButton}: nhận sự kiện
-     * @param btn2     {@code JButton}: nhận sự kiện
-     * @param frame    {@code fDieuHuong}: nhận sự kiện
-     */
-    public CheckPassword(String matKhau, JButton btnBookingManagement, JButton btnSystemManagement,
-            Trash.fDieuHuong frame) {
-
-    }
-
     @Override
     public void run() {
         if (password.equalsIgnoreCase("123456")) {

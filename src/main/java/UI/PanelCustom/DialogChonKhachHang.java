@@ -27,9 +27,11 @@ public class DialogChonKhachHang extends JDialog
 	private JTextField txtKeyword;
 	private JComboBox<String> cboSearch;
 	private JButton btnSearch, btnChooseCustomer;
+	private JPanel pnlShowCustomer;
+	private JTextField txtBFieldSearch;
 
 	private ImageIcon background = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(810, 400, Image.SCALE_SMOOTH));
+			CustomUI.BACKGROUND.getImage().getScaledInstance(810, 450, Image.SCALE_SMOOTH));
 	private ImageIcon searchIcon = new ImageIcon(
 			CustomUI.SEARCH_ICON.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
 	private ImageIcon manIcon = new ImageIcon(
@@ -37,8 +39,6 @@ public class DialogChonKhachHang extends JDialog
 	private ImageIcon womanIcon = new ImageIcon(
 			CustomUI.WOMAN_ICON.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 
-	private JPanel pnlShowCustomer;
-	private JTextField txtBFieldSearch;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
@@ -49,7 +49,7 @@ public class DialogChonKhachHang extends JDialog
 	 */
 	public DialogChonKhachHang() {
 		setTitle("Chọn khách hàng");
-		setSize(810, 400);
+		setSize(805, 450);
 		setResizable(false);
 		setLocationRelativeTo(null);
 
@@ -80,7 +80,7 @@ public class DialogChonKhachHang extends JDialog
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Danh sách khách hàng ", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		pnlCustomerList.setBackground(Color.WHITE);
-		pnlCustomerList.setBounds(0, 0, 500, 350);
+		pnlCustomerList.setBounds(5, 0, 500, 378);
 		pnlCustomerList.setOpaque(false);
 		pnlMain.add(pnlCustomerList);
 		pnlCustomerList.setLayout(new BorderLayout(0, 0));
@@ -135,7 +135,7 @@ public class DialogChonKhachHang extends JDialog
 
 		JLabel lblCMND = new JLabel("CMNN/CCCD: ");
 		CustomUI.getInstance().setCustomLabel(lblCMND);
-		lblCMND.setBounds(10, 80, 93, 14);
+		lblCMND.setBounds(10, 80, 95, 14);
 		pnlCustomerInfo.add(lblCMND);
 
 		txtCMND = new JTextField();

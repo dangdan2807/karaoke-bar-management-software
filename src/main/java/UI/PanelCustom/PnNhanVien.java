@@ -19,6 +19,8 @@ import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import javax.swing.border.*;
+
 public class PnNhanVien extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**
@@ -32,7 +34,7 @@ public class PnNhanVien extends JPanel
 	private JComboBox<String> cboSearch, cboSearchType, cboPosition;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPosition, lblSalary, lblPhoneNumber, lbStaffID;
 	private JLabel lblStaffName, lblStatus, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnRefreshPass, btnNext;
 	private JRadioButton radWorking, radRetired, radMale, radFemale;
 	private kDatePicker dpBirthDay;
 	private JSpinner spnSalary;
@@ -44,6 +46,8 @@ public class PnNhanVien extends JPanel
 	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
+	private ImageIcon nextIcon = CustomUI.NEXT_ICON;
+	private ImageIcon doubleNextIcon = CustomUI.DOUBLE_NEXT_ICON;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 	private DecimalFormat df = new DecimalFormat("#,###.##");
@@ -72,8 +76,8 @@ public class PnNhanVien extends JPanel
 				g2.drawImage(bgMain, 0, 0, null);
 				setFont(new Font("Dialog", Font.BOLD, 24));
 				g2.setColor(Color.decode("#9B17EB"));
-				g2.drawRoundRect(10, 50, 1238, 530, 20, 20);
-				g2.drawRoundRect(9, 49, 1240, 530, 20, 20);
+				g2.drawRoundRect(10, 50, 1235, 530, 20, 20);
+				g2.drawRoundRect(9, 49, 1235, 530, 20, 20);
 			}
 		};
 		pnlMain.setLayout(null);
@@ -107,9 +111,22 @@ public class PnNhanVien extends JPanel
 		pnlTitle.add(lbTitle);
 
 		JPanel pnlInfo = new JPanel();
+		// {
+		// @Override
+		// protected void paintComponent(Graphics g) {
+		// super.paintComponent(g);
+		// Graphics2D g2 = (Graphics2D) g;
+		// Image bgMain = bg.getImage();
+		// g2.drawImage(bgMain, 0, 0, null);
+		// setFont(new Font("Dialog", Font.BOLD, 24));
+		// g2.setColor(Color.decode("#9B17EB"));
+		// g2.drawRoundRect(10, 10, 1206, 155, 10, 10);
+		// g2.drawRoundRect(9, 9, 1206, 155, 10, 10);
+		// }
+		// };
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(10, 50, 1238, 182);
+		pnlInfo.setBounds(10, 50, 1238, 210);
 		pnlMain.add(pnlInfo);
 
 		dpBirthDay = new kDatePicker(250, 20);
@@ -120,50 +137,50 @@ public class PnNhanVien extends JPanel
 		dpBirthDay.setToolTipTextCustom("Ngày sinh của nhân viên");
 		dpBirthDay.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
 		pnlInfo.add(dpBirthDay);
-		dpBirthDay.setBounds(965, 54, 250, 20);
+		dpBirthDay.setBounds(669, 76, 250, 20);
 
 		txtCMND = new JTextField();
-		txtCMND.setBounds(965, 29, 250, 20);
+		txtCMND.setBounds(165, 51, 250, 20);
 		txtCMND.setToolTipText("Nhập CMND gồm có 9 số hoặc CCCD gồm có 12 số");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtCMND);
 		pnlInfo.add(txtCMND);
 
 		lblCMND = new JLabel("CMND/CCCD:");
 		CustomUI.getInstance().setCustomLabel(lblCMND);
-		lblCMND.setBounds(845, 29, 105, 20);
+		lblCMND.setBounds(40, 51, 105, 20);
 		pnlInfo.add(lblCMND);
 
 		lblBirthDay = new JLabel("Ngày sinh:");
 		CustomUI.getInstance().setCustomLabel(lblBirthDay);
-		lblBirthDay.setBounds(845, 54, 105, 20);
+		lblBirthDay.setBounds(550, 76, 105, 20);
 		pnlInfo.add(lblBirthDay);
 
 		lblGender = new JLabel("Giới tính:");
 		CustomUI.getInstance().setCustomLabel(lblGender);
-		lblGender.setBounds(845, 79, 105, 20);
+		lblGender.setBounds(550, 127, 105, 20);
 		pnlInfo.add(lblGender);
 
 		txtPhoneNumber = new JTextField();
-		txtPhoneNumber.setBounds(554, 79, 250, 20);
+		txtPhoneNumber.setBounds(165, 76, 250, 20);
 		txtPhoneNumber.setToolTipText("Nhập số điện thoại của nhân viên gồm 10 số và bắt đầu bằng 03, 05, 07, 08, 09");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtPhoneNumber);
 		pnlInfo.add(txtPhoneNumber);
 
 		spnSalary = new JSpinner(new SpinnerNumberModel(0f, 0f, Double.MAX_VALUE, 1000f));
 		CustomUI.getInstance().setCustomSpinner(spnSalary);
-		spnSalary.setBounds(554, 54, 250, 20);
+		spnSalary.setBounds(165, 102, 250, 20);
 		spnSalary.setToolTipText("Nhập mức lương của nhân viên phải lớn hơn hoặc bằng 0");
 		pnlInfo.add(spnSalary);
 
 		radMale = new JRadioButton("Nam");
 		CustomUI.getInstance().setCustomRadioButton(radMale);
-		radMale.setBounds(961, 79, 115, 20);
+		radMale.setBounds(669, 127, 115, 20);
 		radMale.setSelected(true);
 		pnlInfo.add(radMale);
 
 		radFemale = new JRadioButton("Nữ");
 		CustomUI.getInstance().setCustomRadioButton(radFemale);
-		radFemale.setBounds(1082, 79, 115, 20);
+		radFemale.setBounds(787, 127, 115, 20);
 		pnlInfo.add(radFemale);
 
 		ButtonGroup groupGender = new ButtonGroup();
@@ -172,55 +189,55 @@ public class PnNhanVien extends JPanel
 
 		lblPosition = new JLabel("Chức vụ:");
 		CustomUI.getInstance().setCustomLabel(lblPosition);
-		lblPosition.setBounds(435, 29, 115, 20);
+		lblPosition.setBounds(550, 51, 115, 20);
 		pnlInfo.add(lblPosition);
 
 		lblSalary = new JLabel("Mức lương:");
 		CustomUI.getInstance().setCustomLabel(lblSalary);
-		lblSalary.setBounds(435, 54, 115, 16);
+		lblSalary.setBounds(40, 102, 115, 20);
 		pnlInfo.add(lblSalary);
 
 		lblPhoneNumber = new JLabel("Số điện thoại:");
 		CustomUI.getInstance().setCustomLabel(lblPhoneNumber);
-		lblPhoneNumber.setBounds(435, 79, 115, 16);
+		lblPhoneNumber.setBounds(40, 76, 115, 20);
 		pnlInfo.add(lblPhoneNumber);
 
 		txtStaffName = new JTextField();
-		txtStaffName.setBounds(145, 54, 250, 20);
+		txtStaffName.setBounds(669, 25, 250, 20);
 		txtStaffName.setToolTipText("Nhập tên của nhân viên, không quá 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtStaffName);
 		pnlInfo.add(txtStaffName);
 
 		txtStaffID = new JTextField();
-		txtStaffID.setBounds(145, 28, 250, 20);
+		txtStaffID.setBounds(165, 25, 250, 20);
 		txtStaffID.setToolTipText("Mã nhân viên");
 		CustomUI.getInstance().setCustomTextFieldOff(txtStaffID);
 		pnlInfo.add(txtStaffID);
 
 		lbStaffID = new JLabel("Mã nhân viên: ");
 		CustomUI.getInstance().setCustomLabel(lbStaffID);
-		lbStaffID.setBounds(20, 29, 120, 20);
+		lbStaffID.setBounds(40, 26, 120, 20);
 		pnlInfo.add(lbStaffID);
 
 		lblStaffName = new JLabel("Tên nhân viên:");
 		CustomUI.getInstance().setCustomLabel(lblStaffName);
-		lblStaffName.setBounds(20, 54, 120, 20);
+		lblStaffName.setBounds(550, 25, 120, 20);
 		pnlInfo.add(lblStaffName);
 
 		lblStatus = new JLabel("Trạng thái:");
 		CustomUI.getInstance().setCustomLabel(lblStatus);
-		lblStatus.setBounds(20, 79, 120, 20);
+		lblStatus.setBounds(40, 127, 120, 20);
 		pnlInfo.add(lblStatus);
 
 		radWorking = new JRadioButton("Đang làm ");
 		CustomUI.getInstance().setCustomRadioButton(radWorking);
 		radWorking.setSelected(true);
-		radWorking.setBounds(142, 78, 115, 21);
+		radWorking.setBounds(165, 127, 115, 21);
 		pnlInfo.add(radWorking);
 
 		radRetired = new JRadioButton("Đã nghỉ");
 		CustomUI.getInstance().setCustomRadioButton(radRetired);
-		radRetired.setBounds(262, 78, 115, 21);
+		radRetired.setBounds(282, 127, 115, 21);
 		pnlInfo.add(radRetired);
 
 		ButtonGroup groupStatus = new ButtonGroup();
@@ -233,19 +250,19 @@ public class PnNhanVien extends JPanel
 		CustomUI.getInstance().setCustomComboBox(cboPosition);
 		cboPosition.setToolTipText("Chọn chức vụ của nhân viên");
 		txtBFieldPosition = CustomUI.getInstance().setCustomCBoxField(cboPosition);
-		cboPosition.setBounds(554, 28, 250, 20);
+		cboPosition.setBounds(669, 51, 250, 20);
 		pnlInfo.add(cboPosition);
 
 		JPanel pnlSearch = new JPanel();
-		pnlSearch.setBounds(10, 135, 1218, 41);
+		pnlSearch.setBounds(40, 173, 1160, 35);
 		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
 		pnlInfo.add(pnlSearch);
 
-		lblSearch = new JLabel("Lọc theo:");
+		lblSearch = new JLabel("Tìm theo:");
 		CustomUI.getInstance().setCustomLabel(lblSearch);
-		lblSearch.setBounds(285, 10, 100, 20);
+		lblSearch.setBounds(0, 5, 100, 20);
 		pnlSearch.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
@@ -256,21 +273,21 @@ public class PnNhanVien extends JPanel
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		cboSearch.setToolTipText("Chọn loại thông tin cần lọc");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
-		cboSearch.setBounds(385, 11, 200, 20);
+		cboSearch.setBounds(125, 6, 250, 20);
 		pnlSearch.add(cboSearch);
 
-		btnSearch = new MyButton(110, 35, "Tìm kiếm", gra, searchIcon.getImage(), 35, 19, 14, 5);
-		btnSearch.setBounds(956, 5, 110, 35);
+		btnSearch = new MyButton(150, 35, "Tìm kiếm", gra, searchIcon.getImage(), 50, 19, 10, 5);
+		btnSearch.setBounds(996, 2, 150, 35);
 		btnSearch.setToolTipText("Tìm kiếm thông tin nhân viên theo yêu cần đã chọn");
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
 		CustomUI.getInstance().setCustomLabel(lblKeyWord);
-		lblKeyWord.setBounds(641, 10, 73, 20);
+		lblKeyWord.setBounds(510, 5, 73, 20);
 		pnlSearch.add(lblKeyWord);
 
 		txtKeyWord = new JTextField();
-		txtKeyWord.setBounds(707, 10, 190, 20);
+		txtKeyWord.setBounds(629, 6, 250, 20);
 		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
 		txtKeyWord.setVisible(false);
@@ -282,43 +299,56 @@ public class PnNhanVien extends JPanel
 		CustomUI.getInstance().setCustomComboBox(cboSearchType);
 		txtBFieldSearchPosition = CustomUI.getInstance().setCustomCBoxField(cboSearchType);
 		cboSearchType.setToolTipText("Chọn chức vụ muốn lọc");
-		cboSearchType.setBounds(707, 11, 190, 20);
+		cboSearchType.setBounds(629, 6, 250, 20);
 		pnlSearch.add(cboSearchType);
 
-		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 31, 19, 10, 5);
-		btnRefresh.setBounds(1106, 5, 100, 35);
-		btnRefresh.setBackground(Color.CYAN);
-		btnRefresh.setToolTipText("Xóa rỗng form thông tin");
-		pnlSearch.add(btnRefresh);
-
-		btnUpdate = new MyButton(100, 35, "Sửa", gra, updateIcon.getImage(), 45, 19, 24, 6);
-		btnUpdate.setBounds(136, 5, 100, 35);
-		btnUpdate.setEnabledCustom(false);
-		btnUpdate.setToolTipText("Cập nhật thông tin nhân viên");
-		pnlSearch.add(btnUpdate);
-
-		btnAdd = new MyButton(100, 35, "Thêm", gra, addIcon.getImage(), 40, 19, 19, 6);
-		btnAdd.setBounds(10, 5, 100, 35);
-		btnAdd.setToolTipText("Thêm nhân viên mới từ thông tin đã nhập trên form");
-		pnlSearch.add(btnAdd);
-
-		JLabel lbUsername = new JLabel("Tài khoản:");
+		JLabel lbUsername = new JLabel("Tên đăng nhập:");
 		CustomUI.getInstance().setCustomLabel(lbUsername);
-		lbUsername.setBounds(20, 104, 120, 20);
+		lbUsername.setBounds(550, 102, 115, 20);
 		pnlInfo.add(lbUsername);
 
 		txtUsername = new JTextField();
 		txtUsername.setForeground(Color.WHITE);
 		txtUsername.setCaretColor(Color.WHITE);
-		txtUsername.setBounds(145, 104, 250, 20);
+		txtUsername.setBounds(669, 102, 250, 20);
 		txtUsername.setToolTipText("Tên đăng nhập phải có từ 6 đến 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtUsername);
 		pnlInfo.add(txtUsername);
 
+		btnAdd = new MyButton(150, 35, "Thêm", gra, addIcon.getImage(), 55, 19, 10, 6);
+		btnAdd.setBounds(1036, 17, 150, 35);
+		pnlInfo.add(btnAdd);
+		btnAdd.setToolTipText("Thêm nhân viên mới từ thông tin đã nhập trên form");
+
+		btnUpdate = new MyButton(150, 35, "Sửa", gra, updateIcon.getImage(), 63, 19, 10, 6);
+		btnUpdate.setBounds(1036, 54, 150, 35);
+		pnlInfo.add(btnUpdate);
+		btnUpdate.setEnabledCustom(false);
+		btnUpdate.setToolTipText("Cập nhật thông tin nhân viên");
+
+		btnRefresh = new MyButton(150, 35, "Làm mới", gra, refreshIcon.getImage(), 50, 19, 10, 5);
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnRefresh.setBounds(1036, 91, 150, 35);
+		pnlInfo.add(btnRefresh);
+		btnRefresh.setBackground(Color.CYAN);
+		btnRefresh.setToolTipText("Xóa rỗng form thông tin");
+
+		btnRefreshPass = new MyButton(150, 35, "Đặt lại mật khẩu", gra, updateIcon.getImage(), 31, 19, 10, 5);
+		btnRefreshPass.setBounds(1036, 128, 150, 35);
+		pnlInfo.add(btnRefreshPass);
+		btnRefreshPass.setBackground(Color.CYAN);
+		btnRefreshPass.setToolTipText("Làm mới lại mật khẩu nhân viên");
+
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(8, 234, 1240, 351);
+		Border borderTitleTable = CustomUI.BORDER_TITLE_TABLE;
+		((TitledBorder) borderTitleTable).setTitle("Danh sách nhân viên");
+		pnlTable.setBorder(borderTitleTable);
+		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã nhân viên", "Tên nhân viên", "CMND/CCCD", "Chức vụ", "SDT", "Ngày sinh",
 				"Mức lương", "Giới tính", "Trạng thái", "Tài khoản" };
@@ -330,14 +360,35 @@ public class PnNhanVien extends JPanel
 		};
 
 		tblTableStaff = new JTable(modelTableStaff);
-		CustomUI.getInstance().setCustomTable(tblTableStaff);
+		tblTableStaff.setBackground(new Color(255, 255, 255, 0));
+		tblTableStaff.setForeground(new Color(255, 255, 255));
 		tblTableStaff.setRowHeight(21);
+		tblTableStaff.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tblTableStaff.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
+		tblTableStaff.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		tblTableStaff.getTableHeader().setBackground(new Color(255, 255, 255));
 
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableStaff);
-		scrTable.setBounds(10, 10, 1220, 330);
+		tblTableStaff.getTableHeader().setBackground(new Color(255, 255, 255));
+		JScrollPane scrTable = new JScrollPane(tblTableStaff, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrTable.getViewport().setBackground(Color.WHITE);
+		scrTable.setBounds(10, 20, 1200, 230);
+		scrTable.setOpaque(false);
+		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
+
+		// btnNext = new MyButton(150, 35, "Tìm kiếm", gra, nextIcon.getImage(), 50, 19,
+		// 10, 5);
+		// btnNext.setBounds(328, 549, 150, 35);
+		// pnlMain.add(btnNext);
+		//// btnNext.setEnabledCustom(false);
+		// btnNext.setToolTipText("Cập nhật thông tin nhân viên");
+
+		JLabel aJLabel = new JLabel(nextIcon);
+		aJLabel.setBounds(328, 549, 150, 35);
+		pnlMain.add(aJLabel);
 
 		btnSearch.addActionListener(this);
 		btnAdd.addActionListener(this);
