@@ -7,8 +7,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
 
 import DAO.LoaiDichVuDAO;
@@ -33,13 +31,13 @@ public class PnLoaiDichVu extends JPanel
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
 	private ImageIcon nextIconRight = new ImageIcon(
-			CustomUI.NEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon doubleNextRightIcon = new ImageIcon(
-			CustomUI.DOUBLENEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon nextLeftIcon = new ImageIcon(
-			CustomUI.NEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon doubleNextLeftIcon = new ImageIcon(
-			CustomUI.DOUBLENEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 

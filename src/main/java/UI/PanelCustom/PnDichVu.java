@@ -13,7 +13,6 @@ import DAO.*;
 import UI.fDieuHuong;
 import UI.fQuanTri;
 import entity.*;
-import javax.swing.border.*;
 
 public class PnDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
@@ -26,13 +25,13 @@ public class PnDichVu extends JPanel
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon nextIconRight = new ImageIcon(
-			CustomUI.NEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon doubleNextRightIcon = new ImageIcon(
-			CustomUI.DOUBLENEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon nextLeftIcon = new ImageIcon(
-			CustomUI.NEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon doubleNextLeftIcon = new ImageIcon(
-			CustomUI.DOUBLENEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private JTable tblTableService;
 	private DefaultTableModel modelTableService;
 	private JTextField txtServiceName, txtServiceID, txtBFieldSerType, txtBFieldSearch;

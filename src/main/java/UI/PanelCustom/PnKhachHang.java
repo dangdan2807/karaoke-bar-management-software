@@ -1,43 +1,13 @@
 package UI.PanelCustom;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
+import javax.swing.*;
+import javax.swing.table.*;
 
 import DAO.ConvertTime;
 import DAO.KhachHangDAO;
@@ -76,13 +46,13 @@ public class PnKhachHang extends JPanel
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
 	private ImageIcon nextIconRight = new ImageIcon(
-			CustomUI.NEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon doubleNextRightIcon = new ImageIcon(
-			CustomUI.DOUBLENEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon nextLeftIcon = new ImageIcon(
-			CustomUI.NEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon doubleNextLeftIcon = new ImageIcon(
-			CustomUI.DOUBLENEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 	private JTextField txtIndex;

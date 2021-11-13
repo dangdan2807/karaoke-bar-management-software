@@ -19,8 +19,6 @@ import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import javax.swing.border.*;
-
 public class PnNhanVien extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**
@@ -48,14 +46,13 @@ public class PnNhanVien extends JPanel
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
 	private ImageIcon nextIconRight = new ImageIcon(
-			CustomUI.NEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon doubleNextRightIcon = new ImageIcon(
-			CustomUI.DOUBLENEXTRIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon nextLeftIcon = new ImageIcon(
-			CustomUI.NEXTLEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon doubleNextLeftIcon = new ImageIcon(
-			CustomUI.DOUBLENEXTLEFT_ICON.getImage()
-			.getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 	private DecimalFormat df = new DecimalFormat("#,###.##");
@@ -364,7 +361,7 @@ public class PnNhanVien extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách nhân viên");
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách nhân viên");
 		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã nhân viên", "Tên nhân viên", "CMND/CCCD", "Chức vụ", "SDT", "Ngày sinh",
@@ -408,7 +405,7 @@ public class PnNhanVien extends JPanel
 		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
 		btnDoubleNextRight.setBounds(760, 540, 70, 35);
 		pnlMain.add(btnDoubleNextRight);
-		
+
 		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
 		btnNextLeft.setBounds(520, 540, 70, 35);
 		pnlMain.add(btnNextLeft);
@@ -420,7 +417,6 @@ public class PnNhanVien extends JPanel
 		txtIndex = new MyTextField("12");
 		txtIndex.setBounds(600, 540, 70, 35);
 		pnlMain.add(txtIndex);
-
 
 		btnSearch.addActionListener(this);
 		btnAdd.addActionListener(this);
