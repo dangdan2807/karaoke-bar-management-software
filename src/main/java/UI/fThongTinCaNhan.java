@@ -199,7 +199,7 @@ public class fThongTinCaNhan extends JDialog
         CustomUI.getInstance().setCustomTextFieldOff(txtUsername);
         pnlAccountInfo.add(txtUsername);
 
-        lblPassword = new JLabel("Mật khẩu: ");
+        lblPassword = new JLabel("Nhập mật khẩu: ");
         CustomUI.getInstance().setCustomLabel(lblPassword);
         lblPassword.setBounds(32, 80, 120, 25);
         pnlAccountInfo.add(lblPassword);

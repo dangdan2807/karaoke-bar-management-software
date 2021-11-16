@@ -146,6 +146,7 @@ public class PnHoaDon extends JPanel
 		cboSearch.addItem("Tên khách hàng");
 		cboSearch.addItem("SĐT khách hàng");
 		cboSearch.addItem("Tên nhân viên");
+		cboSearch.addItem("Mã hóa đơn");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(290, 70, 250, 20);
@@ -553,6 +554,8 @@ public class PnHoaDon extends JPanel
 				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerName(keyword, fromDate, toDate);
 			} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
 				billList = HoaDonDAO.getInstance().getBillListByDateAndStaffName(keyword, fromDate, toDate);
+			} else if (searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {
+				billList = HoaDonDAO.getInstance().getBillListByDateAndBillId(keyword, fromDate, toDate);
 			}
 		}
 		loadBillList(billList);

@@ -98,8 +98,8 @@ public class HoaDonDAO {
      */
     public boolean insertBill(HoaDon bill) {
         String query = "{CALL USP_insertBill( ? , ? , ? , ? , ? )}";
-        Object[] parameter = new Object[] { bill.getMaHoaDon() , bill.getNgayGioDat(), bill.getNhanVien().getMaNhanVien(),
-                bill.getKhachHang().getMaKH(), bill.getPhong().getMaPhong() };
+        Object[] parameter = new Object[] { bill.getMaHoaDon(), bill.getNgayGioDat(),
+                bill.getNhanVien().getMaNhanVien(), bill.getKhachHang().getMaKH(), bill.getPhong().getMaPhong() };
         int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         return result > 0;
     }
@@ -144,14 +144,14 @@ public class HoaDonDAO {
     /**
      * Lấy danh sách hóa đơn trong khoản ngày được chọn
      * 
-     * @param startDate {@code java.sql.Date}: ngày bắt đầu
-     * @param endDate   {@code java.sql.Date}: ngày kết thúc
+     * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
-    public ArrayList<HoaDon> getBillListByDate(Date startDate, Date endDate) {
+    public ArrayList<HoaDon> getBillListByDate(Date fromDate, Date toDate) {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
         String query = "{CALL USP_getBillListByDate( ? , ? )}";
-        Object[] parameter = new Object[] { startDate, endDate };
+        Object[] parameter = new Object[] { fromDate, toDate };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -168,14 +168,14 @@ public class HoaDonDAO {
      * hàng
      * 
      * @param phoneNumber {@code String}: Số điện thoại
-     * @param startDate   {@code java.sql.Date}: ngày bắt đầu
-     * @param endDate     {@code java.sql.Date}: ngày kết thúc
+     * @param fromDate    {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate      {@code java.sql.Date}: ngày kết thúc thống kê
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
-    public ArrayList<HoaDon> getBillListByDateAndCustomerPhoneNumber(String phoneNumber, Date startDate, Date endDate) {
+    public ArrayList<HoaDon> getBillListByDateAndCustomerPhoneNumber(String phoneNumber, Date fromDate, Date toDate) {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
         String query = "{CALL USP_getBillListByDateAndCustomerPhoneNumber( ? , ? , ? )}";
-        Object[] parameter = new Object[] { phoneNumber, startDate, endDate };
+        Object[] parameter = new Object[] { phoneNumber, fromDate, toDate };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -191,14 +191,14 @@ public class HoaDonDAO {
      * Lấy danh sách hóa đơn trong khoản ngày được chọn và tên của khách hàng
      * 
      * @param customerName {@code String}: Tên khách hàng
-     * @param startDate    {@code java.sql.Date}: ngày bắt đầu
-     * @param endDate      {@code java.sql.Date}: ngày kết thúc
+     * @param fromDate     {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate       {@code java.sql.Date}: ngày kết thúc thống kê
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
-    public ArrayList<HoaDon> getBillListByDateAndCustomerName(String customerName, Date startDate, Date endDate) {
+    public ArrayList<HoaDon> getBillListByDateAndCustomerName(String customerName, Date fromDate, Date toDate) {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
         String query = "{CALL USP_getBillListByDateAndCustomerName( ? , ? , ? )}";
-        Object[] parameter = new Object[] { customerName, startDate, endDate };
+        Object[] parameter = new Object[] { customerName, fromDate, toDate };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -215,14 +215,37 @@ public class HoaDonDAO {
      * đơn
      * 
      * @param staffName {@code String}: Tên nhân viên
-     * @param startDate    {@code java.sql.Date}: ngày bắt đầu
-     * @param endDate      {@code java.sql.Date}: ngày kết thúc
+     * @param fromDate  {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate    {@code java.sql.Date}: ngày kết thúc thống kê
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
-    public ArrayList<HoaDon> getBillListByDateAndStaffName(String staffName, Date startDate, Date endDate) {
+    public ArrayList<HoaDon> getBillListByDateAndStaffName(String staffName, Date fromDate, Date toDate) {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
         String query = "{CALL USP_getBillListByDateAndStaffName( ? , ? , ? )}";
-        Object[] parameter = new Object[] { staffName, startDate, endDate };
+        Object[] parameter = new Object[] { staffName, fromDate, toDate };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new HoaDon(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy danh sách hóa đơn trong khoản ngày được chọn và mã hóa đơn đơn
+     * 
+     * @param billId   {@code String}: Mã hóa đơn
+     * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
+     * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
+     */
+    public ArrayList<HoaDon> getBillListByDateAndBillId(String billId, Date fromDate, Date toDate) {
+        ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
+        String query = "{CALL USP_getBillListByDateAndBillId( ? , ? , ? )}";
+        Object[] parameter = new Object[] { billId, fromDate, toDate };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {

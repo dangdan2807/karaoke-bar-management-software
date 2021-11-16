@@ -32,7 +32,7 @@ public class PnNhanVien extends JPanel
 	private JComboBox<String> cboSearch, cboSearchType, cboPosition;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPosition, lblSalary, lblPhoneNumber, lbStaffID;
 	private JLabel lblStaffName, lblStatus, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnRefreshPass, btnNextRight,
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnResetPassword, btnNextRight,
 			btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
 	private JRadioButton radWorking, radRetired, radMale, radFemale;
 	private kDatePicker dpBirthDay;
@@ -57,6 +57,8 @@ public class PnNhanVien extends JPanel
 			Color.decode("#FAFFD1"));
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
+	private boolean isResetPassword = false;
+	private boolean isInsertStaff = false;
 	private UI.PanelCustom.MyTextField txtIndex;
 
 	/**
@@ -127,19 +129,6 @@ public class PnNhanVien extends JPanel
 		pnlTitle.add(lbTitle);
 
 		JPanel pnlInfo = new JPanel();
-		// {
-		// @Override
-		// protected void paintComponent(Graphics g) {
-		// super.paintComponent(g);
-		// Graphics2D g2 = (Graphics2D) g;
-		// Image bgMain = bg.getImage();
-		// g2.drawImage(bgMain, 0, 0, null);
-		// setFont(new Font("Dialog", Font.BOLD, 24));
-		// g2.setColor(Color.decode("#9B17EB"));
-		// g2.drawRoundRect(10, 10, 1206, 155, 10, 10);
-		// g2.drawRoundRect(9, 9, 1206, 155, 10, 10);
-		// }
-		// };
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
 		pnlInfo.setBounds(10, 50, 1238, 210);
@@ -352,11 +341,11 @@ public class PnNhanVien extends JPanel
 		btnRefresh.setBackground(Color.CYAN);
 		btnRefresh.setToolTipText("Xóa rỗng form thông tin");
 
-		btnRefreshPass = new MyButton(150, 35, "Đặt lại mật khẩu", gra, updateIcon.getImage(), 31, 19, 10, 5);
-		btnRefreshPass.setBounds(1036, 128, 150, 35);
-		pnlInfo.add(btnRefreshPass);
-		btnRefreshPass.setBackground(Color.CYAN);
-		btnRefreshPass.setToolTipText("Làm mới lại mật khẩu nhân viên");
+		btnResetPassword = new MyButton(150, 35, "Đặt lại mật khẩu", gra, updateIcon.getImage(), 31, 19, 10, 5);
+		btnResetPassword.setBounds(1036, 128, 150, 35);
+		pnlInfo.add(btnResetPassword);
+		btnResetPassword.setBackground(Color.CYAN);
+		btnResetPassword.setToolTipText("Làm mới lại mật khẩu nhân viên");
 
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
@@ -418,10 +407,11 @@ public class PnNhanVien extends JPanel
 		txtIndex.setBounds(600, 540, 70, 35);
 		pnlMain.add(txtIndex);
 
-		btnSearch.addActionListener(this);
 		btnAdd.addActionListener(this);
+		btnSearch.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnRefresh.addActionListener(this);
+		btnResetPassword.addActionListener(this);
 
 		tblTableStaff.addMouseListener(this);
 		txtStaffName.addMouseListener(this);
@@ -474,6 +464,7 @@ public class PnNhanVien extends JPanel
 		if (o.equals(btnRefresh)) {
 			refreshForm();
 		} else if (o.equals(btnAdd)) {
+			isInsertStaff = true;
 			addNewStaff();
 		} else if (o.equals(btnBack)) {
 			backTofDieuHuong();
@@ -481,6 +472,9 @@ public class PnNhanVien extends JPanel
 			updateStaffInfo();
 		} else if (o.equals(btnSearch)) {
 			searchEventUsingBtnSearch();
+		} else if (o.equals(btnResetPassword)) {
+			isResetPassword = true;
+			updateStaffInfo();
 		}
 	}
 
@@ -772,6 +766,7 @@ public class PnNhanVien extends JPanel
 		String staffID = txtStaffID.getText().trim();
 		String staffName = txtStaffName.getText().trim();
 		String status = radRetired.isSelected() ? "Đã nghỉ" : "Đang làm";
+		boolean accountStatus = radRetired.isSelected() ? false : true;
 		String position = cboPosition.getSelectedItem().toString().trim();
 		Double salary = Double.parseDouble(spnSalary.getValue().toString());
 		String phoneNumber = txtPhoneNumber.getText().trim();
@@ -780,6 +775,13 @@ public class PnNhanVien extends JPanel
 		boolean gender = radMale.isSelected() ? false : true;
 		String username = txtUsername.getText().trim();
 		TaiKhoan account = new TaiKhoan(username);
+		account.setTinhTrangTK(accountStatus);
+		if (isResetPassword == true || isInsertStaff == true)
+			account.setMatKhau("123456");
+		else {
+			String password = NhanVienDAO.getInstance().getStaffByUsername(username).getTaiKhoan().getMatKhau();
+			account.setMatKhau(password);
+		}
 		if (staffID.equals("") || staffID.length() <= 0)
 			staffID = createNewStaffID();
 		return new NhanVien(staffID, cmnd, staffName, birthDay, phoneNumber, position, salary, gender, status, account);
@@ -956,21 +958,26 @@ public class PnNhanVien extends JPanel
 		String message = "";
 		if (validData()) {
 			NhanVien staff = getStaffDataInForm();
-			Boolean result = NhanVienDAO.getInstance().insertStaff(staff);
-			String name = "nhân viên";
-			if (result) {
-				message = "Thêm " + name + " mới thành công";
-				txtStaffID.setText(staff.getMaNhanVien());
-				int stt = tblTableStaff.getRowCount();
-				addRow(stt, staff);
-				int lastIndex = tblTableStaff.getRowCount() - 1;
-				tblTableStaff.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-				tblTableStaff.scrollRectToVisible(tblTableStaff.getCellRect(lastIndex, lastIndex, true));
-				txtUsername.setEditable(false);
-				btnAdd.setEnabledCustom(false);
-				btnUpdate.setEnabledCustom(true);
+			if (staff.getChucVu().equalsIgnoreCase("chủ quán")) {
+				Boolean result = NhanVienDAO.getInstance().insertStaff(staff);
+				String name = "nhân viên";
+				if (result) {
+					message = "Thêm " + name + " mới thành công";
+					txtStaffID.setText(staff.getMaNhanVien());
+					int stt = tblTableStaff.getRowCount() + 1;
+					addRow(stt, staff);
+					int lastIndex = tblTableStaff.getRowCount() - 1;
+					tblTableStaff.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+					tblTableStaff.scrollRectToVisible(tblTableStaff.getCellRect(lastIndex, lastIndex, true));
+					CustomUI.getInstance().setCustomTextFieldOff(txtUsername);
+					btnAdd.setEnabledCustom(false);
+					btnUpdate.setEnabledCustom(true);
+					isInsertStaff = false;
+				} else {
+					message = "Thêm " + name + " thất bại";
+				}
 			} else {
-				message = "Thêm " + name + " thất bại";
+				message = "Chỉ có duy nhất 1 chủ quán";
 			}
 			JOptionPane.showMessageDialog(this, message);
 		}
@@ -982,34 +989,53 @@ public class PnNhanVien extends JPanel
 	private void updateStaffInfo() {
 		if (validData()) {
 			NhanVien staff = getStaffDataInForm();
-			String staffName = NhanVienDAO.getInstance().getStaffNameById(staff.getMaNhanVien());
 			String message = "";
-			int selectedRow = tblTableStaff.getSelectedRow();
-			String name = "nhân viên";
-			if (selectedRow == -1) {
-				message = "Hãy chọn " + name + " mà bạn cần cập nhật thông tin";
-				JOptionPane.showConfirmDialog(this, message, "Thông báo", JOptionPane.OK_OPTION,
-						JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				message = "Xác nhận cập nhật thông tin " + name + " " + staffName;
-				int choose = JOptionPane.showConfirmDialog(this, message, "Xác nhận cập nhật thông tin " + name + "",
-						JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (choose == JOptionPane.OK_OPTION) {
-					Boolean result = NhanVienDAO.getInstance().updateInfoStaff(staff);
-					if (result) {
-						message = "Cập nhật thông tin " + name + " thành công";
-						updateRow(selectedRow, staff);
-						txtUsername.setEditable(false);
-						btnAdd.setEnabledCustom(false);
-						btnUpdate.setEnabledCustom(true);
-						tblTableStaff.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-						tblTableStaff.scrollRectToVisible(tblTableStaff.getCellRect(selectedRow, selectedRow, true));
-					} else {
-						message = "Cập nhật thông tin " + name + " thất bại";
+			boolean isManager = staffLogin.getTaiKhoan().getTenDangNhap()
+					.equalsIgnoreCase(staff.getTaiKhoan().getTenDangNhap());
+			boolean isUpdateStatus = isManager && staff.getTrangThaiNV().equalsIgnoreCase("Đang làm");
+			boolean isUpdateManager = isManager && staff.getChucVu().equalsIgnoreCase("Chủ quán");
+			if (isUpdateStatus || isUpdateManager) {
+				String staffName = NhanVienDAO.getInstance().getStaffNameById(staff.getMaNhanVien());
+				int selectedRow = tblTableStaff.getSelectedRow();
+				String name = "nhân viên";
+				if (selectedRow == -1) {
+					message = "Hãy chọn " + name + " mà bạn cần cập nhật thông tin";
+					JOptionPane.showConfirmDialog(this, message, "Thông báo", JOptionPane.OK_OPTION,
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					message = "Xác nhận cập nhật thông tin " + name + " " + staffName;
+					int choose = JOptionPane.showConfirmDialog(this, message,
+							"Xác nhận cập nhật thông tin " + name + "", JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE);
+					if (choose == JOptionPane.OK_OPTION) {
+						Boolean result = false;
+						if (isResetPassword || staff.getTaiKhoan().getTinhTrangTK() == false) {
+							result = NhanVienDAO.getInstance().updateInfoStaffAndAccount(staff);
+						} else {
+							result = NhanVienDAO.getInstance().updateInfoStaff(staff);
+						}
+						if (result) {
+							message = "Cập nhật thông tin " + name + " thành công";
+							updateRow(selectedRow, staff);
+							CustomUI.getInstance().setCustomTextFieldOff(txtUsername);
+							btnAdd.setEnabledCustom(false);
+							btnUpdate.setEnabledCustom(true);
+							tblTableStaff.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+							tblTableStaff
+									.scrollRectToVisible(tblTableStaff.getCellRect(selectedRow, selectedRow, true));
+							isResetPassword = false;
+						} else {
+							message = "Cập nhật thông tin " + name + " thất bại";
+						}
 					}
-					JOptionPane.showMessageDialog(this, message);
 				}
+			} else {
+				if (!isUpdateStatus)
+					message = "Bạn không thể vô hiệu hóa tài khoản của chính bạn";
+				else if (!isUpdateManager)
+					message = "Bạn không thể thay đổi chức vụ của chính bạn";
 			}
+			JOptionPane.showMessageDialog(this, message);
 		}
 	}
 

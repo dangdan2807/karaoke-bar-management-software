@@ -29,7 +29,6 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 	private ImageIcon pdfIcon = CustomUI.PDF_ICON;
 	private ImageIcon excelIcon = CustomUI.EXCEL_ICON;
 
-
 	private String formatTime = "HH:mm:ss dd/MM/yyyy";
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private final String WORKING_DIR = System.getProperty("user.dir");
@@ -58,11 +57,11 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				// GradientPaint gra = new GradientPaint(179, 0, Color.decode("#013a63"), 180,
+				GradientPaint gra = new GradientPaint(179, 0, Color.decode("#013a63"), 180, getHeight(),
+						Color.decode("#2c7da0"));
+				// GradientPaint gra = new GradientPaint(179, 0, Color.decode("#5a189a"), 180,
 				// getHeight(),
-				// Color.decode("#2c7da0"));
-				GradientPaint gra = new GradientPaint(179, 0, Color.decode("#5a189a"), 180, getHeight(),
-						Color.decode("#7b2cbf"));
+				// Color.decode("#7b2cbf"));
 				g2.setPaint(gra);
 				g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 30, 30);
 				setFont(new Font("Dialog", Font.BOLD, 16));
@@ -366,7 +365,6 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		} else if (o.equals(btnPayment)) {
 			Double totalPriceBill = bill.tinhTongTienHoaDon();
 			boolean isPaid = HoaDonDAO.getInstance().payment(bill.getMaHoaDon(), bill.getNgayGioTra(), totalPriceBill);
-			System.out.println(isPaid);
 			if (isPaid) {
 				paid = isPaid;
 				btnExportExcel.setEnabledCustom(true);
@@ -376,7 +374,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(null, "Lỗi khi thanh toán vui lòng thử lại!!!", "Lỗi",
 						JOptionPane.ERROR_MESSAGE);
 			}
-			this.dispose();
+			// this.dispose();
 		} else if (o.equals(btnBack)) {
 			this.dispose();
 		}

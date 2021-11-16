@@ -158,9 +158,9 @@ public class PhongDAO {
      *         <li>Nếu thất bại thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean switchRoom(String oldRoomId, String newRoomId) {
-        String query = "{CALL USP_switchRoom( ? , ? )}";
-        Object[] parameter = new Object[] { oldRoomId, newRoomId };
+    public boolean switchRoom(String billId, String oldRoomId, String newRoomId) {
+        String query = "{CALL USP_switchRoom( ? , ? , ? )}";
+        Object[] parameter = new Object[] { billId, oldRoomId, newRoomId };
         Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         int result = obj != null ? result = (int) obj : 0;
         return result > 0;

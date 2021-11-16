@@ -129,11 +129,11 @@ public class NhanVienDAO {
      *         </ul>
      */
     public Boolean updateInfoStaffAndAccount(NhanVien staff) {
-        String query = "{CALL USP_updateInfoStaffAndAccount( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )}";
+        String query = "{CALL USP_updateInfoStaffAndAccount( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )}";
         TaiKhoan taiKhoan = staff.getTaiKhoan();
         Object[] parameter = new Object[] { staff.getMaNhanVien(), staff.getCmnd(), staff.getHoTen(),
                 staff.getNgaySinh(), staff.getSoDienThoai(), staff.getChucVu(), staff.getMucLuong(),
-                staff.getTrangThaiNV(), staff.getGioiTinh(), taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau() };
+                staff.getTrangThaiNV(), staff.getGioiTinh(), taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau(), taiKhoan.getTinhTrangTK() };
         Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         int result = obj != null ? result = (int) obj : 0;
         return result > 0;

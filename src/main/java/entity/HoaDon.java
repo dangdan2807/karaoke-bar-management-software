@@ -358,6 +358,9 @@ public class HoaDon {
 	 */
 	public Double tinhTienPhong() {
 		Double soGio = tinhGioThue();
+		if (soGio < 1.0) {
+			soGio = 1.0;
+		}
 		Double tongTien = soGio * phong.getLoaiPhong().getGiaTien();
 		return tongTien;
 	}

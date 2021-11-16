@@ -67,6 +67,7 @@ public class pnDatPhong extends JPanel
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private ArrayList<DichVu> serviceList = new ArrayList<DichVu>();
 	private ArrayList<DichVu> serviceOrderList = new ArrayList<DichVu>();
+	private boolean isDoubleClick = false;
 
 	/**
 	 * Hàm khởi tạo form
@@ -129,9 +130,10 @@ public class pnDatPhong extends JPanel
 		pnlStaffInfo.add(pnlStaffControl);
 
 		lblStaffName = new JLabel("Tên nhân viên");
+		lblStaffName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblStaffName.setForeground(Color.WHITE);
-		lblStaffName.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblStaffName.setBounds(80, 4, 191, 21);
+		lblStaffName.setFont(new Font("Dialog", Font.BOLD, 24));
+		lblStaffName.setBounds(0, 4, 318, 34);
 		pnlStaffControl.add(lblStaffName);
 
 		JPanel pnlRoomList = new JPanel();
@@ -286,21 +288,21 @@ public class pnDatPhong extends JPanel
 				new Dimension(16, 19), gra);
 		((MyButton) btnRentRoom).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		((MyButton) btnRentRoom).setEnabledCustom(false);
-		btnRentRoom.setBounds(27, 165, 120, 35);
 		pnlBiffInfo.add(btnRentRoom);
+		btnRentRoom.setBounds(27, 150, 120, 35);
 
 		btnPayment = new MyButton(120, 35, "Thanh toán", new Dimension(75, 20), paymentIcon.getImage(),
 				new Dimension(16, 19), gra);
 		((MyButton) btnPayment).setFontCustom(new Font("Dialog", Font.BOLD, 14));
-		btnPayment.setBounds(177, 165, 120, 35);
 		pnlBiffInfo.add(btnPayment);
+		btnPayment.setBounds(177, 150, 120, 35);
 
 		btnChooseCustomer = new MyButton(135, 35, "Chọn K.Hàng", new Dimension(87, 20), userIcon.getImage(),
 				new Dimension(16, 19), gra);
 		((MyButton) btnChooseCustomer).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		((MyButton) btnChooseCustomer).setEnabledCustom(false);
-		btnChooseCustomer.setBounds(327, 165, 135, 35);
 		pnlBiffInfo.add(btnChooseCustomer);
+		btnChooseCustomer.setBounds(327, 150, 135, 35);
 
 		JLabel lblTotalPriceBill = new JLabel("Tổng tiền: ");
 		CustomUI.getInstance().setCustomLabel(lblTotalPriceBill);
@@ -316,10 +318,10 @@ public class pnDatPhong extends JPanel
 		txtTotalPriceBill.setColumns(10);
 		pnlBiffInfo.add(txtTotalPriceBill);
 
-		JLabel lblVND = new JLabel("(VND)");
-		CustomUI.getInstance().setCustomLabel(lblVND);
-		lblVND.setBounds(248, 105, 43, 20);
-		pnlBiffInfo.add(lblVND);
+		// JLabel lblVND = new JLabel("(VND)");
+		// CustomUI.getInstance().setCustomLabel(lblVND);
+		// lblVND.setBounds(248, 105, 43, 20);
+		// pnlBiffInfo.add(lblVND);
 
 		txtEndTime = new JTextField("");
 		txtEndTime.setForeground(Color.WHITE);
@@ -354,12 +356,12 @@ public class pnDatPhong extends JPanel
 
 		JLabel lblCustomerName = new JLabel("Tên KH:");
 		CustomUI.getInstance().setCustomLabel(lblCustomerName);
-		lblCustomerName.setBounds(12, 136, 85, 20);
+		lblCustomerName.setBounds(248, 105, 85, 20);
 		pnlBiffInfo.add(lblCustomerName);
 
 		txtCustomerName = new JTextField();
 		txtCustomerName.setColumns(10);
-		txtCustomerName.setBounds(100, 136, 142, 20);
+		txtCustomerName.setBounds(332, 105, 145, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtCustomerName);
 		pnlBiffInfo.add(txtCustomerName);
 
@@ -496,6 +498,7 @@ public class pnDatPhong extends JPanel
 		chkSearchService.setBounds(289, 154, 144, 20);
 		chkSearchService.setOpaque(false);
 		chkSearchService.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		chkSearchService.setVisible(false);
 		pnlControlService.add(chkSearchService);
 
 		JPanel pnlServiceList = new JPanel();
@@ -660,7 +663,8 @@ public class pnDatPhong extends JPanel
 					JOptionPane.showConfirmDialog(this, message, "Phòng này chưa được cho thuê nên không thể chuyển",
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 				} else {
-					PhongDAO.getInstance().switchRoom(RoomIdOld, roomIdNew);
+					String billId = txtBillID.getText().trim();
+					PhongDAO.getInstance().switchRoom(billId, RoomIdOld, roomIdNew);
 					LoadRoomList(PhongDAO.getInstance().getRoomList());
 					String roomTypeName = txtRoomTypeName.getText();
 					loadCboRoom(roomTypeName);
@@ -704,6 +708,7 @@ public class pnDatPhong extends JPanel
 			((MyButton) btnCannelServices).setEnabledCustom(true);
 			((MyButton) btnOrderServices).setEnabledCustom(true);
 			if (e.getClickCount() == 2) {
+				isDoubleClick = true;
 				orderService();
 			}
 		} else if (o.equals(tblTableBill)) {
@@ -712,13 +717,11 @@ public class pnDatPhong extends JPanel
 			String serviceName = modelTableBill.getValueAt(selectedRow, 1).toString().trim();
 			txtServiceName.setText(serviceName);
 			selectedServiceOrderIndex = selectedRow;
-			String quantityStr = modelTableBill.getValueAt(selectedRow, 2).toString().trim();
-			int orderQuantity = Integer.parseInt(quantityStr);
 			String price = modelTableBill.getValueAt(selectedRow, 3).toString().trim();
 			txtServicePrice.setText(price);
 			int quantityService = serviceOrderList.get(selectedRow).getSoLuongTon();
 			txtQuantityService.setText(String.valueOf(quantityService));
-			spnOrderQuantity.setValue(Math.abs(orderQuantity));
+			spnOrderQuantity.setValue(1);
 			((MyButton) btnCannelServices).setEnabledCustom(true);
 			((MyButton) btnOrderServices).setEnabledCustom(true);
 			if (e.getClickCount() == 2) {
@@ -775,13 +778,8 @@ public class pnDatPhong extends JPanel
 			loadRoomListByRoomTypeName(roomTypeName);
 		} else if (o.equals(cboServiceType)) {
 			String serviceTypeName = cboServiceType.getSelectedItem().toString();
-			if (serviceTypeName.equalsIgnoreCase("tất cả")) {
-				serviceList = DichVuDAO.getInstance().getServiceList();
-				loadServiceList(serviceList);
-			} else {
-				serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName);
-				loadServiceList(serviceList);
-			}
+			serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName);
+			loadServiceList(serviceList);
 		} else if (o.equals(chkSearchService)) {
 			if (chkSearchService.isSelected()) {
 				cboServiceType.removeItemListener(this);
@@ -1176,32 +1174,14 @@ public class pnDatPhong extends JPanel
 	private void searchService(int isRefresh) {
 		String serviceName = txtServiceName.getText().trim();
 		String serviceTypeName = cboServiceType.getSelectedItem().toString().trim();
-		if (chkSearchService.isSelected() == true) {
-			if (serviceName.equalsIgnoreCase("")) {
-				if (serviceTypeName.equalsIgnoreCase("Tất cả"))
-					serviceList = DichVuDAO.getInstance().getServiceList();
-				else
-					serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName);
-			} else {
-				if (serviceTypeName.equalsIgnoreCase("Tất cả"))
-					serviceList = DichVuDAO.getInstance().getServiceListByName(serviceName);
-				else
-					serviceList = DichVuDAO.getInstance().getServiceListByNameAndServiceTypeName(serviceName,
-							serviceTypeName);
-			}
+		if (serviceName.equalsIgnoreCase("")) {
+			serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName);
 		} else {
-			if (serviceName.equalsIgnoreCase("")) {
-				serviceList = DichVuDAO.getInstance().getServiceList();
-			} else {
-				if (isRefresh == 1) {
-					if (serviceTypeName.equalsIgnoreCase("Tất cả"))
-						serviceList = DichVuDAO.getInstance().getServiceList();
-					else
-						serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName);
-				} else
-					serviceList = DichVuDAO.getInstance().getServiceListByName(serviceName);
-				isRefresh = 0;
-			}
+			if (isRefresh == 1) {
+				serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName);
+			} else
+				serviceList = DichVuDAO.getInstance().getServiceListByNameAndServiceTypeName(serviceName,
+						serviceTypeName);
 		}
 		loadServiceList(serviceList);
 	}
@@ -1298,6 +1278,10 @@ public class pnDatPhong extends JPanel
 			JOptionPane.showMessageDialog(this, "Bạn cần phải chọn sản phẩm");
 		} else {
 			int orderQuantity = (int) spnOrderQuantity.getValue();
+			if (isDoubleClick) {
+				orderQuantity = 1;
+				isDoubleClick = false;
+			}
 			String quantityInStockStr = txtQuantityService.getText().replace(",", "").trim();
 			int quantityInStock = Integer.parseInt(quantityInStockStr);
 			String message = "";
@@ -1321,7 +1305,12 @@ public class pnDatPhong extends JPanel
 				// trường hợp khác
 			} else {
 				String typeMessage = "Thêm";
-				DichVu service = serviceList.get(selectedServiceIndex);
+				DichVu service = new DichVu();
+				if (selectedServiceIndex != -1) {
+					service = serviceList.get(selectedServiceIndex);
+				} else if (selectedServiceOrderIndex != -1) {
+					service = serviceOrderList.get(selectedServiceOrderIndex);
+				}
 
 				String roomID = txtRoomID.getText().trim();
 				String billID = txtBillID.getText().trim();
@@ -1360,8 +1349,14 @@ public class pnDatPhong extends JPanel
 					// kiểm tra kết quả thêm, cập nhật
 					if (result) {
 						if (isUpdate) {
-							int selectedRow = tblTableService.getSelectedRow();
-							serviceOrderList.get(selectedRow).setSoLuongTon(newOrderQuantity);
+							int lastIndex = serviceOrderList.size() - 1;
+							for (int i = 0; i < lastIndex; i++) {
+								DichVu serviceOrder = serviceOrderList.get(i);
+								if (service.getMaDichVu().equals(serviceOrder.getMaDichVu())) {
+									serviceOrder.setSoLuongTon(newOrderQuantity);
+									break;
+								}
+							}
 						} else {
 							serviceOrderList.add(service);
 						}
@@ -1394,7 +1389,7 @@ public class pnDatPhong extends JPanel
 			JOptionPane.showMessageDialog(this, "Bạn cần phải chọn dịch vụ");
 		} else {
 			int cancelQuantity = (int) spnOrderQuantity.getValue();
-			String orderQuantityStr = tblTableBill.getValueAt(selectedServiceOrderIndex, 3).toString().replace(",", "")
+			String orderQuantityStr = tblTableBill.getValueAt(selectedServiceOrderIndex, 2).toString().replace(",", "")
 					.trim();
 			int orderQuantity = Integer.parseInt(orderQuantityStr);
 			String message = "";

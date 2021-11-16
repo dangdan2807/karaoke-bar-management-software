@@ -308,10 +308,10 @@ GO
 INSERT INTO dbo.NhanVien
     (maNhanVien, cmnd, hoTen, ngaySinh, gioiTinh, soDienThoai, chucVu, mucLuong, taiKhoan, trangThaiNV)
 VALUES
-    ('NV00000001', '111111111', N'Phạm Đăng Đan', '2001-01-01', 0, '0312345678', N'Chủ quán', 6000000, 'phamdangdan', N'Đang làm'),
-    ('NV00000002', '111111113', N'Huỳnh Tuấn Anh', '2001-01-01', 0, '0312345671', N'Chủ quán', 6000000, 'huynhtuananh', N'Đang làm'),
-    ('NV00000003', '111111112', N'Lăng Nhật Sang', '2001-01-01', 0, '0312345679', N'Chủ quán', 6000000, 'langnhapsang', N'Đang làm'),
-    ('NV00000004', '111111114', N'Võ Minh Hiếu', '2001-01-01', 0, '0312345672', N'Chủ quán', 6000000, 'vominhhieu', N'Đang làm'),
+    ('NV00000001', '111111111', N'Phạm Đăng Đan', '2001-01-01', 0, '0312345678', N'Chủ quán', 1, 'phamdangdan', N'Đang làm'),
+    ('NV00000002', '111111113', N'Huỳnh Tuấn Anh', '2001-01-01', 0, '0312345671', N'Nhân Viên', 3000000, 'huynhtuananh', N'Đang làm'),
+    ('NV00000003', '111111112', N'Lăng Nhật Sang', '2001-01-01', 0, '0312345679', N'Nhân Viên', 3000000, 'langnhapsang', N'Đang làm'),
+    ('NV00000004', '111111114', N'Võ Minh Hiếu', '2001-01-01', 0, '0312345672', N'Nhân Viên', 3000000, 'vominhhieu', N'Đang làm'),
     ('NV00000005', '111111115', N'Nguyễn Xuân Anh', '1999-06-14', 1, '0312345673', N'Nhân Viên', 3000000, 'nhanvien1', N'Đang làm'),
     ('NV00000006', '111111116', N'Trần Thị Ngọc Vân', '1998-07-17', 1, '0812144673', N'Nhân Viên', 2800000, 'nhanvien2', N'Đang làm'),
     ('NV00000007', '111111117', N'Trần Vinh Can', '1993-08-27', 0, '0715344673', N'Nhân Viên', 3100000, 'nhanvien3', N'Đang làm'),
@@ -429,9 +429,9 @@ GO
 INSERT INTO dbo.LoaiPhong
     (maLP, tenLP, sucChua, giaTien)
 VALUES
-    ('LP001', N'Phòng 5 người', 5, 80000),
-    ('LP002', N'Phòng 10 người', 10, 120000),
-    ('LP003', N'Phòng 20 người', 20, 180000)
+    ('LP001', N'5 người', 5, 80000),
+    ('LP002', N'10 người', 10, 120000),
+    ('LP003', N'20 người', 20, 180000)
 GO
 
 INSERT INTO dbo.Phong
@@ -535,6 +535,11 @@ BEGIN
     WHERE tenDangNhap = @username AND matKhau = @password
 END
 GO
+
+-- Update dbo.TaiKhoan
+--     SET tinhTrangTK = 1
+--     WHERE tenDangNhap = 'phamdangdan'
+-- GO
 
 CREATE PROC USP_getAccountByUsername
     @username VARCHAR(100)
@@ -999,6 +1004,25 @@ BEGIN
     WHERE hd.tinhTrangHD = 1
         AND hd.maNhanVien = nv.maNhanVien
         AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+        AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+    GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+    nv.maNhanVien, nv.hoTen, nv.soDienThoai
+END
+GO
+
+CREATE PROC USP_getBillListByDateAndBillId
+    @billId VARCHAR(15),
+    @startDate DATE,
+    @endDate DATE
+AS
+BEGIN
+    DECLARE @keyword NVARCHAR(17) = N'%' + @billId + N'%'
+    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        nv.maNhanVien, nv.hoTen, nv.soDienThoai
+    FROM dbo.HoaDon hd, dbo.NhanVien nv
+    WHERE hd.tinhTrangHD = 1
+        AND hd.maNhanVien = nv.maNhanVien
+        AND hd.maHoaDon LIKE @keyword
         AND hd.ngayGioDat BETWEEN @startDate AND @endDate
     GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
     nv.maNhanVien, nv.hoTen, nv.soDienThoai
@@ -1909,20 +1933,22 @@ CREATE PROC USP_updateInfoStaffAndAccount
     @status NVARCHAR(100),
     @gender INT,
     @username VARCHAR(100),
-    @password NVARCHAR(100)
+    @password NVARCHAR(100),
+    @activeAccount bit
 AS
 BEGIN
     BEGIN TRANSACTION
     DECLARE @isExitsUsername VARCHAR(100)
 
     UPDATE dbo.TaiKhoan 
-    SET matKhau = @password
+    SET matKhau = @password, tinhTrangTK = @activeAccount
     WHERE tenDangNhap = @username
 
     SELECT @isExitsUsername = tk.tenDangNhap
     FROM dbo.TaiKhoan tk
     WHERE tk.tenDangNhap = @username
         AND tk.matKhau = @password
+        AND tk.tinhTrangTK = @activeAccount
 
     IF @isExitsUsername IS NULL
     BEGIN
