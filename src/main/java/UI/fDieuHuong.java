@@ -14,10 +14,10 @@ import java.awt.event.*;
 public class fDieuHuong extends JFrame implements ActionListener {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 8033841194327699528L;
-	private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
+     * 
+     */
+    private static final long serialVersionUID = 8033841194327699528L;
+    private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
     private NhanVien staffLogin = null;
     private String STAFF = "Nhân viên", MANAGER = "Chủ quán";
     private ImageIcon profileIcon = new ImageIcon(
@@ -121,9 +121,7 @@ public class fDieuHuong extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if (o.equals(btnLogOut)) {
-            fDangNhap winLogin = new fDangNhap();
-            this.setVisible(false);
-            winLogin.setVisible(true);
+            logout(this);
         } else if (o.equals(btnBookingManagement)) {
             fQuanLyDatPhong winBookingManagement = new fQuanLyDatPhong(staffLogin);
             this.setVisible(false);
@@ -157,11 +155,27 @@ public class fDieuHuong extends JFrame implements ActionListener {
         jframe.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                fDangNhap f = new fDangNhap();
-                jframe.setVisible(false);
-                f.setVisible(true);
+                logout(jframe);
             }
         });
+    }
+
+    /**
+     * Xác nhận đăng xuất tài khoản
+     * 
+     * @param jframe {@code JFrame} frame sẽ nhận sự kiện
+     */
+    private void logout(JFrame jframe) {
+        String title = "Xác nhận đăng xuất tài khoản";
+        String message = "Bạn muốn đăng xuất tài khoản này";
+        Object[] options = { "Đăng xuất", "Hủy" };
+        int selected = JOptionPane.showOptionDialog(jframe, message, title, JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+        if (selected == 0) {
+            fDangNhap winLogin = new fDangNhap();
+            jframe.setVisible(false);
+            winLogin.setVisible(true);
+        }
     }
 
     /**

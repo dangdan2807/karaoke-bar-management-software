@@ -34,8 +34,8 @@ public class PnKhachHang extends JPanel
 	private JTextField txtCMND, txtPhoneNumber, txtCustomerName, txtCustomerID, txtBFieldSearch;
 	private JTextField txtKeyWord, txtBFieldSearchGender;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPhone, lblCustomerID, lblCustomerName, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch,btnNextRight,
-	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnNextRight, btnDoubleNextRight, btnNextLeft,
+			btnDoubleNextLeft;
 	private kDatePicker dpBirthDay;
 	private JComboBox<String> cboSearch, cboSearchGender;
 	private JRadioButton radMale, radFemale;
@@ -259,7 +259,7 @@ public class PnKhachHang extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách khách hàng");
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách khách hàng");
 		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã khách hàng", "Tên khách hàng ", "CMND/CCCD", "Số điện thoại", "Ngày sinh",
@@ -366,7 +366,7 @@ public class PnKhachHang extends JPanel
 		} else if (o.equals(btnSearch)) {
 			searchEventUsingBtnSearch();
 		} else if (o.equals(btnUpdate)) {
-				updateStaffInfo();
+			updateStaffInfo();
 		}
 	}
 
@@ -645,7 +645,8 @@ public class PnKhachHang extends JPanel
 						btnAdd.setEnabledCustom(false);
 						btnUpdate.setEnabledCustom(true);
 						tblTableCustomer.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-						tblTableCustomer.scrollRectToVisible(tblTableCustomer.getCellRect(selectedRow, selectedRow, true));
+						tblTableCustomer
+								.scrollRectToVisible(tblTableCustomer.getCellRect(selectedRow, selectedRow, true));
 					} else {
 						message = "Cập nhật thông tin " + name + " thất bại";
 					}

@@ -144,25 +144,21 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		if (o.equals(btnLogin)) {
 			String username = txtUsername.getText().trim();
 			String password = txtPassword.getText().trim();
-			// xác thực dữ liệu trên form
-			if (validData()) {
-				boolean loginResult = login(username, password);
-				// nếu tài khoản, mật khẩu hợp lệ và không bị vô hiệu hóa thì đăng nhập thành
-				// công
-				if (loginResult) {
-					NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername(username);
-					// kiểm tra tài khoản có bị vô hiệu hóa hay không
-					if (staff.getTaiKhoan().getTinhTrangTK() == true) {
-						fDieuHuong winDieuHuong = new fDieuHuong(staff);
-						this.setVisible(false);
-						winDieuHuong.setVisible(true);
-
-					} else {
-						showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
-					}
+			boolean loginResult = login(username, password);
+			// nếu tài khoản, mật khẩu hợp lệ và không bị vô hiệu hóa thì đăng nhập thành
+			// công
+			if (loginResult) {
+				NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername(username);
+				// kiểm tra tài khoản có bị vô hiệu hóa hay không
+				if (staff.getTaiKhoan().getTinhTrangTK() == true) {
+					fDieuHuong winDieuHuong = new fDieuHuong(staff);
+					this.setVisible(false);
+					winDieuHuong.setVisible(true);
 				} else {
-					showMessage("Sai tài khoản hoặc mật khẩu");
+					showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
 				}
+			} else {
+				showMessage("Sai tài khoản hoặc mật khẩu");
 			}
 		}
 	}
@@ -237,46 +233,6 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	 */
 	private void showMessage(String message) {
 		JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.OK_OPTION);
-	}
-
-	/**
-	 * Kiểm tra thông tin trước khi đăng nhập
-	 * 
-	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra
-	 *         <ul>
-	 *         <li>Nếu hợp lệ thì trả về {@code true}</li>
-	 *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
-	 *         </ul>
-	 */
-	private boolean validData() {
-		String username = txtUsername.getText().trim();
-		String password = txtPassword.getText().trim();
-		// username tối thiểu 6 ký tự và không được quá 100 ký tự
-		// username có thể chứa ký tự, số và @, !, #, _
-		if (!(username.length() >= 6 && password.length() <= 100 && username.matches("^[a-zA-Z0-9_@#!]{6,100}$"))) {
-			if (username.length() < 6)
-				showMessage("Tên đăng nhập phải tối thiểu 6 ký tự");
-			else if (username.length() > 100)
-				showMessage("Tên đăng nhập không quá 100 ký tự");
-			else
-				showMessage("Tên đăng nhập chỉ có thể chứa các kỳ tự, số, @, #, !");
-			txtUsername.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
-			return false;
-		}
-
-		// password tối thiểu 6 ký tự và không được quá 100 ký tự
-		// password có thể chứa ký tự, số và @, #
-		if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9@#!]{6,100}$"))) {
-			if (password.length() < 6)
-				showMessage("Mật khẩu phải tối thiểu 6 ký tự");
-			else if (password.length() > 100)
-				showMessage("Mật khẩu không quá 100 ký tự");
-			else
-				showMessage("Mật khẩu chỉ có thể chứa các kỳ tự, số, @, #, !");
-			txtPassword.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
-			return false;
-		}
-		return true;
 	}
 
 	/**
