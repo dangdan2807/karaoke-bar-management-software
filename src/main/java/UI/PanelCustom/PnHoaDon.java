@@ -310,6 +310,11 @@ public class PnHoaDon extends JPanel
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
 		InputEventHandler handler = new InputEventHandler();
@@ -320,15 +325,12 @@ public class PnHoaDon extends JPanel
 			}
 			if (searchTypeName.equalsIgnoreCase("SĐT khách hàng")) {
 				handler.enterOnlyNumbers(key, txtKeyWord, 10);
+			} else if(searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {
+				handler.characterInputLimit(key, txtKeyWord, 15);
 			} else {
 				handler.characterInputLimit(key, txtKeyWord, 100);
 			}
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
 	}
 
 	@Override

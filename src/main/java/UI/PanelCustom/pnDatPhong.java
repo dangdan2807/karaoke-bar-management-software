@@ -830,6 +830,11 @@ public class pnDatPhong extends JPanel
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
 		InputEventHandler handler = new InputEventHandler();
@@ -841,11 +846,6 @@ public class pnDatPhong extends JPanel
 		} else if (o.equals(txtOrderQuantity)) {
 			handler.enterOnlyNumbers(key, txtOrderQuantity, 5);
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
 	}
 
 	/**

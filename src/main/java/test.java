@@ -146,7 +146,7 @@ public class test {
     }
 
     public static void main(String[] args) {
-        int key = 0;
+        int key = 100;
         String billId = "HD2021100200002";
         switch (key) {
         case 0:
@@ -241,16 +241,17 @@ public class test {
             System.out.println(tinhGioThue(ngayGioDat, ngayGioTra));
             break;
         default:
-            String end = "12/12/11 23:22:09";
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            java.util.Date date = null;
-            try {
-                date = format.parse(end);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Time in 24Hours =" + new SimpleDateFormat("HH:mm").format(date));
-
+            // String end = "12/12/11 23:22:09";
+            // SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            // java.util.Date date = null;
+            // try {
+            //     date = format.parse(end);
+            // } catch (ParseException e) {
+            //     e.printStackTrace();
+            // }
+            // System.out.println("Time in 24Hours =" + new SimpleDateFormat("HH:mm").format(date));
+            String d = "123456";
+            System.out.println(d.substring(0,1));
             break;
         }
 

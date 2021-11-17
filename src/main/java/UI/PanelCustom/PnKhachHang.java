@@ -331,6 +331,7 @@ public class PnKhachHang extends JPanel
 		txtCMND.addKeyListener(this);
 		txtKeyWord.addKeyListener(this);
 		txtPhoneNumber.addKeyListener(this);
+		txtCustomerName.addKeyListener(this);
 
 		cboSearch.addItemListener(this);
 		cboSearchGender.addItemListener(this);
@@ -460,6 +461,11 @@ public class PnKhachHang extends JPanel
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
 		InputEventHandler handler = new InputEventHandler();
@@ -470,17 +476,16 @@ public class PnKhachHang extends JPanel
 			}
 			if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
 				handler.enterOnlyNumbers(key, txtKeyWord, 10);
+			} else {
+				handler.characterInputLimit(key, txtKeyWord, 100);
 			}
 		} else if (o.equals(txtPhoneNumber)) {
 			handler.enterOnlyNumbers(key, txtPhoneNumber, 10);
 		} else if (o.equals(txtCMND)) {
 			handler.enterOnlyNumbers(key, txtCMND, 12);
+		} else if (o.equals(txtCustomerName)) {
+			handler.characterInputLimit(key, txtCustomerName, 100);
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
 	}
 
 	@Override

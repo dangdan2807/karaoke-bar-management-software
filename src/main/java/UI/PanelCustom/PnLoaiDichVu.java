@@ -12,6 +12,7 @@ import javax.swing.table.*;
 import DAO.LoaiDichVuDAO;
 import DAO.NhanVienDAO;
 import DAO.ValidationData;
+import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
 import UI.fQuanTri;
 import entity.LoaiDichVu;
@@ -43,8 +44,8 @@ public class PnLoaiDichVu extends JPanel
 
 	private JTable tblTableServiceType;
 	private DefaultTableModel modelTable;
-	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack,btnNextRight,
-	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
+	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack, btnNextRight, btnDoubleNextRight, btnNextLeft,
+			btnDoubleNextLeft;
 	private JComboBox<String> cboSearch, cboSearchType;
 	private JLabel lblSearch;
 	private JTextField txtBFieldSearch, txtKeyWord, txtBFieldSearchType, txtServiceTypeID;
@@ -203,7 +204,7 @@ public class PnLoaiDichVu extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách loại dịch vụ");
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách loại dịch vụ");
 		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã loại dịch vụ", "Tên loại dịch vụ " };
@@ -229,7 +230,7 @@ public class PnLoaiDichVu extends JPanel
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
-		
+
 		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
 		btnNextRight.setBounds(680, 540, 70, 35);
 		pnlMain.add(btnNextRight);
@@ -250,8 +251,6 @@ public class PnLoaiDichVu extends JPanel
 		txtIndex.setBounds(600, 540, 70, 35);
 		pnlMain.add(txtIndex);
 
-		
-
 		btnSearch.addMouseListener(this);
 		tblTableServiceType.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
@@ -260,6 +259,7 @@ public class PnLoaiDichVu extends JPanel
 		txtServiceTypeName.addFocusListener(this);
 
 		txtKeyWord.addKeyListener(this);
+		txtServiceTypeName.addKeyListener(this);
 
 		cboSearch.addItemListener(this);
 
@@ -428,6 +428,18 @@ public class PnLoaiDichVu extends JPanel
 	}
 
 	@Override
+	public void keyReleased(KeyEvent e) {
+		Object o = e.getSource();
+		int key = e.getKeyCode();
+		InputEventHandler handler = new InputEventHandler();
+		if (o.equals(txtKeyWord)) {
+			handler.characterInputLimit(key, txtKeyWord, 100);
+		} else if (o.equals(txtServiceTypeName)) {
+			handler.characterInputLimit(key, txtServiceTypeName, 100);
+		}
+	}
+
+	@Override
 	public void focusGained(FocusEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtKeyWord)) {
@@ -445,11 +457,6 @@ public class PnLoaiDichVu extends JPanel
 		} else if (o.equals(txtServiceTypeName)) {
 			CustomUI.getInstance().setCustomTextFieldUnFocus(txtServiceTypeName);
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
 	}
 
 	/**

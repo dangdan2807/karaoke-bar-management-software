@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
 import UI.fQuanTri;
 import entity.*;
@@ -287,9 +288,10 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 
 		txtKeyWord.addFocusListener(this);
 		txtLocation.addFocusListener(this);
-
+		
 		txtKeyWord.addKeyListener(this);
-
+		txtLocation.addKeyListener(this);
+		
 		cboSearch.addItemListener(this);
 		cboSearchType.addItemListener(this);
 
@@ -496,7 +498,14 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		Object o = e.getSource();
+		int key = e.getKeyCode();
+		InputEventHandler handler = new InputEventHandler();
+		if (o.equals(txtKeyWord)) {
+			handler.characterInputLimit(key, txtKeyWord, 100);
+		} else if (o.equals(txtLocation)) {
+			handler.characterInputLimit(key, txtLocation, 100);
+		}
 	}
 
 	@Override

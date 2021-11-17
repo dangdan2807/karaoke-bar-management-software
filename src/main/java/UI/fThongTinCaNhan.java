@@ -300,6 +300,11 @@ public class fThongTinCaNhan extends JDialog
 
     @Override
     public void keyPressed(KeyEvent e) {
+        
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
         Object o = e.getSource();
         int key = e.getKeyCode();
         InputEventHandler handler = new InputEventHandler();
@@ -321,11 +326,6 @@ public class fThongTinCaNhan extends JDialog
         } else if (o.equals(txtPassword)) {
             handler.characterInputLimit(key, txtPassword, 100);
         }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 
     @Override

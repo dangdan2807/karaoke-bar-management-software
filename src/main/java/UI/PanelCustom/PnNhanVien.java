@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.ConvertTime;
+import DAO.HoaDonDAO;
 import DAO.NhanVienDAO;
 import DAO.TaiKhoanDAO;
 import DAO.ValidationData;
@@ -61,7 +62,6 @@ public class PnNhanVien extends JPanel
 	private NhanVien staffLogin = null;
 	private boolean isResetPassword = false;
 	private boolean isInsertStaff = false;
-	private final String STAFF = "Nhân viên", MANAGER = "Chủ quán";
 
 	/**
 	 * Constructor form quản lý nhân viên
@@ -450,6 +450,8 @@ public class PnNhanVien extends JPanel
 		btnSearch.addKeyListener(this);
 		btnRefresh.addKeyListener(this);
 		txtKeyWord.addKeyListener(this);
+		txtUsername.addKeyListener(this);
+		txtStaffName.addKeyListener(this);
 		txtPhoneNumber.addKeyListener(this);
 
 		allLoaded();
@@ -496,7 +498,6 @@ public class PnNhanVien extends JPanel
 				// statistic();
 			}
 		} else if (o.equals(btnNextToFirst)) {
-			System.out.println(txtNumPage.getText());
 			txtNumPage.setText("1");
 		} else if (o.equals(btnNextToLast)) {
 			int lastPage = getLastPage();
@@ -616,6 +617,11 @@ public class PnNhanVien extends JPanel
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
 		InputEventHandler handler = new InputEventHandler();
@@ -631,12 +637,11 @@ public class PnNhanVien extends JPanel
 			handler.enterOnlyNumbers(key, txtPhoneNumber, 10);
 		} else if (o.equals(txtCMND)) {
 			handler.enterOnlyNumbers(key, txtCMND, 12);
+		} else if (o.equals(txtStaffName)) {
+			handler.characterInputLimit(key, txtStaffName, 100);
+		} else if (o.equals(txtUsername)) {
+			handler.characterInputLimit(key, txtUsername, 100);
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
 	}
 
 	@Override
@@ -682,6 +687,8 @@ public class PnNhanVien extends JPanel
 		reSizeColumnTable();
 		String workingStatus = cboSearchType.getSelectedItem().toString().trim();
 		loadStaffList(NhanVienDAO.getInstance().getStaffListByWorkingStatus(workingStatus));
+		txtNumPage.setText("1");
+		txtNumPage.setTextMyTextField("1");
 		// loadStaffListPaging(workingStatus, 1);
 	}
 
@@ -1085,7 +1092,7 @@ public class PnNhanVien extends JPanel
 	}
 
 	public int getLastPage() {
-		// int sumRecord = BillDAO.getInstance().getNumBillByDate(dateCheckIn,
+		// int sumRecord = HoaDonDAO.getInstance().getNumBillByDate(dateCheckIn,
 		// dateCheckOut);
 		int sumRecord = 1;
 		int lastPage = sumRecord / 30;

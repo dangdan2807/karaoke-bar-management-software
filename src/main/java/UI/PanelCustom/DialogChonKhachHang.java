@@ -266,6 +266,11 @@ public class DialogChonKhachHang extends JDialog
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
 		// bắt sự kiện nhấn phím enter tự nhấn btnLogin
@@ -279,13 +284,10 @@ public class DialogChonKhachHang extends JDialog
 				handler.enterOnlyNumbers(key, txtKeyword, 10);
 			} else if (searchTypeName.equalsIgnoreCase("CMND/CCCD")) {
 				handler.enterOnlyNumbers(key, txtKeyword, 12);
+			} else {
+				handler.characterInputLimit(key, txtKeyword, 100);
 			}
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
 	}
 
 	@Override

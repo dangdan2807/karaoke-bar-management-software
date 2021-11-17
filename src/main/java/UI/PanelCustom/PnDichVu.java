@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
 import UI.fQuanTri;
 import entity.*;
@@ -281,24 +282,25 @@ public class PnDichVu extends JPanel
 
 
 		tblTableService.addMouseListener(this);
-		txtBFieldSerType.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
+		txtBFieldSerType.addMouseListener(this);
 		txtBFieldSearchSerType.addMouseListener(this);
 
 		btnAdd.addActionListener(this);
-		btnRefresh.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnSearch.addActionListener(this);
+		btnRefresh.addActionListener(this);
 
 		cboSearch.addItemListener(this);
 		cboSearchServiceType.addItemListener(this);
 
-		txtServiceName.addFocusListener(this);
-		((JSpinner.DefaultEditor) spnQuantity.getEditor()).getTextField().addFocusListener(this);
 		txtKeyWord.addFocusListener(this);
+		txtServiceName.addFocusListener(this);
 		((JSpinner.DefaultEditor) spnPrice.getEditor()).getTextField().addFocusListener(this);
+		((JSpinner.DefaultEditor) spnQuantity.getEditor()).getTextField().addFocusListener(this);
 
 		txtKeyWord.addKeyListener(this);
+		txtServiceName.addKeyListener(this);
 
 		allLoaded();
 	}
@@ -486,7 +488,14 @@ public class PnDichVu extends JPanel
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		Object o = e.getSource();
+		int key = e.getKeyCode();
+		InputEventHandler handler = new InputEventHandler();
+		if (o.equals(txtKeyWord)) {
+			handler.characterInputLimit(key, txtKeyWord, 100);
+		} else if (o.equals(txtServiceName)) {
+			handler.characterInputLimit(key, txtServiceName, 100);
+		}
 	}
 
 	@Override

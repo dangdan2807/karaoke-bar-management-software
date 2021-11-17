@@ -12,6 +12,7 @@ import javax.swing.table.*;
 import DAO.LoaiPhongDAO;
 import DAO.NhanVienDAO;
 import DAO.ValidationData;
+import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
 import UI.fQuanTri;
 import entity.LoaiPhong;
@@ -269,23 +270,24 @@ public class PnLoaiPhong extends JPanel
 		pnlMain.add(txtIndex);
 		
 		
-		btnSearch.addActionListener(this);
 		btnAdd.addActionListener(this);
+		btnSearch.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnRefresh.addActionListener(this);
 
-		tblTableTypeRoom.addMouseListener(this);
-		txtBFieldSearch.addMouseListener(this);
 		cboSearch.addMouseListener(this);
-		txtRoomTypeName.addMouseListener(this);
 		txtKeyWord.addMouseListener(this);
+		txtBFieldSearch.addMouseListener(this);
+		txtRoomTypeName.addMouseListener(this);
+		tblTableTypeRoom.addMouseListener(this);
 
+		txtKeyWord.addFocusListener(this);
 		txtRoomTypeName.addFocusListener(this);
 		((JSpinner.DefaultEditor) spnCapacity.getEditor()).getTextField().addFocusListener(this);
 		((JSpinner.DefaultEditor) spnPrice.getEditor()).getTextField().addFocusListener(this);
-		txtKeyWord.addFocusListener(this);
 
 		txtKeyWord.addKeyListener(this);
+		txtRoomTypeName.addKeyListener(this);
 		((JSpinner.DefaultEditor) spnSearchPrice.getEditor()).getTextField().addKeyListener(this);
 
 		cboSearch.addItemListener(this);
@@ -470,7 +472,14 @@ public class PnLoaiPhong extends JPanel
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		Object o = e.getSource();
+		int key = e.getKeyCode();
+		InputEventHandler handler = new InputEventHandler();
+		if (o.equals(txtKeyWord)) {
+			handler.characterInputLimit(key, txtKeyWord, 100);
+		} else if (o.equals(txtRoomTypeName)) {
+			handler.characterInputLimit(key, txtRoomTypeName, 100);
+		}
 	}
 
 	@Override
