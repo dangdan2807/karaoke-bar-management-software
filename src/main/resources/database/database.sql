@@ -942,90 +942,197 @@ GO
 
 CREATE PROC USP_getBillListByDate
     @startDate DATE,
-    @endDate DATE
+    @endDate DATE,
+    @staffId VARCHAR(10)
 AS
 BEGIN
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
-    FROM dbo.HoaDon hd
-    WHERE hd.tinhTrangHD = 1
-        AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-    GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+    DECLARE @position NVARCHAR(100)
+    select @position = nv.chucVu
+    from dbo.NhanVien nv
+    where nv.maNhanVien = @staffId
+
+    IF(@position = N'Chủ quán')
+    BEGIN
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+        FROM dbo.HoaDon hd
+        WHERE hd.tinhTrangHD = 1
+            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+    END
+    ELSE
+    BEGIN
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+        FROM dbo.HoaDon hd
+        WHERE hd.tinhTrangHD = 1
+            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+            AND hd.maNhanVien = @staffId
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+    END
 END
 GO
 
 CREATE PROC USP_getBillListByDateAndCustomerPhoneNumber
     @phoneNumber VARCHAR(10),
     @startDate DATE,
-    @endDate DATE
+    @endDate DATE,
+    @staffId VARCHAR(10)
 AS
 BEGIN
+    DECLARE @position NVARCHAR(100)
+    select @position = nv.chucVu
+    from dbo.NhanVien nv
+    where nv.maNhanVien = @staffId
+
     DECLARE @keyword VARCHAR(12) = N'%' + @phoneNumber + N'%'
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+
+    IF(@position = N'Chủ quán')
+    BEGIN
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+            kh.maKH, kh.hoTen, kh.soDienThoai
+        FROM dbo.HoaDon hd, dbo.KhachHang kh
+        WHERE hd.tinhTrangHD = 1
+            AND hd.maKH = kh.maKH
+            AND kh.soDienThoai LIKE @keyword
+            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
         kh.maKH, kh.hoTen, kh.soDienThoai
-    FROM dbo.HoaDon hd, dbo.KhachHang kh
-    WHERE hd.tinhTrangHD = 1
-        AND hd.maKH = kh.maKH
-        AND kh.soDienThoai LIKE @keyword
-        AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-    GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
-    kh.maKH, kh.hoTen, kh.soDienThoai
+    END
+    ELSE
+    BEGIN
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+            kh.maKH, kh.hoTen, kh.soDienThoai
+        FROM dbo.HoaDon hd, dbo.KhachHang kh
+        WHERE hd.tinhTrangHD = 1
+            AND hd.maKH = kh.maKH
+            AND kh.soDienThoai LIKE @keyword
+            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+            AND hd.maNhanVien = @staffId
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        kh.maKH, kh.hoTen, kh.soDienThoai
+    END
 END
 GO
 
 CREATE PROC USP_getBillListByDateAndCustomerName
     @customerName NVARCHAR(100),
     @startDate DATE,
-    @endDate DATE
+    @endDate DATE,
+    @staffId VARCHAR(10)
 AS
 BEGIN
     DECLARE @keyword NVARCHAR(102) = N'%' + @customerName + N'%'
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+    DECLARE @position NVARCHAR(100)
+    select @position = nv.chucVu
+    from dbo.NhanVien nv
+    where nv.maNhanVien = @staffId
+
+    IF(@position = N'Chủ quán')
+    BEGIN
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+            kh.maKH, kh.hoTen, kh.soDienThoai
+        FROM dbo.HoaDon hd, dbo.KhachHang kh
+        WHERE hd.tinhTrangHD = 1
+            AND hd.maKH = kh.maKH
+            AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
         kh.maKH, kh.hoTen, kh.soDienThoai
-    FROM dbo.HoaDon hd, dbo.KhachHang kh
-    WHERE hd.tinhTrangHD = 1
-        AND hd.maKH = kh.maKH
-        AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
-        AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-    GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
-    kh.maKH, kh.hoTen, kh.soDienThoai
+    END
+    ELSE
+    BEGIN
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+            kh.maKH, kh.hoTen, kh.soDienThoai
+        FROM dbo.HoaDon hd, dbo.KhachHang kh
+        WHERE hd.tinhTrangHD = 1
+            AND hd.maKH = kh.maKH
+            AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+            AND hd.maNhanVien = @staffId
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        kh.maKH, kh.hoTen, kh.soDienThoai
+    END
 END
 GO
 
 CREATE PROC USP_getBillListByDateAndStaffName
     @staffName NVARCHAR(100),
     @startDate DATE,
-    @endDate DATE
+    @endDate DATE,
+    @staffId VARCHAR(10)
 AS
 BEGIN
     DECLARE @keyword NVARCHAR(102) = N'%' + @staffName + N'%'
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+    DECLARE @position NVARCHAR(100)
+    select @position = nv.chucVu
+    from dbo.NhanVien nv
+    where nv.maNhanVien = @staffId
+
+    IF(@position = N'Chủ quán')
+    BEGIN
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+        FROM dbo.HoaDon hd, dbo.NhanVien nv
+        WHERE hd.tinhTrangHD = 1
+            AND hd.maNhanVien = nv.maNhanVien
+            AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
         nv.maNhanVien, nv.hoTen, nv.soDienThoai
-    FROM dbo.HoaDon hd, dbo.NhanVien nv
-    WHERE hd.tinhTrangHD = 1
-        AND hd.maNhanVien = nv.maNhanVien
-        AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
-        AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-    GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
-    nv.maNhanVien, nv.hoTen, nv.soDienThoai
+    END
+    ELSE
+    BEGIN
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+        FROM dbo.HoaDon hd, dbo.NhanVien nv
+        WHERE hd.tinhTrangHD = 1
+            AND hd.maNhanVien = nv.maNhanVien
+            AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+            AND hd.maNhanVien = @staffId
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        nv.maNhanVien, nv.hoTen, nv.soDienThoai
+    END
 END
 GO
 
 CREATE PROC USP_getBillListByDateAndBillId
     @billId VARCHAR(15),
     @startDate DATE,
-    @endDate DATE
+    @endDate DATE,
+    @staffId VARCHAR(10)
 AS
 BEGIN
     DECLARE @keyword NVARCHAR(17) = N'%' + @billId + N'%'
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+    DECLARE @position NVARCHAR(100)
+    select @position = nv.chucVu
+    from dbo.NhanVien nv
+    where nv.maNhanVien = @staffId  
+
+    IF(@position = N'Chủ quán')
+    BEGIN
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+        FROM dbo.HoaDon hd, dbo.NhanVien nv
+        WHERE hd.tinhTrangHD = 1
+            AND hd.maNhanVien = nv.maNhanVien
+            AND hd.maHoaDon LIKE @keyword
+            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
         nv.maNhanVien, nv.hoTen, nv.soDienThoai
-    FROM dbo.HoaDon hd, dbo.NhanVien nv
-    WHERE hd.tinhTrangHD = 1
-        AND hd.maNhanVien = nv.maNhanVien
-        AND hd.maHoaDon LIKE @keyword
-        AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-    GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
-    nv.maNhanVien, nv.hoTen, nv.soDienThoai
+    END
+    ELSE
+    BEGIN
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+        FROM dbo.HoaDon hd, dbo.NhanVien nv
+        WHERE hd.tinhTrangHD = 1
+            AND hd.maNhanVien = nv.maNhanVien
+            AND hd.maHoaDon LIKE @keyword
+            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+            AND hd.maNhanVien = @staffId
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        nv.maNhanVien, nv.hoTen, nv.soDienThoai
+    END
 END
 GO
 

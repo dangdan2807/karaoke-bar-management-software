@@ -24,10 +24,13 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 			Color.decode("#FAFFD1"));
 	private MyButton btnPayment, btnBack, btnExportPdf, btnExportExcel;
 
+	private ImageIcon logoApp = CustomUI.LOGO_APP;
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon paymentIcon = CustomUI.PAYMENT_ICON;
 	private ImageIcon pdfIcon = CustomUI.PDF_ICON;
 	private ImageIcon excelIcon = CustomUI.EXCEL_ICON;
+	private ImageIcon logoIcon = new ImageIcon(
+			CustomUI.LOGO_ICON.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH));
 
 	private String formatTime = "HH:mm:ss dd/MM/yyyy";
 	private DecimalFormat df = new DecimalFormat("#,###.##");
@@ -44,6 +47,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		bill.setKhachHang(customer);
 
 		setSize(800, 720);
+		setIconImage(logoApp.getImage());
 		// setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setUndecorated(true);
@@ -79,8 +83,8 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-				Image bgMain = CustomUI.LOGO_ICON.getImage();
-				g2.drawImage(bgMain, 0, 0, 100, 100, null);
+				Image bgMain = logoIcon.getImage();
+				g2.drawImage(bgMain, 20, 20, 70, 70, null);
 			}
 		};
 		lblKaraokeName.setVerticalAlignment(SwingConstants.TOP);
@@ -144,6 +148,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		CustomUI.getInstance().setCustomTable(tblTableBillInfo);
 		tblTableBillInfo.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 16));
 		tblTableBillInfo.getTableHeader().setBackground(new Color(255, 255, 255, 0));
+		// tblTableBillInfo.getTableHeader().setForeground(Color.BLACK);
 		tblTableBillInfo.setOpaque(false);
 		tblTableBillInfo.setShowGrid(false);
 		tblTableBillInfo.setRowHeight(25);

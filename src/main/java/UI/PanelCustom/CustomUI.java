@@ -17,7 +17,7 @@ public class CustomUI {
 	public static final ImageIcon ADD_ICON = new ImageIcon(pathImg + "blueAdd_16.png");
 	public static final ImageIcon TRASH_ICON = new ImageIcon(pathImg + "trash_16.png");
 	public static final ImageIcon REFRESH_ICON = new ImageIcon(pathImg + "refresh_16.png");
-	public static final ImageIcon ANALYTICS_ICON = new ImageIcon(pathImg + "analytics_16.png");
+	// public static final ImageIcon ANALYTICS_ICON = new ImageIcon(pathImg + "analytics_16.png");
 	public static final ImageIcon BACK_ICON = new ImageIcon(pathImg + "back_16.png");
 	public static final ImageIcon SEARCH_ICON = new ImageIcon(pathImg + "search_16.png");
 	public static final ImageIcon LOGOUT_ICON = new ImageIcon(pathImg + "logout_16.png");
@@ -25,9 +25,9 @@ public class CustomUI {
 	public static final ImageIcon UPDATE_ICON = new ImageIcon(pathImg + "update_16.png");
 	public static final ImageIcon TRANSFER_ICON = new ImageIcon(pathImg + "transfer_16.png");
 	public static final ImageIcon PAYMENT_ICON = new ImageIcon(pathImg + "payment_16.png");
-	public static final ImageIcon ERROR_ICON = new ImageIcon(pathImg + "cancel_16.png");
+	// public static final ImageIcon ERROR_ICON = new ImageIcon(pathImg + "cancel_16.png");
 	public static final ImageIcon USER_ICON = new ImageIcon(pathImg + "user_16.png");
-	public static final ImageIcon USER_ICON_512 = new ImageIcon(pathImg + "user_512.png");
+	// public static final ImageIcon USER_ICON_512 = new ImageIcon(pathImg + "user_512.png");
 	public static final ImageIcon MAN_ICON = new ImageIcon(pathImg + "man_512.png");
 	public static final ImageIcon WOMAN_ICON = new ImageIcon(pathImg + "woman_512.png");
 	public static final ImageIcon BACKGROUND = new ImageIcon(pathImg + "bgBlue.jpg");
@@ -41,6 +41,7 @@ public class CustomUI {
 	public static final ImageIcon PDF_ICON = new ImageIcon(pathImg + "pdf_16.png");
 	public static final ImageIcon EXCEL_ICON = new ImageIcon(pathImg + "excel_16.png");
 	public static final ImageIcon LOGO_ICON = new ImageIcon(pathImg + "Logo.png");
+	public static final ImageIcon LOGO_APP = new ImageIcon(pathImg + "login_logo_512.png");
 	public static final ImageIcon NEXT_RIGHT_ICON = new ImageIcon(pathImg + "nextRight.png");
 	public static final ImageIcon DOUBLE_NEXT_RIGHT_ICON = new ImageIcon(pathImg + "doubleNextRight.png");
 	public static final ImageIcon NEXT_LEFT_ICON = new ImageIcon(pathImg + "nextLeft.png");

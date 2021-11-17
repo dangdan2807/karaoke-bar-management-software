@@ -13,13 +13,11 @@ import java.awt.event.*;
 
 public class fDieuHuong extends JFrame implements ActionListener {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 8033841194327699528L;
     private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
     private NhanVien staffLogin = null;
-    private String STAFF = "Nhân viên", MANAGER = "Chủ quán";
+    private final String STAFF = "Nhân viên", MANAGER = "Chủ quán";
+    private ImageIcon logoApp = CustomUI.LOGO_APP;
     private ImageIcon profileIcon = new ImageIcon(
             CustomUI.PROFILE_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
     private ImageIcon sellIcon = new ImageIcon(
@@ -38,6 +36,7 @@ public class fDieuHuong extends JFrame implements ActionListener {
     public fDieuHuong(NhanVien staff) {
         setTitle("Điều hướng quản lý");
         setSize(776, 370);
+        setIconImage(logoApp.getImage());
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -84,21 +83,32 @@ public class fDieuHuong extends JFrame implements ActionListener {
         pnlBottom.add(btnLogOut);
 
         btnBookingManagement = new JButton("Quản lý đặt phòng");
-        btnBookingManagement.setBounds(261, 25, 240, 240);
         btnBookingManagement.setIcon(sellIcon);
         customBtn(btnBookingManagement);
-        pnlMain.add(btnBookingManagement);
-
-        btnSystemManagement = new JButton("Quản Trị");
-        btnSystemManagement.setBounds(10, 25, 240, 240);
-        btnSystemManagement.setIcon(managerIcon);
-        customBtn(btnSystemManagement);
-        pnlMain.add(btnSystemManagement);
-
+        
         btnInfoManagement = new JButton("Thông Tin Cá Nhân");
-        btnInfoManagement.setBounds(513, 25, 240, 240);
         btnInfoManagement.setIcon(profileIcon);
         customBtn(btnInfoManagement);
+        
+        btnSystemManagement = new JButton("Quản Trị");
+        btnSystemManagement.setIcon(managerIcon);
+        customBtn(btnSystemManagement);
+        
+        if (staffLogin.getChucVu().equals(MANAGER)) {
+            btnBookingManagement.setBounds(261, 25, 240, 240);
+            btnSystemManagement.setBounds(10, 25, 240, 240);
+            btnInfoManagement.setBounds(513, 25, 240, 240);
+            btnSystemManagement.setVisible(true);
+            btnSystemManagement.setEnabled(true);
+        } else {
+            btnBookingManagement.setBounds(111, 25, 240, 240);
+            btnInfoManagement.setBounds(433, 25, 240, 240);
+            btnSystemManagement.setVisible(false);
+            btnSystemManagement.setEnabled(false);
+        }
+
+        pnlMain.add(btnSystemManagement);
+        pnlMain.add(btnBookingManagement);
         pnlMain.add(btnInfoManagement);
 
         btnBookingManagement.addActionListener(this);
@@ -113,6 +123,7 @@ public class fDieuHuong extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
+        // NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("nhanvien1");
         NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
         new fDieuHuong(staff).setVisible(true);
     }

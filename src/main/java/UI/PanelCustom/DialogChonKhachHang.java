@@ -30,6 +30,7 @@ public class DialogChonKhachHang extends JDialog
 	private JPanel pnlShowCustomer;
 	private JTextField txtBFieldSearch;
 
+	private ImageIcon logoApp = CustomUI.LOGO_APP;
 	private ImageIcon background = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(810, 450, Image.SCALE_SMOOTH));
 	private ImageIcon searchIcon = new ImageIcon(
@@ -50,6 +51,7 @@ public class DialogChonKhachHang extends JDialog
 	public DialogChonKhachHang() {
 		setTitle("Chọn khách hàng");
 		setSize(805, 450);
+		setIconImage(logoApp.getImage());
 		setResizable(false);
 		setLocationRelativeTo(null);
 

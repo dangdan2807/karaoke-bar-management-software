@@ -225,7 +225,7 @@ public class PnHoaDon extends JPanel
 
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("huynhtuananh");
 			new fQuanTri(staff).setVisible(true);
 		});
 	}
@@ -362,7 +362,8 @@ public class PnHoaDon extends JPanel
 		reSizeColumnTableBillInfo();
 		Date startDate = dpFromDate.getValueSqlDate();
 		Date endDate = dpToDate.getNextDay();
-		loadBillList(HoaDonDAO.getInstance().getBillListByDate(startDate, endDate));
+		String staffId = staffLogin.getMaNhanVien();
+		loadBillList(HoaDonDAO.getInstance().getBillListByDate(startDate, endDate, staffId));
 	}
 
 	/**
@@ -425,9 +426,9 @@ public class PnHoaDon extends JPanel
 		Phong room = PhongDAO.getInstance().getRoomByBillId(billId);
 
 		modelTableBill.addRow(new Object[] { sttStr, addSpaceToString(String.valueOf(billId)),
-				addSpaceToString(startTimeStr), addSpaceToString(endTimeStr),
-				addSpaceToString(room.getMaPhong()), addSpaceToString(customer.getHoTen()),
-				addSpaceToString(staff.getHoTen()), addSpaceToString(df.format(totalPrice)) });
+				addSpaceToString(startTimeStr), addSpaceToString(endTimeStr), addSpaceToString(room.getMaPhong()),
+				addSpaceToString(customer.getHoTen()), addSpaceToString(staff.getHoTen()),
+				addSpaceToString(df.format(totalPrice)) });
 		modelTableBill.fireTableDataChanged();
 	}
 
@@ -545,20 +546,21 @@ public class PnHoaDon extends JPanel
 		Date toDate = dpToDate.getNextDay();
 		ArrayList<HoaDon> billList = new ArrayList<>();
 		String keyword = txtKeyWord.getText().trim();
+		String staffId = staffLogin.getMaNhanVien();
 		if (validData()) {
 			if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-				billList = HoaDonDAO.getInstance().getBillListByDate(fromDate, toDate);
+				billList = HoaDonDAO.getInstance().getBillListByDate(fromDate, toDate, staffId);
 			} else if (searchTypeName.equalsIgnoreCase("SĐT khách hàng")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerPhoneNumber(keyword, fromDate, toDate);
+				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerPhoneNumber(keyword, fromDate, toDate, staffId);
 			} else if (searchTypeName.equalsIgnoreCase("Tên khách hàng")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerName(keyword, fromDate, toDate);
+				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerName(keyword, fromDate, toDate, staffId);
 			} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndStaffName(keyword, fromDate, toDate);
+				billList = HoaDonDAO.getInstance().getBillListByDateAndStaffName(keyword, fromDate, toDate, staffId);
 			} else if (searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndBillId(keyword, fromDate, toDate);
+				billList = HoaDonDAO.getInstance().getBillListByDateAndBillId(keyword, fromDate, toDate, staffId);
 			}
+			loadBillList(billList);
 		}
-		loadBillList(billList);
 	}
 
 	/**

@@ -146,12 +146,13 @@ public class HoaDonDAO {
      * 
      * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId   {@code String}: mã nhân viên
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
-    public ArrayList<HoaDon> getBillListByDate(Date fromDate, Date toDate) {
+    public ArrayList<HoaDon> getBillListByDate(Date fromDate, Date toDate, String staffId) {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
-        String query = "{CALL USP_getBillListByDate( ? , ? )}";
-        Object[] parameter = new Object[] { fromDate, toDate };
+        String query = "{CALL USP_getBillListByDate( ? , ? , ? )}";
+        Object[] parameter = new Object[] { fromDate, toDate, staffId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -170,12 +171,13 @@ public class HoaDonDAO {
      * @param phoneNumber {@code String}: Số điện thoại
      * @param fromDate    {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate      {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId   {@code String}: mã nhân viên
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
-    public ArrayList<HoaDon> getBillListByDateAndCustomerPhoneNumber(String phoneNumber, Date fromDate, Date toDate) {
+    public ArrayList<HoaDon> getBillListByDateAndCustomerPhoneNumber(String phoneNumber, Date fromDate, Date toDate, String staffId) {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
-        String query = "{CALL USP_getBillListByDateAndCustomerPhoneNumber( ? , ? , ? )}";
-        Object[] parameter = new Object[] { phoneNumber, fromDate, toDate };
+        String query = "{CALL USP_getBillListByDateAndCustomerPhoneNumber( ? , ? , ? , ? )}";
+        Object[] parameter = new Object[] { phoneNumber, fromDate, toDate, staffId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -193,12 +195,13 @@ public class HoaDonDAO {
      * @param customerName {@code String}: Tên khách hàng
      * @param fromDate     {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate       {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId   {@code String}: mã nhân viên
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
-    public ArrayList<HoaDon> getBillListByDateAndCustomerName(String customerName, Date fromDate, Date toDate) {
+    public ArrayList<HoaDon> getBillListByDateAndCustomerName(String customerName, Date fromDate, Date toDate, String staffId) {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
-        String query = "{CALL USP_getBillListByDateAndCustomerName( ? , ? , ? )}";
-        Object[] parameter = new Object[] { customerName, fromDate, toDate };
+        String query = "{CALL USP_getBillListByDateAndCustomerName( ? , ? , ? , ? )}";
+        Object[] parameter = new Object[] { customerName, fromDate, toDate, staffId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -217,12 +220,13 @@ public class HoaDonDAO {
      * @param staffName {@code String}: Tên nhân viên
      * @param fromDate  {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate    {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId   {@code String}: mã nhân viên
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
-    public ArrayList<HoaDon> getBillListByDateAndStaffName(String staffName, Date fromDate, Date toDate) {
+    public ArrayList<HoaDon> getBillListByDateAndStaffName(String staffName, Date fromDate, Date toDate, String staffId) {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
-        String query = "{CALL USP_getBillListByDateAndStaffName( ? , ? , ? )}";
-        Object[] parameter = new Object[] { staffName, fromDate, toDate };
+        String query = "{CALL USP_getBillListByDateAndStaffName( ? , ? , ? , ? )}";
+        Object[] parameter = new Object[] { staffName, fromDate, toDate, staffId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -240,12 +244,13 @@ public class HoaDonDAO {
      * @param billId   {@code String}: Mã hóa đơn
      * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId   {@code String}: mã nhân viên
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
-    public ArrayList<HoaDon> getBillListByDateAndBillId(String billId, Date fromDate, Date toDate) {
+    public ArrayList<HoaDon> getBillListByDateAndBillId(String billId, Date fromDate, Date toDate, String staffId) {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
-        String query = "{CALL USP_getBillListByDateAndBillId( ? , ? , ? )}";
-        Object[] parameter = new Object[] { billId, fromDate, toDate };
+        String query = "{CALL USP_getBillListByDateAndBillId( ? , ? , ? , ? )}";
+        Object[] parameter = new Object[] { billId, fromDate, toDate, staffId };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {

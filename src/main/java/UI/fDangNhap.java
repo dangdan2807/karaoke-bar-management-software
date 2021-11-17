@@ -18,8 +18,9 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	private JTextField txtUsername, txtPassword;
 	private JButton btnLogin;
 
-	private ImageIcon logoIcon = new ImageIcon(
-			CustomUI.USER_ICON_512.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
+	private ImageIcon logo = new ImageIcon(
+			CustomUI.LOGO_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+	private ImageIcon logoApp = CustomUI.LOGO_APP;
 	private ImageIcon backgroundTop = new ImageIcon(
 			CustomUI.BACKGROUND_LOGIN.getImage().getScaledInstance(700, 300, Image.SCALE_SMOOTH));
 	private ImageIcon loginIcon = new ImageIcon(
@@ -34,6 +35,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	public fDangNhap() {
 		setTitle("Đăng nhập");
 		setSize(460, 650);
+		setIconImage(logoApp.getImage());
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -72,8 +74,8 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		lblBackgroundTop.setBounds(-18, 143, 473, 281);
 		pnlMau.add(lblBackgroundTop);
 
-		JLabel lblLogo = new JLabel(logoIcon);
-		lblLogo.setBounds(0, 57, 455, 82);
+		JLabel lblLogo = new JLabel(logo);
+		lblLogo.setBounds(0, 37, 455, 102);
 		pnlMau.add(lblLogo);
 		lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
 

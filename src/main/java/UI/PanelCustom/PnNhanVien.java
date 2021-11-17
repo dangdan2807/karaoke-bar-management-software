@@ -56,11 +56,12 @@ public class PnNhanVien extends JPanel
 			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
-			
+
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 	private boolean isResetPassword = false;
 	private boolean isInsertStaff = false;
+	private final String STAFF = "Nhân viên", MANAGER = "Chủ quán";
 
 	/**
 	 * Constructor form quản lý nhân viên
@@ -680,8 +681,8 @@ public class PnNhanVien extends JPanel
 	private void allLoaded() {
 		reSizeColumnTable();
 		String workingStatus = cboSearchType.getSelectedItem().toString().trim();
-		// loadStaffList(NhanVienDAO.getInstance().getStaffListByWorkingStatus(workingStatus));
-		loadStaffListPaging(workingStatus, 1);
+		loadStaffList(NhanVienDAO.getInstance().getStaffListByWorkingStatus(workingStatus));
+		// loadStaffListPaging(workingStatus, 1);
 	}
 
 	/**
@@ -1084,7 +1085,8 @@ public class PnNhanVien extends JPanel
 	}
 
 	public int getLastPage() {
-		// int sumRecord = BillDAO.getInstance().getNumBillByDate(dateCheckIn, dateCheckOut);
+		// int sumRecord = BillDAO.getInstance().getNumBillByDate(dateCheckIn,
+		// dateCheckOut);
 		int sumRecord = 1;
 		int lastPage = sumRecord / 30;
 		if (sumRecord % 30 != 0) {

@@ -24,6 +24,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeLis
         return instance;
     }
 
+    private ImageIcon logoApp = CustomUI.LOGO_APP;
     private JTabbedPane tabMain;
     private NhanVien staffLogin = null;
 
@@ -35,6 +36,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeLis
     public fQuanLyDatPhong(NhanVien staff) {
         setTitle("Quản Lý Đặt Phòng");
         setSize(1280, 700);
+        setIconImage(logoApp.getImage());
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -83,6 +85,8 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeLis
         Object o = e.getSource();
         if (o.equals(btnBackCustomer) || o.equals(btnBackBill) || o.equals(btnBackRentRoom)) {
             EventBackTofDieuHuong();
+        } else if (o.equals(tabMain)) {
+            // EventChangeTab();
         }
     }
 

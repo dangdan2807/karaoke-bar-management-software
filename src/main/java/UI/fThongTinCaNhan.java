@@ -29,6 +29,7 @@ public class fThongTinCaNhan extends JDialog
     private JCheckBox chkChangePassword;
     private JRadioButton radMale, radFemale;
 
+    private ImageIcon logoApp = CustomUI.LOGO_APP;
     private ImageIcon background = new ImageIcon(
             CustomUI.BACKGROUND.getImage().getScaledInstance(965, 512, Image.SCALE_SMOOTH));
     private ImageIcon updateInfoIcon = CustomUI.UPDATE_PROFILE_ICON;
@@ -47,6 +48,7 @@ public class fThongTinCaNhan extends JDialog
     public fThongTinCaNhan(NhanVien staff) {
         setTitle("Quản Lý Thông Tin Tài Khoản");
         setSize(965, 500);
+        setIconImage(logoApp.getImage());
         setLocationRelativeTo(null);
         setResizable(false);
         // setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -25,6 +25,7 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         return instance;
     }
 
+    private ImageIcon logoApp = CustomUI.LOGO_APP;
     private JTabbedPane tabMain;
     private NhanVien staffLogin = null;
 
@@ -37,6 +38,7 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         setTitle("Quản Lý Hệ Thống");
         setSize(1280, 655);
         setResizable(false);
+        setIconImage(logoApp.getImage());
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.staffLogin = staff;
