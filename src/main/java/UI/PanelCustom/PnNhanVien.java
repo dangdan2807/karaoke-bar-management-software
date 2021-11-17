@@ -29,11 +29,12 @@ public class PnNhanVien extends JPanel
 	private DefaultTableModel modelTableStaff;
 	private JTextField txtCMND, txtPhoneNumber, txtStaffName, txtStaffID, txtBFieldSearch, txtKeyWord;
 	private JTextField txtBFieldSearchPosition, txtBFieldPosition, txtUsername;
+	private MyTextField txtNumPage;
 	private JComboBox<String> cboSearch, cboSearchType, cboPosition;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPosition, lblSalary, lblPhoneNumber, lbStaffID;
 	private JLabel lblStaffName, lblStatus, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnResetPassword, btnNextRight,
-			btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnResetPassword, btnNextToRight, btnNextToLast,
+			btnNextToLeft, btnNextToFirst;
 	private JRadioButton radWorking, radRetired, radMale, radFemale;
 	private kDatePicker dpBirthDay;
 	private JSpinner spnSalary;
@@ -55,11 +56,11 @@ public class PnNhanVien extends JPanel
 			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
+			
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 	private boolean isResetPassword = false;
 	private boolean isInsertStaff = false;
-	private UI.PanelCustom.MyTextField txtIndex;
 
 	/**
 	 * Constructor form quản lý nhân viên
@@ -351,7 +352,7 @@ public class PnNhanVien extends JPanel
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
 		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách nhân viên");
-		pnlTable.setBounds(18, 270, 1220, 260);
+		pnlTable.setBounds(18, 260, 1220, 270);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã nhân viên", "Tên nhân viên", "CMND/CCCD", "Chức vụ", "SDT", "Ngày sinh",
 				"Mức lương", "Giới tính", "Trạng thái", "Tài khoản" };
@@ -375,78 +376,80 @@ public class PnNhanVien extends JPanel
 		tblTableStaff.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
 		tblTableStaff.getTableHeader().setForeground(Color.decode("#9B17EB"));
 		tblTableStaff.getTableHeader().setBackground(new Color(255, 255, 255));
-
-		tblTableStaff.getTableHeader().setBackground(new Color(255, 255, 255));
-		JScrollPane scrTable = new JScrollPane(tblTableStaff, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JScrollPane scrTable = new JScrollPane(tblTableStaff, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 20, 1200, 230);
+		scrTable.setBounds(10, 20, 1200, 240);
 		scrTable.setOpaque(false);
 		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
 
-		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
-		btnNextRight.setBounds(680, 540, 70, 35);
-		pnlMain.add(btnNextRight);
+		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextToRight.setBounds(680, 540, 70, 35);
+		pnlMain.add(btnNextToRight);
 
-		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextRight.setBounds(760, 540, 70, 35);
-		pnlMain.add(btnDoubleNextRight);
+		btnNextToLast = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLast.setBounds(760, 540, 70, 35);
+		pnlMain.add(btnNextToLast);
 
-		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnNextLeft.setBounds(520, 540, 70, 35);
-		pnlMain.add(btnNextLeft);
+		btnNextToLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLeft.setBounds(520, 540, 70, 35);
+		pnlMain.add(btnNextToLeft);
 
-		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextLeft.setBounds(440, 540, 70, 35);
-		pnlMain.add(btnDoubleNextLeft);
+		btnNextToFirst = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToFirst.setBounds(440, 540, 70, 35);
+		pnlMain.add(btnNextToFirst);
 
-		txtIndex = new MyTextField("12");
-		txtIndex.setBounds(600, 540, 70, 35);
-		pnlMain.add(txtIndex);
+		txtNumPage = new MyTextField("12");
+		txtNumPage.setBounds(600, 540, 70, 35);
+		pnlMain.add(txtNumPage);
 
 		btnAdd.addActionListener(this);
 		btnSearch.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnRefresh.addActionListener(this);
+		btnNextToLast.addActionListener(this);
+		btnNextToLeft.addActionListener(this);
+		btnNextToRight.addActionListener(this);
+		btnNextToFirst.addActionListener(this);
 		btnResetPassword.addActionListener(this);
 
-		tblTableStaff.addMouseListener(this);
-		txtStaffName.addMouseListener(this);
 		txtCMND.addMouseListener(this);
-		txtPhoneNumber.addMouseListener(this);
-		spnSalary.addMouseListener(this);
-		txtBFieldSearch.addMouseListener(this);
-		txtBFieldSearchPosition.addMouseListener(this);
-		txtBFieldPosition.addMouseListener(this);
-		cboPosition.addMouseListener(this);
 		cboSearch.addMouseListener(this);
+		spnSalary.addMouseListener(this);
+		cboPosition.addMouseListener(this);
+		txtStaffName.addMouseListener(this);
 		cboSearchType.addMouseListener(this);
+		tblTableStaff.addMouseListener(this);
+		txtPhoneNumber.addMouseListener(this);
+		txtBFieldSearch.addMouseListener(this);
+		txtBFieldPosition.addMouseListener(this);
+		txtBFieldSearchPosition.addMouseListener(this);
 
-		txtStaffName.addFocusListener(this);
-		txtKeyWord.addFocusListener(this);
-		txtPhoneNumber.addFocusListener(this);
 		txtCMND.addFocusListener(this);
-		cboPosition.addFocusListener(this);
 		cboSearch.addFocusListener(this);
-		cboSearchType.addFocusListener(this);
 		dpBirthDay.addFocusListener(this);
+		txtKeyWord.addFocusListener(this);
+		cboPosition.addFocusListener(this);
 		txtUsername.addFocusListener(this);
+		txtStaffName.addFocusListener(this);
+		cboSearchType.addFocusListener(this);
+		txtPhoneNumber.addFocusListener(this);
 		((JSpinner.DefaultEditor) spnSalary.getEditor()).getTextField().addFocusListener(this);
 
 		cboSearch.addItemListener(this);
 		cboSearchType.addItemListener(this);
 
-		txtPhoneNumber.addKeyListener(this);
-		txtKeyWord.addKeyListener(this);
-		txtCMND.addKeyListener(this);
 		btnAdd.addKeyListener(this);
 		btnBack.addKeyListener(this);
+		txtCMND.addKeyListener(this);
 		btnUpdate.addKeyListener(this);
 		btnSearch.addKeyListener(this);
 		btnRefresh.addKeyListener(this);
+		txtKeyWord.addKeyListener(this);
+		txtPhoneNumber.addKeyListener(this);
 
 		allLoaded();
 	}
@@ -475,6 +478,29 @@ public class PnNhanVien extends JPanel
 		} else if (o.equals(btnResetPassword)) {
 			isResetPassword = true;
 			updateStaffInfo();
+		} else if (o.equals(btnNextToLeft)) {
+			int pageNum = Integer.parseInt(txtNumPage.getText().trim());
+			if (pageNum != 1) {
+				pageNum--;
+				txtNumPage.setText(String.valueOf(pageNum));
+				// statistic();
+			}
+		} else if (o.equals(btnNextToRight)) {
+			int pageNum = Integer.parseInt(txtNumPage.getText().trim());
+			// int lastPage = Integer.parseInt(lbLastPageNum.getText().replace("/", ""));
+			int lastPage = Integer.parseInt(txtNumPage.getText().replace("/", ""));
+			if (pageNum < lastPage) {
+				pageNum++;
+				txtNumPage.setText(String.valueOf(pageNum));
+				// statistic();
+			}
+		} else if (o.equals(btnNextToFirst)) {
+			System.out.println(txtNumPage.getText());
+			txtNumPage.setText("1");
+		} else if (o.equals(btnNextToLast)) {
+			int lastPage = getLastPage();
+			txtNumPage.setText(String.valueOf(lastPage));
+			// statistic();
 		}
 	}
 
@@ -654,7 +680,8 @@ public class PnNhanVien extends JPanel
 	private void allLoaded() {
 		reSizeColumnTable();
 		String workingStatus = cboSearchType.getSelectedItem().toString().trim();
-		loadStaffList(NhanVienDAO.getInstance().getStaffListByWorkingStatus(workingStatus));
+		// loadStaffList(NhanVienDAO.getInstance().getStaffListByWorkingStatus(workingStatus));
+		loadStaffListPaging(workingStatus, 1);
 	}
 
 	/**
@@ -858,6 +885,23 @@ public class PnNhanVien extends JPanel
 	}
 
 	/**
+	 * Hiển thị danh sách nhân viên và phân trang
+	 * 
+	 * @param staffList {@code ArrayList <NhanVien>}: danh sách nhân viên
+	 * @param numPage   {@code int}: số của trang hiện tại
+	 */
+	private void loadStaffListPaging(String workingStatus, int numPage) {
+		modelTableStaff.getDataVector().removeAllElements();
+		modelTableStaff.fireTableDataChanged();
+		ArrayList<NhanVien> staffList = NhanVienDAO.getInstance().getStaffListByWorkingStatusAndNumPage(workingStatus,
+				numPage);
+		int i = 1 + (numPage - 1) * 10;
+		for (NhanVien item : staffList) {
+			addRow(i++, item);
+		}
+	}
+
+	/**
 	 * Thay đổi kích thước cột
 	 */
 	private void reSizeColumnTable() {
@@ -866,14 +910,14 @@ public class PnNhanVien extends JPanel
 		columnModel.getColumn(0).setPreferredWidth(40);
 		columnModel.getColumn(1).setPreferredWidth(100);
 		columnModel.getColumn(2).setPreferredWidth(200);
-		columnModel.getColumn(3).setPreferredWidth(90);
+		columnModel.getColumn(3).setPreferredWidth(100);
 		columnModel.getColumn(4).setPreferredWidth(100);
 		columnModel.getColumn(5).setPreferredWidth(100);
 		columnModel.getColumn(6).setPreferredWidth(100);
 		columnModel.getColumn(7).setPreferredWidth(100);
 		columnModel.getColumn(8).setPreferredWidth(80);
 		columnModel.getColumn(9).setPreferredWidth(130);
-		columnModel.getColumn(10).setPreferredWidth(140);
+		columnModel.getColumn(10).setPreferredWidth(150);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -992,9 +1036,9 @@ public class PnNhanVien extends JPanel
 			String message = "";
 			boolean isManager = staffLogin.getTaiKhoan().getTenDangNhap()
 					.equalsIgnoreCase(staff.getTaiKhoan().getTenDangNhap());
-			boolean isUpdateStatus = isManager && staff.getTrangThaiNV().equalsIgnoreCase("Đang làm");
-			boolean isUpdateManager = isManager && staff.getChucVu().equalsIgnoreCase("Chủ quán");
-			if (isUpdateStatus || isUpdateManager) {
+			boolean isUpdateStatus = isManager && staff.getTrangThaiNV().equalsIgnoreCase("Đã nghỉ");
+			boolean isUpdateManager = isManager && staff.getChucVu().equalsIgnoreCase("Nhân viên");
+			if (!isUpdateStatus && !isUpdateManager) {
 				String staffName = NhanVienDAO.getInstance().getStaffNameById(staff.getMaNhanVien());
 				int selectedRow = tblTableStaff.getSelectedRow();
 				String name = "nhân viên";
@@ -1030,13 +1074,23 @@ public class PnNhanVien extends JPanel
 					}
 				}
 			} else {
-				if (!isUpdateStatus)
+				if (isUpdateStatus)
 					message = "Bạn không thể vô hiệu hóa tài khoản của chính bạn";
-				else if (!isUpdateManager)
+				else if (isUpdateManager)
 					message = "Bạn không thể thay đổi chức vụ của chính bạn";
 			}
 			JOptionPane.showMessageDialog(this, message);
 		}
+	}
+
+	public int getLastPage() {
+		// int sumRecord = BillDAO.getInstance().getNumBillByDate(dateCheckIn, dateCheckOut);
+		int sumRecord = 1;
+		int lastPage = sumRecord / 30;
+		if (sumRecord % 30 != 0) {
+			lastPage++;
+		}
+		return lastPage;
 	}
 
 	/**

@@ -1069,7 +1069,7 @@ GO
 -- exec USP_getServiceDetailListByBillId 'HD2021100100001'
 -- go
 
-ALTER PROC USP_getServiceDetailByBillIdAndServiceId
+CREATE PROC USP_getServiceDetailByBillIdAndServiceId
     @billId VARCHAR(15),
     @serviceId VARCHAR(6)
 AS
@@ -1093,7 +1093,7 @@ END
 GO
 
 -- @quantityOrder có thể là số âm
-ALTER PROC USP_insertServiceDetail
+CREATE PROC USP_insertServiceDetail
     @serviceId VARCHAR(6),
     @billId VARCHAR(15),
     @quantityOrder INT,
@@ -1805,6 +1805,34 @@ BEGIN
     FROM dbo.NhanVien nv, dbo.TaiKhoan tk
     WHERE nv.taiKhoan = tk.tenDangNhap
         AND nv.trangThaiNV = @workingStatus
+END
+GO
+
+CREATE PROC USP_getStaffListByWorkingStatusAndNumPage
+    @workingStatus NVARCHAR(100),
+    @numPage INT
+AS
+BEGIN
+    DECLARE @pageRows int = 10
+    DECLARE @selectRows int = @pageRows * @numPage
+    DECLARE @exceptRows int = (@numPage - 1) * @pageRows
+
+    ;WITH staffShow AS (
+    SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
+        nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
+        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
+        tk.tinhTrangTK, tk.tenDangNhap, tk.matKhau
+    FROM dbo.NhanVien nv, dbo.TaiKhoan tk
+    WHERE nv.taiKhoan = tk.tenDangNhap
+        AND nv.trangThaiNV = @workingStatus
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM staffShow
+    WHERE maNhanVien NOT IN (
+        SELECT TOP (@exceptRows) maNhanVien
+        FROM staffShow
+    )
 END
 GO
 
