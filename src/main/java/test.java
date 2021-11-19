@@ -1,14 +1,11 @@
 
 import java.math.BigDecimal;
-import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.awt.*;
 
 import javax.swing.*;
-
-import org.bouncycastle.util.test.Test;
 
 import DAO.*;
 
@@ -152,7 +149,8 @@ public class test {
         case 0:
             // final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
             // System.out.println(workingDir + "");
-            // URL location = Test.class.getProtectionDomain().getCodeSource().getLocation();
+            // URL location =
+            // Test.class.getProtectionDomain().getCodeSource().getLocation();
             // System.out.println(location.getFile());
             ArrayList<String> list = new ArrayList<>();
             list.add("1");
@@ -245,13 +243,14 @@ public class test {
             // SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             // java.util.Date date = null;
             // try {
-            //     date = format.parse(end);
+            // date = format.parse(end);
             // } catch (ParseException e) {
-            //     e.printStackTrace();
+            // e.printStackTrace();
             // }
-            // System.out.println("Time in 24Hours =" + new SimpleDateFormat("HH:mm").format(date));
+            // System.out.println("Time in 24Hours =" + new
+            // SimpleDateFormat("HH:mm").format(date));
             String d = "123456";
-            System.out.println(d.substring(0,1));
+            System.out.println(d.substring(0, 1));
             break;
         }
 

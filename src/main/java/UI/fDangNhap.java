@@ -10,6 +10,16 @@ import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.MyButton;
 import entity.NhanVien;
 
+/**
+ * Giao diện đăng nhập của phần mềm
+ * <p>
+ * Người tham gia thiết kế: Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 04/10/2021
+ * <p>
+ * Lần cập nhật cuối: 18/11/2021
+ * <p>
+ */
 public class fDangNhap extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener {
 	/**
 	 * 

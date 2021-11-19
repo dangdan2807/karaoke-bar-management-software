@@ -6,6 +6,22 @@ import java.util.ArrayList;
 import entity.CTDichVu;
 import entity.DichVu;
 
+/**
+ * Thêm, sửa, đọc dữ liệu từ database:
+ * <ul>
+ * <li>{@code java.sql.Date} sang {@code java.util.Date}</li>
+ * <li>{@code java.sql.Date} sang {@code String}</li>
+ * <li>{@code java.sql.Timestamp} sang {@code String}</li>
+ * </ul>
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 13/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ */
 public class CTDichVuDAO {
     private static CTDichVuDAO instance = new CTDichVuDAO();
 

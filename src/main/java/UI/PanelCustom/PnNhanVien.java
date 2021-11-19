@@ -3,16 +3,10 @@ package UI.PanelCustom;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import DAO.ConvertTime;
-import DAO.HoaDonDAO;
-import DAO.NhanVienDAO;
-import DAO.TaiKhoanDAO;
-import DAO.ValidationData;
+import DAO.*;
 import Event_Handlers.InputEventHandler;
-import UI.fDieuHuong;
-import UI.fQuanTri;
-import entity.NhanVien;
-import entity.TaiKhoan;
+import UI.*;
+import entity.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -20,6 +14,18 @@ import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+/**
+ * Giao diện quản lý nhân viên của phần mềm
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 04/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm phân trang cho phần mềm
+ * <p>
+ */
 public class PnNhanVien extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**
@@ -62,6 +68,7 @@ public class PnNhanVien extends JPanel
 	private NhanVien staffLogin = null;
 	private boolean isResetPassword = false;
 	private boolean isInsertStaff = false;
+	private int lineNumberDisplayed = 10;
 
 	/**
 	 * Constructor form quản lý nhân viên
@@ -358,9 +365,6 @@ public class PnNhanVien extends JPanel
 		String[] cols = { "STT", "Mã nhân viên", "Tên nhân viên", "CMND/CCCD", "Chức vụ", "SDT", "Ngày sinh",
 				"Mức lương", "Giới tính", "Trạng thái", "Tài khoản" };
 		modelTableStaff = new DefaultTableModel(cols, 0) {
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -453,6 +457,7 @@ public class PnNhanVien extends JPanel
 		txtUsername.addKeyListener(this);
 		txtStaffName.addKeyListener(this);
 		txtPhoneNumber.addKeyListener(this);
+		txtNumPage.addKeyListener(this);
 
 		allLoaded();
 	}
@@ -482,27 +487,17 @@ public class PnNhanVien extends JPanel
 			isResetPassword = true;
 			updateStaffInfo();
 		} else if (o.equals(btnNextToLeft)) {
-			int pageNum = Integer.parseInt(txtNumPage.getText().trim());
-			if (pageNum != 1) {
-				pageNum--;
-				txtNumPage.setText(String.valueOf(pageNum));
-				// statistic();
-			}
+			txtNumPage.subtractOne();
+			searchEventUsingBtnSearch();
 		} else if (o.equals(btnNextToRight)) {
-			int pageNum = Integer.parseInt(txtNumPage.getText().trim());
-			// int lastPage = Integer.parseInt(lbLastPageNum.getText().replace("/", ""));
-			int lastPage = Integer.parseInt(txtNumPage.getText().replace("/", ""));
-			if (pageNum < lastPage) {
-				pageNum++;
-				txtNumPage.setText(String.valueOf(pageNum));
-				// statistic();
-			}
+			txtNumPage.plusOne();
+			searchEventUsingBtnSearch();
 		} else if (o.equals(btnNextToFirst)) {
-			txtNumPage.setText("1");
+			txtNumPage.toTheFirstPage();
+			searchEventUsingBtnSearch();
 		} else if (o.equals(btnNextToLast)) {
-			int lastPage = getLastPage();
-			txtNumPage.setText(String.valueOf(lastPage));
-			// statistic();
+			txtNumPage.toTheLastPage();
+			searchEventUsingBtnSearch();
 		}
 	}
 
@@ -641,6 +636,8 @@ public class PnNhanVien extends JPanel
 			handler.characterInputLimit(key, txtStaffName, 100);
 		} else if (o.equals(txtUsername)) {
 			handler.characterInputLimit(key, txtUsername, 100);
+		} else if (o.equals(txtNumPage)) {
+			handler.enterOnlyNumbers(key, txtNumPage, 20);
 		}
 	}
 
@@ -686,10 +683,12 @@ public class PnNhanVien extends JPanel
 	private void allLoaded() {
 		reSizeColumnTable();
 		String workingStatus = cboSearchType.getSelectedItem().toString().trim();
-		loadStaffList(NhanVienDAO.getInstance().getStaffListByWorkingStatus(workingStatus));
-		txtNumPage.setText("1");
-		txtNumPage.setTextMyTextField("1");
-		// loadStaffListPaging(workingStatus, 1);
+		int totalLine = NhanVienDAO.getInstance().getTotalLineByWorkingStatus(workingStatus);
+		txtNumPage.setCurrentPage(1);
+		txtNumPage.setNumberOfPages(getLastPage(totalLine));
+		ArrayList<NhanVien> staffList = NhanVienDAO.getInstance()
+				.getStaffListByWorkingStatusAndPageNumber(workingStatus, 1);
+		loadStaffList(staffList, 1);
 	}
 
 	/**
@@ -814,7 +813,8 @@ public class PnNhanVien extends JPanel
 		if (isResetPassword == true || isInsertStaff == true)
 			account.setMatKhau("123456");
 		else {
-			String password = NhanVienDAO.getInstance().getStaffByUsername(username).getTaiKhoan().getMatKhau();
+			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername(username);
+			String password = staff.getTaiKhoan().getMatKhau();
 			account.setMatKhau(password);
 		}
 		if (staffID.equals("") || staffID.length() <= 0)
@@ -883,27 +883,10 @@ public class PnNhanVien extends JPanel
 	 * 
 	 * @param staffList {@code ArrayList <NhanVien>}: danh sách nhân viên
 	 */
-	private void loadStaffList(ArrayList<NhanVien> staffList) {
+	private void loadStaffList(ArrayList<NhanVien> staffList, int currentPage) {
 		modelTableStaff.getDataVector().removeAllElements();
 		modelTableStaff.fireTableDataChanged();
-		int i = 1;
-		for (NhanVien item : staffList) {
-			addRow(i++, item);
-		}
-	}
-
-	/**
-	 * Hiển thị danh sách nhân viên và phân trang
-	 * 
-	 * @param staffList {@code ArrayList <NhanVien>}: danh sách nhân viên
-	 * @param numPage   {@code int}: số của trang hiện tại
-	 */
-	private void loadStaffListPaging(String workingStatus, int numPage) {
-		modelTableStaff.getDataVector().removeAllElements();
-		modelTableStaff.fireTableDataChanged();
-		ArrayList<NhanVien> staffList = NhanVienDAO.getInstance().getStaffListByWorkingStatusAndNumPage(workingStatus,
-				numPage);
-		int i = 1 + (numPage - 1) * 10;
+		int i = 1 + (currentPage - 1) * lineNumberDisplayed;
 		for (NhanVien item : staffList) {
 			addRow(i++, item);
 		}
@@ -947,19 +930,25 @@ public class PnNhanVien extends JPanel
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		ArrayList<NhanVien> staffList = null;
 		String keyword = "";
+		String currentPageStr = txtNumPage.getText().trim();
+		int currentPage = currentPageStr.isEmpty() ? 1 : Integer.parseInt(currentPageStr);
+		int totalLine = 1;
 		if (searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
 			keyword = "Đang làm";
 			if (cboSearchType.getSelectedItem() != null) {
 				keyword = cboSearchType.getSelectedItem().toString().trim();
 			}
-			staffList = NhanVienDAO.getInstance().getStaffListByWorkingStatus(keyword);
+			totalLine = NhanVienDAO.getInstance().getTotalLineByWorkingStatus(keyword);
+			staffList = NhanVienDAO.getInstance().getStaffListByWorkingStatusAndPageNumber(keyword, currentPage);
 		} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
 			keyword = txtKeyWord.getText().trim();
-			staffList = NhanVienDAO.getInstance().getStaffListByStaffName(keyword);
+			totalLine = NhanVienDAO.getInstance().getTotalLineByStaffName(keyword);
+			staffList = NhanVienDAO.getInstance().getStaffListByStaffNameAndPageNumber(keyword, currentPage);
 		} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
 			keyword = txtKeyWord.getText().trim();
 			if (keyword.matches("^[\\d]{0,10}$")) {
-				staffList = NhanVienDAO.getInstance().getStaffListByPhoneNumber(keyword);
+				totalLine = NhanVienDAO.getInstance().getTotalLineByPhoneNumber(keyword);
+				staffList = NhanVienDAO.getInstance().getStaffListByPhoneNumberAndPageNumber(keyword, currentPage);
 			} else {
 				String message = "Sổ điện phải phải là số, không được quá 10 số";
 				showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
@@ -969,9 +958,12 @@ public class PnNhanVien extends JPanel
 			if (cboSearchType.getSelectedItem() != null) {
 				keyword = cboSearchType.getSelectedItem().toString().trim();
 			}
-			staffList = NhanVienDAO.getInstance().getStaffListByPosition(keyword);
+			totalLine = NhanVienDAO.getInstance().getTotalLineByPosition(keyword);
+			staffList = NhanVienDAO.getInstance().getStaffListByPositionAndPageNumber(keyword, currentPage);
 		}
-		loadStaffList(staffList);
+		int lastPage = getLastPage(totalLine);
+		txtNumPage.setNumberOfPages(lastPage);
+		loadStaffList(staffList, currentPage);
 	}
 
 	/**
@@ -1091,12 +1083,9 @@ public class PnNhanVien extends JPanel
 		}
 	}
 
-	public int getLastPage() {
-		// int sumRecord = HoaDonDAO.getInstance().getNumBillByDate(dateCheckIn,
-		// dateCheckOut);
-		int sumRecord = 1;
-		int lastPage = sumRecord / 30;
-		if (sumRecord % 30 != 0) {
+	public int getLastPage(int totalLine) {
+		int lastPage = totalLine / lineNumberDisplayed;
+		if (totalLine % lineNumberDisplayed != 0) {
 			lastPage++;
 		}
 		return lastPage;

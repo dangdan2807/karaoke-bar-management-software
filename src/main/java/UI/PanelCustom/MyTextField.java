@@ -5,7 +5,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-public class MyTextField extends JTextField implements KeyListener {
+public class MyTextField extends JTextField {
 	/**
 	 * 
 	 */
@@ -19,7 +19,6 @@ public class MyTextField extends JTextField implements KeyListener {
 		setForeground(Color.white);
 		setBackground(new Color(255, 255, 255, 100));
 		initBorder();
-		this.addKeyListener(this);
 	}
 
 	@Override
@@ -43,33 +42,53 @@ public class MyTextField extends JTextField implements KeyListener {
 		setBorder(javax.swing.BorderFactory.createEmptyBorder(0, left, 0, right));
 	}
 
-	public void setTextMyTextField(String t) {
-		this.text = t;
+	public void setCurrentPage(int pageNumber) {
+		this.setText(String.valueOf(pageNumber));
 	}
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-
+	public void setNumberOfPages(int numberOfPages) {
+		this.text = String.valueOf(numberOfPages);
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// int key = e.getKeyCode();
-		// int length = text.length();
-		// System.out.println(length);
-		// if (key >= 48 && key <= 57 || key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
-		// 	this.setEditable(true);
-		// 	this.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-		// 	if (length == 10 && key != KeyEvent.VK_BACK_SPACE && key != KeyEvent.VK_DELETE) {
-		// 		this.setEditable(false);
-		// 	}
-		// } else {
-		// 	this.setEditable(false);
-		// }
+	public int getCurrentPage() {
+		String currentPage = this.getText();
+		return Integer.parseInt(currentPage.isEmpty() ? "1" : currentPage);
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
+	public int getNumberOfPages() {
+		String numberOfPages = this.text;
+		return Integer.parseInt(numberOfPages.isEmpty() ? "1" : numberOfPages);
+	}
 
+	public void plusOne() {
+		String currentPageStr = this.getText();
+		int currentPage = Integer.parseInt(currentPageStr.isEmpty() ? "1" : currentPageStr);
+		String numberOfPagesStr = this.text;
+		int numberOfPages = Integer.parseInt(numberOfPagesStr.isEmpty() ? "1" : numberOfPagesStr);
+		if (currentPage > 0 && currentPage < numberOfPages) {
+			++currentPage;
+			this.setText(String.valueOf(currentPage));
+		}
+	}
+
+	public void subtractOne() {
+		String currentPageStr = this.getText();
+		int currentPage = Integer.parseInt(currentPageStr.isEmpty() ? "1" : currentPageStr);
+		String numberOfPagesStr = this.text;
+		int numberOfPages = Integer.parseInt(numberOfPagesStr.isEmpty() ? "1" : numberOfPagesStr);
+		if (currentPage > 1 && currentPage <= numberOfPages) {
+			--currentPage;
+			this.setText(String.valueOf(currentPage));
+		}
+	}
+
+	public void toTheLastPage() {
+		String numberOfPagesStr = this.text;
+		int numberOfPages = Integer.parseInt(numberOfPagesStr.isEmpty() ? "1" : numberOfPagesStr);
+		this.setText(String.valueOf(numberOfPages));
+	}
+
+	public void toTheFirstPage() {
+		this.setText("1");
 	}
 }

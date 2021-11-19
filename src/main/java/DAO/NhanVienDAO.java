@@ -7,6 +7,17 @@ import java.util.ArrayList;
 import entity.NhanVien;
 import entity.TaiKhoan;
 
+/**
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code NhanVien}
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu
+ * <p>
+ * Ngày tạo: 04/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
+ */
 public class NhanVienDAO {
     private static NhanVienDAO instance = new NhanVienDAO();
 
@@ -20,11 +31,12 @@ public class NhanVienDAO {
      * Lấy danh sách tất cả khách hàng đang làm việc
      * 
      * @param workingStatus {@code String}: trạng thái làm việc của nhân viên
+     * @param currentPage   {@code int}: số của trang cần lấy thông tin
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<NhanVien> getStaffListByWorkingStatus(String workingStatus) {
-        String query = "{CALL USP_getStaffListByWorkingStatus( ? )}";
-        Object[] parameter = new Object[] { workingStatus };
+    public ArrayList<NhanVien> getStaffListByWorkingStatusAndPageNumber(String workingStatus, int currentPage) {
+        String query = "{CALL USP_getStaffListByWorkingStatusAndPageNumber( ?, ? )}";
+        Object[] parameter = new Object[] { workingStatus, currentPage };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         try {
@@ -38,24 +50,17 @@ public class NhanVienDAO {
     }
 
     /**
-     * Lấy danh sách tất cả khách hàng đang làm việc
+     * Lấy số lượng nhân viên tìm được dựa trên trạng thái nhân viên
      * 
      * @param workingStatus {@code String}: trạng thái làm việc của nhân viên
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<NhanVien> getStaffListByWorkingStatusAndNumPage(String workingStatus, int numPage) {
-        String query = "{CALL USP_getStaffListByWorkingStatusAndNumPage( ?, ? )}";
-        Object[] parameter = new Object[] { workingStatus, numPage };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
-        try {
-            while (rs.next()) {
-                staffList.add(new NhanVien(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return staffList;
+    public int getTotalLineByWorkingStatus(String workingStatus) {
+        String query = "{CALL USP_getTotalLineByWorkingStatus( ? )}";
+        Object[] parameter = new Object[] { workingStatus };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**
@@ -154,21 +159,59 @@ public class NhanVienDAO {
         TaiKhoan taiKhoan = staff.getTaiKhoan();
         Object[] parameter = new Object[] { staff.getMaNhanVien(), staff.getCmnd(), staff.getHoTen(),
                 staff.getNgaySinh(), staff.getSoDienThoai(), staff.getChucVu(), staff.getMucLuong(),
-                staff.getTrangThaiNV(), staff.getGioiTinh(), taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau(), taiKhoan.getTinhTrangTK() };
+                staff.getTrangThaiNV(), staff.getGioiTinh(), taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau(),
+                taiKhoan.getTinhTrangTK() };
         Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
         int result = obj != null ? result = (int) obj : 0;
         return result > 0;
     }
 
     /**
-     * Lấy danh sách nhân viên dự theo chức vụ
+     * Lấy danh sách nhân viên dựa theo chức vụ
+     * 
+     * @param position    {@code String}: chức vụ nhân viên cần tìm
+     * @param currentPage {@code int}: số của trang cần lấy thông tin
+     * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
+     */
+    public ArrayList<NhanVien> getStaffListByPositionAndPageNumber(String position, int currentPage) {
+        String query = "{CALL USP_getStaffListByPositionAndPageNumber( ? , ? )}";
+        Object[] parameter = new Object[] { position, currentPage };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
+        try {
+            while (rs.next()) {
+                staffList.add(new NhanVien(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return staffList;
+    }
+
+    /**
+     * Lấy số lượng nhân viên tìm được dựa theo chức vụ
      * 
      * @param position {@code String}: chức vụ nhân viên cần tìm
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     */
+    public int getTotalLineByPosition(String position) {
+        String query = "{CALL USP_getTotalLineByPosition( ? )}";
+        Object[] parameter = new Object[] { position };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
+
+    /**
+     * Lấy danh sách nhân viên dựa theo tên nhân viên
+     * 
+     * @param staffName   {@code String}: tên nhân viên cần tìm
+     * @param currentPage {@code int}: số của trang cần lấy thông tin
      * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
      */
-    public ArrayList<NhanVien> getStaffListByPosition(String position) {
-        String query = "{CALL USP_getStaffListByPosition( ? )}";
-        Object[] parameter = new Object[] { position };
+    public ArrayList<NhanVien> getStaffListByStaffNameAndPageNumber(String staffName, int currentPage) {
+        String query = "{CALL USP_getStaffListByStaffNameAndPageNumber( ? , ? )}";
+        Object[] parameter = new Object[] { staffName, currentPage };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         try {
@@ -182,14 +225,29 @@ public class NhanVienDAO {
     }
 
     /**
-     * Lấy danh sách nhân viên dự theo tên nhân viên
+     * Lấy số lượng nhân viên tìm được dựa theo tên nhân viên
      * 
      * @param staffName {@code String}: tên nhân viên cần tìm
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     */
+    public int getTotalLineByStaffName(String staffName) {
+        String query = "{CALL USP_getTotalLineByStaffName( ? )}";
+        Object[] parameter = new Object[] { staffName };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
+
+    /**
+     * Lấy danh sách nhân viên dựa theo số điện thoại
+     * 
+     * @param phoneNumber {@code String}: số điện thoại cần tìm
+     * @param currentPage {@code int}: số của trang cần lấy thông tin
      * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
      */
-    public ArrayList<NhanVien> getStaffListByStaffName(String staffName) {
-        String query = "{CALL USP_getStaffListByStaffName( ? )}";
-        Object[] parameter = new Object[] { staffName };
+    public ArrayList<NhanVien> getStaffListByPhoneNumberAndPageNumber(String phoneNumber, int currentPage) {
+        String query = "{CALL USP_getStaffListByPhoneNumberAndPageNumber( ? , ? )}";
+        Object[] parameter = new Object[] { phoneNumber, currentPage };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         try {
@@ -203,24 +261,17 @@ public class NhanVienDAO {
     }
 
     /**
-     * Lấy danh sách nhân viên dự theo số điện thoại
+     * Lấy số lượng nhân viên tìm được dựa theo số điện thoại
      * 
      * @param phoneNumber {@code String}: số điện thoại cần tìm
-     * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<NhanVien> getStaffListByPhoneNumber(String phoneNumber) {
-        String query = "{CALL USP_getStaffListByPhoneNumber( ? )}";
+    public int getTotalLineByPhoneNumber(String phoneNumber) {
+        String query = "{CALL USP_getTotalLineByPhoneNumber( ? )}";
         Object[] parameter = new Object[] { phoneNumber };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
-        try {
-            while (rs.next()) {
-                staffList.add(new NhanVien(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return staffList;
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**
