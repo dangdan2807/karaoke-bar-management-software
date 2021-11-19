@@ -55,48 +55,6 @@ public class DichVuDAO {
     }
 
     /**
-     * Lấy dịch vụ theo tên dịch vụ
-     * 
-     * @param serviceName {@code int}: tên dịch vụ
-     * @return {@code DichVu}: kết quả trả về của câu truy vấn
-     *         <ul>
-     *         <li>Nếu tìm thấy thì trả về {@code DichVu}</li>
-     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
-     *         </ul>
-     */
-    public DichVu getServiceByName(String serviceName) {
-        DichVu data = null;
-        String query = "{CALL USP_getServiceByName( ? )}";
-        Object[] parameter = new Object[] { serviceName };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        try {
-            if (rs.next())
-                data = new DichVu(rs);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return data;
-    }
-
-    /**
-     * Lấy số lượng tồn của dịch vụ bằng tên dịch vụ
-     * 
-     * @param serviceName {@code String}: tên dịch vụ
-     * @return {@code int}: kết quả trả về của câu truy vấn
-     *         <ul>
-     *         <li>Nếu tìm thấy thì trả về {@code số lượng tồn của dịch vụ}</li>
-     *         <li>Nếu không tìm thấy thì trả về {@code 0} 0</li>
-     *         </ul>
-     */
-    public int getQuantityByServiceName(String serviceName) {
-        String query = "{CALL USP_getQuantityByServiceName( ? )}";
-        Object[] parameter = new Object[] { serviceName };
-        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
-        int result = obj != null ? result = (int) obj : 0;
-        return result;
-    }
-
-    /**
      * Lấy danh sách dịch vụ theo tên dịch vụ
      * 
      * @param serviceName {@code String}: tên dịch vụ
@@ -153,30 +111,6 @@ public class DichVuDAO {
         Object obj = DataProvider.getInstance().ExecuteScalar(query, null);
         String staffID = obj != null ? obj.toString() : "";
         return staffID;
-    }
-
-    /**
-     * Lấy dịch vụ theo mã dịch vụ
-     * 
-     * @param serviceID {@code String}: mã dịch vụ
-     * @return {@code DichVu}: kết quả trả về của câu truy vấn
-     *         <ul>
-     *         <li>Nếu tìm thấy thì trả về {@code DichVu}</li>
-     *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
-     *         </ul>
-     */
-    public DichVu getServiceById(String serviceID) {
-        DichVu data = null;
-        String query = "{CALL USP_getServiceById( ? )}";
-        Object[] parameter = new Object[] { serviceID };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        try {
-            if (rs.next())
-                data = new DichVu(rs);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return data;
     }
 
     /**

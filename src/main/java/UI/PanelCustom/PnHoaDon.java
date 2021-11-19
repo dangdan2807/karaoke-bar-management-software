@@ -13,15 +13,18 @@ import javax.swing.table.*;
 import DAO.*;
 import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
+import UI.fQuanTri;
 import entity.*;
 
-public class PnHoaDon extends JFrame
+public class PnHoaDon extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7158582925692848950L;
+
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-
 	private JTable tblTableBill, tblTableBillInfo;
 	private DefaultTableModel modelTableBill, modelTableBillInfo;
 	private MyButton btnSearch, btnRefresh, btnBack;
@@ -30,33 +33,36 @@ public class PnHoaDon extends JFrame
 	private JComboBox<String> cboSearch, cboSearchType;
 	private JTextField txtBFieldSearch, txtKeyWord, txtBFieldSearchType;
 
+	private ImageIcon bg = new ImageIcon(
+			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon backIcon = CustomUI.BACK_ICON;
+
 	private NhanVien staffLogin = null;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 
 	public PnHoaDon(NhanVien staff) {
 		this.staffLogin = staff;
 		setSize(1270, 630);
-		getContentPane().setLayout(null);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(null);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
-				Image bgMain = bg.getImage();
-				g2.drawImage(bgMain, 0, 0, null);
+				g2.drawImage(bg.getImage(), 0, 0, null);
 				setFont(new Font("Dialog", Font.BOLD, 24));
 				g2.setColor(Color.decode("#9B17EB"));
-				g2.drawRoundRect(10, 43, 1238, 543, 20, 20);
-				g2.drawRoundRect(9, 42, 1240, 543, 20, 20);
+				g2.drawRoundRect(10, 50, 1238, 530, 20, 20);
+				g2.drawRoundRect(9, 49, 1240, 530, 20, 20);
 			}
 		};
 		pnlMain.setLayout(null);
 		pnlMain.setBounds(0, 0, 1270, 630);
-		getContentPane().add(pnlMain);
+		this.add(pnlMain);
 
 		JPanel pnlTitle = new JPanel() {
 			@Override
@@ -64,19 +70,25 @@ public class PnHoaDon extends JFrame
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setColor(new Color(255, 255, 255));
-				setFont(new Font("Dialog", Font.BOLD, 20));
-				g2.drawString("QUẢN LÝ KHÁCH HÀNG", 500, 30);
 			}
 		};
 
-		pnlTitle.setBounds(0, 0, 1270, 41);
+		pnlTitle.setBounds(0, 0, 1270, 50);
 		pnlTitle.setOpaque(false);
 		pnlTitle.setLayout(null);
-		btnBack = new MyButton(100, 35, "Quay lại", gra, CustomUI.BACK_ICON.getImage(), 30, 19, 9, 5);
-		btnBack.setBounds(1150, 4, 100, 35);
+
+		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19, 9, 5);
+		btnBack.setBounds(1150, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
 		pnlTitle.add(btnBack);
 		pnlMain.add(pnlTitle);
+
+		JLabel lblTitle = new JLabel("QUẢN LÝ HÓA ĐƠN");
+		lblTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lblTitle.setForeground(Color.WHITE);
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setBounds(0, 0, 1250, 45);
+		pnlTitle.add(lblTitle);
 
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
@@ -95,8 +107,7 @@ public class PnHoaDon extends JFrame
 		pnlInfo.add(dpToDate);
 
 		lblToDate = new JLabel("Đến ngày:");
-		lblToDate.setForeground(Color.WHITE);
-		lblToDate.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblToDate);
 		lblToDate.setBounds(642, 26, 105, 20);
 		pnlInfo.add(lblToDate);
 
@@ -111,8 +122,7 @@ public class PnHoaDon extends JFrame
 		pnlInfo.add(dpFromDate);
 
 		lblFromDate = new JLabel("Từ ngày:");
-		lblFromDate.setForeground(Color.WHITE);
-		lblFromDate.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblFromDate);
 		lblFromDate.setBounds(187, 26, 105, 20);
 		pnlInfo.add(lblFromDate);
 
@@ -127,26 +137,25 @@ public class PnHoaDon extends JFrame
 		pnlInfo.add(btnSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
+		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(187, 70, 105, 20);
 		pnlInfo.add(lblSearch);
-		lblSearch.setForeground(Color.WHITE);
-		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
 
 		cboSearch = new JComboBox<String>();
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên khách hàng");
 		cboSearch.addItem("SĐT khách hàng");
 		cboSearch.addItem("Tên nhân viên");
+		cboSearch.addItem("Mã hóa đơn");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(290, 70, 250, 20);
 		pnlInfo.add(cboSearch);
 
 		JLabel lpKeyWord = new JLabel("Từ khóa:");
+		CustomUI.getInstance().setCustomLabel(lpKeyWord);
 		lpKeyWord.setBounds(642, 70, 105, 20);
 		pnlInfo.add(lpKeyWord);
-		lpKeyWord.setForeground(Color.WHITE);
-		lpKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
 
 		txtKeyWord = new JTextField();
 		txtKeyWord.setBounds(747, 70, 250, 20);
@@ -200,7 +209,6 @@ public class PnHoaDon extends JFrame
 		pnlTable.add(scrTableBillInfo);
 		pnlMain.add(pnlTable);
 
-		btnBack.addActionListener(this);
 		btnRefresh.addActionListener(this);
 		btnSearch.addActionListener(this);
 
@@ -217,8 +225,8 @@ public class PnHoaDon extends JFrame
 
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new PnHoaDon(staff).setVisible(true);
+			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("huynhtuananh");
+			new fQuanTri(staff).setVisible(true);
 		});
 	}
 
@@ -283,7 +291,6 @@ public class PnHoaDon extends JFrame
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
-			cboSearch.showPopup();
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
@@ -303,6 +310,11 @@ public class PnHoaDon extends JFrame
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
 		InputEventHandler handler = new InputEventHandler();
@@ -313,15 +325,12 @@ public class PnHoaDon extends JFrame
 			}
 			if (searchTypeName.equalsIgnoreCase("SĐT khách hàng")) {
 				handler.enterOnlyNumbers(key, txtKeyWord, 10);
+			} else if(searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {
+				handler.characterInputLimit(key, txtKeyWord, 15);
 			} else {
 				handler.characterInputLimit(key, txtKeyWord, 100);
 			}
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
 	}
 
 	@Override
@@ -353,11 +362,10 @@ public class PnHoaDon extends JFrame
 	public void allLoaded() {
 		reSizeColumnTableBill();
 		reSizeColumnTableBillInfo();
-		dpFromDate.setValue("01-10-2021");
-		dpToDate.setValue("01-10-2021");
 		Date startDate = dpFromDate.getValueSqlDate();
 		Date endDate = dpToDate.getNextDay();
-		loadBillList(HoaDonDAO.getInstance().getBillListByDate(startDate, endDate));
+		String staffId = staffLogin.getMaNhanVien();
+		loadBillList(HoaDonDAO.getInstance().getBillListByDate(startDate, endDate, staffId));
 	}
 
 	/**
@@ -415,9 +423,9 @@ public class PnHoaDon extends JFrame
 		String endTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioTra(), format);
 
 		KhachHang customer = KhachHangDAO.getInstance().getCustomerByBillId(billId);
+		Double totalPrice = HoaDonDAO.getInstance().getTotalPriceBill(billId);
 		NhanVien staff = NhanVienDAO.getInstance().getStaffByBillId(billId);
 		Phong room = PhongDAO.getInstance().getRoomByBillId(billId);
-		Double totalPrice = HoaDonDAO.getInstance().getTotalPriceBill(billId);
 
 		modelTableBill.addRow(new Object[] { sttStr, addSpaceToString(String.valueOf(billId)),
 				addSpaceToString(startTimeStr), addSpaceToString(endTimeStr), addSpaceToString(room.getMaPhong()),
@@ -436,7 +444,7 @@ public class PnHoaDon extends JFrame
 		DichVu service = serviceDetail.getDichVu();
 		String sttStr = df.format(stt);
 		String quantityStr = df.format(serviceDetail.getSoLuongDat());
-		String priceStr = df.format(service.getGiaBan());
+		String priceStr = df.format(serviceDetail.getDonGia());
 		String totalPrice = df.format(serviceDetail.tinhTienDichVu());
 		modelTableBillInfo.addRow(new Object[] { sttStr, addSpaceToString(service.getTenDichVu()),
 				addSpaceToString(quantityStr), addSpaceToString(priceStr), addSpaceToString(totalPrice) });
@@ -480,14 +488,14 @@ public class PnHoaDon extends JFrame
 	private void reSizeColumnTableBill() {
 		tblTableBill.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		TableColumnModel columnModelTableBill = tblTableBill.getColumnModel();
-		columnModelTableBill.getColumn(0).setPreferredWidth(70);
-		columnModelTableBill.getColumn(1).setPreferredWidth(150);
+		columnModelTableBill.getColumn(0).setPreferredWidth(50);
+		columnModelTableBill.getColumn(1).setPreferredWidth(140);
 		columnModelTableBill.getColumn(2).setPreferredWidth(160);
 		columnModelTableBill.getColumn(3).setPreferredWidth(160);
 		columnModelTableBill.getColumn(4).setPreferredWidth(100);
 		columnModelTableBill.getColumn(5).setPreferredWidth(210);
 		columnModelTableBill.getColumn(6).setPreferredWidth(210);
-		columnModelTableBill.getColumn(7).setPreferredWidth(140);
+		columnModelTableBill.getColumn(7).setPreferredWidth(170);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -495,8 +503,6 @@ public class PnHoaDon extends JFrame
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
 		columnModelTableBill.getColumn(0).setCellRenderer(centerRenderer);
-		columnModelTableBill.getColumn(1).setCellRenderer(centerRenderer);
-		columnModelTableBill.getColumn(4).setCellRenderer(centerRenderer);
 		columnModelTableBill.getColumn(7).setCellRenderer(rightRenderer);
 	}
 
@@ -542,17 +548,27 @@ public class PnHoaDon extends JFrame
 		Date toDate = dpToDate.getNextDay();
 		ArrayList<HoaDon> billList = new ArrayList<>();
 		String keyword = txtKeyWord.getText().trim();
+		String staffId = staffLogin.getMaNhanVien();
 		if (validData()) {
 			if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-				billList = HoaDonDAO.getInstance().getBillListByDate(fromDate, toDate);
+				billList = HoaDonDAO.getInstance().getBillListByDate(fromDate, toDate, staffId);
 			} else if (searchTypeName.equalsIgnoreCase("SĐT khách hàng")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndPhoneNumber(keyword, fromDate, toDate);
+				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerPhoneNumber(keyword, fromDate, toDate, staffId);
 			} else if (searchTypeName.equalsIgnoreCase("Tên khách hàng")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerName(keyword, fromDate, toDate);
+				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerName(keyword, fromDate, toDate, staffId);
 			} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndStaffName(keyword, fromDate, toDate);
+				billList = HoaDonDAO.getInstance().getBillListByDateAndStaffName(keyword, fromDate, toDate, staffId);
+			} else if (searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {
+				billList = HoaDonDAO.getInstance().getBillListByDateAndBillId(keyword, fromDate, toDate, staffId);
 			}
+			loadBillList(billList);
 		}
-		loadBillList(billList);
+	}
+
+	/**
+	 * Lấy nút quay lại
+	 */
+	public JButton getBtnBack() {
+		return btnBack;
 	}
 }

@@ -1,36 +1,22 @@
 
 import java.math.BigDecimal;
-import java.awt.*;
 import java.sql.*;
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-import java.awt.Component;
+import java.awt.*;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-
-import org.apache.poi.ss.usermodel.CellStyle;
+import javax.swing.*;
 
 import DAO.*;
-import entity.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class test {
     public static void testTime() {
-        String start = "2021/10/01 15:30:00";
-        String end = "2021/10/01 15:30:05";
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String start = "2021/10/01 23:30:00";
+        String end = "2021/10/01 00:30:05";
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy kk:mm:ss");
         java.util.Date date1 = null;
         try {
             date1 = format.parse(start);
@@ -44,6 +30,8 @@ public class test {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        System.out.println();
 
         long difference = date2.getTime() - date1.getTime();
         int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
@@ -105,18 +93,6 @@ public class test {
         }
     }
 
-    private void showMessage(JFrame jFrame) {
-
-    }
-
-    private void showMessage(JDialog jDialog) {
-
-    }
-
-    private void showMessage(JPanel jPanel) {
-
-    }
-
     private static String createNewBillId(Timestamp date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         String dateStr = format.format(date);
@@ -150,9 +126,42 @@ public class test {
         return newStaffIdStr;
     }
 
+    /**
+     * tính số giờ thuê phòng
+     * 
+     * @return {@code Double}: số giờ thuê phòng
+     */
+    public static Double tinhGioThue(Timestamp ngayGioDat, Timestamp ngayGioTra) {
+        int minutes = 0;
+        if (ngayGioTra != null && ngayGioDat != null) {
+            long difference = ngayGioTra.getTime() - ngayGioDat.getTime();
+            minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
+        }
+
+        minutes = (int) minutes / 30;
+        return minutes * 1.0 / 2;
+    }
+
     public static void main(String[] args) {
-        int key = 10;
+        int key = 100;
+        String billId = "HD2021100200002";
         switch (key) {
+        case 0:
+            // final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
+            // System.out.println(workingDir + "");
+            // URL location =
+            // Test.class.getProtectionDomain().getCodeSource().getLocation();
+            // System.out.println(location.getFile());
+            ArrayList<String> list = new ArrayList<>();
+            list.add("1");
+            list.add("2");
+            list.add("3");
+            list.add("4");
+
+            System.out.println(list.get(0));
+            // list.remove(2);
+            System.out.println(list.get(2));
+            break;
         case 1:
             testTime();
             break;
@@ -160,16 +169,18 @@ public class test {
             System.out.println(createNewServiceID());
             break;
         case 3:
-            ExportBill.getInstance().exportBillToExcel("HD2021010100001", "D:/hd.xlsx");
+            // ExportBill.getInstance().exportBillToExcel(billId, "D:");
             break;
         case 4:
-            // ExportBill.getInstance().exportBillToPdf(1, "D:/hd.xlsx");
+            // ExportBill.getInstance().exportBillToPdf(billId, "D:/");
             break;
         case 5:
-            BigDecimal a = new BigDecimal("0.00");
-            BigDecimal b = new BigDecimal("1.00");
-            System.out.println(a.add(b));
-            System.out.println(a.multiply(b));
+            BigDecimal a = new BigDecimal("1.00");
+            BigDecimal b = new BigDecimal("2.00");
+            System.out.println("a + b = " + a.add(b));
+            System.out.println("a - b = " + a.subtract(b));
+            System.out.println("a * b = " + a.multiply(b));
+            System.out.println("a / b = " + a.divide(b));
             break;
         case 6:
             String data = "8000.0";
@@ -204,7 +215,42 @@ public class test {
             String id = createNewBillId(Timestamp.valueOf("2021-10-02 00:00:00"));
             System.out.println(id);
             break;
+        case 11:
+            String demoPath1 = "D:/123";
+            // D:/123 -> D:/123/
+            // D:/123/ -> D:/123/
+            // D:/123\\ -> D:/123\
+
+            String demoPath2 = demoPath1;
+            // ^.+[^\\\/]$
+            if (!demoPath1.matches("^.+[\\\\/]$")) {
+                demoPath1 += "/";
+            }
+            boolean result = false;
+            if (demoPath1.equalsIgnoreCase(demoPath2 + "/") && !demoPath1.endsWith("\\/")
+                    || demoPath1.equalsIgnoreCase(demoPath2)) {
+                result = true;
+            }
+            System.out.println(demoPath2 + " -> " + demoPath1 + " : " + result);
+            break;
+        case 12:
+            Timestamp ngayGioDat = Timestamp.valueOf("2021-10-02 00:00:00");
+            Timestamp ngayGioTra = Timestamp.valueOf("2021-10-03 00:00:00");
+            System.out.println(tinhGioThue(ngayGioDat, ngayGioTra));
+            break;
         default:
+            // String end = "12/12/11 23:22:09";
+            // SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            // java.util.Date date = null;
+            // try {
+            // date = format.parse(end);
+            // } catch (ParseException e) {
+            // e.printStackTrace();
+            // }
+            // System.out.println("Time in 24Hours =" + new
+            // SimpleDateFormat("HH:mm").format(date));
+            String d = "123456";
+            System.out.println(d.substring(0, 1));
             break;
         }
 

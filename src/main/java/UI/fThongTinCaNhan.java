@@ -16,7 +16,11 @@ import javax.swing.border.TitledBorder;
 
 public class fThongTinCaNhan extends JDialog
         implements ActionListener, KeyListener, MouseListener, FocusListener, ItemListener {
-    private JLabel lblUsername, lblFullName, lblPassword, lblNewPassword, lblReNewPassword, lblGender;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7162277696412530687L;
+	private JLabel lblUsername, lblFullName, lblPassword, lblNewPassword, lblReNewPassword, lblGender;
     private JLabel lblSalary;
     private JTextField txtUsername, txtFullName, txtPassword, txtNewPassword, txtReNewPassword;
     private JTextField txtCMND, txtPhoneNumber, txtPosition, txtSalary, txtEmpID;
@@ -25,8 +29,10 @@ public class fThongTinCaNhan extends JDialog
     private JCheckBox chkChangePassword;
     private JRadioButton radMale, radFemale;
 
+    private ImageIcon logoApp = CustomUI.LOGO_APP;
     private ImageIcon background = new ImageIcon(
             CustomUI.BACKGROUND.getImage().getScaledInstance(965, 512, Image.SCALE_SMOOTH));
+    private ImageIcon updateInfoIcon = CustomUI.UPDATE_PROFILE_ICON;
     private int withPn = 965, heightPn = 500;
     private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
             Color.decode("#FAFFD1"));
@@ -42,9 +48,10 @@ public class fThongTinCaNhan extends JDialog
     public fThongTinCaNhan(NhanVien staff) {
         setTitle("Quản Lý Thông Tin Tài Khoản");
         setSize(965, 500);
+        setIconImage(logoApp.getImage());
         setLocationRelativeTo(null);
         setResizable(false);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.staffLogin = staff;
         createFormAccountProfile();
     }
@@ -83,8 +90,7 @@ public class fThongTinCaNhan extends JDialog
         pnlPersonalInfo.setLayout(null);
 
         JLabel lblMaNV = new JLabel("Mã nhân viên: ");
-        lblMaNV.setForeground(Color.WHITE);
-        lblMaNV.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblMaNV);
         lblMaNV.setBounds(40, 30, 120, 25);
         pnlPersonalInfo.add(lblMaNV);
 
@@ -94,8 +100,7 @@ public class fThongTinCaNhan extends JDialog
         pnlPersonalInfo.add(txtEmpID);
 
         lblFullName = new JLabel("Tên nhân viên: ");
-        lblFullName.setForeground(Color.WHITE);
-        lblFullName.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblFullName);
         lblFullName.setBounds(40, 65, 120, 25);
         pnlPersonalInfo.add(lblFullName);
 
@@ -105,8 +110,7 @@ public class fThongTinCaNhan extends JDialog
         pnlPersonalInfo.add(txtFullName);
 
         JLabel lblCMND = new JLabel("CMND/CCCD: ");
-        lblCMND.setForeground(Color.WHITE);
-        lblCMND.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblCMND);
         lblCMND.setBounds(40, 100, 120, 25);
         pnlPersonalInfo.add(lblCMND);
 
@@ -117,23 +121,17 @@ public class fThongTinCaNhan extends JDialog
         pnlPersonalInfo.add(txtCMND);
 
         dpBirthday = new kDatePicker(250, 25);
-        dpBirthday.setBackgroundColor(new Color(255, 255, 255, 50));
-        dpBirthday.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-        dpBirthday.setForegroundCustom(Color.white);
-        dpBirthday.setOpaqueCustom(false);
-        dpBirthday.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
+        CustomUI.getInstance().setCustomKDatePicker(dpBirthday);
         dpBirthday.setBounds(160, 135, 250, 25);
         pnlPersonalInfo.add(dpBirthday);
 
         JLabel lblBirthDay = new JLabel("Ngày sinh: ");
-        lblBirthDay.setForeground(Color.WHITE);
-        lblBirthDay.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblBirthDay);
         lblBirthDay.setBounds(40, 135, 120, 25);
         pnlPersonalInfo.add(lblBirthDay);
 
         JLabel lblPhoneNumber = new JLabel("Số điện thoại: ");
-        lblPhoneNumber.setForeground(Color.WHITE);
-        lblPhoneNumber.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblPhoneNumber);
         lblPhoneNumber.setBounds(40, 170, 120, 25);
         pnlPersonalInfo.add(lblPhoneNumber);
 
@@ -144,22 +142,17 @@ public class fThongTinCaNhan extends JDialog
         pnlPersonalInfo.add(txtPhoneNumber);
 
         txtPosition = new JTextField();
-        txtPosition.setForeground(Color.WHITE);
         txtPosition.setBounds(160, 205, 250, 25);
-        pnlPersonalInfo.add(txtPosition);
-        txtPosition.setEditable(false);
-        txtPosition.setFont(new Font("Dialog", Font.PLAIN, 14));
         CustomUI.getInstance().setCustomTextFieldOff(txtPosition);
+        pnlPersonalInfo.add(txtPosition);
 
         JLabel lblPosition = new JLabel("Chức vụ: ");
-        lblPosition.setForeground(Color.WHITE);
-        lblPosition.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblPosition);
         lblPosition.setBounds(40, 205, 115, 25);
         pnlPersonalInfo.add(lblPosition);
 
         lblGender = new JLabel("Giới tính: ");
-        lblGender.setForeground(Color.WHITE);
-        lblGender.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblGender);
         lblGender.setBounds(40, 240, 115, 25);
         pnlPersonalInfo.add(lblGender);
 
@@ -185,8 +178,7 @@ public class fThongTinCaNhan extends JDialog
         pnlPersonalInfo.add(txtSalary);
 
         lblSalary = new JLabel("Mức Lương: ");
-        lblSalary.setForeground(Color.WHITE);
-        lblSalary.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblSalary);
         lblSalary.setBounds(40, 275, 120, 25);
         pnlPersonalInfo.add(lblSalary);
 
@@ -199,8 +191,7 @@ public class fThongTinCaNhan extends JDialog
         pnlMain.add(pnlAccountInfo);
 
         lblUsername = new JLabel("Tên đăng nhập: ");
-        lblUsername.setForeground(Color.WHITE);
-        lblUsername.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblUsername);
         lblUsername.setBounds(32, 35, 120, 25);
         pnlAccountInfo.add(lblUsername);
 
@@ -210,9 +201,8 @@ public class fThongTinCaNhan extends JDialog
         CustomUI.getInstance().setCustomTextFieldOff(txtUsername);
         pnlAccountInfo.add(txtUsername);
 
-        lblPassword = new JLabel("Mật khẩu: ");
-        lblPassword.setForeground(Color.WHITE);
-        lblPassword.setFont(new Font("Dialog", Font.BOLD, 14));
+        lblPassword = new JLabel("Nhập mật khẩu: ");
+        CustomUI.getInstance().setCustomLabel(lblPassword);
         lblPassword.setBounds(32, 80, 120, 25);
         pnlAccountInfo.add(lblPassword);
 
@@ -230,8 +220,7 @@ public class fThongTinCaNhan extends JDialog
         pnlMain.add(pnlPasswordInfo);
 
         lblNewPassword = new JLabel("Mật khẩu mới: ");
-        lblNewPassword.setForeground(Color.WHITE);
-        lblNewPassword.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblNewPassword);
         lblNewPassword.setBounds(33, 80, 120, 25);
         pnlPasswordInfo.add(lblNewPassword);
 
@@ -249,8 +238,7 @@ public class fThongTinCaNhan extends JDialog
         pnlPasswordInfo.add(chkChangePassword);
 
         lblReNewPassword = new JLabel("Nhập lại: ");
-        lblReNewPassword.setForeground(Color.WHITE);
-        lblReNewPassword.setFont(new Font("Dialog", Font.BOLD, 14));
+        CustomUI.getInstance().setCustomLabel(lblReNewPassword);
         lblReNewPassword.setBounds(33, 125, 120, 25);
         pnlPasswordInfo.add(lblReNewPassword);
 
@@ -258,9 +246,9 @@ public class fThongTinCaNhan extends JDialog
         txtReNewPassword.setBounds(153, 125, 250, 25);
         CustomUI.getInstance().setCustomTextFieldOff(txtReNewPassword);
         pnlPasswordInfo.add(txtReNewPassword);
-
-        btnUpdate = new MyButton(120, 35, "Đổi thông tin", gra, null, 13, 19);
-        btnUpdate.setBounds(790, 415, 120, 35);
+        
+        btnUpdate = new MyButton(130, 35, "Đổi thông tin", gra, updateInfoIcon.getImage(), 30, 19);
+        btnUpdate.setBounds(790, 415, 130, 35);
         pnlMain.add(btnUpdate);
 
         btnUpdate.addActionListener(this);
@@ -286,8 +274,10 @@ public class fThongTinCaNhan extends JDialog
     }
 
     public static void main(String[] args) {
-        new fThongTinCaNhan(NhanVienDAO.getInstance().getStaffByUsername("phamdangdan")).setVisible(true);
-        ;
+        SwingUtilities.invokeLater(() -> {
+            NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+            new fDieuHuong(staff).setVisible(true);
+        });
     }
 
     @Override
@@ -310,6 +300,11 @@ public class fThongTinCaNhan extends JDialog
 
     @Override
     public void keyPressed(KeyEvent e) {
+        
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
         Object o = e.getSource();
         int key = e.getKeyCode();
         InputEventHandler handler = new InputEventHandler();
@@ -334,11 +329,6 @@ public class fThongTinCaNhan extends JDialog
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    @Override
     public void mouseClicked(MouseEvent e) {
 
     }
@@ -355,22 +345,12 @@ public class fThongTinCaNhan extends JDialog
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        Object o = e.getSource();
-        if (o.equals(btnUpdate)) {
-            CustomUI.getInstance().setCustomBtnHover(btnUpdate);
-        } else if (o.equals(btnBack)) {
-            CustomUI.getInstance().setCustomBtnHover(btnBack);
-        }
+
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        Object o = e.getSource();
-        if (o.equals(btnUpdate)) {
-            CustomUI.getInstance().setCustomBtn(btnUpdate);
-        } else if (o.equals(btnBack)) {
-            CustomUI.getInstance().setCustomBtn(btnBack);
-        }
+
     }
 
     @Override
@@ -395,17 +375,17 @@ public class fThongTinCaNhan extends JDialog
     public void focusLost(FocusEvent e) {
         Object o = e.getSource();
         if (o.equals(txtFullName)) {
-            txtFullName.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtFullName);
         } else if (o.equals(txtCMND)) {
-            txtCMND.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtCMND);
         } else if (o.equals(txtPhoneNumber)) {
-            txtPhoneNumber.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtPhoneNumber);
         } else if (o.equals(txtPassword)) {
-            txtPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtPassword);
         } else if (o.equals(txtNewPassword)) {
-            txtNewPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtNewPassword);
         } else if (o.equals(txtReNewPassword)) {
-            txtReNewPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+            CustomUI.getInstance().setCustomTextFieldUnFocus(txtReNewPassword);
         }
     }
 
@@ -487,17 +467,17 @@ public class fThongTinCaNhan extends JDialog
      * Kiểm tra mât khẩu
      * 
      * @param password {@code String}: mật khẩu
-     * @param mess     {@code String}: tên loại mật khẩu (mật khẩu, mật khẩu mới,
+     * @param message  {@code String}: tên loại mật khẩu (mật khẩu, mật khẩu mới,
      *                 nhập lại mật khẩu, ...)
      */
-    private void checkPassword(String password, String mess) {
-        String message = mess;
+    private void checkPassword(String password, String message) {
+        String text = message;
         if (password.length() < 6) {
-            message = mess + " phải tối thiểu 6 ký tự";
-            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+            text = message + " phải tối thiểu 6 ký tự";
+            showMessage(txtPassword, 1, text, "Thông báo", JOptionPane.ERROR_MESSAGE);
         } else {
-            message = mess + " chỉ có thể chứa các kỳ tự, số, @, #, _, !, $";
-            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+            text = message + " chỉ có thể chứa các kỳ tự, số, @, #, !";
+            showMessage(txtPassword, 1, text, "Thông báo", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -535,50 +515,50 @@ public class fThongTinCaNhan extends JDialog
 
         NhanVien newStaffLogin = getDataInForm();
         String password = txtPassword.getText().trim();
+        // Trường hợp: mật khẩu rỗng
         if (password.equalsIgnoreCase("") || password.length() <= 0) {
             message = "Vui lòng nhập mật khẩu để xác nhận bạn là chủ tài khoản";
             showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
             return false;
 
-        } else if (password.equals("123456")) {
-            message = "Mật khẩu quá đơn giản. Vui lòng đổi mật khẩu khác";
-            showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
-            return false;
-
-        } else if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9@!#$_]{6,}$"))) {
+            // Trường hợp: có chiều dài ít hơn 6 ký tự và phù hợp regex:
+            // ^[a-zA-Z0-9@!#]{6,}$
+        } else if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9@!#]{6,}$"))) {
             checkPassword(password, "Mật khẩu");
             return false;
 
+            // Trường hợp: mật khẩu sai
         } else if (!password.equalsIgnoreCase(newStaffLogin.getTaiKhoan().getMatKhau())) {
             message = "Mật khẩu sai. Vui lòng nhập lại";
             showMessage(txtPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
+        // Nếu đối mật khẩu
         if (chkChangePassword.isSelected()) {
             String newPassword = txtNewPassword.getText().trim();
             String rePassword = txtReNewPassword.getText().trim();
 
             if (!(rePassword.equals(newPassword))) {
-                message = "Mật khẩu mới không khớp";
+                message = "Mật khẩu nhập lại không khớp mật khẩu mới";
                 showMessage(txtReNewPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
                 return false;
 
-            } else if (newPassword.equals("")) {
+            } else if (newPassword.equals("") || newPassword.length() <= 0) {
                 message = "Mật khẩu mới không được rỗng";
                 showMessage(txtNewPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
                 return false;
 
-            } else if (rePassword.equals("")) {
+            } else if (rePassword.equals("") || rePassword.length() <= 0) {
                 message = "Mật khẩu nhập lại không được rỗng";
                 showMessage(txtReNewPassword, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
                 return false;
 
-            } else if (!(rePassword.length() >= 6 && rePassword.matches("^[a-zA-Z0-9_@#]{6,}$"))) {
+            } else if (!(rePassword.length() >= 6 && rePassword.matches("^[a-zA-Z0-9_@!#]{6,}$"))) {
                 checkPassword(rePassword, "Mật khẩu nhập lại");
                 return false;
 
-            } else if (!(newPassword.length() >= 6 && newPassword.matches("^[a-zA-Z0-9_@#]{6,}$"))) {
+            } else if (!(newPassword.length() >= 6 && newPassword.matches("^[a-zA-Z0-9_@!#]{6,}$"))) {
                 checkPassword(newPassword, "Mật khẩu mới");
                 return false;
 
@@ -612,5 +592,9 @@ public class fThongTinCaNhan extends JDialog
             message = "Cập nhật thông tin thất bại";
             JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    public NhanVien getNewStaffInfo() {
+        return staffLogin;
     }
 }

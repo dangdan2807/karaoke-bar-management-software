@@ -9,10 +9,15 @@ import javax.swing.border.*;
 
 import DAO.ConvertTime;
 import DAO.KhachHangDAO;
+import Event_Handlers.InputEventHandler;
 import entity.KhachHang;
 
 public class DialogChonKhachHang extends JDialog
 		implements ActionListener, MouseListener, FocusListener, KeyListener, ItemListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2630390669224093490L;
 	private JButton[] btnCustomerList;
 	private int pnShowTableWidth = 310;
 	private int heightTable = 300;
@@ -22,9 +27,12 @@ public class DialogChonKhachHang extends JDialog
 	private JTextField txtKeyword;
 	private JComboBox<String> cboSearch;
 	private JButton btnSearch, btnChooseCustomer;
+	private JPanel pnlShowCustomer;
+	private JTextField txtBFieldSearch;
 
+	private ImageIcon logoApp = CustomUI.LOGO_APP;
 	private ImageIcon background = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(810, 400, Image.SCALE_SMOOTH));
+			CustomUI.BACKGROUND.getImage().getScaledInstance(810, 450, Image.SCALE_SMOOTH));
 	private ImageIcon searchIcon = new ImageIcon(
 			CustomUI.SEARCH_ICON.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
 	private ImageIcon manIcon = new ImageIcon(
@@ -32,8 +40,6 @@ public class DialogChonKhachHang extends JDialog
 	private ImageIcon womanIcon = new ImageIcon(
 			CustomUI.WOMAN_ICON.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 
-	private JPanel pnlShowCustomer;
-	private JTextField txtBFieldSearch;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
@@ -44,7 +50,8 @@ public class DialogChonKhachHang extends JDialog
 	 */
 	public DialogChonKhachHang() {
 		setTitle("Chọn khách hàng");
-		setSize(810, 400);
+		setSize(805, 450);
+		setIconImage(logoApp.getImage());
 		setResizable(false);
 		setLocationRelativeTo(null);
 
@@ -75,7 +82,7 @@ public class DialogChonKhachHang extends JDialog
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Danh sách khách hàng ", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		pnlCustomerList.setBackground(Color.WHITE);
-		pnlCustomerList.setBounds(0, 0, 500, 350);
+		pnlCustomerList.setBounds(5, 0, 500, 378);
 		pnlCustomerList.setOpaque(false);
 		pnlMain.add(pnlCustomerList);
 		pnlCustomerList.setLayout(new BorderLayout(0, 0));
@@ -108,70 +115,64 @@ public class DialogChonKhachHang extends JDialog
 		pnlCustomerInfo.setOpaque(false);
 
 		JLabel lblCustomerId = new JLabel("Mã KH: ");
-		lblCustomerId.setForeground(Color.WHITE);
-		lblCustomerId.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblCustomerId);
 		lblCustomerId.setBounds(10, 24, 83, 14);
 		pnlCustomerInfo.add(lblCustomerId);
 
 		txtCustomerId = new JTextField();
-		txtCustomerId.setBounds(97, 21, 167, 20);
+		txtCustomerId.setBounds(105, 21, 159, 20);
 		txtCustomerId.setColumns(10);
 		CustomUI.getInstance().setCustomTextFieldOff(txtCustomerId);
 		pnlCustomerInfo.add(txtCustomerId);
 
 		JLabel lblCustomerName = new JLabel("Tên KH: ");
-		lblCustomerName.setForeground(Color.WHITE);
-		lblCustomerName.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblCustomerName);
 		lblCustomerName.setBounds(10, 52, 83, 14);
 		pnlCustomerInfo.add(lblCustomerName);
 
 		txtCustomerName = new JTextField();
-		txtCustomerName.setBounds(97, 49, 167, 20);
+		txtCustomerName.setBounds(105, 49, 159, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtCustomerName);
 		pnlCustomerInfo.add(txtCustomerName);
 
 		JLabel lblCMND = new JLabel("CMNN/CCCD: ");
-		lblCMND.setForeground(Color.WHITE);
-		lblCMND.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblCMND.setBounds(10, 80, 83, 14);
+		CustomUI.getInstance().setCustomLabel(lblCMND);
+		lblCMND.setBounds(10, 80, 95, 14);
 		pnlCustomerInfo.add(lblCMND);
 
 		txtCMND = new JTextField();
-		txtCMND.setBounds(97, 77, 167, 20);
+		txtCMND.setBounds(105, 77, 159, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtCMND);
 		pnlCustomerInfo.add(txtCMND);
 
 		JLabel lblPhoneNumber = new JLabel("SDT: ");
-		lblPhoneNumber.setForeground(Color.WHITE);
-		lblPhoneNumber.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblPhoneNumber);
 		lblPhoneNumber.setBounds(10, 108, 83, 14);
 		pnlCustomerInfo.add(lblPhoneNumber);
 
 		txtPhoneNumber = new JTextField();
-		txtPhoneNumber.setBounds(97, 105, 167, 20);
+		txtPhoneNumber.setBounds(105, 105, 159, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtPhoneNumber);
 		pnlCustomerInfo.add(txtPhoneNumber);
 
 		JLabel lblNgaySinh = new JLabel("Ngày sinh: ");
-		lblNgaySinh.setForeground(Color.WHITE);
-		lblNgaySinh.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblNgaySinh);
 		lblNgaySinh.setBounds(10, 136, 83, 14);
 		pnlCustomerInfo.add(lblNgaySinh);
 
 		txtBirthDay = new JTextField();
-		txtBirthDay.setBounds(97, 133, 167, 20);
+		txtBirthDay.setBounds(105, 133, 159, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtBirthDay);
 		pnlCustomerInfo.add(txtBirthDay);
 
 		JLabel lblGender = new JLabel("Giới tính: ");
-		lblGender.setForeground(Color.WHITE);
-		lblGender.setFont(new Font("Dialog", Font.BOLD, 12));
+		CustomUI.getInstance().setCustomLabel(lblGender);
 		lblGender.setBounds(10, 164, 83, 14);
 		pnlCustomerInfo.add(lblGender);
 
 		txtGender = new JTextField();
 		txtGender.setColumns(10);
-		txtGender.setBounds(97, 161, 167, 20);
+		txtGender.setBounds(105, 161, 159, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtGender);
 		pnlCustomerInfo.add(txtGender);
 
@@ -186,8 +187,7 @@ public class DialogChonKhachHang extends JDialog
 		pnlSearch.setLayout(null);
 
 		JLabel lblSearchType = new JLabel("Lọc theo: ");
-		lblSearchType.setForeground(Color.WHITE);
-		lblSearchType.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblSearchType);
 		lblSearchType.setBounds(10, 23, 77, 14);
 		pnlSearch.add(lblSearchType);
 
@@ -195,15 +195,14 @@ public class DialogChonKhachHang extends JDialog
 		cboSearch.setBounds(97, 21, 167, 20);
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên Khách hàng");
-		cboSearch.addItem("Mã khách hàng");
+		cboSearch.addItem("CMND/CCCD");
 		cboSearch.addItem("Số điện thoại");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		pnlSearch.add(cboSearch);
 
 		JLabel lblSearch = new JLabel("Từ khóa: ");
-		lblSearch.setForeground(Color.WHITE);
-		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(10, 57, 77, 14);
 		pnlSearch.add(lblSearch);
 
@@ -267,23 +266,28 @@ public class DialogChonKhachHang extends JDialog
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
 		// bắt sự kiện nhấn phím enter tự nhấn btnLogin
+		InputEventHandler handler = new InputEventHandler();
 		if (o.equals(txtKeyword)) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				searchCustomer();
 			}
 			String searchTypeName = cboSearch.getSelectedItem().toString();
 			if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-				enterOnlyNumbers(key, txtKeyword, 10);
+				handler.enterOnlyNumbers(key, txtKeyword, 10);
+			} else if (searchTypeName.equalsIgnoreCase("CMND/CCCD")) {
+				handler.enterOnlyNumbers(key, txtKeyword, 12);
+			} else {
+				handler.characterInputLimit(key, txtKeyword, 100);
 			}
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-
 	}
 
 	@Override
@@ -322,10 +326,7 @@ public class DialogChonKhachHang extends JDialog
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		Object object = e.getSource();
-		if (object.equals(txtBFieldSearch)) {
-			cboSearch.showPopup();
-		}
+
 	}
 
 	@Override
@@ -361,11 +362,8 @@ public class DialogChonKhachHang extends JDialog
 		txtPhoneNumber.setText(customer.getSoDienThoai());
 		String ngaySinhStr = ConvertTime.getInstance().convertTimeToString(customer.getNgaySinh(), "dd-MM-yyyy");
 		txtBirthDay.setText(ngaySinhStr);
-		boolean gioiTinh = customer.getGioiTinh();
-		txtGender.setText("Nữ");
-		if (gioiTinh == false) {
-			txtGender.setText("Nam");
-		}
+		String genderStr = customer.getGioiTinh() ? "Nữ" : "Nam";
+		txtGender.setText(genderStr);
 	}
 
 	/**
@@ -375,26 +373,26 @@ public class DialogChonKhachHang extends JDialog
 	 */
 	private void loadBtnCustomer(String customerId) {
 		KhachHang khachHang = KhachHangDAO.getInstance().getCustomerById(customerId);
-		String tenBtn = "<html>" + "<p style='text-align: left; width:116px'>Mã KH: " + khachHang.getMaKH() + " </p>"
+		String btnName = "<html>" + "<p style='text-align: left; width:116px'>Mã KH: " + khachHang.getMaKH() + " </p>"
 				+ "<p style='text-align: left; width:116px'>Tên: " + khachHang.getHoTen() + " </p>"
 				+ "<p style='text-align: left; width:116px'>CMND: " + khachHang.getCmnd() + "</p>"
 				+ "<p style='text-align: left; width:116px'>SDT: " + khachHang.getSoDienThoai() + "</p></html>";
 		int index = 0;
 		for (int i = 0; i < btnCustomerList.length; i++) {
-			if (btnCustomerList[i].getText().contains(tenBtn))
+			if (btnCustomerList[i].getText().contains(btnName))
 				index = i;
 			else if (btnCustomerList[i].getText().equals("")) {
 				index = i;
 				break;
 			}
 		}
-		boolean gioiTinh = khachHang.getGioiTinh();
-		if (gioiTinh) {
+		boolean gender = khachHang.getGioiTinh();
+		if (gender) {
 			btnCustomerList[index].setIcon(womanIcon);
 		} else {
 			btnCustomerList[index].setIcon(manIcon);
 		}
-		btnCustomerList[index].setText(tenBtn);
+		btnCustomerList[index].setText(btnName);
 		btnCustomerList[index].setForeground(Color.WHITE);
 		btnCustomerList[index].setFont(new Font("Dialog", Font.BOLD, 11));
 		btnCustomerList[index].setBackground(Color.decode("#3c8dbc"));
@@ -412,7 +410,7 @@ public class DialogChonKhachHang extends JDialog
 	 *                     hiển thị
 	 */
 	private void LoadCustomerList(ArrayList<KhachHang> customerList) {
-		heightTable = KhachHangDAO.TABLE_HEIGHT;
+		heightTable = KhachHangDAO.TABLE_HEIGHT + 7;
 		pnlShowCustomer.removeAll();
 		pnlShowCustomer.revalidate();
 		pnlShowCustomer.repaint();
@@ -428,7 +426,7 @@ public class DialogChonKhachHang extends JDialog
 			loadBtnCustomer(maKH);
 			btnCustomerList[selection].setBorder(lineGray);
 			if ((i + 1) % 2 == 0) {
-				heightTable += KhachHangDAO.TABLE_HEIGHT;
+				heightTable += KhachHangDAO.TABLE_HEIGHT + 7;
 				pnlShowCustomer.setPreferredSize(new Dimension(pnShowTableWidth, heightTable));
 			}
 			btnCustomerList[selection].addActionListener(new ActionListener() {
@@ -465,26 +463,24 @@ public class DialogChonKhachHang extends JDialog
 	 */
 	private void searchCustomer() {
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
-		ArrayList<KhachHang> dsKhachHang = new ArrayList<KhachHang>();
-		String keyword = txtKeyword.getText();
+		ArrayList<KhachHang> customerList = new ArrayList<KhachHang>();
+		String keyword = txtKeyword.getText().trim();
 		switch (searchTypeName) {
 		case "Tất cả":
 			txtKeyword.setText("");
-			dsKhachHang = KhachHangDAO.getInstance().getCustomerList();
+			customerList = KhachHangDAO.getInstance().getCustomerListUnBooked();
 			break;
 		case "Tên Khách hàng":
-			dsKhachHang = KhachHangDAO.getInstance().getCustomerListByName(keyword);
+			customerList = KhachHangDAO.getInstance().getCustomerListUnBookedByName(keyword);
 			break;
-		case "Mã khách hàng":
-			dsKhachHang = KhachHangDAO.getInstance().getCustomerListById(keyword);
+		case "CMND/CCCD":
+			customerList = KhachHangDAO.getInstance().getCustomerListUnBookedByCMND(keyword);
 			break;
 		case "Số điện thoại":
-			dsKhachHang = KhachHangDAO.getInstance().getCustomerListByPhoneNumber(keyword);
-			break;
-		default:
+			customerList = KhachHangDAO.getInstance().getCustomerListUnBookedByPhoneNumber(keyword);
 			break;
 		}
-		LoadCustomerList(dsKhachHang);
+		LoadCustomerList(customerList);
 	}
 
 	/**
@@ -494,24 +490,5 @@ public class DialogChonKhachHang extends JDialog
 	 */
 	public KhachHang getSelectedCustomer() {
 		return khachHang;
-	}
-
-	/**
-	 * Giới hạn số lượng ký tự nhập vào và chỉ cho phép nhập số
-	 * 
-	 * @param key       {@code int}: mã số của phím được nhấn
-	 * @param txt       {@code JTextField}: text field nhận sự kiện
-	 * @param maxLength {@code int}: số lượng ký tự tối đa có thể nhập được
-	 */
-	private void enterOnlyNumbers(int key, JTextField txt, int maxLength) {
-		String phoneNumberStr = txt.getText();
-		int length = phoneNumberStr.length();
-		if (key >= 49 && key <= 57 || key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
-			txt.setEditable(true);
-			if (length == maxLength && key != KeyEvent.VK_BACK_SPACE && key != KeyEvent.VK_DELETE)
-				txt.setEditable(false);
-		} else {
-			txt.setEditable(false);
-		}
 	}
 }

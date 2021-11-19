@@ -19,16 +19,58 @@ public class InputEventHandler {
      * @param maxLength {@code int}: số lượng ký tự tối đa có thể nhập được
      */
     public void enterOnlyNumbers(int key, JTextField txt, int maxLength) {
-        String phoneNumberStr = txt.getText();
-        int length = phoneNumberStr.length();
-        if (key >= 48 && key <= 57 || key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
-            txt.setEditable(true);
+        String numberStr = txt.getText();
+        int length = numberStr.length();
+        switch (key) {
+        case 48:
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        case 57:
+        case KeyEvent.VK_BACK_SPACE:
+        case KeyEvent.VK_DELETE:
+        case KeyEvent.VK_LEFT:
+        case KeyEvent.VK_RIGHT:
+        case KeyEvent.VK_SHIFT:
+        case KeyEvent.VK_CONTROL:
+        case KeyEvent.VK_ALT:
+        case KeyEvent.VK_CAPS_LOCK:
+        case KeyEvent.VK_UP:
+        case KeyEvent.VK_DOWN:
             txt.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-            if (length == maxLength && key != KeyEvent.VK_BACK_SPACE && key != KeyEvent.VK_DELETE) {
-                txt.setEditable(false);
+            break;
+
+        default:
+            if (length > 0) {
+                for (int i = 0; i < length; i++) {
+                    String str = "";
+                    str = numberStr.charAt(i) + "";
+                    if (!str.matches("[\\d]")) {
+                        numberStr = numberStr.substring(0, i);
+                        break;
+                    }
+                }
+                length = numberStr.length();
             }
-        } else {
-            txt.setEditable(false);
+            txt.setText(numberStr);
+            break;
+        }
+        if (length > maxLength && key != KeyEvent.VK_BACK_SPACE && key != KeyEvent.VK_DELETE) {
+            int count = length < maxLength ? length : maxLength;
+            numberStr = numberStr.substring(0, count);
+            for (int i = 0; i < count; i++) {
+                String str = numberStr.charAt(i) + "";
+                if (!str.matches("[\\d]")) {
+                    numberStr = numberStr.substring(0, i);
+                    break;
+                }
+            }
+            txt.setText(numberStr);
         }
     }
 
@@ -40,17 +82,12 @@ public class InputEventHandler {
      * @param maxLength {@code int}: số lượng ký tự tối đa có thể nhập được
      */
     public void characterInputLimit(int key, JTextField txt, int maxLength) {
-        String phoneNumberStr = txt.getText();
-        int length = phoneNumberStr.length();
-
-        if (key != -1 || key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_DELETE) {
-            txt.setEditable(true);
-            txt.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
-            if (length >= maxLength && key != KeyEvent.VK_BACK_SPACE && key != KeyEvent.VK_DELETE) {
-                txt.setEditable(false);
-            }
-        } else {
-            txt.setEditable(false);
+        String str = txt.getText();
+        int length = str.length();
+        if (length > maxLength && key != KeyEvent.VK_BACK_SPACE && key != KeyEvent.VK_DELETE) {
+            int count = length < maxLength ? length : maxLength;
+            str = str.substring(0, count);
+            txt.setText(str);
         }
     }
 }

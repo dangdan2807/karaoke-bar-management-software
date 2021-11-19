@@ -10,11 +10,16 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
+import UI.fQuanTri;
 import entity.*;
 
-public class PnPhong extends JFrame implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
-	private static final long serialVersionUID = 1L;
+public class PnPhong extends JPanel implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8410052847174456849L;
 	private JTable tblTableRoom;
 	private DefaultTableModel modelTableRoom;
 	private ImageIcon bg = new ImageIcon(
@@ -24,25 +29,35 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
+	private ImageIcon nextIconRight = new ImageIcon(
+			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(
+			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(
+			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
 	private JTextField txtLocation, txtBFieldSearch, txtKeyWord, txtBFieldSearchType, txtRoomID;
 	private JTextField txtBFieldRoomStatus, txtBFieldRoomType;
 	private JLabel lblLocation, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch,btnNextRight,
+	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
 	private JComboBox<String> cboSearch, cboSearchType, cboRoomType, cboRoomStatus;
 
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
+	private MyTextField txtIndex;
 
 	public PnPhong(NhanVien staff) {
 		this.staffLogin = staff;
 		setSize(1270, 630);
-		getContentPane().setLayout(null);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(null);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -61,11 +76,9 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		};
 		pnlMain.setLayout(null);
 		pnlMain.setBounds(0, 0, 1270, 630);
-		getContentPane().add(pnlMain);
+		this.add(pnlMain);
 
 		JPanel pnlTitle = new JPanel() {
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -85,8 +98,7 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		pnlMain.add(pnlTitle);
 
 		JLabel lblTitle = new JLabel("QUẢN LÝ PHÒNG");
-		lblTitle.setFont(new Font("Dialog", Font.BOLD, 24));
-		lblTitle.setForeground(Color.WHITE);
+		CustomUI.getInstance().setCustomLabel(lblTitle);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setBounds(0, 0, 1250, 45);
 		pnlTitle.add(lblTitle);
@@ -94,58 +106,55 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(0, 60, 1238, 140);
+		pnlInfo.setBounds(0, 60, 1238, 188);
 		pnlMain.add(pnlInfo);
 
 		txtLocation = new JTextField();
-		txtLocation.setBounds(725, 15, 180, 20);
+		txtLocation.setBounds(206, 65, 180, 20);
 		txtLocation.setToolTipText("Nhập vị trí của phòng");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtLocation);
 		pnlInfo.add(txtLocation);
 
 		lblLocation = new JLabel("Vị trí:");
-		lblLocation.setForeground(Color.WHITE);
-		lblLocation.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblLocation.setBounds(660, 15, 70, 20);
+		CustomUI.getInstance().setCustomLabel(lblLocation);
+		lblLocation.setBounds(116, 65, 70, 20);
 		pnlInfo.add(lblLocation);
 
-		btnAdd = new MyButton(100, 35, "Thêm", gra, addIcon.getImage(), 39, 19);
-		btnAdd.setToolTipText("Thêm nhân viên mới sau khi đã điền đủ thông tin");
-		btnAdd.setBounds(20, 93, 100, 35);
+		btnAdd = new MyButton(130, 35, "Thêm", gra, addIcon.getImage(), 50, 19, 10, 6);
+		btnAdd.setToolTipText("Thêm loại dịch vụ mới sau khi đã điền đủ thông tin");
+		btnAdd.setBounds(1005, 10, 130, 35);
 		pnlInfo.add(btnAdd);
 
-		btnUpdate = new MyButton(100, 35, "Sửa", gra, updateIcon.getImage(), 43, 19);
-		btnUpdate.setToolTipText("Sửa thông tin nhân viên");
-		btnUpdate.setBounds(150, 93, 100, 35);
+		btnUpdate = new MyButton(130, 35, "Sửa", gra, updateIcon.getImage(), 55, 19, 10, 6);
+		btnUpdate.setToolTipText("Sửa thông tin loại dịch vụ");
+		btnUpdate.setBounds(1005, 50, 130, 35);
 		btnUpdate.setEnabledCustom(false);
 		pnlInfo.add(btnUpdate);
 
-		btnRefresh = new MyButton(100, 35, "Làm mới", gra, refreshIcon.getImage(), 27, 19);
+		btnRefresh = new MyButton(130, 35, "Làm mới", gra, refreshIcon.getImage(), 40, 19, 10, 5);
 		btnRefresh.setToolTipText("Làm mới form");
-		btnRefresh.setBounds(1118, 93, 100, 35);
+		btnRefresh.setBounds(1005, 90, 130, 35);
 		pnlInfo.add(btnRefresh);
 
 		JPanel pnlSearch = new JPanel();
-		pnlSearch.setBounds(286, 83, 822, 53);
+		pnlSearch.setBounds(186, 135, 822, 53);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
 		pnlInfo.add(pnlSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
-		lblSearch.setForeground(Color.WHITE);
-		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblSearch.setBounds(30, 18, 100, 20);
+		CustomUI.getInstance().setCustomLabel(lblSearch);
+		lblSearch.setBounds(30, 18, 76, 20);
 		pnlSearch.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
-		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tình trạng phòng");
 		cboSearch.addItem("Loại phòng");
 		cboSearch.addItem("Vị trí");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		cboSearch.setToolTipText("Loại tìm kiếm");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
-		cboSearch.setBounds(140, 18, 160, 20);
+		cboSearch.setBounds(105, 18, 200, 20);
 
 		pnlSearch.add(cboSearch);
 
@@ -155,48 +164,47 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
-		lblKeyWord.setForeground(Color.WHITE);
-		lblKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblKeyWord);
 		lblKeyWord.setBounds(364, 18, 76, 20);
 		pnlSearch.add(lblKeyWord);
 
 		txtKeyWord = new JTextField();
 		txtKeyWord.setToolTipText("Nhập từ khoá cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
-		txtKeyWord.setBounds(440, 18, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
+		txtKeyWord.setBounds(440, 18, 200, 20);
+		txtKeyWord.setVisible(false);
 		pnlSearch.add(txtKeyWord);
 
 		cboSearchType = new JComboBox<String>();
 		cboSearchType.setToolTipText("Loại phòng cần tìm");
+		cboSearchType.addItem("Phòng trống");
+		cboSearchType.addItem("Phòng đang sử dụng");
 		CustomUI.getInstance().setCustomComboBox(cboSearchType);
 		txtBFieldSearchType = CustomUI.getInstance().setCustomCBoxField(cboSearchType);
 		cboSearchType.setBounds(440, 18, 200, 20);
-		cboSearchType.setVisible(false);
+		cboSearchType.setVisible(true);
 		pnlSearch.add(cboSearchType);
 
 		JLabel lblRoomType = new JLabel("Loại phòng:");
-		lblRoomType.setForeground(Color.WHITE);
-		lblRoomType.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblRoomType.setBounds(955, 15, 90, 20);
+		CustomUI.getInstance().setCustomLabel(lblRoomType);
+		lblRoomType.setBounds(562, 65, 90, 20);
 		pnlInfo.add(lblRoomType);
 
 		JLabel lblRoomID = new JLabel("Mã phòng:");
-		lblRoomID.setForeground(Color.WHITE);
-		lblRoomID.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblRoomID.setBounds(25, 15, 90, 20);
+		CustomUI.getInstance().setCustomLabel(lblRoomID);
+		lblRoomID.setBounds(116, 25, 90, 20);
 		pnlInfo.add(lblRoomID);
 
 		txtRoomID = new JTextField();
-		txtRoomID.setBounds(115, 15, 180, 20);
+		txtRoomID.setBounds(206, 25, 180, 20);
 		txtRoomID.setToolTipText("Mã phòng");
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomID);
 		pnlInfo.add(txtRoomID);
 
 		JLabel lblStatusRoom = new JLabel("Tình trạng:");
-		lblStatusRoom.setForeground(Color.WHITE);
-		lblStatusRoom.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblStatusRoom.setBounds(340, 15, 90, 20);
+		CustomUI.getInstance().setCustomLabel(lblStatusRoom);
+		lblStatusRoom.setBounds(562, 27, 90, 20);
 		pnlInfo.add(lblStatusRoom);
 
 		cboRoomStatus = new JComboBox<String>();
@@ -205,20 +213,21 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		cboRoomStatus.setToolTipText("Tình trạng phòng");
 		CustomUI.getInstance().setCustomComboBox(cboRoomStatus);
 		txtBFieldRoomStatus = CustomUI.getInstance().setCustomCBoxField(cboRoomStatus);
-		cboRoomStatus.setBounds(430, 15, 180, 20);
+		cboRoomStatus.setBounds(657, 27, 180, 20);
 		pnlInfo.add(cboRoomStatus);
 
 		cboRoomType = new JComboBox<String>();
 		cboRoomType.setToolTipText("Chọn loại phòng");
 		CustomUI.getInstance().setCustomComboBox(cboRoomType);
 		txtBFieldRoomType = CustomUI.getInstance().setCustomCBoxField(cboRoomType);
-		cboRoomType.setBounds(1050, 15, 180, 20);
+		cboRoomType.setBounds(657, 65, 180, 20);
 		pnlInfo.add(cboRoomType);
 
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(8, 201, 1240, 384);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách phòng");
+		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã phòng", "Tình trạng ", "Vị trí", "Loại phòng" };
 		modelTableRoom = new DefaultTableModel(cols, 0);
@@ -237,15 +246,35 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		JScrollPane scrTable = new JScrollPane(tblTableRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 10, 1220, 350);
+		scrTable.setBounds(10, 20, 1200, 230);
 		scrTable.setOpaque(false);
 		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
+		
+		
+		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextRight.setBounds(690, 540, 70, 35);
+		pnlMain.add(btnNextRight);
+
+		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextRight.setBounds(770, 540, 70, 35);
+		pnlMain.add(btnDoubleNextRight);
+
+		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextLeft.setBounds(510, 540, 70, 35);
+		pnlMain.add(btnNextLeft);
+
+		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextLeft.setBounds(430, 540, 70, 35);
+		pnlMain.add(btnDoubleNextLeft);
+
+		txtIndex = new MyTextField("2222");
+		txtIndex.setBounds(590, 540, 90, 35);
+		pnlMain.add(txtIndex);
 
 		btnAdd.addActionListener(this);
-		btnBack.addActionListener(this);
 		btnRefresh.addActionListener(this);
 		btnSearch.addActionListener(this);
 		btnUpdate.addActionListener(this);
@@ -259,9 +288,10 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 
 		txtKeyWord.addFocusListener(this);
 		txtLocation.addFocusListener(this);
-
+		
 		txtKeyWord.addKeyListener(this);
-
+		txtLocation.addKeyListener(this);
+		
 		cboSearch.addItemListener(this);
 		cboSearchType.addItemListener(this);
 
@@ -271,7 +301,7 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new PnPhong(staff).setVisible(true);
+			new fQuanTri(staff).setVisible(true);
 		});
 	}
 
@@ -427,16 +457,12 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSearch)) {
-			cboSearch.showPopup();
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldSearchType)) {
-			cboSearchType.showPopup();
 			cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldRoomType)) {
-			cboRoomType.showPopup();
 			cboRoomType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldRoomStatus)) {
-			cboRoomStatus.showPopup();
 			cboRoomStatus.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
@@ -472,7 +498,14 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		Object o = e.getSource();
+		int key = e.getKeyCode();
+		InputEventHandler handler = new InputEventHandler();
+		if (o.equals(txtKeyWord)) {
+			handler.characterInputLimit(key, txtKeyWord, 100);
+		} else if (o.equals(txtLocation)) {
+			handler.characterInputLimit(key, txtLocation, 100);
+		}
 	}
 
 	@Override
@@ -500,8 +533,10 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	 */
 	public void allLoaded() {
 		reSizeColumnTable();
-		loadRoomList(PhongDAO.getInstance().getRoomList());
 		loadRoomTypeList();
+		String roomStatusStr = cboRoomStatus.getSelectedItem().toString().trim();
+		int roomStatus = roomStatusStr.equalsIgnoreCase("Phòng Trống") ? 0 : 1;
+		loadRoomList(PhongDAO.getInstance().getRoomListByStatus(roomStatus));
 	}
 
 	/**
@@ -641,8 +676,6 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
 		columnModel.getColumn(0).setCellRenderer(centerRenderer);
-		columnModel.getColumn(3).setCellRenderer(rightRenderer);
-		columnModel.getColumn(4).setCellRenderer(rightRenderer);
 	}
 
 	/**
@@ -652,27 +685,26 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		ArrayList<Phong> roomList = null;
 		Object keyword = "";
-		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			roomList = PhongDAO.getInstance().getRoomList();
-
-		} else if (searchTypeName.equalsIgnoreCase("Tình trạng phòng")) {
+		switch (searchTypeName) {
+		case "Tình trạng phòng":
 			keyword = cboSearchType.getSelectedItem();
 			int roomStatus = 0;
 			if (keyword != null) {
 				roomStatus = keyword.toString().equalsIgnoreCase("Phòng trống") ? 0 : 1;
 			}
 			roomList = PhongDAO.getInstance().getRoomListByStatus(roomStatus);
-
-		} else if (searchTypeName.equalsIgnoreCase("Loại phòng")) {
+			break;
+		case "Loại phòng":
 			keyword = cboSearchType.getSelectedItem();
 			if (keyword == null) {
 				keyword = cboRoomStatus.getItemAt(0).toString().trim();
 			}
 			roomList = PhongDAO.getInstance().getRoomListByRoomTypeName(keyword.toString());
-
-		} else if (searchTypeName.equalsIgnoreCase("Vị trí")) {
+			break;
+		case "Vị trí":
 			keyword = txtKeyWord.getText().trim();
 			roomList = PhongDAO.getInstance().getRoomListByLocation(keyword.toString());
+			break;
 		}
 		loadRoomList(roomList);
 	}
@@ -683,5 +715,12 @@ public class PnPhong extends JFrame implements ActionListener, MouseListener, It
 	private void removeSelectionInterval() {
 		int selectedRow = tblTableRoom.getSelectedRow();
 		tblTableRoom.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
+	}
+
+	/**
+	 * Lấy nút quay lại
+	 */
+	public JButton getBtnBack() {
+		return btnBack;
 	}
 }

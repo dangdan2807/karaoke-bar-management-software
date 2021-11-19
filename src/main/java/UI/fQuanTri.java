@@ -7,16 +7,17 @@ import java.awt.*;
 import java.awt.event.*;
 
 import DAO.NhanVienDAO;
-import UI.PanelCustom.PnDichVu;
-import UI.PanelCustom.PnKhachHang;
-import UI.PanelCustom.PnLoaiDichVu;
-import UI.PanelCustom.PnLoaiPhong;
-import UI.PanelCustom.PnNhanVien;
-import UI.PanelCustom.PnPhong;
+import UI.PanelCustom.*;
 import entity.NhanVien;
 
 public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
-    private static fQuanTri instance;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2840284348303179625L;
+	private static fQuanTri instance;
+    private JButton btnBackStaff, btnBackCustomer, btnBackRoomType, btnBackRoom, btnBackServiceType;
+    private JButton btnBackService, btnBackBill;
 
     public static fQuanTri getInstance(NhanVien staffLogin) {
         if (instance == null)
@@ -24,6 +25,7 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         return instance;
     }
 
+    private ImageIcon logoApp = CustomUI.LOGO_APP;
     private JTabbedPane tabMain;
     private NhanVien staffLogin = null;
 
@@ -34,8 +36,9 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
      */
     public fQuanTri(NhanVien staff) {
         setTitle("Quản Lý Hệ Thống");
-        setSize(1275, 655);
+        setSize(1280, 655);
         setResizable(false);
+        setIconImage(logoApp.getImage());
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.staffLogin = staff;
@@ -52,33 +55,55 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         tabMain.setBorder(null);
         tabMain.setFont(new Font("Dialog", Font.PLAIN, 14));
 
-        PnNhanVien pnlNhanVien = new PnNhanVien(staffLogin);
-        PnKhachHang pnlKhachHang = new PnKhachHang(staffLogin);
-        PnLoaiPhong pnlLoaiPhong = new PnLoaiPhong(staffLogin);
-        PnPhong pnlPhong = new PnPhong(staffLogin);
-        PnLoaiDichVu pnlLoaiDichVu = new PnLoaiDichVu(staffLogin);
-        PnDichVu pnlDichVu = new PnDichVu(staffLogin);
+        PnNhanVien pnlStaff = new PnNhanVien(staffLogin);
+        PnKhachHang pnlCustomer = new PnKhachHang(staffLogin);
+        PnLoaiPhong pnlRoomType = new PnLoaiPhong(staffLogin);
+        PnPhong pnlRoom = new PnPhong(staffLogin);
+        PnLoaiDichVu pnlServiceType = new PnLoaiDichVu(staffLogin);
+        PnDichVu pnlService = new PnDichVu(staffLogin);
+        PnHoaDon pnlBill = new PnHoaDon(staffLogin);
 
-        tabMain.addTab("Nhân viên", null, pnlNhanVien, "Quản lý Nhân viên");
-        tabMain.addTab("Khách hàng", null, pnlKhachHang, "Quản lý Khách hàng");
-        tabMain.addTab("Loại phòng", null, pnlLoaiPhong, "Quản lý loại phòng");
-        tabMain.addTab("Phòng", null, pnlPhong, "Quản lý Phòng");
-        tabMain.addTab("Loại dịch vụ", null, pnlLoaiDichVu, "Quản lý loại dịch vụ");
-        tabMain.addTab("Dịch vụ", null, pnlDichVu, "Quản lý dịch vụ");
-        tabMain.addTab("Hóa đơn", null, null, "Quản lý Hóa đơn");
+        tabMain.addTab("Nhân viên", null, pnlStaff, "Quản lý Nhân viên");
+        tabMain.addTab("Khách hàng", null, pnlCustomer, "Quản lý Khách hàng");
+        tabMain.addTab("Loại phòng", null, pnlRoomType, "Quản lý loại phòng");
+        tabMain.addTab("Phòng", null, pnlRoom, "Quản lý Phòng");
+        tabMain.addTab("Loại dịch vụ", null, pnlServiceType, "Quản lý loại dịch vụ");
+        tabMain.addTab("Dịch vụ", null, pnlService, "Quản lý dịch vụ");
+        tabMain.addTab("Hóa đơn", null, pnlBill, "Quản lý Hóa đơn");
         this.add(tabMain);
 
+        btnBackStaff = pnlStaff.getBtnBack();
+        btnBackCustomer = pnlCustomer.getBtnBack();
+        btnBackRoomType = pnlRoomType.getBtnBack();
+        btnBackRoom = pnlRoom.getBtnBack();
+        btnBackServiceType = pnlServiceType.getBtnBack();
+        btnBackService = pnlService.getBtnBack();
+        btnBackBill = pnlBill.getBtnBack();
+
         tabMain.addChangeListener(this);
+        btnBackStaff.addActionListener(this);
+        btnBackCustomer.addActionListener(this);
+        btnBackRoomType.addActionListener(this);
+        btnBackRoom.addActionListener(this);
+        btnBackServiceType.addActionListener(this);
+        btnBackService.addActionListener(this);
+        btnBackBill.addActionListener(this);
     }
 
     public static void main(String[] args) {
-        NhanVien staffLogin = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-        new fQuanTri(staffLogin).setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+            new fQuanTri(staff).setVisible(true);
+        });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        Object o = e.getSource();
+        if (o.equals(btnBackStaff) || o.equals(btnBackCustomer) || o.equals(btnBackRoomType) || o.equals(btnBackRoom)
+                || o.equals(btnBackServiceType) || o.equals(btnBackService) || o.equals(btnBackBill)) {
+            EventBackTofDieuHuong();
+        }
     }
 
     @Override
@@ -100,5 +125,14 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
                 f.setVisible(true);
             }
         });
+    }
+
+    /**
+     * Đóng form hiện tại và mở form điều hướng
+     */
+    public void EventBackTofDieuHuong() {
+        fDieuHuong f = new fDieuHuong(staffLogin);
+        setVisible(false);
+        f.setVisible(true);
     }
 }

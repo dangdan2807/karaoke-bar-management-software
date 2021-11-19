@@ -17,7 +17,7 @@ public class HoaDon {
 	private KhachHang khachHang;
 	private Phong phong;
 
-	private List<CTDichVu> ctDSDichVu;
+	private List<CTDichVu> dsCTDichVu;
 
 	/**
 	 * Lấy mã hóa đơn
@@ -158,8 +158,8 @@ public class HoaDon {
 	 * 
 	 * @return {@code List<CTDichVu>}: danh sách chi tiết dịch vụ
 	 */
-	public List<CTDichVu> getCtDSDichVu() {
-		return ctDSDichVu;
+	public List<CTDichVu> getDsCTDichVu() {
+		return dsCTDichVu;
 	}
 
 	/**
@@ -167,8 +167,8 @@ public class HoaDon {
 	 * 
 	 * @param ctDSDichVu {@code List<CTDichVu>}: danh sách chi tiết dịch vụ
 	 */
-	public void setCtDSDichVu(List<CTDichVu> ctDSDichVu) {
-		this.ctDSDichVu = ctDSDichVu;
+	public void setDsCTDichVu(List<CTDichVu> ctDSDichVu) {
+		this.dsCTDichVu = ctDSDichVu;
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class HoaDon {
 		this.khachHang = khachHang;
 		this.phong = phong;
 
-		ctDSDichVu = new ArrayList<CTDichVu>();
+		dsCTDichVu = new ArrayList<CTDichVu>();
 
 	}
 
@@ -223,7 +223,7 @@ public class HoaDon {
 		this.khachHang = khachHang;
 		this.phong = phong;
 
-		ctDSDichVu = new ArrayList<CTDichVu>();
+		dsCTDichVu = new ArrayList<CTDichVu>();
 	}
 
 	/**
@@ -243,7 +243,7 @@ public class HoaDon {
 		this.khachHang = khachHang;
 		this.phong = phong;
 
-		ctDSDichVu = new ArrayList<CTDichVu>();
+		dsCTDichVu = new ArrayList<CTDichVu>();
 	}
 
 	/**
@@ -258,7 +258,7 @@ public class HoaDon {
 		this.ngayGioTra = ngayGioTra;
 		this.tinhTrangHD = tinhTrangHD;
 
-		ctDSDichVu = new ArrayList<CTDichVu>();
+		dsCTDichVu = new ArrayList<CTDichVu>();
 	}
 
 	/**
@@ -269,14 +269,14 @@ public class HoaDon {
 	public HoaDon(String maHoaDon) {
 		this.maHoaDon = maHoaDon;
 
-		ctDSDichVu = new ArrayList<CTDichVu>();
+		dsCTDichVu = new ArrayList<CTDichVu>();
 	}
 
 	/**
 	 * Tạo 1 {@code HoaDon} không tham số
 	 */
 	public HoaDon() {
-		ctDSDichVu = new ArrayList<CTDichVu>();
+		dsCTDichVu = new ArrayList<CTDichVu>();
 	}
 
 	/**
@@ -292,9 +292,17 @@ public class HoaDon {
 
 	@Override
 	public String toString() {
-		return "HoaDon [ngayGioTra=" + ngayGioTra + ", ctDichVu=" + ctDSDichVu + ", khachHang=" + khachHang
+		return "HoaDon [ngayGioTra=" + ngayGioTra + ", ctDichVu=" + dsCTDichVu + ", khachHang=" + khachHang
 				+ ", maHoaDon=" + maHoaDon + ", ngayGioDat=" + ngayGioDat + ", nhanVien=" + nhanVien + ", phong="
 				+ phong + ", tinhTrangHD=" + tinhTrangHD + "]";
+	}
+
+	public Double tinhTongTienDichVu() {
+		Double tongTienDV = 0.0;
+		for (CTDichVu item : dsCTDichVu) {
+			tongTienDV += item.tinhTienDichVu();
+		}
+		return tongTienDV;
 	}
 
 	/**
@@ -302,19 +310,17 @@ public class HoaDon {
 	 * 
 	 * @return {@code double}: tiền hóa đơn
 	 */
-	public Double tinhTienHoaDon() {
-		Double tongTienDV = 0.0;
-		for (CTDichVu item : ctDSDichVu) {
-			tongTienDV += item.tinhTienDichVu();
-		}
-		tongTienDV += tinhTienPhong();
-		return tongTienDV;
+	public Double tinhTongTienHoaDon() {
+		Double tongTienHD = tinhTongTienDichVu() + tinhTienPhong();
+		Double vat = tongTienHD * 0.1;
+		return tongTienHD + vat;
 	}
 
 	/**
 	 * Thêm một chi tiết dịch vụ vào hóa đơn
 	 * 
 	 * @param dichVu     {@code DichVu}: dịch vụ được thêm
+	 * @param donGia     {@code double}: Giá bán tại thời điểm tạo hóa đơn
 	 * @param soLuongDat {@code int}: số lượng đặt
 	 * @return {@code boolean}: kết quả trả về của câu truy vấn
 	 *         <ul>
@@ -322,9 +328,9 @@ public class HoaDon {
 	 *         <li>Nếu thêm thất bại thì trả về {@code false}</li>
 	 *         </ul>
 	 */
-	public boolean themCTDichVu(DichVu dichVu, int soLuongDat) {
-		CTDichVu ctDV = new CTDichVu(soLuongDat, dichVu);
-		if (ctDSDichVu.contains(ctDV)) {
+	public boolean themCTDichVu(DichVu dichVu, int soLuongDat, double donGia) {
+		CTDichVu ctDV = new CTDichVu(soLuongDat, donGia, dichVu);
+		if (dsCTDichVu.contains(ctDV)) {
 			return false;
 		}
 		return true;
@@ -341,7 +347,8 @@ public class HoaDon {
 			long difference = ngayGioTra.getTime() - ngayGioDat.getTime();
 			minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
 		}
-		return minutes * 1.0 / 60;
+		minutes = (int) minutes / 15;
+		return minutes * 1.0 / 4;
 	}
 
 	/**
@@ -351,6 +358,9 @@ public class HoaDon {
 	 */
 	public Double tinhTienPhong() {
 		Double soGio = tinhGioThue();
+		if (soGio < 1.0) {
+			soGio = 1.0;
+		}
 		Double tongTien = soGio * phong.getLoaiPhong().getGiaTien();
 		return tongTien;
 	}

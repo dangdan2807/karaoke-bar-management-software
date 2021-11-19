@@ -15,7 +15,11 @@ import java.sql.*;
  * Dialog dùng để chọn ngày giờ
  */
 public class DialogDatePicker extends JDialog implements ActionListener, ChangeListener {
-    private int width = 450, heightPn = 210, widthPn = width - 20;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6679826367296394635L;
+	private int width = 450, heightPn = 210, widthPn = width - 20;
     private JButton[] button = new JButton[49];
     private String day = "";
     private int month = Calendar.getInstance().get(Calendar.MONTH);

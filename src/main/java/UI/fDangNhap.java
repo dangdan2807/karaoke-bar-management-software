@@ -10,12 +10,27 @@ import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.MyButton;
 import entity.NhanVien;
 
+/**
+ * Giao diện đăng nhập của phần mềm
+ * <p>
+ * Người tham gia thiết kế: Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 04/10/2021
+ * <p>
+ * Lần cập nhật cuối: 18/11/2021
+ * <p>
+ */
 public class fDangNhap extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4368075097887104646L;
 	private JTextField txtUsername, txtPassword;
 	private JButton btnLogin;
 
-	private ImageIcon logoIcon = new ImageIcon(
-			CustomUI.USER_ICON_512.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
+	private ImageIcon logo = new ImageIcon(
+			CustomUI.LOGO_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+	private ImageIcon logoApp = CustomUI.LOGO_APP;
 	private ImageIcon backgroundTop = new ImageIcon(
 			CustomUI.BACKGROUND_LOGIN.getImage().getScaledInstance(700, 300, Image.SCALE_SMOOTH));
 	private ImageIcon loginIcon = new ImageIcon(
@@ -30,6 +45,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	public fDangNhap() {
 		setTitle("Đăng nhập");
 		setSize(460, 650);
+		setIconImage(logoApp.getImage());
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -68,8 +84,8 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		lblBackgroundTop.setBounds(-18, 143, 473, 281);
 		pnlMau.add(lblBackgroundTop);
 
-		JLabel lblLogo = new JLabel(logoIcon);
-		lblLogo.setBounds(0, 57, 455, 82);
+		JLabel lblLogo = new JLabel(logo);
+		lblLogo.setBounds(0, 37, 455, 102);
 		pnlMau.add(lblLogo);
 		lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -86,23 +102,24 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		pnlLogin.setLayout(null);
 		pnlLogin.setBounds(0, 325, 455, 273);
 		pnlMain.add(pnlLogin);
+
 		lblUsername = new JLabel("Tên đăng nhập: ");
 		lblUsername.setBounds(83, 12, 285, 25);
-		pnlLogin.add(lblUsername);
 		lblUsername.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblUsername.setForeground(Color.decode("#1a66e3"));
+		pnlLogin.add(lblUsername);
 
 		txtUsername = new JTextField("phamdangdan");
 		txtUsername.setBounds(83, 49, 285, 25);
-		pnlLogin.add(txtUsername);
 		txtUsername.setFont(new Font("Dialog", Font.PLAIN, 14));
 		txtUsername.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		pnlLogin.add(txtUsername);
 
 		lblPassword = new JLabel("Mật khẩu: ");
 		lblPassword.setBounds(83, 86, 285, 25);
-		pnlLogin.add(lblPassword);
 		lblPassword.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblPassword.setForeground(Color.decode("#1a66e3"));
+		pnlLogin.add(lblPassword);
 
 		txtPassword = new JPasswordField("1234567");
 		txtPassword.setBounds(83, 123, 285, 25);
@@ -139,26 +156,21 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		if (o.equals(btnLogin)) {
 			String username = txtUsername.getText().trim();
 			String password = txtPassword.getText().trim();
-			// xác thực dữ liệu trên form
-			if (validData()) {
-				boolean loginResult = login(username, password);
-				// nếu tài khoản, mật khẩu hợp lệ và không bị vô hiệu hóa thì đăng nhập thành
-				// công
-				if (loginResult) {
-					NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername(username);
-					// kiểm tra tài khoản có bị vô hiệu hóa hay không
-					if (staff.getTaiKhoan().getTinhTrangTK() == true) {
-						fDieuHuong winDieuHuong = new fDieuHuong(staff);
-						this.setVisible(false);
-						winDieuHuong.setVisible(true);
-
-					} else {
-						showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
-					}
-
+			boolean loginResult = login(username, password);
+			// nếu tài khoản, mật khẩu hợp lệ và không bị vô hiệu hóa thì đăng nhập thành
+			// công
+			if (loginResult) {
+				NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername(username);
+				// kiểm tra tài khoản có bị vô hiệu hóa hay không
+				if (staff.getTaiKhoan().getTinhTrangTK() == true) {
+					fDieuHuong winDieuHuong = new fDieuHuong(staff);
+					this.setVisible(false);
+					winDieuHuong.setVisible(true);
 				} else {
-					showMessage("Sai tài khoản hoặc mật khẩu");
+					showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
 				}
+			} else {
+				showMessage("Sai tài khoản hoặc mật khẩu");
 			}
 		}
 	}
@@ -233,46 +245,6 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	 */
 	private void showMessage(String message) {
 		JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.OK_OPTION);
-	}
-
-	/**
-	 * Kiểm tra thông tin trước khi đăng nhập
-	 * 
-	 * @return {@code boolean}: kết quả trả về của quá trình kiểm tra
-	 *         <ul>
-	 *         <li>Nếu hợp lệ thì trả về {@code true}</li>
-	 *         <li>Nếu không hợp lệ thì trả về {@code false}</li>
-	 *         </ul>
-	 */
-	private boolean validData() {
-		String username = txtUsername.getText().trim();
-		String password = txtPassword.getText().trim();
-		// username tối thiểu 6 ký tự và không được quá 100 ký tự
-		// username có thể chứa ký tự, số và @, !, #, _
-		if (!(username.length() >= 6 && password.length() <= 100 && username.matches("^[a-zA-Z0-9_@#]{6,100}$"))) {
-			if (username.length() < 6)
-				showMessage("Tên đăng nhập phải tối thiểu 6 ký tự");
-			else if (username.length() > 100)
-				showMessage("Tên đăng nhập không quá 100 ký tự");
-			else
-				showMessage("Tên đăng nhập chỉ có thể chứa các kỳ tự, số, @, #, _");
-			txtUsername.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
-			return false;
-		}
-
-		// password tối thiểu 6 ký tự và không được quá 100 ký tự
-		// password có thể chứa ký tự, số và @, #
-		if (!(password.length() >= 6 && password.matches("^[a-zA-Z0-9@#]{6,100}$"))) {
-			if (password.length() < 6)
-				showMessage("Mật khẩu phải tối thiểu 6 ký tự");
-			else if (password.length() > 100)
-				showMessage("Mật khẩu không quá 100 ký tự");
-			else
-				showMessage("Mật khẩu chỉ có thể chứa các kỳ tự, số, @, #");
-			txtPassword.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
-			return false;
-		}
-		return true;
 	}
 
 	/**

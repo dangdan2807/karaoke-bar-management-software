@@ -6,13 +6,13 @@ import java.sql.SQLException;
 
 public class NhanVien {
 	private String maNhanVien;
-	private String cmnd;
 	private String hoTen;
+	private String cmnd;
 	private Date ngaySinh;
 	private String soDienThoai;
+	private Boolean gioiTinh;
 	private String chucVu;
 	private Double mucLuong;
-	private Boolean gioiTinh;
 	private String trangThaiNV;
 
 	private TaiKhoan taiKhoan;

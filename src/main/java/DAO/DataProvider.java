@@ -3,10 +3,27 @@ package DAO;
 import java.sql.*;
 import connectDB.ConnectDB;
 
+/**
+ * Sử dụng jdbc để thao tác với database dựa trên câu query và mảng object được
+ * truyền vào
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 15/06/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: Thêm mô tả cho lớp và các hàm
+ */
 public class DataProvider {
     private static DataProvider instance = new DataProvider();
     private static ConnectDB db = ConnectDB.getInstance();
 
+    /**
+     * Sử dụng kiến trúc singleton để tạo ra đối tượng {@code DataProvider} duy nhất
+     * 
+     * @return {@code DataProvider}: đối tượng DataProvider
+     */
     public static DataProvider getInstance() {
         if (instance == null)
             instance = new DataProvider();
@@ -48,7 +65,8 @@ public class DataProvider {
     }
 
     /**
-     * Dùng khi insert, delete, update hoặc các câu query trả về số lượng dòng thực
+     * Dùng khi thực hiện các câu truy vấn insert, delete, update hoặc các câu query
+     * trả về số lượng dòng thực
      * 
      * @param query     {@code String}: câu truy vấn
      * @param parameter {@code Object[]}: các giá trị được truyền vào dấu truy vấn

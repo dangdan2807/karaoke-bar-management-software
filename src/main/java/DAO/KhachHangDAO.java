@@ -36,27 +36,6 @@ public class KhachHangDAO {
     }
 
     /**
-     * Lấy danh sách tất cả khách hàng dựa trên mã khách hàng
-     * 
-     * @param customerId {@code String}: mã khách hàng
-     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
-     */
-    public ArrayList<KhachHang> getCustomerListById(String customerId) {
-        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "{CALL USP_getCustomerListById( ? )}";
-        Object[] parameter = new Object[] { customerId };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        try {
-            while (rs.next()) {
-                dataList.add(new KhachHang(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return dataList;
-    }
-
-    /**
      * Lấy danh sách tất cả khách hàng có tên khách hàng phù hợp điều kiện
      * 
      * @param customerName {@code String}: tên khách hàng
@@ -107,6 +86,69 @@ public class KhachHangDAO {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListUnBooked()}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
+        try {
+            while (rs.next()) {
+                dataList.add(new KhachHang(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy ra danh sách tất cả khách hàng chưa đặt phòng theo tên
+     * 
+     * @param customerName {@code String}: tên khách hàng
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng chưa đặt phòng
+     */
+    public ArrayList<KhachHang> getCustomerListUnBookedByName(String customerName) {
+        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
+        String query = "{CALL USP_getCustomerListUnBookedByName( ? )}";
+        Object[] parameter = new Object[] { customerName };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new KhachHang(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy ra danh sách tất cả khách hàng chưa đặt phòng theo CMND/CCCD
+     * 
+     * @param cmnd {@code String}: CMND/CCCD của khách hàng
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng chưa đặt phòng
+     */
+    public ArrayList<KhachHang> getCustomerListUnBookedByCMND(String cmnd) {
+        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
+        String query = "{CALL USP_getCustomerListUnBookedByCMND( ? )}";
+        Object[] parameter = new Object[] { cmnd };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new KhachHang(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy ra danh sách tất cả khách hàng chưa đặt phòng theo CMND/CCCD
+     * 
+     * @param phoneNumber {@code String}: số điện thoại của khách hàng
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng chưa đặt phòng
+     */
+    public ArrayList<KhachHang> getCustomerListUnBookedByPhoneNumber(String phoneNumber) {
+        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
+        String query = "{CALL USP_getCustomerListUnBookedByPhoneNumber( ? )}";
+        Object[] parameter = new Object[] { phoneNumber };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
                 dataList.add(new KhachHang(rs));
@@ -171,7 +213,7 @@ public class KhachHangDAO {
      *         </ul>
      */
     public String getLastCustomerId() {
-        String query = "{CALL USP_getLastCustomerId}";
+        String query = "{CALL USP_getLastCustomerId()}";
         Object[] parameter = new Object[] {};
         Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
         String result = obj != null ? result = obj.toString() : "";

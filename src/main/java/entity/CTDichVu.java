@@ -5,8 +5,27 @@ import java.sql.SQLException;
 
 public class CTDichVu {
 	private int soLuongDat;
+	private double donGia;
 
 	private DichVu dichVu;
+
+	/**
+	 * Lây đơn giá bán ở thời điểm tạo hóa đơn
+	 * 
+	 * @return {@code double}: đơn giá bán
+	 */
+	public double getDonGia() {
+		return donGia;
+	}
+
+	/**
+	 * Cập nhật đơn giá bán lúc tạo hóa đơn
+	 * 
+	 * @param donGia {@code double}: đơn giá bán
+	 */
+	public void setDonGia(double donGia) {
+		this.donGia = donGia;
+	}
 
 	/**
 	 * Lấy số lượng dịch vụ đã đặt
@@ -48,10 +67,12 @@ public class CTDichVu {
 	 * Tạo 1 {@code CTDichVu} với các tham số: số lượng đặt và dịch vụ
 	 * 
 	 * @param soLuongDat {@code int}: Số lượng đặt
+	 * @param donGia     {@code double}: Giá dịch vụ tại thời điểm bán
 	 * @param dichVu     {@code DichVu}: Dịch vụ đã đặt
 	 */
-	public CTDichVu(int soLuongDat, DichVu dichVu) {
+	public CTDichVu(int soLuongDat, double donGia, DichVu dichVu) {
 		this.soLuongDat = soLuongDat;
+		this.donGia = donGia;
 		this.dichVu = dichVu;
 	}
 
@@ -68,7 +89,7 @@ public class CTDichVu {
 	 * @throws SQLException {@code SQLException}: lỗi truy vấn
 	 */
 	public CTDichVu(ResultSet rs) throws SQLException {
-		this(rs.getInt("soLuongDat"), new DichVu(rs));
+		this(rs.getInt("soLuongDat"), rs.getDouble("donGia"), new DichVu(rs));
 	}
 
 	@Override
@@ -107,6 +128,6 @@ public class CTDichVu {
 	 * @return {@code double}: Tiền dịch vụ đã đặt
 	 */
 	public Double tinhTienDichVu() {
-		return dichVu.getGiaBan() * soLuongDat;
+		return donGia * soLuongDat;
 	}
 }

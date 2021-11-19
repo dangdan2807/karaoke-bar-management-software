@@ -10,28 +10,42 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
+import UI.fQuanTri;
 import entity.*;
 
-public class PnDichVu extends JFrame
+public class PnDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -356436856151590278L;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-
+	private ImageIcon nextIconRight = new ImageIcon(
+			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(
+			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(
+			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private JTable tblTableService;
 	private DefaultTableModel modelTableService;
 	private JTextField txtServiceName, txtServiceID, txtBFieldSerType, txtBFieldSearch;
 	private JTextField txtBFieldSearchSerType, txtKeyWord;
 	private JLabel lblServiceType, lblServiceName, lblQuantityInStock, lblServiceID, lblPrice, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch,btnNextRight,
+	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
 	private JComboBox<String> cboServiceType, cboSearch, cboSearchServiceType;
 	private JSpinner spnQuantity, spnPrice;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 
 	private NhanVien staffLogin = null;
+	private MyTextField txtIndex;
 
 	/**
 	 * Constructor mặc định của panel Dịch vụ
@@ -42,9 +56,9 @@ public class PnDichVu extends JFrame
 		this.staffLogin = staff;
 		setSize(1270, 630);
 		setLayout(null);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			@Override
@@ -91,94 +105,90 @@ public class PnDichVu extends JFrame
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(0, 60, 1238, 140);
+		pnlInfo.setBounds(0, 60, 1238, 191);
 		pnlMain.add(pnlInfo);
 
 		txtServiceName = new JTextField();
 		txtServiceName.setForeground(Color.WHITE);
-		txtServiceName.setBounds(555, 15, 250, 20);
+		txtServiceName.setBounds(685, 21, 250, 20);
 		txtServiceName.setToolTipText("Nhập tên dịch vụ, không quá 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtServiceName);
 		pnlInfo.add(txtServiceName);
 
 		lblServiceType = new JLabel("Loại dịch vụ:");
-		lblServiceType.setForeground(Color.WHITE);
-		lblServiceType.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblServiceType.setBounds(845, 15, 105, 20);
+		CustomUI.getInstance().setCustomLabel(lblServiceType);
+		lblServiceType.setBounds(89, 91, 105, 20);
 		pnlInfo.add(lblServiceType);
 
 		lblServiceName = new JLabel("Tên dịch vụ:");
-		lblServiceName.setForeground(Color.WHITE);
-		lblServiceName.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblServiceName.setBounds(435, 15, 105, 20);
+		CustomUI.getInstance().setCustomLabel(lblServiceName);
+		lblServiceName.setBounds(565, 21, 105, 20);
 		pnlInfo.add(lblServiceName);
 
 		cboServiceType = new JComboBox<String>();
 		CustomUI.getInstance().setCustomComboBox(cboServiceType);
 		cboServiceType.setToolTipText("Loại dịch vụ");
 		txtBFieldSerType = CustomUI.getInstance().setCustomCBoxField(cboServiceType);
-		cboServiceType.setBounds(965, 15, 250, 20);
+		cboServiceType.setBounds(214, 91, 250, 20);
 		pnlInfo.add(cboServiceType);
 
 		lblQuantityInStock = new JLabel("Số lượng tồn:");
-		lblQuantityInStock.setForeground(Color.WHITE);
-		lblQuantityInStock.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblQuantityInStock.setBounds(435, 45, 115, 16);
+		CustomUI.getInstance().setCustomLabel(lblQuantityInStock);
+		lblQuantityInStock.setBounds(565, 56, 115, 16);
 		pnlInfo.add(lblQuantityInStock);
 
 		spnPrice = new JSpinner(new SpinnerNumberModel(1000f, 0f, Double.MAX_VALUE, 1000f));
-		spnPrice.setBounds(145, 45, 250, 20);
+		spnPrice.setBounds(214, 56, 250, 20);
 		CustomUI.getInstance().setCustomSpinner(spnPrice);
 		spnPrice.setToolTipText("Nhập giá bán của dịch vụ và phải là một số dương lớn hơn 0");
 		pnlInfo.add(spnPrice);
 
 		txtServiceID = new JTextField();
 		txtServiceID.setForeground(Color.WHITE);
-		txtServiceID.setBounds(145, 15, 250, 20);
+		txtServiceID.setBounds(214, 21, 250, 20);
 		txtServiceID.setToolTipText("Mã dịch vụ");
 		CustomUI.getInstance().setCustomTextFieldOff(txtServiceID);
 
 		pnlInfo.add(txtServiceID);
 
 		lblServiceID = new JLabel("Mã dịch vụ: ");
-		lblServiceID.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblServiceID.setForeground(Color.WHITE);
-		lblServiceID.setBackground(new Color(249, 249, 249));
-		lblServiceID.setBounds(20, 15, 120, 20);
+		CustomUI.getInstance().setCustomLabel(lblServiceID);
+		lblServiceID.setBounds(89, 21, 120, 20);
 		pnlInfo.add(lblServiceID);
 
 		lblPrice = new JLabel("Giá bán:");
-		lblPrice.setForeground(Color.WHITE);
-		lblPrice.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblPrice.setBounds(20, 45, 120, 20);
+		CustomUI.getInstance().setCustomLabel(lblPrice);
+		lblPrice.setBounds(89, 56, 120, 20);
 		pnlInfo.add(lblPrice);
 
-		btnAdd = new MyButton(100, 35, "Thêm", gra, CustomUI.ADD_ICON.getImage(), 39, 19);
-		btnAdd.setToolTipText("Thêm dịch vụ mới");
-		btnAdd.setBounds(20, 93, 100, 35);
+		
+		btnAdd = new MyButton(130, 35, "Thêm", gra, CustomUI.ADD_ICON.getImage(), 50, 19, 10, 6);
+		btnAdd.setToolTipText("Thêm loại dịch vụ mới sau khi đã điền đủ thông tin");
+		btnAdd.setBounds(1023, 10, 130, 35);
 		pnlInfo.add(btnAdd);
 
-		btnUpdate = new MyButton(100, 35, "Sửa", gra, CustomUI.UPDATE_ICON.getImage(), 43, 19);
-		btnUpdate.setToolTipText("Sửa thông tin nhân viên");
-		btnUpdate.setBounds(150, 93, 100, 35);
+		btnUpdate = new MyButton(130, 35, "Sửa", gra, CustomUI.UPDATE_ICON.getImage(), 55, 19, 10, 6);
+		btnUpdate.setToolTipText("Sửa thông tin loại dịch vụ");
+		btnUpdate.setBounds(1023, 50, 130, 35);
 		btnUpdate.setEnabledCustom(false);
 		pnlInfo.add(btnUpdate);
 
-		btnRefresh = new MyButton(100, 35, "Làm mới", gra, CustomUI.REFRESH_ICON.getImage(), 27, 19);
+		btnRefresh = new MyButton(130, 35, "Làm mới", gra, CustomUI.REFRESH_ICON.getImage(), 40, 19, 10, 5);
 		btnRefresh.setToolTipText("Làm mới form");
-		btnRefresh.setBounds(1118, 93, 100, 35);
+		btnRefresh.setBounds(1023, 90, 130, 35);
 		pnlInfo.add(btnRefresh);
+		
+		
 
 		JPanel pnlSearch = new JPanel();
-		pnlSearch.setBounds(286, 83, 822, 53);
+		pnlSearch.setBounds(190, 138, 851, 53);
 		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
 		pnlInfo.add(pnlSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
-		lblSearch.setForeground(Color.WHITE);
-		lblSearch.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(30, 18, 100, 20);
 		pnlSearch.add(lblSearch);
 
@@ -192,14 +202,13 @@ public class PnDichVu extends JFrame
 		cboSearch.setBounds(140, 18, 160, 20);
 		pnlSearch.add(cboSearch);
 
-		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(), 30, 19);
+		btnSearch = new MyButton(130, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(),40, 19, 10, 5);
 		btnSearch.setToolTipText("Tìm kiếm thông tin dịch vụ theo từ khóa");
-		btnSearch.setBounds(702, 10, 100, 35);
+		btnSearch.setBounds(702, 10, 130, 35);
 		pnlSearch.add(btnSearch);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
-		lblKeyWord.setForeground(Color.WHITE);
-		lblKeyWord.setFont(new Font("Dialog", Font.BOLD, 13));
+		CustomUI.getInstance().setCustomLabel(lblKeyWord);
 		lblKeyWord.setBounds(364, 18, 76, 20);
 		pnlSearch.add(lblKeyWord);
 
@@ -223,13 +232,14 @@ public class PnDichVu extends JFrame
 		spnQuantity = new JSpinner();
 		spnQuantity.setModel(new SpinnerNumberModel(1, 0, Integer.MAX_VALUE, 1));
 		CustomUI.getInstance().setCustomSpinner(spnQuantity);
-		spnQuantity.setBounds(555, 45, 250, 20);
+		spnQuantity.setBounds(685, 56, 250, 20);
 		pnlInfo.add(spnQuantity);
 
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(8, 201, 1240, 384);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách dịch vụ");
+		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã dịch vụ", "Tên dịch vụ", "Giá bán", "Số lượng", "Loại dịch vụ" };
 		modelTableService = new DefaultTableModel(cols, 0);
@@ -240,36 +250,57 @@ public class PnDichVu extends JFrame
 		tblTableService.setFont(new Font("Dialog", Font.PLAIN, 14));
 		tblTableService.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
 		tblTableService.getTableHeader().setForeground(Color.decode("#9B17EB"));
+		
 		JScrollPane scrTable = new JScrollPane(tblTableService, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 10, 1220, 350);
+		scrTable.setBounds(10, 20, 1200, 230);
 		scrTable.setOpaque(false);
 		scrTable.getViewport().setOpaque(false);
 		pnlTable.add(scrTable);
-
 		pnlMain.add(pnlTable);
+		
+		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextRight.setBounds(690, 540, 70, 35);
+		pnlMain.add(btnNextRight);
+
+		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextRight.setBounds(770, 540, 70, 35);
+		pnlMain.add(btnDoubleNextRight);
+
+		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextLeft.setBounds(510, 540, 70, 35);
+		pnlMain.add(btnNextLeft);
+
+		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnDoubleNextLeft.setBounds(430, 540, 70, 35);
+		pnlMain.add(btnDoubleNextLeft);
+
+		txtIndex = new MyTextField("2222");
+		txtIndex.setBounds(590, 540, 90, 35);
+		pnlMain.add(txtIndex);
+
 
 		tblTableService.addMouseListener(this);
-		txtBFieldSerType.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
+		txtBFieldSerType.addMouseListener(this);
 		txtBFieldSearchSerType.addMouseListener(this);
 
 		btnAdd.addActionListener(this);
-		btnBack.addActionListener(this);
-		btnRefresh.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnSearch.addActionListener(this);
+		btnRefresh.addActionListener(this);
 
 		cboSearch.addItemListener(this);
 		cboSearchServiceType.addItemListener(this);
 
-		txtServiceName.addFocusListener(this);
-		((JSpinner.DefaultEditor) spnQuantity.getEditor()).getTextField().addFocusListener(this);
 		txtKeyWord.addFocusListener(this);
+		txtServiceName.addFocusListener(this);
 		((JSpinner.DefaultEditor) spnPrice.getEditor()).getTextField().addFocusListener(this);
+		((JSpinner.DefaultEditor) spnQuantity.getEditor()).getTextField().addFocusListener(this);
 
 		txtKeyWord.addKeyListener(this);
+		txtServiceName.addKeyListener(this);
 
 		allLoaded();
 	}
@@ -277,7 +308,7 @@ public class PnDichVu extends JFrame
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new PnDichVu(staff).setVisible(true);
+			new fQuanTri(staff).setVisible(true);
 		});
 	}
 
@@ -394,13 +425,10 @@ public class PnDichVu extends JFrame
 	public void mouseEntered(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtBFieldSerType)) {
-			cboServiceType.showPopup();
 			cboServiceType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldSearch)) {
-			cboSearch.showPopup();
 			cboSearch.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldSearchSerType)) {
-			cboSearchServiceType.showPopup();
 			cboSearchServiceType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		}
 	}
@@ -460,7 +488,14 @@ public class PnDichVu extends JFrame
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		Object o = e.getSource();
+		int key = e.getKeyCode();
+		InputEventHandler handler = new InputEventHandler();
+		if (o.equals(txtKeyWord)) {
+			handler.characterInputLimit(key, txtKeyWord, 100);
+		} else if (o.equals(txtServiceName)) {
+			handler.characterInputLimit(key, txtServiceName, 100);
+		}
 	}
 
 	@Override
@@ -553,7 +588,7 @@ public class PnDichVu extends JFrame
 		boolean flag = true;
 		while (flag) {
 			newStaffIdStr = newStaffIdStr.replace(idStr, idStr + "0");
-			if (newStaffIdStr.length() > 4) {
+			if (newStaffIdStr.length() > 5) {
 				flag = false;
 			}
 		}
@@ -682,5 +717,12 @@ public class PnDichVu extends JFrame
 	private void removeSelectionInterval() {
 		int selectedRow = tblTableService.getSelectedRow();
 		tblTableService.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
+	}
+
+	/**
+	 * Lấy nút quay lại
+	 */
+	public JButton getBtnBack() {
+		return btnBack;
 	}
 }
