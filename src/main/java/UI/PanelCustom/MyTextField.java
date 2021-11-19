@@ -33,12 +33,12 @@ public class MyTextField extends JTextField implements KeyListener {
 	private void paintIcon(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		// g2.setFont(new Font("Dialog", Font.BOLD, 14));
-		g2.drawString("/ " + text, getWidth() - 35, getHeight() / 2 + 6);
+		g2.drawString("/ " + text, getWidth() - 45, getHeight() / 2 + 6);
 	}
 
 	private void initBorder() {
 		int left = 5;
-		int right = 40;
+		int right = 50;
 		// 5 is default
 		setBorder(javax.swing.BorderFactory.createEmptyBorder(0, left, 0, right));
 	}

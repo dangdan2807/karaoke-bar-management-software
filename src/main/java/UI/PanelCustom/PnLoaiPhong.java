@@ -250,23 +250,23 @@ public class PnLoaiPhong extends JPanel
 
 		
 		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
-		btnNextRight.setBounds(680, 540, 70, 35);
+		btnNextRight.setBounds(690, 540, 70, 35);
 		pnlMain.add(btnNextRight);
 
 		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextRight.setBounds(760, 540, 70, 35);
+		btnDoubleNextRight.setBounds(770, 540, 70, 35);
 		pnlMain.add(btnDoubleNextRight);
 
 		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnNextLeft.setBounds(520, 540, 70, 35);
+		btnNextLeft.setBounds(510, 540, 70, 35);
 		pnlMain.add(btnNextLeft);
 
 		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextLeft.setBounds(440, 540, 70, 35);
+		btnDoubleNextLeft.setBounds(430, 540, 70, 35);
 		pnlMain.add(btnDoubleNextLeft);
 
-		txtIndex = new MyTextField("12");
-		txtIndex.setBounds(600, 540, 70, 35);
+		txtIndex = new MyTextField("2222");
+		txtIndex.setBounds(590, 540, 90, 35);
 		pnlMain.add(txtIndex);
 		
 		

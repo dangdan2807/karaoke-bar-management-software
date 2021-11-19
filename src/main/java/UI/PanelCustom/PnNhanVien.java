@@ -388,23 +388,23 @@ public class PnNhanVien extends JPanel
 		pnlMain.add(pnlTable);
 
 		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
-		btnNextToRight.setBounds(680, 540, 70, 35);
+		btnNextToRight.setBounds(690, 540, 70, 35);
 		pnlMain.add(btnNextToRight);
 
 		btnNextToLast = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
-		btnNextToLast.setBounds(760, 540, 70, 35);
+		btnNextToLast.setBounds(770, 540, 70, 35);
 		pnlMain.add(btnNextToLast);
 
 		btnNextToLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnNextToLeft.setBounds(520, 540, 70, 35);
+		btnNextToLeft.setBounds(510, 540, 70, 35);
 		pnlMain.add(btnNextToLeft);
 
 		btnNextToFirst = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnNextToFirst.setBounds(440, 540, 70, 35);
+		btnNextToFirst.setBounds(430, 540, 70, 35);
 		pnlMain.add(btnNextToFirst);
 
 		txtNumPage = new MyTextField("12");
-		txtNumPage.setBounds(600, 540, 70, 35);
+		txtNumPage.setBounds(590, 540, 90, 35);
 		pnlMain.add(txtNumPage);
 
 		btnAdd.addActionListener(this);
