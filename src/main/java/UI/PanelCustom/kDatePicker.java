@@ -17,10 +17,6 @@ import java.sql.Date;
  * {@code kDatePicker} dùng để tạo 1 {@code JPanel} có thể dùng để chọn ngày
  */
 public class kDatePicker extends JPanel implements ActionListener, MouseListener {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 2154011239157650194L;
 	private JTextField txt;
     private JButton btn;
     private int widthDefault = 150;
@@ -31,18 +27,6 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     private Color backgroundColor = Color.decode("#f9f9f9");
     private Border borderBottomFocus = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#FCA120"));
     private Border borderBottomUnFocus = BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 161, 32, 100));
-
-    /**
-     * Constructor mặc định không tham số
-     */
-    public kDatePicker() {
-        setLayout(null);
-        // setSize(200, 200);
-        // setResizable(false);
-        // setLocationRelativeTo(null);
-        // setDefaultCloseOperation(EXIT_ON_CLOSE);
-        createGUI();
-    }
 
     /**
      * Constructor với 2 tham số
@@ -77,10 +61,6 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
         this.add(btn);
         btn.addActionListener(this);
         txt.addMouseListener(this);
-    }
-
-    public static void main(String[] args) {
-        new kDatePicker().setVisible(true);
     }
 
     @Override

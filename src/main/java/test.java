@@ -147,6 +147,7 @@ public class test {
         String billId = "HD2021100200002";
         switch (key) {
         case 0:
+            System.out.println(billId);
             // final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
             // System.out.println(workingDir + "");
             // URL location =

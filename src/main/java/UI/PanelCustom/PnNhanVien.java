@@ -36,7 +36,6 @@ public class PnNhanVien extends JPanel
 	private DefaultTableModel modelTableStaff;
 	private JTextField txtCMND, txtPhoneNumber, txtStaffName, txtStaffID, txtBFieldSearch, txtKeyWord;
 	private JTextField txtBFieldSearchPosition, txtBFieldPosition, txtUsername;
-	private MyTextField txtNumPage;
 	private JComboBox<String> cboSearch, cboSearchType, cboPosition;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPosition, lblSalary, lblPhoneNumber, lbStaffID;
 	private JLabel lblStaffName, lblStatus, lblSearch;
@@ -45,6 +44,7 @@ public class PnNhanVien extends JPanel
 	private JRadioButton radWorking, radRetired, radMale, radFemale;
 	private kDatePicker dpBirthDay;
 	private JSpinner spnSalary;
+	private PnTextFiledPaging txtPaging;
 
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
@@ -407,9 +407,9 @@ public class PnNhanVien extends JPanel
 		btnNextToFirst.setBounds(430, 540, 70, 35);
 		pnlMain.add(btnNextToFirst);
 
-		txtNumPage = new MyTextField("12");
-		txtNumPage.setBounds(590, 540, 90, 35);
-		pnlMain.add(txtNumPage);
+		txtPaging = new PnTextFiledPaging(90, 35, 1, 1);
+		txtPaging.setBounds(590, 540, 90, 35);
+		pnlMain.add(txtPaging);
 
 		btnAdd.addActionListener(this);
 		btnSearch.addActionListener(this);
@@ -457,7 +457,6 @@ public class PnNhanVien extends JPanel
 		txtUsername.addKeyListener(this);
 		txtStaffName.addKeyListener(this);
 		txtPhoneNumber.addKeyListener(this);
-		txtNumPage.addKeyListener(this);
 
 		allLoaded();
 	}
@@ -487,16 +486,16 @@ public class PnNhanVien extends JPanel
 			isResetPassword = true;
 			updateStaffInfo();
 		} else if (o.equals(btnNextToLeft)) {
-			txtNumPage.subtractOne();
+			txtPaging.subtractOne();
 			searchEventUsingBtnSearch();
 		} else if (o.equals(btnNextToRight)) {
-			txtNumPage.plusOne();
+			txtPaging.plusOne();
 			searchEventUsingBtnSearch();
 		} else if (o.equals(btnNextToFirst)) {
-			txtNumPage.toTheFirstPage();
+			txtPaging.toTheFirstPage();
 			searchEventUsingBtnSearch();
 		} else if (o.equals(btnNextToLast)) {
-			txtNumPage.toTheLastPage();
+			txtPaging.toTheLastPage();
 			searchEventUsingBtnSearch();
 		}
 	}
@@ -636,8 +635,6 @@ public class PnNhanVien extends JPanel
 			handler.characterInputLimit(key, txtStaffName, 100);
 		} else if (o.equals(txtUsername)) {
 			handler.characterInputLimit(key, txtUsername, 100);
-		} else if (o.equals(txtNumPage)) {
-			handler.enterOnlyNumbers(key, txtNumPage, 20);
 		}
 	}
 
@@ -684,8 +681,8 @@ public class PnNhanVien extends JPanel
 		reSizeColumnTable();
 		String workingStatus = cboSearchType.getSelectedItem().toString().trim();
 		int totalLine = NhanVienDAO.getInstance().getTotalLineByWorkingStatus(workingStatus);
-		txtNumPage.setCurrentPage(1);
-		txtNumPage.setNumberOfPages(getLastPage(totalLine));
+		txtPaging.setCurrentPage(1);
+		txtPaging.setTotalPage(getLastPage(totalLine));
 		ArrayList<NhanVien> staffList = NhanVienDAO.getInstance()
 				.getStaffListByWorkingStatusAndPageNumber(workingStatus, 1);
 		loadStaffList(staffList, 1);
@@ -930,8 +927,7 @@ public class PnNhanVien extends JPanel
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		ArrayList<NhanVien> staffList = null;
 		String keyword = "";
-		String currentPageStr = txtNumPage.getText().trim();
-		int currentPage = currentPageStr.isEmpty() ? 1 : Integer.parseInt(currentPageStr);
+		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
 		if (searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
 			keyword = "Đang làm";
@@ -962,7 +958,7 @@ public class PnNhanVien extends JPanel
 			staffList = NhanVienDAO.getInstance().getStaffListByPositionAndPageNumber(keyword, currentPage);
 		}
 		int lastPage = getLastPage(totalLine);
-		txtNumPage.setNumberOfPages(lastPage);
+		txtPaging.setTotalPage(lastPage);
 		loadStaffList(staffList, currentPage);
 	}
 
