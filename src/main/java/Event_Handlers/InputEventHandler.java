@@ -3,10 +3,11 @@ package Event_Handlers;
 import java.awt.event.*;
 import javax.swing.JTextField;
 
-import UI.PanelCustom.CustomUI;
-
 public class InputEventHandler {
 
+    /**
+     * Constructor mặc định không tham số
+     */
     public InputEventHandler() {
 
     }
@@ -37,12 +38,13 @@ public class InputEventHandler {
         case KeyEvent.VK_LEFT:
         case KeyEvent.VK_RIGHT:
         case KeyEvent.VK_SHIFT:
-        case KeyEvent.VK_CONTROL:
         case KeyEvent.VK_ALT:
         case KeyEvent.VK_CAPS_LOCK:
         case KeyEvent.VK_UP:
         case KeyEvent.VK_DOWN:
-            txt.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+            break;
+        case KeyEvent.VK_CONTROL:
+            
             break;
 
         default:

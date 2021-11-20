@@ -13,6 +13,17 @@ import javax.swing.JTextField;
 import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.kDatePicker;
 
+/**
+ * lớp này dùng để xác thực dữ liệu và thông báo lỗi
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 02/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: Thêm mô tả cho lớp và các hàm
+ */
 public class ValidationData {
     private static ValidationData instance = new ValidationData();
     private static DecimalFormat df = new DecimalFormat("#,###.##");

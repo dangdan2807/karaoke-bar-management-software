@@ -17,9 +17,9 @@ public class KhachHangDAO {
     }
 
     /**
-     * Lấy ra danh sách khách hàng theo số trang
+     * Lấy ra danh sách khách hàng theo từng trang
      * 
-     * @param currentPage {@code int}: số của trang cần lấy thông tin
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
      * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<KhachHang>} : danh sách khách hàng
      */
@@ -55,12 +55,13 @@ public class KhachHangDAO {
      * Lấy danh sách tất cả khách hàng dựa theo tên khách hàng và số trang được chỉ
      * định
      * 
-     * @param customerName {@code String}: tên khách hàng
-     * @param currentPage  {@code int}: số của trang cần lấy thông tin
+     * @param customerName        {@code String}: tên khách hàng
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
      * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<KhachHang> getCustomerListByNameAndPageNumber(String customerName, int currentPage, int lineNumberDisplayed) {
+    public ArrayList<KhachHang> getCustomerListByNameAndPageNumber(String customerName, int currentPage,
+            int lineNumberDisplayed) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListByNameAndPageNumber( ? , ? , ? )}";
         Object[] parameter = new Object[] { customerName, currentPage, lineNumberDisplayed };
@@ -93,12 +94,13 @@ public class KhachHangDAO {
      * Lấy danh sách tất cả khách hàng dựa theo số điện thoại và số trang được chỉ
      * định
      * 
-     * @param phoneNumber {@code String}: số điện thoại của khách hàng
-     * @param currentPage {@code int}: số của trang cần lấy thông tin
+     * @param phoneNumber         {@code String}: số điện thoại của khách hàng
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
      * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<KhachHang> getCustomerListByPhoneNumberAndPageNumber(String phoneNumber, int currentPage, int lineNumberDisplayed) {
+    public ArrayList<KhachHang> getCustomerListByPhoneNumberAndPageNumber(String phoneNumber, int currentPage,
+            int lineNumberDisplayed) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListByPhoneNumberAndPageNumber( ? , ? , ? )}";
         Object[] parameter = new Object[] { phoneNumber, currentPage, lineNumberDisplayed };
@@ -292,16 +294,17 @@ public class KhachHangDAO {
     /**
      * Lấy danh sách khách hàng theo giới tính
      * 
-     * @param gender      {@code boolean}: giới tính khách hàng
-     *                    <ul>
-     *                    <li>{@code true} thì là Nữ</li>
-     *                    <li>{@code false} thì là Nam</li>
-     *                    </ul>
-     * @param currentPage {@code int}: số của trang cần lấy thông tin
+     * @param gender              {@code boolean}: giới tính khách hàng
+     *                            <ul>
+     *                            <li>{@code true} thì là Nữ</li>
+     *                            <li>{@code false} thì là Nam</li>
+     *                            </ul>
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
      * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<KhachHang> getCustomerListByGenderAndPageNumber(boolean gender, int currentPage, int lineNumberDisplayed) {
+    public ArrayList<KhachHang> getCustomerListByGenderAndPageNumber(boolean gender, int currentPage,
+            int lineNumberDisplayed) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListByGenderAndPageNumber( ? , ? , ? )}";
         Object[] parameter = new Object[] { gender, currentPage, lineNumberDisplayed };

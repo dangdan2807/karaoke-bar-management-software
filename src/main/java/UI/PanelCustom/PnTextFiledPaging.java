@@ -82,13 +82,13 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
         txtPaging.setCursor(new Cursor(Cursor.HAND_CURSOR));
         txtPaging.setBorder(border);
         this.add(txtPaging);
-        
+
         lblSeparates = new JLabel("/");
         lblSeparates.setFont(fontLbl);
         lblSeparates.setBounds(width - 1, 0, 4, heightDefault);
         lblSeparates.setBackground(new Color(255, 255, 255, 0));
         this.add(lblSeparates);
-        
+
         lblPaging = new JLabel(String.valueOf(totalPage));
         lblPaging.setFont(fontLbl);
         lblPaging.setBounds(width + 6, 0, width - 6, heightDefault);
@@ -169,6 +169,15 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
     }
 
     /**
+     * Lấy ra text field Paging
+     * 
+     * @return {@code JTextField}: txtPaging
+     */
+    public JTextField getTextFieldPaging() {
+        return txtPaging;
+    }
+
+    /**
      * Cập nhật tổng số trang
      * 
      * @param totalPage {@code int}: tổng số trang
@@ -183,8 +192,27 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * @return {@code int}: số trang hiện tại
      */
     public int getCurrentPage() {
-        String currentPage = txtPaging.getText();
-        return Integer.parseInt(currentPage.isEmpty() ? "1" : currentPage);
+        String currentPageStr = txtPaging.getText();
+        String totalPageStr = lblPaging.getText();
+        if (currentPageStr.equals("")) {
+            currentPageStr = "1";
+        } else if (currentPageStr.equals("0")) {
+            currentPageStr = "1";
+        }
+        if(totalPageStr.equals("")){
+            totalPageStr = "1";
+        } else if (totalPageStr.equals("0")) {
+            totalPageStr = "1";
+        }
+        int currentPage = Integer.parseInt(currentPageStr);
+        int totalPage = Integer.parseInt(totalPageStr);
+        if(currentPage > totalPage){
+            currentPage = totalPage;
+        } else if (currentPage < 1) {
+            currentPage = 1;
+        }
+        txtPaging.setText(String.valueOf(currentPage));
+        return currentPage;
     }
 
     /**

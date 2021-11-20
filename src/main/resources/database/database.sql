@@ -1284,7 +1284,7 @@ BEGIN
     WHERE maKH NOT IN (
         SELECT TOP (@exceptRows)
         maKH
-    FROM customerShow
+        FROM customerShow
     )
 END
 GO
@@ -1404,7 +1404,7 @@ BEGIN
     WHERE maKH NOT IN (
         SELECT TOP (@exceptRows)
         maKH
-    FROM customerShow
+        FROM customerShow
     )
 END
 GO
@@ -1848,22 +1848,104 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getRoomTypeListByName
+CREATE PROC USP_getRoomTypeListAndPageNumber
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH roomTypeShow AS (
+        SELECT lp.tenLP, lp.giaTien, lp.maLP, lp.sucChua
+        FROM dbo.LoaiPhong lp
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM roomTypeShow
+    WHERE maLP NOT IN (
+        SELECT TOP (@exceptRows)
+        maLP
+        FROM roomTypeShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfRoomTypeList
+AS
+BEGIN
+    SELECT COUNT(*) AS totalLine
+    FROM dbo.LoaiPhong
+END
+GO
+
+CREATE PROC USP_getRoomTypeListByNameAndPageNumber
+    @roomTypeName NVARCHAR(100),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @name NVARCHAR(102) = N'%'+ @roomTypeName + N'%'
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH roomTypeShow AS (
+        SELECT lp.tenLP, lp.giaTien, lp.maLP, lp.sucChua
+        FROM dbo.LoaiPhong lp
+        WHERE dbo.fuConvertToUnsign(lp.tenLP) LIKE dbo.fuConvertToUnsign(@name)
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM roomTypeShow
+    WHERE maLP NOT IN (
+        SELECT TOP (@exceptRows)
+        maLP
+        FROM roomTypeShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfRoomTypeListByName
     @roomTypeName NVARCHAR(100)
 AS
 BEGIN
     DECLARE @name NVARCHAR(102) = N'%'+ @roomTypeName + N'%'
-    SELECT lp.tenLP, lp.giaTien, lp.maLP, lp.sucChua
+    SELECT COUNT(*) AS totalLine
     FROM dbo.LoaiPhong lp
     WHERE dbo.fuConvertToUnsign(lp.tenLP) LIKE dbo.fuConvertToUnsign(@name)
 END
 GO
 
-CREATE PROC USP_getRoomTypeListByPrice
+CREATE PROC USP_getRoomTypeListByPriceAndPageNumber
+    @price NVARCHAR(100),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH roomTypeShow AS (
+        SELECT lp.tenLP, lp.giaTien, lp.maLP, lp.sucChua
+        FROM dbo.LoaiPhong lp
+        WHERE CONVERT(NVARCHAR, lp.giaTien) LIKE N'%' + @price + N'%'
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM roomTypeShow
+    WHERE maLP NOT IN (
+        SELECT TOP (@exceptRows)
+        maLP
+        FROM roomTypeShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfRoomTypeListByPrice
     @price NVARCHAR(100)
 AS
 BEGIN
-    SELECT lp.tenLP, lp.giaTien, lp.maLP, lp.sucChua
+    SELECT COUNT(*) AS totalLine
     FROM dbo.LoaiPhong lp
     WHERE CONVERT(NVARCHAR, lp.giaTien) LIKE N'%' + @price + N'%'
 END

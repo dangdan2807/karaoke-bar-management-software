@@ -16,7 +16,7 @@ import entity.TaiKhoan;
  * <p>
  * Lần cập nhật cuối: 19/11/2021
  * <p>
- * Nội dung cập nhật: thêm các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
+ * Nội dung cập nhật: thêm, sửa các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
  */
 public class NhanVienDAO {
     private static NhanVienDAO instance = new NhanVienDAO();

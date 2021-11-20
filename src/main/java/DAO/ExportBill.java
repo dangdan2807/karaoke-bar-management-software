@@ -14,6 +14,17 @@ import org.apache.poi.ss.util.CellRangeAddress;
 
 import entity.*;
 
+/**
+ * Sử dụng xuất hóa đơn dạng pdf và excel
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 27/10/2021
+ * <p>
+ * Lần cập nhật cuối: 07/11/2021
+ * <p>
+ * Nội dung cập nhật: sửa lỗi không xuất file excel
+ */
 public class ExportBill {
     private XSSFWorkbook workbook;
     private XSSFSheet sheet;
@@ -54,11 +65,11 @@ public class ExportBill {
     }
 
     /**
-	 * Chuyển số giờ thuê thành chuỗi dạng {@code x giờ y phút}
-	 * 
-	 * @param hours {@code double}: số giờ thuê
-	 * @return {@code String}: chuỗi dạng {@code x giờ y phút}
-	 */
+     * Chuyển số giờ thuê thành chuỗi dạng {@code x giờ y phút}
+     * 
+     * @param hours {@code double}: số giờ thuê
+     * @return {@code String}: chuỗi dạng {@code x giờ y phút}
+     */
     private String convertRentalTime(double hours) {
         int minutes = (int) (hours % 1 * 60);
         int hoursInt = (int) hours;

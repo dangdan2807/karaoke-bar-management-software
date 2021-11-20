@@ -30,7 +30,6 @@ import entity.NhanVien;
  * Lần cập nhật cuối: 20/11/2021
  * <p>
  * Nội dung cập nhật: thêm phân trang cho phần mềm
- * <p>
  */
 public class PnKhachHang extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
@@ -337,6 +336,7 @@ public class PnKhachHang extends JPanel
 		txtKeyWord.addKeyListener(this);
 		txtPhoneNumber.addKeyListener(this);
 		txtCustomerName.addKeyListener(this);
+		txtPaging.getTextFieldPaging().addKeyListener(this);
 
 		cboSearch.addItemListener(this);
 		cboSearchGender.addItemListener(this);
@@ -480,7 +480,13 @@ public class PnKhachHang extends JPanel
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
+		Object o = e.getSource();
+		int key = e.getKeyCode();
+		if (o.equals(txtPaging.getTextFieldPaging())) {
+			if(key == KeyEvent.VK_ENTER) {
+				searchEventUsingBtnSearch();
+			}
+		}
 	}
 
 	@Override

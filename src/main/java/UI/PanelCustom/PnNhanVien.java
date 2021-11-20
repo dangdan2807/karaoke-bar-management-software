@@ -439,6 +439,7 @@ public class PnNhanVien extends JPanel
 		txtUsername.addKeyListener(this);
 		txtStaffName.addKeyListener(this);
 		txtPhoneNumber.addKeyListener(this);
+		txtPaging.getTextFieldPaging().addKeyListener(this);
 
 		allLoaded();
 	}
@@ -594,7 +595,13 @@ public class PnNhanVien extends JPanel
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
+		Object o = e.getSource();
+		int key = e.getKeyCode();
+		if (o.equals(txtPaging.getTextFieldPaging())) {
+			if(key == KeyEvent.VK_ENTER) {
+				searchEventUsingBtnSearch();
+			}
+		}
 	}
 
 	@Override

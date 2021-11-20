@@ -18,6 +18,17 @@ import UI.fQuanTri;
 import entity.LoaiPhong;
 import entity.NhanVien;
 
+/**
+ * Giao diện quản lý loại phòng của phần mềm
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 06/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm phân trang cho phần mềm
+ */
 public class PnLoaiPhong extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**
@@ -28,10 +39,11 @@ public class PnLoaiPhong extends JPanel
 	private DefaultTableModel modelTableTypeRoom;
 	private JTextField txtBFieldSearch, txtKeyWord, txtRoomTypeId, txtRoomTypeName;
 	private JLabel lblCapacity, lblSearch;
-	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack,btnNextRight,
-	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
+	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack, btnNextToRight, btnNextToLast, btnNextToLeft,
+			btnNextToFirst;
 	private JComboBox<String> cboSearch;
 	private JSpinner spnCapacity, spnPrice, spnSearchPrice;
+	private PnTextFiledPaging txtPaging;
 
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
@@ -50,9 +62,10 @@ public class PnLoaiPhong extends JPanel
 			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
+
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
-	private MyTextField txtIndex;
+	private int lineNumberDisplayed = 10;
 
 	public PnLoaiPhong(NhanVien staff) {
 		this.staffLogin = staff;
@@ -221,7 +234,7 @@ public class PnLoaiPhong extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách loại phòng");
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách loại phòng");
 		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã loại phòng", "Tên loại phòng ", "Sức chứa", "Giá tiền" };
@@ -248,32 +261,35 @@ public class PnLoaiPhong extends JPanel
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
 
-		
-		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
-		btnNextRight.setBounds(690, 540, 70, 35);
-		pnlMain.add(btnNextRight);
+		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextToRight.setBounds(690, 540, 70, 35);
+		pnlMain.add(btnNextToRight);
 
-		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextRight.setBounds(770, 540, 70, 35);
-		pnlMain.add(btnDoubleNextRight);
+		btnNextToLast = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLast.setBounds(770, 540, 70, 35);
+		pnlMain.add(btnNextToLast);
 
-		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnNextLeft.setBounds(510, 540, 70, 35);
-		pnlMain.add(btnNextLeft);
+		btnNextToLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLeft.setBounds(510, 540, 70, 35);
+		pnlMain.add(btnNextToLeft);
 
-		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextLeft.setBounds(430, 540, 70, 35);
-		pnlMain.add(btnDoubleNextLeft);
+		btnNextToFirst = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToFirst.setBounds(430, 540, 70, 35);
+		pnlMain.add(btnNextToFirst);
 
-		txtIndex = new MyTextField("2222");
-		txtIndex.setBounds(590, 540, 90, 35);
-		pnlMain.add(txtIndex);
-		
-		
+		txtPaging = new PnTextFiledPaging(90, 35);
+		txtPaging.setBounds(590, 540, 90, 35);
+		txtPaging.setForegroundCustom(Color.WHITE);
+		pnlMain.add(txtPaging);
+
 		btnAdd.addActionListener(this);
 		btnSearch.addActionListener(this);
 		btnUpdate.addActionListener(this);
 		btnRefresh.addActionListener(this);
+		btnNextToLast.addActionListener(this);
+		btnNextToLeft.addActionListener(this);
+		btnNextToRight.addActionListener(this);
+		btnNextToFirst.addActionListener(this);
 
 		cboSearch.addMouseListener(this);
 		txtKeyWord.addMouseListener(this);
@@ -288,6 +304,7 @@ public class PnLoaiPhong extends JPanel
 
 		txtKeyWord.addKeyListener(this);
 		txtRoomTypeName.addKeyListener(this);
+		txtPaging.getTextFieldPaging().addKeyListener(this);
 		((JSpinner.DefaultEditor) spnSearchPrice.getEditor()).getTextField().addKeyListener(this);
 
 		cboSearch.addItemListener(this);
@@ -373,6 +390,18 @@ public class PnLoaiPhong extends JPanel
 			}
 		} else if (o.equals(btnSearch)) {
 			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToLeft)) {
+			txtPaging.subtractOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToRight)) {
+			txtPaging.plusOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToFirst)) {
+			txtPaging.toTheFirstPage();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToLast)) {
+			txtPaging.toTheLastPage();
+			searchEventUsingBtnSearch();
 		}
 	}
 
@@ -380,6 +409,7 @@ public class PnLoaiPhong extends JPanel
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
 		if (o.equals(cboSearch)) {
+			txtPaging.toTheFirstPage();
 			String searchTypeName = cboSearch.getSelectedItem().toString();
 			txtKeyWord.setText("");
 			if (searchTypeName.equalsIgnoreCase("Tất cả")) {
@@ -467,6 +497,10 @@ public class PnLoaiPhong extends JPanel
 		if (o.equals(((JSpinner.DefaultEditor) spnSearchPrice.getEditor()).getTextField()) || o.equals(txtKeyWord)) {
 			if (key == KeyEvent.VK_ENTER)
 				searchEventUsingBtnSearch();
+		} else if (o.equals(txtPaging.getTextFieldPaging())) {
+			if (key == KeyEvent.VK_ENTER) {
+				searchEventUsingBtnSearch();
+			}
 		}
 	}
 
@@ -515,7 +549,12 @@ public class PnLoaiPhong extends JPanel
 	 */
 	public void allLoaded() {
 		reSizeColumnTable();
-		loadRoomTypeList(LoaiPhongDAO.getInstance().getRoomTypeList());
+		int totalLine = LoaiPhongDAO.getInstance().getTotalLineOfRoomTypeList();
+		txtPaging.setTotalPage(getLastPage(totalLine));
+		txtPaging.setCurrentPage(1);
+		ArrayList<LoaiPhong> roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListAndPageNumber(1,
+				lineNumberDisplayed);
+		loadRoomTypeList(roomTypeList);
 	}
 
 	/**
@@ -653,15 +692,24 @@ public class PnLoaiPhong extends JPanel
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		ArrayList<LoaiPhong> roomTypeList = null;
 		String keyword = "";
+		int currentPage = txtPaging.getCurrentPage();
+		int totalLine = 1;
 		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeList();
+			totalLine = LoaiPhongDAO.getInstance().getTotalLineOfRoomTypeList();
+			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListAndPageNumber(currentPage, lineNumberDisplayed);
 		} else if (searchTypeName.equalsIgnoreCase("Tên loại phòng")) {
 			keyword = txtKeyWord.getText().trim();
-			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByName(keyword);
+			totalLine = LoaiPhongDAO.getInstance().getTotalLineOfRoomTypeListByName(keyword);
+			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByNameAndPageNumber(keyword, currentPage,
+					lineNumberDisplayed);
 		} else if (searchTypeName.equalsIgnoreCase("Giá cho thuê")) {
 			String priceStr = spnSearchPrice.getValue().toString().replaceAll("\\.[0]+$", "");
-			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByPrice(priceStr);
+			totalLine = LoaiPhongDAO.getInstance().getTotalLineOfRoomTypeListByPrice(priceStr);
+			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByPriceAndPageNumber(priceStr, currentPage,
+					lineNumberDisplayed);
 		}
+		int lastPage = getLastPage(totalLine);
+		txtPaging.setTotalPage(lastPage);
 		loadRoomTypeList(roomTypeList);
 	}
 
@@ -678,5 +726,19 @@ public class PnLoaiPhong extends JPanel
 	 */
 	public JButton getBtnBack() {
 		return btnBack;
+	}
+
+	/**
+	 * tính số trang của bảng dựa trên tổng số khách hàng tìm được
+	 * 
+	 * @param totalLine {@code int} tổng số khách hàng tìm được
+	 * @return {@code int} số trang
+	 */
+	public int getLastPage(int totalLine) {
+		int lastPage = totalLine / lineNumberDisplayed;
+		if (totalLine % lineNumberDisplayed != 0) {
+			lastPage++;
+		}
+		return lastPage;
 	}
 }

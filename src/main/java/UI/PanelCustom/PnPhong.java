@@ -43,13 +43,13 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	private JTextField txtLocation, txtBFieldSearch, txtKeyWord, txtBFieldSearchType, txtRoomID;
 	private JTextField txtBFieldRoomStatus, txtBFieldRoomType;
 	private JLabel lblLocation, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch,btnNextRight,
-	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnNextRight, btnDoubleNextRight;
+	private MyButton btnNextLeft, btnDoubleNextLeft;
 	private JComboBox<String> cboSearch, cboSearchType, cboRoomType, cboRoomStatus;
+	private PnTextFiledPaging txtPaging;
 
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
-	private MyTextField txtIndex;
 
 	public PnPhong(NhanVien staff) {
 		this.staffLogin = staff;
@@ -226,7 +226,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách phòng");
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách phòng");
 		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã phòng", "Tình trạng ", "Vị trí", "Loại phòng" };
@@ -252,8 +252,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
-		
-		
+
 		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
 		btnNextRight.setBounds(690, 540, 70, 35);
 		pnlMain.add(btnNextRight);
@@ -270,9 +269,9 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		btnDoubleNextLeft.setBounds(430, 540, 70, 35);
 		pnlMain.add(btnDoubleNextLeft);
 
-		txtIndex = new MyTextField("2222");
-		txtIndex.setBounds(590, 540, 90, 35);
-		pnlMain.add(txtIndex);
+		txtPaging = new PnTextFiledPaging(90, 35);
+		txtPaging.setBounds(590, 540, 90, 35);
+		pnlMain.add(txtPaging);
 
 		btnAdd.addActionListener(this);
 		btnRefresh.addActionListener(this);
@@ -288,10 +287,10 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 
 		txtKeyWord.addFocusListener(this);
 		txtLocation.addFocusListener(this);
-		
+
 		txtKeyWord.addKeyListener(this);
 		txtLocation.addKeyListener(this);
-		
+
 		cboSearch.addItemListener(this);
 		cboSearchType.addItemListener(this);
 
