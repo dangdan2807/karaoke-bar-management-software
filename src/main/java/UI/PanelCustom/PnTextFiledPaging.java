@@ -21,15 +21,13 @@ import java.awt.event.*;
  */
 public class PnTextFiledPaging extends JPanel implements KeyListener {
 
-    private JTextField txt;
-    private JLabel lbl;
+    private JTextField txtPaging;
+    private JLabel lblPaging;
+    private JLabel lblSeparates;
     private Font fontTxt = new Font("Dialog", Font.BOLD, 14);
     private Font fontLbl = new Font("Dialog", Font.BOLD, 14);
     private Color backgroundColor = new Color(255, 255, 255, 100);
     private Border border = BorderFactory.createEmptyBorder();
-
-    private int widthDefault = 100;
-    private int heightDefault = 21;
 
     /**
      * Constructor text field phân trang
@@ -41,8 +39,6 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
         setLayout(null);
         setSize(width, height);
         setBounds(0, 0, width, height);
-        this.widthDefault = width;
-        this.heightDefault = height;
         // setResizable(false);
         // setLocationRelativeTo(null);
         // setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -61,8 +57,6 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
         setLayout(null);
         setSize(width, height);
         setBounds(0, 0, width, height);
-        this.widthDefault = width;
-        this.heightDefault = height;
         // setResizable(false);
         // setLocationRelativeTo(null);
         // setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -77,32 +71,30 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      */
     private void createGUI(int pageNumber, int totalPage) {
         this.setBackground(backgroundColor);
-        // int heightDefault = 21;
+        int widthDefault = this.getWidth();
+        int heightDefault = this.getHeight();
         int width = widthDefault / 2;
-        txt = new JTextField(String.valueOf(pageNumber));
-        txt.setFont(fontTxt);
-        txt.setBounds(0, 0, width - 2, heightDefault);
-        txt.setBackground(new Color(255, 255, 255, 0));
-        txt.setHorizontalAlignment(JTextField.RIGHT);
-        txt.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        txt.setBorder(border);
-        txt.setForeground(Color.WHITE);
-        this.add(txt);
+        txtPaging = new JTextField(String.valueOf(pageNumber));
+        txtPaging.setFont(fontTxt);
+        txtPaging.setBounds(0, 0, width - 2, heightDefault);
+        txtPaging.setBackground(new Color(255, 255, 255, 0));
+        txtPaging.setHorizontalAlignment(JTextField.RIGHT);
+        txtPaging.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        txtPaging.setBorder(border);
+        this.add(txtPaging);
         
-        JLabel lblSeparates = new JLabel("/");
+        lblSeparates = new JLabel("/");
         lblSeparates.setFont(fontLbl);
         lblSeparates.setBounds(width - 1, 0, 4, heightDefault);
-        lblSeparates.setForeground(Color.WHITE);
         lblSeparates.setBackground(new Color(255, 255, 255, 0));
         this.add(lblSeparates);
         
-        lbl = new JLabel(String.valueOf(totalPage));
-        lbl.setFont(fontLbl);
-        lbl.setBounds(width + 6, 0, width - 6, heightDefault);
-        lbl.setForeground(Color.WHITE);
-        lbl.setBackground(backgroundColor);
-        this.add(lbl);
-        txt.addKeyListener(this);
+        lblPaging = new JLabel(String.valueOf(totalPage));
+        lblPaging.setFont(fontLbl);
+        lblPaging.setBounds(width + 6, 0, width - 6, heightDefault);
+        lblPaging.setBackground(backgroundColor);
+        this.add(lblPaging);
+        txtPaging.addKeyListener(this);
     }
 
     public static void main(String[] args) {
@@ -126,8 +118,8 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
         Object o = e.getSource();
         int key = e.getKeyCode();
         InputEventHandler handler = new InputEventHandler();
-        if (o.equals(txt)) {
-            handler.enterOnlyNumbers(key, txt, 20);
+        if (o.equals(txtPaging)) {
+            handler.enterOnlyNumbers(key, txtPaging, 20);
         }
     }
 
@@ -141,8 +133,8 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
         int style = font.getStyle();
         this.fontTxt = font.deriveFont(style, size);
         this.fontLbl = font.deriveFont(style, size + 1);
-        txt.setFont(fontTxt);
-        lbl.setFont(fontLbl);
+        txtPaging.setFont(fontTxt);
+        lblPaging.setFont(fontLbl);
     }
 
     /**
@@ -151,8 +143,10 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * @param color {@code Color}: màu chữ
      */
     public void setForegroundCustom(Color color) {
-        txt.setForeground(color);
-        lbl.setForeground(color);
+        txtPaging.setForeground(color);
+        txtPaging.setCaretColor(color);
+        lblPaging.setForeground(color);
+        lblSeparates.setForeground(color);
     }
 
     /**
@@ -171,7 +165,7 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * @param pageNumber {@code int}: số trang hiện tại
      */
     public void setCurrentPage(int pageNumber) {
-        txt.setText(String.valueOf(pageNumber));
+        txtPaging.setText(String.valueOf(pageNumber));
     }
 
     /**
@@ -180,7 +174,7 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * @param totalPage {@code int}: tổng số trang
      */
     public void setTotalPage(int totalPage) {
-        lbl.setText(String.valueOf(totalPage));
+        lblPaging.setText(String.valueOf(totalPage));
     }
 
     /**
@@ -189,7 +183,7 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * @return {@code int}: số trang hiện tại
      */
     public int getCurrentPage() {
-        String currentPage = txt.getText();
+        String currentPage = txtPaging.getText();
         return Integer.parseInt(currentPage.isEmpty() ? "1" : currentPage);
     }
 
@@ -199,7 +193,7 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * @return {@code int}: tổng số trang
      */
     public int getTotalPage() {
-        String totalPage = lbl.getText();
+        String totalPage = lblPaging.getText();
         return Integer.parseInt(totalPage.isEmpty() ? "1" : totalPage);
     }
 
@@ -207,13 +201,13 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * Tăng trang hiện tại lên 1
      */
     public void plusOne() {
-        String currentPageStr = txt.getText();
+        String currentPageStr = txtPaging.getText();
         int currentPage = Integer.parseInt(currentPageStr.isEmpty() ? "1" : currentPageStr);
-        String totalPageStr = lbl.getText();
+        String totalPageStr = lblPaging.getText();
         int totalPage = Integer.parseInt(totalPageStr.isEmpty() ? "1" : totalPageStr);
         if (currentPage > 0 && currentPage < totalPage) {
             ++currentPage;
-            txt.setText(String.valueOf(currentPage));
+            txtPaging.setText(String.valueOf(currentPage));
         }
     }
 
@@ -221,13 +215,13 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * Giảm trang hiện tại đi 1
      */
     public void subtractOne() {
-        String currentPageStr = txt.getText();
+        String currentPageStr = txtPaging.getText();
         int currentPage = Integer.parseInt(currentPageStr.isEmpty() ? "1" : currentPageStr);
-        String totalPageStr = lbl.getText();
+        String totalPageStr = lblPaging.getText();
         int totalPage = Integer.parseInt(totalPageStr.isEmpty() ? "1" : totalPageStr);
         if (currentPage > 1 && currentPage <= totalPage) {
             --currentPage;
-            txt.setText(String.valueOf(currentPage));
+            txtPaging.setText(String.valueOf(currentPage));
         }
     }
 
@@ -235,15 +229,15 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * Chuyển đến trang cuối cùng
      */
     public void toTheLastPage() {
-        String totalPageStr = lbl.getText();
+        String totalPageStr = lblPaging.getText();
         int totalPage = Integer.parseInt(totalPageStr.isEmpty() ? "1" : totalPageStr);
-        txt.setText(String.valueOf(totalPage));
+        txtPaging.setText(String.valueOf(totalPage));
     }
 
     /**
      * Chuyển đến trang đầu tiên
      */
     public void toTheFirstPage() {
-        txt.setText("1");
+        txtPaging.setText("1");
     }
 }

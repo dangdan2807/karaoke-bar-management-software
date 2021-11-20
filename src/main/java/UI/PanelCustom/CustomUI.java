@@ -11,13 +11,14 @@ public class CustomUI {
 	public static Border BORDER_BOTTOM_UN_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0,
 			new Color(255, 161, 32, 100));
 	public static Border BORDER_BOTTOM_ERROR = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.RED);
-	
+
+	private Font fontBold = new Font("Dialog", Font.BOLD, 14);
+	private Font fontNormal = new Font("Dialog", Font.PLAIN, 14);
 
 	private static String pathImg = "src/main/resources/images/";
 	public static final ImageIcon ADD_ICON = new ImageIcon(pathImg + "blueAdd_16.png");
 	public static final ImageIcon TRASH_ICON = new ImageIcon(pathImg + "trash_16.png");
 	public static final ImageIcon REFRESH_ICON = new ImageIcon(pathImg + "refresh_16.png");
-	// public static final ImageIcon ANALYTICS_ICON = new ImageIcon(pathImg + "analytics_16.png");
 	public static final ImageIcon BACK_ICON = new ImageIcon(pathImg + "back_16.png");
 	public static final ImageIcon SEARCH_ICON = new ImageIcon(pathImg + "search_16.png");
 	public static final ImageIcon LOGOUT_ICON = new ImageIcon(pathImg + "logout_16.png");
@@ -25,9 +26,7 @@ public class CustomUI {
 	public static final ImageIcon UPDATE_ICON = new ImageIcon(pathImg + "update_16.png");
 	public static final ImageIcon TRANSFER_ICON = new ImageIcon(pathImg + "transfer_16.png");
 	public static final ImageIcon PAYMENT_ICON = new ImageIcon(pathImg + "payment_16.png");
-	// public static final ImageIcon ERROR_ICON = new ImageIcon(pathImg + "cancel_16.png");
 	public static final ImageIcon USER_ICON = new ImageIcon(pathImg + "user_16.png");
-	// public static final ImageIcon USER_ICON_512 = new ImageIcon(pathImg + "user_512.png");
 	public static final ImageIcon MAN_ICON = new ImageIcon(pathImg + "man_512.png");
 	public static final ImageIcon WOMAN_ICON = new ImageIcon(pathImg + "woman_512.png");
 	public static final ImageIcon BACKGROUND = new ImageIcon(pathImg + "bgBlue.jpg");
@@ -91,7 +90,7 @@ public class CustomUI {
 	 * @param lbl {@code JLabel}: label cần tùy chỉnh
 	 */
 	public void setCustomLabel(JLabel lbl) {
-		lbl.setFont(new Font("Dialog", Font.PLAIN, 14));
+		lbl.setFont(fontNormal);
 		lbl.setForeground(Color.WHITE);
 	}
 
@@ -116,7 +115,7 @@ public class CustomUI {
 		txt.setForeground(Color.WHITE);
 		txt.setBorder(new EmptyBorder(0, 0, 0, 0));
 		txt.setOpaque(false);
-		txt.setFont(new Font("Dialog", Font.PLAIN, 14));
+		txt.setFont(fontNormal);
 	}
 
 	/**
@@ -129,7 +128,7 @@ public class CustomUI {
 			txt.setBorder(BORDER_BOTTOM_FOCUS);
 			txt.setBackground(new Color(246, 210, 255, 50));
 			txt.setCaretColor(Color.WHITE);
-			txt.setFont(new Font("Dialog", Font.PLAIN, 14));
+			txt.setFont(fontNormal);
 			txt.setForeground(Color.WHITE);
 		}
 	}
@@ -144,7 +143,7 @@ public class CustomUI {
 			txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
 			txt.setBackground(new Color(246, 210, 255, 50));
 			txt.setCaretColor(Color.WHITE);
-			txt.setFont(new Font("Dialog", Font.PLAIN, 14));
+			txt.setFont(fontNormal);
 			txt.setForeground(Color.WHITE);
 		} else {
 			txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
@@ -158,7 +157,7 @@ public class CustomUI {
 	 */
 	public void setCustomTextFieldOn(JTextField txt) {
 		txt.setEditable(true);
-		txt.setFont(new Font("Dialog", Font.PLAIN, 14));
+		txt.setFont(fontNormal);
 		txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
 		txt.setBackground(new Color(246, 210, 255, 40));
 		txt.setCursor(new Cursor(Cursor.TEXT_CURSOR));
@@ -173,7 +172,7 @@ public class CustomUI {
 	 */
 	public void setCustomTextFieldOff(JTextField txt) {
 		txt.setEditable(false);
-		txt.setFont(new Font("Dialog", Font.PLAIN, 14));
+		txt.setFont(fontNormal);
 		txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
 		txt.setBackground(new Color(246, 210, 255, 150));
 		txt.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -205,7 +204,7 @@ public class CustomUI {
 		cbo.setEditable(true);
 		cbo.setUI(new BasicComboBoxUI());
 		cbo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		cbo.setFont(new Font("Dialog", Font.PLAIN, 14));
+		cbo.setFont(fontNormal);
 	}
 
 	/**
@@ -216,7 +215,7 @@ public class CustomUI {
 	 */
 	public JTextField setCustomCBoxField(JComboBox<?> cbo) {
 		JTextField boxField = (JTextField) cbo.getEditor().getEditorComponent();
-		boxField.setFont(new Font("Dialog", Font.PLAIN, 14));
+		boxField.setFont(fontNormal);
 		boxField.setBackground(new Color(246, 210, 255, 50));
 		boxField.setForeground(Color.WHITE);
 		boxField.setBorder(BORDER_BOTTOM_UN_FOCUS);
@@ -232,7 +231,7 @@ public class CustomUI {
 	 * @param spn {@code JSpinner}: Spinner cần tùy chỉnh
 	 */
 	public void setCustomSpinner(JSpinner spn) {
-		spn.setFont(new Font("Dialog", Font.PLAIN, 14));
+		spn.setFont(fontNormal);
 		spn.setBackground(Color.WHITE);
 		spn.setBorder(BORDER_BOTTOM_UN_FOCUS);
 		spn.setOpaque(false);
@@ -249,29 +248,34 @@ public class CustomUI {
 	 * @param btn {@code JTable}: table cần tùy chỉnh
 	 */
 	public void setCustomTable(JTable tbl) {
-		tbl.setFont(new Font("Dialog", Font.PLAIN, 14));
+		tbl.setFont(fontNormal);
 		tbl.setBackground(new Color(255, 255, 255, 0));
 		tbl.setForeground(new Color(255, 255, 255));
-		tbl.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
+		tbl.getTableHeader().setFont(fontBold);
 		tbl.getTableHeader().setForeground(Color.decode("#9B17EB"));
 		tbl.getTableHeader().setBackground(new Color(255, 255, 255));
 	}
 
-	public void setBorderTitlePanelTable(JPanel pnl,String title) {
-		Border border = BorderFactory.createTitledBorder(
-				BorderFactory.createLineBorder(Color.decode("#9B17EB"), 2), title, TitledBorder.LEADING, TitledBorder.TOP,
-				new Font("Dialog", Font.BOLD, 14), Color.white);
+	/**
+	 * Tạo tên đề cho panel
+	 * 
+	 * @param pnl   {@code JPanel}: panel cần tạo tiêu đề
+	 * @param title {@code String}: nội dung tiêu đề
+	 */
+	public void setBorderTitlePanelTable(JPanel pnl, String title) {
+		Border border = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.decode("#9B17EB"), 2),
+				title, TitledBorder.LEADING, TitledBorder.TOP, fontBold, Color.white);
 		pnl.setBorder(border);
 	}
-	
+
 	/**
 	 * tùy chỉnh nhanh {@code JScrollPane}
 	 * 
 	 * @param tbl {@code JTable}: table nhận JScrollPane tùy chỉnh
 	 */
 	public JScrollPane setCustomScrollPane(JTable tbl) {
-		JScrollPane src = new JScrollPane(tbl, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JScrollPane src = new JScrollPane(tbl, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		src.setOpaque(false);
 		src.getViewport().setOpaque(false);
 		src.getViewport().setBackground(Color.WHITE);
@@ -288,6 +292,6 @@ public class CustomUI {
 		dp.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
 		dp.setForegroundCustom(Color.white);
 		dp.setOpaqueCustom(false);
-		dp.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
+		dp.setFontCustom(fontNormal);
 	}
 }

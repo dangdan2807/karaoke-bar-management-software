@@ -28,15 +28,17 @@ public class NhanVienDAO {
     }
 
     /**
-     * Lấy danh sách tất cả khách hàng đang làm việc
+     * Lấy danh sách tất cả nhân viên đang làm việc
      * 
-     * @param workingStatus {@code String}: trạng thái làm việc của nhân viên
-     * @param currentPage   {@code int}: số của trang cần lấy thông tin
-     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     * @param workingStatus       {@code String}: trạng thái làm việc của nhân viên
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
      */
-    public ArrayList<NhanVien> getStaffListByWorkingStatusAndPageNumber(String workingStatus, int currentPage) {
-        String query = "{CALL USP_getStaffListByWorkingStatusAndPageNumber( ?, ? )}";
-        Object[] parameter = new Object[] { workingStatus, currentPage };
+    public ArrayList<NhanVien> getStaffListByWorkingStatusAndPageNumber(String workingStatus, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getStaffListByWorkingStatusAndPageNumber( ?, ? , ? )}";
+        Object[] parameter = new Object[] { workingStatus, currentPage, lineNumberDisplayed };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         try {
@@ -53,10 +55,10 @@ public class NhanVienDAO {
      * Lấy số lượng nhân viên tìm được dựa trên trạng thái nhân viên
      * 
      * @param workingStatus {@code String}: trạng thái làm việc của nhân viên
-     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     * @return {@code int}: số lượng nhân viên
      */
-    public int getTotalLineByWorkingStatus(String workingStatus) {
-        String query = "{CALL USP_getTotalLineByWorkingStatus( ? )}";
+    public int getTotalLineOfStaffListByWorkingStatus(String workingStatus) {
+        String query = "{CALL USP_getTotalLineOfStaffListByWorkingStatus( ? )}";
         Object[] parameter = new Object[] { workingStatus };
         Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
         int result = obj != null ? (int) obj : 0;
@@ -169,13 +171,15 @@ public class NhanVienDAO {
     /**
      * Lấy danh sách nhân viên dựa theo chức vụ
      * 
-     * @param position    {@code String}: chức vụ nhân viên cần tìm
-     * @param currentPage {@code int}: số của trang cần lấy thông tin
+     * @param position            {@code String}: chức vụ nhân viên cần tìm
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
      */
-    public ArrayList<NhanVien> getStaffListByPositionAndPageNumber(String position, int currentPage) {
-        String query = "{CALL USP_getStaffListByPositionAndPageNumber( ? , ? )}";
-        Object[] parameter = new Object[] { position, currentPage };
+    public ArrayList<NhanVien> getStaffListByPositionAndPageNumber(String position, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getStaffListByPositionAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { position, currentPage, lineNumberDisplayed };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         try {
@@ -192,10 +196,10 @@ public class NhanVienDAO {
      * Lấy số lượng nhân viên tìm được dựa theo chức vụ
      * 
      * @param position {@code String}: chức vụ nhân viên cần tìm
-     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     * @return {@code int}: số lượng nhân viên
      */
     public int getTotalLineByPosition(String position) {
-        String query = "{CALL USP_getTotalLineByPosition( ? )}";
+        String query = "{CALL USP_getTotalLineOfStaffListByPosition( ? )}";
         Object[] parameter = new Object[] { position };
         Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
         int result = obj != null ? (int) obj : 0;
@@ -205,13 +209,15 @@ public class NhanVienDAO {
     /**
      * Lấy danh sách nhân viên dựa theo tên nhân viên
      * 
-     * @param staffName   {@code String}: tên nhân viên cần tìm
-     * @param currentPage {@code int}: số của trang cần lấy thông tin
+     * @param staffName           {@code String}: tên nhân viên cần tìm
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
      */
-    public ArrayList<NhanVien> getStaffListByStaffNameAndPageNumber(String staffName, int currentPage) {
-        String query = "{CALL USP_getStaffListByStaffNameAndPageNumber( ? , ? )}";
-        Object[] parameter = new Object[] { staffName, currentPage };
+    public ArrayList<NhanVien> getStaffListByStaffNameAndPageNumber(String staffName, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getStaffListByStaffNameAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { staffName, currentPage, lineNumberDisplayed };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         try {
@@ -228,10 +234,10 @@ public class NhanVienDAO {
      * Lấy số lượng nhân viên tìm được dựa theo tên nhân viên
      * 
      * @param staffName {@code String}: tên nhân viên cần tìm
-     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     * @return {@code int}: số lượng nhân viên
      */
     public int getTotalLineByStaffName(String staffName) {
-        String query = "{CALL USP_getTotalLineByStaffName( ? )}";
+        String query = "{CALL USP_getTotalLineOfStaffListByStaffName( ? )}";
         Object[] parameter = new Object[] { staffName };
         Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
         int result = obj != null ? (int) obj : 0;
@@ -241,13 +247,15 @@ public class NhanVienDAO {
     /**
      * Lấy danh sách nhân viên dựa theo số điện thoại
      * 
-     * @param phoneNumber {@code String}: số điện thoại cần tìm
-     * @param currentPage {@code int}: số của trang cần lấy thông tin
+     * @param phoneNumber         {@code String}: số điện thoại cần tìm
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
      */
-    public ArrayList<NhanVien> getStaffListByPhoneNumberAndPageNumber(String phoneNumber, int currentPage) {
-        String query = "{CALL USP_getStaffListByPhoneNumberAndPageNumber( ? , ? )}";
-        Object[] parameter = new Object[] { phoneNumber, currentPage };
+    public ArrayList<NhanVien> getStaffListByPhoneNumberAndPageNumber(String phoneNumber, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getStaffListByPhoneNumberAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { phoneNumber, currentPage, lineNumberDisplayed };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         try {
@@ -264,10 +272,10 @@ public class NhanVienDAO {
      * Lấy số lượng nhân viên tìm được dựa theo số điện thoại
      * 
      * @param phoneNumber {@code String}: số điện thoại cần tìm
-     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     * @return {@code int}: số lượng nhân viên
      */
     public int getTotalLineByPhoneNumber(String phoneNumber) {
-        String query = "{CALL USP_getTotalLineByPhoneNumber( ? )}";
+        String query = "{CALL USP_getTotalLineStaffListByPhoneNumber( ? )}";
         Object[] parameter = new Object[] { phoneNumber };
         Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
         int result = obj != null ? (int) obj : 0;

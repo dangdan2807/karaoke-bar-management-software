@@ -39,8 +39,8 @@ public class PnNhanVien extends JPanel
 	private JComboBox<String> cboSearch, cboSearchType, cboPosition;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPosition, lblSalary, lblPhoneNumber, lbStaffID;
 	private JLabel lblStaffName, lblStatus, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnResetPassword, btnNextToRight, btnNextToLast,
-			btnNextToLeft, btnNextToFirst;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnResetPassword, btnNextToRight;
+	private MyButton btnNextToLast, btnNextToLeft, btnNextToFirst;
 	private JRadioButton radWorking, radRetired, radMale, radFemale;
 	private kDatePicker dpBirthDay;
 	private JSpinner spnSalary;
@@ -107,9 +107,6 @@ public class PnNhanVien extends JPanel
 		this.add(pnlMain);
 
 		JPanel pnlTitle = new JPanel() {
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -144,12 +141,8 @@ public class PnNhanVien extends JPanel
 		pnlMain.add(pnlInfo);
 
 		dpBirthDay = new kDatePicker(250, 20);
-		dpBirthDay.setBackgroundColor(new Color(255, 255, 255, 50));
-		dpBirthDay.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		dpBirthDay.setForegroundCustom(Color.white);
-		dpBirthDay.setOpaqueCustom(false);
+		CustomUI.getInstance().setCustomKDatePicker(dpBirthDay);
 		dpBirthDay.setToolTipTextCustom("Ngày sinh của nhân viên");
-		dpBirthDay.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
 		pnlInfo.add(dpBirthDay);
 		dpBirthDay.setBounds(669, 76, 250, 20);
 
@@ -269,7 +262,6 @@ public class PnNhanVien extends JPanel
 
 		JPanel pnlSearch = new JPanel();
 		pnlSearch.setBounds(40, 173, 1160, 35);
-		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
 		pnlInfo.add(pnlSearch);
@@ -301,9 +293,9 @@ public class PnNhanVien extends JPanel
 		pnlSearch.add(lblKeyWord);
 
 		txtKeyWord = new JTextField();
-		txtKeyWord.setBounds(629, 6, 250, 20);
-		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
+		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
+		txtKeyWord.setBounds(629, 6, 250, 20);
 		txtKeyWord.setVisible(false);
 		pnlSearch.add(txtKeyWord);
 
@@ -322,8 +314,6 @@ public class PnNhanVien extends JPanel
 		pnlInfo.add(lbUsername);
 
 		txtUsername = new JTextField();
-		txtUsername.setForeground(Color.WHITE);
-		txtUsername.setCaretColor(Color.WHITE);
 		txtUsername.setBounds(669, 102, 250, 20);
 		txtUsername.setToolTipText("Tên đăng nhập phải có từ 6 đến 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtUsername);
@@ -346,22 +336,22 @@ public class PnNhanVien extends JPanel
 			}
 		});
 		btnRefresh.setBounds(1036, 91, 150, 35);
-		pnlInfo.add(btnRefresh);
 		btnRefresh.setBackground(Color.CYAN);
 		btnRefresh.setToolTipText("Xóa rỗng form thông tin");
+		pnlInfo.add(btnRefresh);
 
 		btnResetPassword = new MyButton(150, 35, "Đặt lại mật khẩu", gra, updateIcon.getImage(), 31, 19, 10, 5);
 		btnResetPassword.setBounds(1036, 128, 150, 35);
-		pnlInfo.add(btnResetPassword);
 		btnResetPassword.setBackground(Color.CYAN);
 		btnResetPassword.setToolTipText("Làm mới lại mật khẩu nhân viên");
+		pnlInfo.add(btnResetPassword);
 
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
 		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách nhân viên");
-		pnlTable.setBounds(18, 260, 1220, 270);
 		pnlTable.setOpaque(false);
+		pnlTable.setBounds(18, 260, 1220, 270);
 		String[] cols = { "STT", "Mã nhân viên", "Tên nhân viên", "CMND/CCCD", "Chức vụ", "SDT", "Ngày sinh",
 				"Mức lương", "Giới tính", "Trạng thái", "Tài khoản" };
 		modelTableStaff = new DefaultTableModel(cols, 0) {
@@ -374,20 +364,11 @@ public class PnNhanVien extends JPanel
 		};
 
 		tblTableStaff = new JTable(modelTableStaff);
-		tblTableStaff.setBackground(new Color(255, 255, 255, 0));
-		tblTableStaff.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableStaff);
 		tblTableStaff.setRowHeight(21);
-		tblTableStaff.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tblTableStaff.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tblTableStaff.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		tblTableStaff.getTableHeader().setBackground(new Color(255, 255, 255));
-		JScrollPane scrTable = new JScrollPane(tblTableStaff, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 20, 1200, 240);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
-
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableStaff);
+		scrTable.setBounds(10, 20, 1200, 235);
+		
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
 
@@ -407,8 +388,9 @@ public class PnNhanVien extends JPanel
 		btnNextToFirst.setBounds(430, 540, 70, 35);
 		pnlMain.add(btnNextToFirst);
 
-		txtPaging = new PnTextFiledPaging(90, 35, 1, 1);
-		txtPaging.setBounds(590, 540, 90, 35);
+		txtPaging = new PnTextFiledPaging(90, 35);
+		txtPaging.setBounds(590, 540, 91, 36);
+		txtPaging.setForegroundCustom(Color.WHITE);
 		pnlMain.add(txtPaging);
 
 		btnAdd.addActionListener(this);
@@ -504,6 +486,7 @@ public class PnNhanVien extends JPanel
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
 		if (o.equals(cboSearch)) {
+			txtPaging.setCurrentPage(1);
 			String searchTypeName = cboSearch.getSelectedItem().toString();
 			txtKeyWord.setText("");
 			if (searchTypeName.equalsIgnoreCase("Chức vụ") || searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
@@ -680,11 +663,11 @@ public class PnNhanVien extends JPanel
 	private void allLoaded() {
 		reSizeColumnTable();
 		String workingStatus = cboSearchType.getSelectedItem().toString().trim();
-		int totalLine = NhanVienDAO.getInstance().getTotalLineByWorkingStatus(workingStatus);
+		int totalLine = NhanVienDAO.getInstance().getTotalLineOfStaffListByWorkingStatus(workingStatus);
 		txtPaging.setCurrentPage(1);
 		txtPaging.setTotalPage(getLastPage(totalLine));
 		ArrayList<NhanVien> staffList = NhanVienDAO.getInstance()
-				.getStaffListByWorkingStatusAndPageNumber(workingStatus, 1);
+				.getStaffListByWorkingStatusAndPageNumber(workingStatus, 1, lineNumberDisplayed);
 		loadStaffList(staffList, 1);
 	}
 
@@ -934,17 +917,17 @@ public class PnNhanVien extends JPanel
 			if (cboSearchType.getSelectedItem() != null) {
 				keyword = cboSearchType.getSelectedItem().toString().trim();
 			}
-			totalLine = NhanVienDAO.getInstance().getTotalLineByWorkingStatus(keyword);
-			staffList = NhanVienDAO.getInstance().getStaffListByWorkingStatusAndPageNumber(keyword, currentPage);
+			totalLine = NhanVienDAO.getInstance().getTotalLineOfStaffListByWorkingStatus(keyword);
+			staffList = NhanVienDAO.getInstance().getStaffListByWorkingStatusAndPageNumber(keyword, currentPage, lineNumberDisplayed);
 		} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
 			keyword = txtKeyWord.getText().trim();
 			totalLine = NhanVienDAO.getInstance().getTotalLineByStaffName(keyword);
-			staffList = NhanVienDAO.getInstance().getStaffListByStaffNameAndPageNumber(keyword, currentPage);
+			staffList = NhanVienDAO.getInstance().getStaffListByStaffNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
 		} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
 			keyword = txtKeyWord.getText().trim();
 			if (keyword.matches("^[\\d]{0,10}$")) {
 				totalLine = NhanVienDAO.getInstance().getTotalLineByPhoneNumber(keyword);
-				staffList = NhanVienDAO.getInstance().getStaffListByPhoneNumberAndPageNumber(keyword, currentPage);
+				staffList = NhanVienDAO.getInstance().getStaffListByPhoneNumberAndPageNumber(keyword, currentPage, lineNumberDisplayed);
 			} else {
 				String message = "Sổ điện phải phải là số, không được quá 10 số";
 				showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
@@ -955,7 +938,7 @@ public class PnNhanVien extends JPanel
 				keyword = cboSearchType.getSelectedItem().toString().trim();
 			}
 			totalLine = NhanVienDAO.getInstance().getTotalLineByPosition(keyword);
-			staffList = NhanVienDAO.getInstance().getStaffListByPositionAndPageNumber(keyword, currentPage);
+			staffList = NhanVienDAO.getInstance().getStaffListByPositionAndPageNumber(keyword, currentPage, lineNumberDisplayed);
 		}
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);
@@ -1079,6 +1062,12 @@ public class PnNhanVien extends JPanel
 		}
 	}
 
+	/**
+	 * tính số trang của bảng dựa trên tổng số nhân viên tìm được
+	 * 
+	 * @param totalLine {@code int} tổng số nhân viên tìm được
+	 * @return {@code int} số trang
+	 */
 	public int getLastPage(int totalLine) {
 		int lastPage = totalLine / lineNumberDisplayed;
 		if (totalLine % lineNumberDisplayed != 0) {

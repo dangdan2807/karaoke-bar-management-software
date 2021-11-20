@@ -1263,19 +1263,36 @@ BEGIN
 END
 GO
 
--- select * 
--- from dbo.CTDichVu ctdv, dbo.DichVu dv
--- where maHoaDon = 'HD2021111300006'
---     AND dv.maDichVu = ctdv.maDichVu
--- go
-
 
 -- khách hàng
-CREATE PROC USP_getCustomerList
+CREATE PROC USP_getCustomerListAndPageNumber
+    @numberPage INT,
+    @lineNumberDisplayed INT
 AS
 BEGIN
-    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH customerShow AS (
+        SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
+            kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+        FROM dbo.KhachHang kh
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM customerShow
+    WHERE maKH NOT IN (
+        SELECT TOP (@exceptRows)
+        maKH
+    FROM customerShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfCustomerList
+AS
+BEGIN
+    SELECT COUNT(*) AS totalLine
     FROM dbo.KhachHang kh
 END
 GO
@@ -1291,36 +1308,113 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getCustomerListByName
+CREATE PROC USP_getCustomerListByNameAndPageNumber
+    @customerName NVARCHAR(100),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+    DECLARE @keyword NVARCHAR(102) = N'%' + @customerName + N'%'
+
+    ;WITH customerShow AS (
+        SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
+            kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+        FROM dbo.KhachHang kh
+        WHERE dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM customerShow
+    WHERE maKH NOT IN (
+        SELECT TOP (@exceptRows)
+        maKH
+    FROM customerShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfCustomerListByName
     @customerName NVARCHAR(100)
 AS
 BEGIN
     DECLARE @keyword NVARCHAR(102) = N'%' + @customerName + N'%'
-    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    SELECT COUNT(*)
     FROM dbo.KhachHang kh
     WHERE dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
 END
 GO
 
-CREATE PROC USP_getCustomerListByGender
+CREATE PROC USP_getCustomerListByGenderAndPageNumber
+    @gender BIT,
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH customerShow AS (
+        SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
+            kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+        FROM dbo.KhachHang kh
+        WHERE kh.gioiTinh = @gender
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM customerShow
+    WHERE maKH NOT IN (
+        SELECT TOP (@exceptRows)
+        maKH
+    FROM customerShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfCustomerListByGender
     @gender BIT
 AS
 BEGIN
-    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    SELECT COUNT(*)
     FROM dbo.KhachHang kh
     WHERE kh.gioiTinh = @gender
 END
 GO
 
-CREATE PROC USP_getCustomerListByPhoneNumber
+CREATE PROC USP_getCustomerListByPhoneNumberAndPageNumber
+    @phoneNumber VARCHAR(10),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @keyword NVARCHAR(12) = N'%' + @phoneNumber + N'%'
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH customerShow AS (
+        SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
+            kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+        FROM dbo.KhachHang kh
+        WHERE kh.soDienThoai LIKE @keyword
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM customerShow
+    WHERE maKH NOT IN (
+        SELECT TOP (@exceptRows)
+        maKH
+    FROM customerShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfCustomerListByPhoneNumber
     @phoneNumber VARCHAR(10)
 AS
 BEGIN
     DECLARE @keyword NVARCHAR(12) = N'%' + @phoneNumber + N'%'
-    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    SELECT COUNT(*) AS totalLine
     FROM dbo.KhachHang kh
     WHERE kh.soDienThoai LIKE @keyword
 END
@@ -1917,12 +2011,12 @@ GO
 
 CREATE PROC USP_getStaffListByWorkingStatusAndPageNumber
     @workingStatus NVARCHAR(100),
-    @numberPage INT
+    @numberPage INT,
+    @lineNumberDisplayed INT
 AS
 BEGIN
-    DECLARE @pageRows INT = 10
-    DECLARE @selectRows INT = @pageRows * @numberPage
-    DECLARE @exceptRows INT = (@numberPage - 1) * @pageRows
+    DECLARE @selectRows INT =@lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) *@lineNumberDisplayed
 
     ;WITH staffShow AS (
         SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
@@ -1944,7 +2038,7 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getTotalLineByWorkingStatus
+CREATE PROC USP_getTotalLineOfStaffListByWorkingStatus
     @workingStatus NVARCHAR(100)
 AS
 BEGIN
@@ -2139,12 +2233,12 @@ GO
 
 CREATE PROC USP_getStaffListByPositionAndPageNumber
     @position NVARCHAR(100),
-    @numberPage INT
+    @numberPage INT,
+    @lineNumberDisplayed INT
 AS
 BEGIN
-    DECLARE @pageRows INT = 10
-    DECLARE @selectRows INT = @pageRows * @numberPage
-    DECLARE @exceptRows INT = (@numberPage - 1) * @pageRows
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
 
     ;WITH staffShow AS (
         SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
@@ -2166,7 +2260,7 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getTotalLineByPosition
+CREATE PROC USP_getTotalLineOfStaffListByPosition
     @position NVARCHAR(100)
 AS
 BEGIN
@@ -2179,12 +2273,12 @@ GO
 
 CREATE PROC USP_getStaffListByStaffNameAndPageNumber
     @fullName NVARCHAR(100),
-    @numberPage INT
+    @numberPage INT,
+    @lineNumberDisplayed INT
 AS
 BEGIN
-    DECLARE @pageRows INT = 10
-    DECLARE @selectRows INT = @pageRows * @numberPage
-    DECLARE @exceptRows INT = (@numberPage - 1) * @pageRows
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
     DECLARE @name NVARCHAR(102) = N'%'+ @fullName + N'%'
 
     ;WITH staffShow AS (
@@ -2207,26 +2301,26 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getTotalLineByStaffName
+CREATE PROC USP_getTotalLineOfStaffListByStaffName
     @fullName NVARCHAR(100)
 AS
 BEGIN
     DECLARE @name NVARCHAR(102) = N'%'+ @fullName + N'%'
     SELECT COUNT(*)
     FROM dbo.NhanVien nv, dbo.TaiKhoan tk
-        WHERE nv.taiKhoan = tk.tenDangNhap
-            AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@name)
+    WHERE nv.taiKhoan = tk.tenDangNhap
+        AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@name)
 END
 GO
 
 CREATE PROC USP_getStaffListByPhoneNumberAndPageNumber
     @phoneNumber VARCHAR(10),
-    @numberPage INT
+    @numberPage INT,
+    @lineNumberDisplayed INT
 AS
 BEGIN
-    DECLARE @pageRows INT = 10
-    DECLARE @selectRows INT = @pageRows * @numberPage
-    DECLARE @exceptRows INT = (@numberPage - 1) * @pageRows
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
     DECLARE @rePhoneNumber VARCHAR(12) = '%'+ @phoneNumber + '%'
 
     ;WITH staffShow AS (
@@ -2249,7 +2343,7 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getTotalLineByPhoneNumber
+CREATE PROC USP_getTotalLineStaffListByPhoneNumber
     @phoneNumber VARCHAR(10)
 AS
 BEGIN

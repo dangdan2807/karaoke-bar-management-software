@@ -20,6 +20,18 @@ import UI.fQuanTri;
 import entity.KhachHang;
 import entity.NhanVien;
 
+/**
+ * Giao diện quản lý khách hàng của phần mềm
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu
+ * <p>
+ * Ngày tạo: 07/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm phân trang cho phần mềm
+ * <p>
+ */
 public class PnKhachHang extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**
@@ -34,11 +46,12 @@ public class PnKhachHang extends JPanel
 	private JTextField txtCMND, txtPhoneNumber, txtCustomerName, txtCustomerID, txtBFieldSearch;
 	private JTextField txtKeyWord, txtBFieldSearchGender;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPhone, lblCustomerID, lblCustomerName, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnNextRight, btnDoubleNextRight, btnNextLeft,
-			btnDoubleNextLeft;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnNextToRight, btnNextToLast, btnNextToLeft,
+			btnNextToFirst;
 	private kDatePicker dpBirthDay;
 	private JComboBox<String> cboSearch, cboSearchGender;
 	private JRadioButton radMale, radFemale;
+	private PnTextFiledPaging txtPaging;
 
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
@@ -55,9 +68,10 @@ public class PnKhachHang extends JPanel
 			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon doubleNextLeftIcon = new ImageIcon(
 			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
-	private JTextField txtIndex;
+	private int lineNumberDisplayed = 10;
 
 	public PnKhachHang(NhanVien staff) {
 		this.staffLogin = staff;
@@ -116,13 +130,10 @@ public class PnKhachHang extends JPanel
 		pnlMain.add(pnlInfo);
 
 		dpBirthDay = new kDatePicker(250, 20);
-		dpBirthDay.setBackgroundColor(new Color(255, 255, 255, 50));
-		dpBirthDay.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		dpBirthDay.setForegroundCustom(Color.white);
+		CustomUI.getInstance().setCustomKDatePicker(dpBirthDay);
 		dpBirthDay.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
-		dpBirthDay.setOpaqueCustom(false);
-		pnlInfo.add(dpBirthDay);
 		dpBirthDay.setBounds(165, 85, 250, 20);
+		pnlInfo.add(dpBirthDay);
 
 		txtCMND = new JTextField();
 		txtCMND.setBounds(165, 50, 250, 20);
@@ -260,7 +271,7 @@ public class PnKhachHang extends JPanel
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
 		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách khách hàng");
-		pnlTable.setBounds(18, 270, 1220, 260);
+		pnlTable.setBounds(18, 270, 1220, 265);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã khách hàng", "Tên khách hàng ", "CMND/CCCD", "Số điện thoại", "Ngày sinh",
 				"Giới tính" };
@@ -273,48 +284,42 @@ public class PnKhachHang extends JPanel
 		};
 
 		tblTableCustomer = new JTable(modelTable);
-		tblTableCustomer.setBackground(new Color(255, 255, 255, 0));
-		tblTableCustomer.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableCustomer);
 		tblTableCustomer.setRowHeight(21);
-		tblTableCustomer.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tblTableCustomer.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tblTableCustomer.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scrTable = new JScrollPane(tblTableCustomer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 20, 1200, 230);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
-
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableCustomer);
+		scrTable.setBounds(10, 20, 1200, 235);
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
 
-		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
-		btnNextRight.setBounds(690, 540, 70, 35);
-		pnlMain.add(btnNextRight);
+		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextToRight.setBounds(690, 540, 70, 35);
+		pnlMain.add(btnNextToRight);
 
-		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextRight.setBounds(770, 540, 70, 35);
-		pnlMain.add(btnDoubleNextRight);
+		btnNextToLast = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLast.setBounds(770, 540, 70, 35);
+		pnlMain.add(btnNextToLast);
 
-		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnNextLeft.setBounds(510, 540, 70, 35);
-		pnlMain.add(btnNextLeft);
+		btnNextToLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLeft.setBounds(510, 540, 70, 35);
+		pnlMain.add(btnNextToLeft);
 
-		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextLeft.setBounds(430, 540, 70, 35);
-		pnlMain.add(btnDoubleNextLeft);
+		btnNextToFirst = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToFirst.setBounds(430, 540, 70, 35);
+		pnlMain.add(btnNextToFirst);
 
-		txtIndex = new MyTextField("2222");
-		txtIndex.setBounds(590, 540, 90, 35);
-		pnlMain.add(txtIndex);
+		txtPaging = new PnTextFiledPaging(90, 35);
+		txtPaging.setBounds(590, 540, 91, 36);
+		txtPaging.setForegroundCustom(Color.WHITE);
+		pnlMain.add(txtPaging);
 
-		allLoaded();
-
-		btnSearch.addActionListener(this);
 		btnAdd.addActionListener(this);
-		btnRefresh.addActionListener(this);
 		btnUpdate.addActionListener(this);
+		btnSearch.addActionListener(this);
+		btnRefresh.addActionListener(this);
+		btnNextToLast.addActionListener(this);
+		btnNextToLeft.addActionListener(this);
+		btnNextToRight.addActionListener(this);
+		btnNextToFirst.addActionListener(this);
 
 		btnSearch.addMouseListener(this);
 		tblTableCustomer.addMouseListener(this);
@@ -322,10 +327,10 @@ public class PnKhachHang extends JPanel
 		txtBFieldSearchGender.addMouseListener(this);
 
 		txtCMND.addFocusListener(this);
-		txtCustomerName.addFocusListener(this);
 		txtKeyWord.addFocusListener(this);
 		txtPhoneNumber.addFocusListener(this);
 		txtBFieldSearch.addFocusListener(this);
+		txtCustomerName.addFocusListener(this);
 		txtBFieldSearchGender.addFocusListener(this);
 
 		txtCMND.addKeyListener(this);
@@ -336,6 +341,7 @@ public class PnKhachHang extends JPanel
 		cboSearch.addItemListener(this);
 		cboSearchGender.addItemListener(this);
 
+		allLoaded();
 	}
 
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
@@ -368,6 +374,18 @@ public class PnKhachHang extends JPanel
 			searchEventUsingBtnSearch();
 		} else if (o.equals(btnUpdate)) {
 			updateStaffInfo();
+		} else if (o.equals(btnNextToLeft)) {
+			txtPaging.subtractOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToRight)) {
+			txtPaging.plusOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToFirst)) {
+			txtPaging.toTheFirstPage();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToLast)) {
+			txtPaging.toTheLastPage();
+			searchEventUsingBtnSearch();
 		}
 	}
 
@@ -375,6 +393,7 @@ public class PnKhachHang extends JPanel
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
 		if (o.equals(cboSearch)) {
+			txtPaging.toTheFirstPage();
 			String searchTypeName = cboSearch.getSelectedItem().toString();
 			if (searchTypeName.equals("Giới tính")) {
 				txtKeyWord.setVisible(false);
@@ -461,7 +480,7 @@ public class PnKhachHang extends JPanel
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 	}
 
 	@Override
@@ -521,7 +540,11 @@ public class PnKhachHang extends JPanel
 	 */
 	private void allLoaded() {
 		reSizeColumnTable();
-		loadCustomerList(KhachHangDAO.getInstance().getCustomerList());
+		int totalLine = KhachHangDAO.getInstance().getTotalLineOfCustomerList();
+		txtPaging.setTotalPage(getLastPage(totalLine));
+		txtPaging.setCurrentPage(1);
+		ArrayList<KhachHang> customerList = KhachHangDAO.getInstance().getCustomerListAndPageNumber(1, lineNumberDisplayed);
+		loadCustomerList(customerList, 1);
 	}
 
 	/**
@@ -720,9 +743,6 @@ public class PnKhachHang extends JPanel
 		String birthDayStr = ConvertTime.getInstance().convertTimeToString(customer.getNgaySinh(), format);
 		String genderStr = customer.getGioiTinh() ? "Nữ" : "Nam";
 		String phoneNumberStr = customer.getSoDienThoai();
-		// phoneNumberStr = phoneNumberStr.substring(0, 4) + "-" +
-		// phoneNumberStr.substring(4, 7) + "-"
-		// + phoneNumberStr.substring(7, 10);
 		modelTable.addRow(new Object[] { sttStr, addSpaceToString(customer.getMaKH()),
 				addSpaceToString(customer.getHoTen()), addSpaceToString(customer.getCmnd()),
 				addSpaceToString(phoneNumberStr), addSpaceToString(birthDayStr), addSpaceToString(genderStr) });
@@ -736,25 +756,34 @@ public class PnKhachHang extends JPanel
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		ArrayList<KhachHang> customerList = null;
 		String keyword = "";
+		int currentPage = txtPaging.getCurrentPage();
+		int totalLine = 1;
 		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			customerList = KhachHangDAO.getInstance().getCustomerList();
+			totalLine = KhachHangDAO.getInstance().getTotalLineOfCustomerList();
+			customerList = KhachHangDAO.getInstance().getCustomerListAndPageNumber(currentPage, lineNumberDisplayed);
 		} else if (searchTypeName.equalsIgnoreCase("Tên khách hàng")) {
 			keyword = txtKeyWord.getText().trim();
-			customerList = KhachHangDAO.getInstance().getCustomerListByName(keyword);
+			totalLine = KhachHangDAO.getInstance().getTotalLineOfCustomerListByName(keyword);
+			customerList = KhachHangDAO.getInstance().getCustomerListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
 		} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
 			keyword = txtKeyWord.getText().trim().replace("-", "");
 			if (keyword.matches("^[\\d]{0,10}$")) {
-				customerList = KhachHangDAO.getInstance().getCustomerListByPhoneNumber(keyword);
+				totalLine = KhachHangDAO.getInstance().getTotalLineOfCustomerListByPhoneNumber(keyword);
+				customerList = KhachHangDAO.getInstance().getCustomerListByPhoneNumberAndPageNumber(keyword,
+						currentPage, lineNumberDisplayed);
 			} else {
 				String message = "Sổ điện phải phải là số, không được quá 10 số";
 				showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (searchTypeName.equalsIgnoreCase("Giới tính")) {
-			String genderStr = cboSearchGender.getSelectedItem().toString();
+			String genderStr = cboSearchGender.getSelectedItem().toString().trim();
 			boolean gender = genderStr.equalsIgnoreCase("Nữ") ? true : false;
-			customerList = KhachHangDAO.getInstance().getCustomerListByGender(gender);
+			totalLine = KhachHangDAO.getInstance().getTotalLineOfCustomerListByGender(gender);
+			customerList = KhachHangDAO.getInstance().getCustomerListByGenderAndPageNumber(gender, currentPage, lineNumberDisplayed);
 		}
-		loadCustomerList(customerList);
+		int lastPage = getLastPage(totalLine);
+		txtPaging.setTotalPage(lastPage);
+		loadCustomerList(customerList, currentPage);
 	}
 
 	/**
@@ -762,10 +791,10 @@ public class PnKhachHang extends JPanel
 	 * 
 	 * @param customerList {@code ArrayList<KhachHang>}: danh sách khách hàng
 	 */
-	private void loadCustomerList(ArrayList<KhachHang> customerList) {
+	private void loadCustomerList(ArrayList<KhachHang> customerList, int currentPage) {
 		modelTable.getDataVector().removeAllElements();
 		modelTable.fireTableDataChanged();
-		int i = 1;
+		int i = 1 + (currentPage - 1) * lineNumberDisplayed;
 		for (KhachHang item : customerList) {
 			addRow(i++, item);
 		}
@@ -778,8 +807,8 @@ public class PnKhachHang extends JPanel
 		tblTableCustomer.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		TableColumnModel columnModel = tblTableCustomer.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(70);
-		columnModel.getColumn(1).setPreferredWidth(130);
-		columnModel.getColumn(2).setPreferredWidth(240);
+		columnModel.getColumn(1).setPreferredWidth(140);
+		columnModel.getColumn(2).setPreferredWidth(250);
 		columnModel.getColumn(3).setPreferredWidth(190);
 		columnModel.getColumn(4).setPreferredWidth(200);
 		columnModel.getColumn(5).setPreferredWidth(200);
@@ -808,5 +837,19 @@ public class PnKhachHang extends JPanel
 	 */
 	public JButton getBtnBack() {
 		return btnBack;
+	}
+
+	/**
+	 * tính số trang của bảng dựa trên tổng số khách hàng tìm được
+	 * 
+	 * @param totalLine {@code int} tổng số khách hàng tìm được
+	 * @return {@code int} số trang
+	 */
+	public int getLastPage(int totalLine) {
+		int lastPage = totalLine / lineNumberDisplayed;
+		if (totalLine % lineNumberDisplayed != 0) {
+			lastPage++;
+		}
+		return lastPage;
 	}
 }

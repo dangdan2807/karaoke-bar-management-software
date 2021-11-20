@@ -17,14 +17,17 @@ public class KhachHangDAO {
     }
 
     /**
-     * Lấy ra danh sách tất cả khách hàng
+     * Lấy ra danh sách khách hàng theo số trang
      * 
+     * @param currentPage {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<KhachHang>} : danh sách khách hàng
      */
-    public ArrayList<KhachHang> getCustomerList() {
+    public ArrayList<KhachHang> getCustomerListAndPageNumber(int currentPage, int lineNumberDisplayed) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "{CALL USP_getCustomerList}";
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
+        String query = "{CALL USP_getCustomerListAndPageNumber( ? , ? )}";
+        Object[] parameter = new Object[] { currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
                 dataList.add(new KhachHang(rs));
@@ -36,15 +39,31 @@ public class KhachHangDAO {
     }
 
     /**
-     * Lấy danh sách tất cả khách hàng có tên khách hàng phù hợp điều kiện
+     * Lấy số lượng nhân viên
+     * 
+     * @return {@code int}: số lượng nhân viên
+     */
+    public int getTotalLineOfCustomerList() {
+        String query = "{CALL USP_getTotalLineOfCustomerList()}";
+        Object[] parameter = new Object[] {};
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
+
+    /**
+     * Lấy danh sách tất cả khách hàng dựa theo tên khách hàng và số trang được chỉ
+     * định
      * 
      * @param customerName {@code String}: tên khách hàng
+     * @param currentPage  {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<KhachHang> getCustomerListByName(String customerName) {
+    public ArrayList<KhachHang> getCustomerListByNameAndPageNumber(String customerName, int currentPage, int lineNumberDisplayed) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "{CALL USP_getCustomerListByName( ? )}";
-        Object[] parameter = new Object[] { customerName };
+        String query = "{CALL USP_getCustomerListByNameAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { customerName, currentPage, lineNumberDisplayed };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -57,15 +76,32 @@ public class KhachHangDAO {
     }
 
     /**
-     * Lấy danh sách tất cả khách hàng có số điện thoại phù hợp điều kiện
+     * Lấy số lượng khách hàng dựa theo tên khách hàng
+     * 
+     * @param customerName {@code String}: tên khách hàng
+     * @return {@code int}: số lượng nhân viên
+     */
+    public int getTotalLineOfCustomerListByName(String customerName) {
+        String query = "{CALL USP_getTotalLineOfCustomerListByName( ? )}";
+        Object[] parameter = new Object[] { customerName };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
+
+    /**
+     * Lấy danh sách tất cả khách hàng dựa theo số điện thoại và số trang được chỉ
+     * định
      * 
      * @param phoneNumber {@code String}: số điện thoại của khách hàng
+     * @param currentPage {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<KhachHang> getCustomerListByPhoneNumber(String phoneNumber) {
+    public ArrayList<KhachHang> getCustomerListByPhoneNumberAndPageNumber(String phoneNumber, int currentPage, int lineNumberDisplayed) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "{CALL USP_getCustomerListByPhoneNumber( ? )}";
-        Object[] parameter = new Object[] { phoneNumber };
+        String query = "{CALL USP_getCustomerListByPhoneNumberAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { phoneNumber, currentPage, lineNumberDisplayed };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -75,6 +111,20 @@ public class KhachHangDAO {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    /**
+     * Lấy số lượng khách hàng dựa theo số điện thoại
+     * 
+     * @param phoneNumber {@code String}: số điện thoại của khách hàng
+     * @return {@code int}: số lượng nhân viên
+     */
+    public int getTotalLineOfCustomerListByPhoneNumber(String phoneNumber) {
+        String query = "{CALL USP_getTotalLineOfCustomerListByPhoneNumber( ? )}";
+        Object[] parameter = new Object[] { phoneNumber };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**
@@ -242,17 +292,19 @@ public class KhachHangDAO {
     /**
      * Lấy danh sách khách hàng theo giới tính
      * 
-     * @param gender {@code boolean}: giới tính khách hàng
-     *               <ul>
-     *               <li>{@code true} thì là Nữ</li>
-     *               <li>{@code false} thì là Nam</li>
-     *               </ul>
+     * @param gender      {@code boolean}: giới tính khách hàng
+     *                    <ul>
+     *                    <li>{@code true} thì là Nữ</li>
+     *                    <li>{@code false} thì là Nam</li>
+     *                    </ul>
+     * @param currentPage {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
      */
-    public ArrayList<KhachHang> getCustomerListByGender(boolean gender) {
+    public ArrayList<KhachHang> getCustomerListByGenderAndPageNumber(boolean gender, int currentPage, int lineNumberDisplayed) {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
-        String query = "{CALL USP_getCustomerListByGender( ? )}";
-        Object[] parameter = new Object[] { gender };
+        String query = "{CALL USP_getCustomerListByGenderAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { gender, currentPage, lineNumberDisplayed };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         try {
             while (rs.next()) {
@@ -262,6 +314,24 @@ public class KhachHangDAO {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    /**
+     * Lấy số lượng khách hàng dựa theo giới tính
+     * 
+     * @param gender {@code boolean}: giới tính khách hàng
+     *               <ul>
+     *               <li>{@code true} thì là Nữ</li>
+     *               <li>{@code false} thì là Nam</li>
+     *               </ul>
+     * @return {@code int}: số lượng nhân viên
+     */
+    public int getTotalLineOfCustomerListByGender(boolean gender) {
+        String query = "{CALL USP_getTotalLineOfCustomerListByGender( ? )}";
+        Object[] parameter = new Object[] { gender };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**
