@@ -65,12 +65,12 @@ public class PhongDAO {
     /**
      * Lấy danh sách phòng dựa trên tên loại phòng
      * 
-     * @param roomTypeName {@code String}: tên loại phòng
+     * @param roomTypeName        {@code String}: tên loại phòng
      * @return {@code ArrayList<Phong>}: danh sách phòng
      */
     public ArrayList<Phong> getRoomListByRoomTypeName(String roomTypeName) {
         String query = "{CALL USP_getRoomListByRoomTypeName( ? )}";
-        Object[] parameter = new Object[] { roomTypeName };
+        Object[] parameter = new Object[] { roomTypeName};
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<Phong> dsPhong = new ArrayList<Phong>();
         try {
@@ -81,6 +81,44 @@ public class PhongDAO {
             e.printStackTrace();
         }
         return dsPhong;
+    }
+
+    /**
+     * Lấy danh sách phòng dựa trên tên loại phòng và số trong
+     * 
+     * @param roomTypeName        {@code String}: tên loại phòng
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<Phong>}: danh sách phòng
+     */
+    public ArrayList<Phong> getRoomListByRoomTypeNameAndPageNumber(String roomTypeName, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getRoomListByRoomTypeNameAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { roomTypeName, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        ArrayList<Phong> dsPhong = new ArrayList<Phong>();
+        try {
+            while (rs.next()) {
+                dsPhong.add(new Phong(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsPhong;
+    }
+
+    /**
+     * Lấy số lượng loại phòng theo tên loại phòng
+     * 
+     * @param roomTypeName {@code String}: tên loại phòng
+     * @return {@code int}: số lượng loại phòng
+     */
+    public int getTotalLineOfRoomListByRoomTypeName(String roomTypeName) {
+        String query = "{CALL USP_getTotalLineOfRoomListByRoomTypeName( ? )}";
+        Object[] parameter = new Object[] { roomTypeName };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**
@@ -169,12 +207,15 @@ public class PhongDAO {
     /**
      * Lấy danh sách phòng theo vị trí
      * 
-     * @param location {@code String}: từ khóa tìm kiếm
+     * @param location            {@code String}: vị trí của phòng
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<Phong>}: danh sách phòng
      */
-    public ArrayList<Phong> getRoomListByLocation(String location) {
-        String query = "{CALL USP_getRoomListByLocation( ? )}";
-        Object[] parameter = new Object[] { location };
+    public ArrayList<Phong> getRoomListByLocationAndPageNumber(String location, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getRoomListByLocationAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { location, currentPage, lineNumberDisplayed };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<Phong> dsPhong = new ArrayList<Phong>();
         try {
@@ -188,18 +229,36 @@ public class PhongDAO {
     }
 
     /**
+     * Lấy số lượng phòng theo trạng thái
+     * 
+     * @param location {@code String}: ví trí phòng
+     * @return {@code int}: số lượng loại phòng
+     */
+    public int getTotalLineOfRoomListByLocation(String location) {
+        String query = "{CALL USP_getTotalLineOfRoomListByLocation( ? )}";
+        Object[] parameter = new Object[] { location };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
+
+    /**
      * Lấy danh sách phòng theo trạng thái của phòng
      * 
-     * @param roomStatus {@code int}: tính trạng phòng
-     *                   <ul>
-     *                   <li>Nếu phòng còn trống thì truyền vào {@code 0}</li>
-     *                   <li>Nếu phòng đang sử dụng thì truyền vào {@code 1}</li>
-     *                   </ul>
+     * @param roomStatus          {@code int}: tính trạng phòng
+     *                            <ul>
+     *                            <li>Nếu phòng còn trống thì truyền vào
+     *                            {@code 0}</li>
+     *                            <li>Nếu phòng đang sử dụng thì truyền vào
+     *                            {@code 1}</li>
+     *                            </ul>
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<Phong>}: danh sách phòng
      */
-    public ArrayList<Phong> getRoomListByStatus(int roomStatus) {
-        String query = "{CALL USP_getRoomListByStatus( ? )}";
-        Object[] parameter = new Object[] { roomStatus };
+    public ArrayList<Phong> getRoomListByStatusAndPageNumber(int roomStatus, int currentPage, int lineNumberDisplayed) {
+        String query = "{CALL USP_getRoomListByStatusAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { roomStatus, currentPage, lineNumberDisplayed };
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<Phong> dsPhong = new ArrayList<Phong>();
         try {
@@ -210,6 +269,24 @@ public class PhongDAO {
             e.printStackTrace();
         }
         return dsPhong;
+    }
+
+    /**
+     * Lấy số lượng phòng theo trạng thái
+     * 
+     * @param roomStatus {@code int}: tính trạng phòng
+     *                   <ul>
+     *                   <li>Nếu phòng còn trống thì truyền vào {@code 0}</li>
+     *                   <li>Nếu phòng đang sử dụng thì truyền vào {@code 1}</li>
+     *                   </ul>
+     * @return {@code int}: số lượng loại phòng
+     */
+    public int getTotalLineOfRoomListByStatus(int roomStatus) {
+        String query = "{CALL USP_getTotalLineOfRoomListByStatus( ? )}";
+        Object[] parameter = new Object[] { roomStatus };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**

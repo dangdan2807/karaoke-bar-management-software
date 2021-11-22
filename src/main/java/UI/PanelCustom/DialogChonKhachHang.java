@@ -281,9 +281,9 @@ public class DialogChonKhachHang extends JDialog
 			}
 			String searchTypeName = cboSearch.getSelectedItem().toString();
 			if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-				handler.enterOnlyNumbers(key, txtKeyword, 10);
+				handler.enterOnlyNumbersAndLimitInput(key, txtKeyword, 10);
 			} else if (searchTypeName.equalsIgnoreCase("CMND/CCCD")) {
-				handler.enterOnlyNumbers(key, txtKeyword, 12);
+				handler.enterOnlyNumbersAndLimitInput(key, txtKeyword, 12);
 			} else {
 				handler.characterInputLimit(key, txtKeyword, 100);
 			}

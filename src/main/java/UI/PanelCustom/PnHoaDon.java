@@ -99,8 +99,8 @@ public class PnHoaDon extends JPanel
 		dpToDate = new kDatePicker(250, 20);
 		dpToDate.setBackgroundColor(new Color(255, 255, 255, 50));
 		dpToDate.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		dpToDate.setForegroundCustom(Color.white);
-		dpToDate.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
+		dpToDate.setTextColor(Color.white);
+		dpToDate.setTextFont(new Font("Dialog", Font.PLAIN, 14));
 		dpToDate.setOpaqueCustom(false);
 		dpToDate.setToolTipTextCustom("Ngày kết thúc thống kê");
 		dpToDate.setBounds(747, 26, 250, 20);
@@ -114,8 +114,8 @@ public class PnHoaDon extends JPanel
 		dpFromDate = new kDatePicker(250, 20);
 		dpFromDate.setBackgroundColor(new Color(255, 255, 255, 50));
 		dpFromDate.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		dpFromDate.setForegroundCustom(Color.white);
-		dpFromDate.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
+		dpFromDate.setTextColor(Color.white);
+		dpFromDate.setTextFont(new Font("Dialog", Font.PLAIN, 14));
 		dpFromDate.setOpaqueCustom(false);
 		dpFromDate.setBounds(292, 26, 250, 20);
 		dpFromDate.setToolTipTextCustom("Ngày bắt đầu thống kê");
@@ -324,7 +324,7 @@ public class PnHoaDon extends JPanel
 				searchEventUsingBtnSearch();
 			}
 			if (searchTypeName.equalsIgnoreCase("SĐT khách hàng")) {
-				handler.enterOnlyNumbers(key, txtKeyWord, 10);
+				handler.enterOnlyNumbersAndLimitInput(key, txtKeyWord, 10);
 			} else if(searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {
 				handler.characterInputLimit(key, txtKeyWord, 15);
 			} else {

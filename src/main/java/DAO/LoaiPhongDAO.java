@@ -103,7 +103,7 @@ public class LoaiPhongDAO {
      * @param roomTypeName        {@code String}: từ khóa trong tên loại phòng
      * @param currentPage         {@code int}: số của trang cần lấy thông tin
      * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
-     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng phù hợp điều kiện
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
      */
     public ArrayList<LoaiPhong> getRoomTypeListByNameAndPageNumber(String roomTypeName, int currentPage,
             int lineNumberDisplayed) {
@@ -124,7 +124,7 @@ public class LoaiPhongDAO {
     /**
      * Lấy số lượng loại phòng theo tên và số trang
      * 
-     * @param roomTypeName {@code String}: từ khóa trong tên loại phòng
+     * @param roomTypeName {@code String}: tên loại phòng
      * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng phù hợp điều kiện
      */
     public int getTotalLineOfRoomTypeListByName(String roomTypeName) {

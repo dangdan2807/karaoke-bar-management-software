@@ -71,6 +71,7 @@ public class PnKhachHang extends JPanel
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 	private int lineNumberDisplayed = 10;
+	private KhachHangDAO customerDAO = KhachHangDAO.getInstance();
 
 	public PnKhachHang(NhanVien staff) {
 		this.staffLogin = staff;
@@ -130,7 +131,7 @@ public class PnKhachHang extends JPanel
 
 		dpBirthDay = new kDatePicker(250, 20);
 		CustomUI.getInstance().setCustomKDatePicker(dpBirthDay);
-		dpBirthDay.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
+		dpBirthDay.setTextFont(new Font("Dialog", Font.PLAIN, 14));
 		dpBirthDay.setBounds(165, 85, 250, 20);
 		pnlInfo.add(dpBirthDay);
 
@@ -308,7 +309,7 @@ public class PnKhachHang extends JPanel
 
 		txtPaging = new PnTextFiledPaging(90, 35);
 		txtPaging.setBounds(590, 540, 91, 36);
-		txtPaging.setForegroundCustom(Color.WHITE);
+		txtPaging.setTextColor(Color.WHITE);
 		pnlMain.add(txtPaging);
 
 		btnAdd.addActionListener(this);
@@ -483,7 +484,7 @@ public class PnKhachHang extends JPanel
 		Object o = e.getSource();
 		int key = e.getKeyCode();
 		if (o.equals(txtPaging.getTextFieldPaging())) {
-			if(key == KeyEvent.VK_ENTER) {
+			if (key == KeyEvent.VK_ENTER) {
 				searchEventUsingBtnSearch();
 			}
 		}
@@ -500,14 +501,14 @@ public class PnKhachHang extends JPanel
 				searchEventUsingBtnSearch();
 			}
 			if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-				handler.enterOnlyNumbers(key, txtKeyWord, 10);
+				handler.enterOnlyNumbersAndLimitInput(key, txtKeyWord, 10);
 			} else {
 				handler.characterInputLimit(key, txtKeyWord, 100);
 			}
 		} else if (o.equals(txtPhoneNumber)) {
-			handler.enterOnlyNumbers(key, txtPhoneNumber, 10);
+			handler.enterOnlyNumbersAndLimitInput(key, txtPhoneNumber, 10);
 		} else if (o.equals(txtCMND)) {
-			handler.enterOnlyNumbers(key, txtCMND, 12);
+			handler.enterOnlyNumbersAndLimitInput(key, txtCMND, 12);
 		} else if (o.equals(txtCustomerName)) {
 			handler.characterInputLimit(key, txtCustomerName, 100);
 		}
@@ -546,10 +547,10 @@ public class PnKhachHang extends JPanel
 	 */
 	private void allLoaded() {
 		reSizeColumnTable();
-		int totalLine = KhachHangDAO.getInstance().getTotalLineOfCustomerList();
+		int totalLine = customerDAO.getTotalLineOfCustomerList();
 		txtPaging.setTotalPage(getLastPage(totalLine));
 		txtPaging.setCurrentPage(1);
-		ArrayList<KhachHang> customerList = KhachHangDAO.getInstance().getCustomerListAndPageNumber(1, lineNumberDisplayed);
+		ArrayList<KhachHang> customerList = customerDAO.getCustomerListAndPageNumber(1, lineNumberDisplayed);
 		loadCustomerList(customerList, 1);
 	}
 
@@ -591,7 +592,7 @@ public class PnKhachHang extends JPanel
 	 * @return {@code String}: mã khách hàng mới
 	 */
 	private String createNewStaffID() {
-		String lastCustomerId = KhachHangDAO.getInstance().getLastCustomerId();
+		String lastCustomerId = customerDAO.getLastCustomerId();
 		String idStr = "KH";
 		int oldNumberCustomerID = 0;
 		if (lastCustomerId.equalsIgnoreCase("") == false || lastCustomerId != null) {
@@ -634,7 +635,7 @@ public class PnKhachHang extends JPanel
 		String message = "";
 		if (validData()) {
 			KhachHang customer = getCustomerDataInForm();
-			Boolean result = KhachHangDAO.getInstance().insertCustomer(customer);
+			Boolean result = customerDAO.insertCustomer(customer);
 			String name = "khách hàng";
 			if (result) {
 				message = "Thêm " + name + " mới thành công";
@@ -659,7 +660,7 @@ public class PnKhachHang extends JPanel
 	private void updateStaffInfo() {
 		if (validData()) {
 			KhachHang customer = getCustomerDataInForm();
-			String staffName = KhachHangDAO.getInstance().getCustomerById(customer.getMaKH()).getHoTen();
+			String staffName = customerDAO.getCustomerById(customer.getMaKH()).getHoTen();
 			String message = "";
 			int selectedRow = tblTableCustomer.getSelectedRow();
 			String name = "khách hàng";
@@ -672,7 +673,7 @@ public class PnKhachHang extends JPanel
 				int choose = JOptionPane.showConfirmDialog(this, message, "Xác nhận cập nhật thông tin " + name + "",
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (choose == JOptionPane.OK_OPTION) {
-					Boolean result = KhachHangDAO.getInstance().updateCustomerInfo(customer);
+					Boolean result = customerDAO.updateCustomerInfo(customer);
 					if (result) {
 						message = "Cập nhật thông tin " + name + " thành công";
 						updateRow(selectedRow, customer);
@@ -765,18 +766,18 @@ public class PnKhachHang extends JPanel
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
 		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			totalLine = KhachHangDAO.getInstance().getTotalLineOfCustomerList();
-			customerList = KhachHangDAO.getInstance().getCustomerListAndPageNumber(currentPage, lineNumberDisplayed);
+			totalLine = customerDAO.getTotalLineOfCustomerList();
+			customerList = customerDAO.getCustomerListAndPageNumber(currentPage, lineNumberDisplayed);
 		} else if (searchTypeName.equalsIgnoreCase("Tên khách hàng")) {
 			keyword = txtKeyWord.getText().trim();
-			totalLine = KhachHangDAO.getInstance().getTotalLineOfCustomerListByName(keyword);
-			customerList = KhachHangDAO.getInstance().getCustomerListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+			totalLine = customerDAO.getTotalLineOfCustomerListByName(keyword);
+			customerList = customerDAO.getCustomerListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
 		} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
 			keyword = txtKeyWord.getText().trim().replace("-", "");
 			if (keyword.matches("^[\\d]{0,10}$")) {
-				totalLine = KhachHangDAO.getInstance().getTotalLineOfCustomerListByPhoneNumber(keyword);
-				customerList = KhachHangDAO.getInstance().getCustomerListByPhoneNumberAndPageNumber(keyword,
-						currentPage, lineNumberDisplayed);
+				totalLine = customerDAO.getTotalLineOfCustomerListByPhoneNumber(keyword);
+				customerList = customerDAO.getCustomerListByPhoneNumberAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
 			} else {
 				String message = "Sổ điện phải phải là số, không được quá 10 số";
 				showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
@@ -784,8 +785,8 @@ public class PnKhachHang extends JPanel
 		} else if (searchTypeName.equalsIgnoreCase("Giới tính")) {
 			String genderStr = cboSearchGender.getSelectedItem().toString().trim();
 			boolean gender = genderStr.equalsIgnoreCase("Nữ") ? true : false;
-			totalLine = KhachHangDAO.getInstance().getTotalLineOfCustomerListByGender(gender);
-			customerList = KhachHangDAO.getInstance().getCustomerListByGenderAndPageNumber(gender, currentPage, lineNumberDisplayed);
+			totalLine = customerDAO.getTotalLineOfCustomerListByGender(gender);
+			customerList = customerDAO.getCustomerListByGenderAndPageNumber(gender, currentPage, lineNumberDisplayed);
 		}
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);

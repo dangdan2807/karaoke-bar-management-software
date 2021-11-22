@@ -314,9 +314,9 @@ public class fThongTinCaNhan extends JDialog
                     updateInfo();
             }
         } else if (o.equals(txtPhoneNumber)) {
-            handler.enterOnlyNumbers(key, txtPhoneNumber, 10);
+            handler.enterOnlyNumbersAndLimitInput(key, txtPhoneNumber, 10);
         } else if (o.equals(txtCMND)) {
-            handler.enterOnlyNumbers(key, txtCMND, 12);
+            handler.enterOnlyNumbersAndLimitInput(key, txtCMND, 12);
         } else if (o.equals(txtFullName)) {
             handler.characterInputLimit(key, txtFullName, 100);
         } else if (o.equals(txtNewPassword)) {

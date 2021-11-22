@@ -569,6 +569,37 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_getServiceTypeListAndPageNumber
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH serviceTypeShow AS (
+        SELECT ldv.tenLDV, ldv.maLDV
+        FROM dbo.LoaiDichVu ldv
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM serviceTypeShow
+    WHERE maLDV NOT IN (
+        SELECT TOP (@exceptRows)
+        maLDV
+        FROM serviceTypeShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfServiceTypeList
+AS
+BEGIN
+    SELECT COUNT(*) AS totalLine
+    FROM dbo.LoaiDichVu ldv
+END
+GO
+
 CREATE PROC USP_getServiceTypeByName
     @ServiceTypeName NVARCHAR(100)
 AS
@@ -599,12 +630,38 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getServiceTypeListByName
+CREATE PROC USP_getServiceTypeListByNameAndPageNumber
+    @serviceTypeName NVARCHAR(100),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @name NVARCHAR(102) = N'%'+ @serviceTypeName + N'%'
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH serviceTypeShow AS (
+        SELECT ldv.maLDV, ldv.tenLDV
+        FROM dbo.LoaiDichVu ldv
+        WHERE dbo.fuConvertToUnsign(ldv.tenLDV) LIKE dbo.fuConvertToUnsign(@name)
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM serviceTypeShow
+    WHERE maLDV NOT IN (
+        SELECT TOP (@exceptRows)
+        maLDV
+        FROM serviceTypeShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfServiceTypeListByName
     @serviceTypeName NVARCHAR(100)
 AS
 BEGIN
     DECLARE @name NVARCHAR(102) = N'%'+ @serviceTypeName + N'%'
-    SELECT ldv.maLDV, ldv.tenLDV
+    SELECT COUNT(*) AS totalLine
     FROM dbo.LoaiDichVu ldv
     WHERE dbo.fuConvertToUnsign(ldv.tenLDV) LIKE dbo.fuConvertToUnsign(@name)
 END
@@ -1622,6 +1679,44 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_getRoomListByRoomTypeNameAndPageNumber
+    @roomTypeName NVARCHAR(100),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH roomTypeShow AS (
+        SELECT p.maPhong, p.tinhTrangP, p.viTri,
+            lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+        FROM dbo.Phong p, dbo.LoaiPhong lp
+        WHERE p.maLP = lp.maLP
+            AND lp.tenLP = @roomTypeName
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM roomTypeShow
+    WHERE maLP NOT IN (
+        SELECT TOP (@exceptRows)
+        maLP
+        FROM roomTypeShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfRoomListByRoomTypeName
+    @roomTypeName NVARCHAR(100)
+AS
+BEGIN
+    SELECT COUNT(*) AS totalLine
+    FROM dbo.Phong p, dbo.LoaiPhong lp
+    WHERE p.maLP = lp.maLP
+        AND lp.tenLP = @roomTypeName
+END
+GO
+
 CREATE PROC USP_getListAvailableRoom
 AS
 BEGIN
@@ -1725,13 +1820,40 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getRoomListByLocation
+CREATE PROC USP_getRoomListByLocationAndPageNumber
+    @location NVARCHAR(100),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @keyword NVARCHAR(102) = N'%' + @location + N'%'
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH roomTypeShow AS (
+        SELECT p.maPhong, p.tinhTrangP, p.viTri,
+            lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+        FROM dbo.Phong p, dbo.LoaiPhong lp
+        WHERE p.maLP = lp.maLP
+            AND dbo.fuConvertToUnsign(p.viTri) LIKE dbo.fuConvertToUnsign(@keyword)
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM roomTypeShow
+    WHERE maLP NOT IN (
+        SELECT TOP (@exceptRows)
+        maLP
+        FROM roomTypeShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfRoomListByLocation
     @location NVARCHAR(100)
 AS
 BEGIN
     DECLARE @keyword NVARCHAR(102) = N'%' + @location + N'%'
-    SELECT p.maPhong, p.tinhTrangP, p.viTri,
-        lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+    SELECT COUNT(*) AS totalLine
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
         AND dbo.fuConvertToUnsign(p.viTri) LIKE dbo.fuConvertToUnsign(@keyword)
@@ -1739,12 +1861,38 @@ END
 GO
 
 --  0 là là còn trống | 1 là đang sử dụng
-CREATE PROC USP_getRoomListByStatus
+CREATE PROC USP_getRoomListByStatusAndPageNumber
+    @roomStatus INT,
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH roomShow AS (
+        SELECT p.maPhong, p.tinhTrangP, p.viTri,
+            lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+        FROM dbo.Phong p, dbo.LoaiPhong lp
+        WHERE p.maLP = lp.maLP
+            AND p.tinhTrangP = @roomStatus
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM roomShow
+    WHERE maPhong NOT IN (
+        SELECT TOP (@exceptRows)
+        maPhong
+        FROM roomShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfRoomListByStatus
     @roomStatus INT
 AS
 BEGIN
-    SELECT p.maPhong, p.tinhTrangP, p.viTri,
-        lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+    SELECT COUNT(*)
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
         AND p.tinhTrangP = @roomStatus

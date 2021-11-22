@@ -142,7 +142,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
      * 
      * @param color {@code Color}: màu cần thay đổi
      */
-    public void setForegroundCustom(Color color) {
+    public void setTextColor(Color color) {
         txt.setForeground(color);
     };
 
@@ -178,7 +178,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
      * 
      * @param font {@code Font}: font cần thay đổi
      */
-    public void setFontCustom(Font font) {
+    public void setTextFont(Font font) {
         txt.setFont(font);
     }
 
@@ -187,7 +187,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
      * 
      * @return {@code String}: ngày được hiển thị
      */
-    public String getValueStr() {
+    public String getValueString() {
         return txt.getText();
     }
 

@@ -290,8 +290,8 @@ public class CustomUI {
 	public void setCustomKDatePicker(kDatePicker dp) {
 		dp.setBackgroundColor(new Color(255, 255, 255, 50));
 		dp.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		dp.setForegroundCustom(Color.white);
+		dp.setTextColor(Color.white);
 		dp.setOpaqueCustom(false);
-		dp.setFontCustom(fontNormal);
+		dp.setTextFont(fontNormal);
 	}
 }

@@ -844,7 +844,7 @@ public class pnDatPhong extends JPanel
 			}
 			handler.characterInputLimit(key, txtServiceName, 100);
 		} else if (o.equals(txtOrderQuantity)) {
-			handler.enterOnlyNumbers(key, txtOrderQuantity, 5);
+			handler.enterOnlyNumbersAndLimitInput(key, txtOrderQuantity, 5);
 		}
 	}
 

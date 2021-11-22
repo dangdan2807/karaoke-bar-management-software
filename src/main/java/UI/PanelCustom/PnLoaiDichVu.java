@@ -9,14 +9,10 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import DAO.LoaiDichVuDAO;
-import DAO.NhanVienDAO;
-import DAO.ValidationData;
+import DAO.*;
 import Event_Handlers.InputEventHandler;
-import UI.fDieuHuong;
-import UI.fQuanTri;
-import entity.LoaiDichVu;
-import entity.NhanVien;
+import UI.*;
+import entity.*;
 
 public class PnLoaiDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
@@ -44,15 +40,18 @@ public class PnLoaiDichVu extends JPanel
 
 	private JTable tblTableServiceType;
 	private DefaultTableModel modelTable;
-	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack, btnNextRight, btnDoubleNextRight, btnNextLeft,
-			btnDoubleNextLeft;
+	private MyButton btnSearch, btnAdd, btnUpdate, btnRefresh, btnBack, btnNextToRight, btnNextToLast;
+	private MyButton btnNextToLeft, btnNextToFirst;
 	private JComboBox<String> cboSearch, cboSearchType;
 	private JLabel lblSearch;
 	private JTextField txtBFieldSearch, txtKeyWord, txtBFieldSearchType, txtServiceTypeID;
 	private JTextField txtServiceTypeName;
+	private PnTextFiledPaging txtPaging;
+
 	private DecimalFormat df = new DecimalFormat("#,###.##");
+	private int lineNumberDisplayed = 10;
 	private NhanVien staffLogin = null;
-	private MyTextField txtIndex;
+	private LoaiDichVuDAO serviceTypeDAO = LoaiDichVuDAO.getInstance();
 
 	public PnLoaiDichVu(NhanVien staff) {
 		this.staffLogin = staff;
@@ -161,14 +160,12 @@ public class PnLoaiDichVu extends JPanel
 
 		txtKeyWord = new JTextField();
 		txtKeyWord.setForeground(Color.WHITE);
-		txtKeyWord.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtKeyWord.setBounds(431, 11, 200, 20);
 		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
 		pnlSearch.add(txtKeyWord);
 
-		// sử dụng trong tương lai
 		cboSearchType = new JComboBox<String>();
 		CustomUI.getInstance().setCustomComboBox(cboSearchType);
 		txtBFieldSearchType = CustomUI.getInstance().setCustomCBoxField(cboSearchType);
@@ -193,8 +190,6 @@ public class PnLoaiDichVu extends JPanel
 		pnlInfo.add(lblServiceTypeName);
 
 		txtServiceTypeName = new JTextField();
-		txtServiceTypeName.setForeground(Color.WHITE);
-		txtServiceTypeName.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtServiceTypeName.setBounds(669, 50, 250, 20);
 		txtServiceTypeName.setToolTipText("Tên loại dịch vụ, không quá 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtServiceTypeName);
@@ -205,7 +200,7 @@ public class PnLoaiDichVu extends JPanel
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
 		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách loại dịch vụ");
-		pnlTable.setBounds(18, 270, 1220, 260);
+		pnlTable.setBounds(18, 270, 1220, 265);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã loại dịch vụ", "Tên loại dịch vụ " };
 		modelTable = new DefaultTableModel(cols, 0) {
@@ -214,42 +209,36 @@ public class PnLoaiDichVu extends JPanel
 				return false;
 			}
 		};
-		tblTableServiceType = new JTable(modelTable);
-		tblTableServiceType.setBackground(new Color(255, 255, 255, 0));
-		tblTableServiceType.setForeground(new Color(255, 255, 255));
-		tblTableServiceType.setRowHeight(21);
-		tblTableServiceType.setFont(new Font("Dialog", Font.PLAIN, 13));
-		tblTableServiceType.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 13));
-		tblTableServiceType.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scrTable = new JScrollPane(tblTableServiceType, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 20, 1200, 230);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
 
+		tblTableServiceType = new JTable(modelTable);
+		CustomUI.getInstance().setCustomTable(tblTableServiceType);
+		tblTableServiceType.setRowHeight(21);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableServiceType);
+		scrTable.setBounds(10, 20, 1200, 235);
+		
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
 
-		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
-		btnNextRight.setBounds(690, 540, 70, 35);
-		pnlMain.add(btnNextRight);
+		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextToRight.setBounds(690, 540, 70, 35);
+		pnlMain.add(btnNextToRight);
 
-		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextRight.setBounds(770, 540, 70, 35);
-		pnlMain.add(btnDoubleNextRight);
+		btnNextToLast = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLast.setBounds(770, 540, 70, 35);
+		pnlMain.add(btnNextToLast);
 
-		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnNextLeft.setBounds(510, 540, 70, 35);
-		pnlMain.add(btnNextLeft);
+		btnNextToLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLeft.setBounds(510, 540, 70, 35);
+		pnlMain.add(btnNextToLeft);
 
-		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextLeft.setBounds(430, 540, 70, 35);
-		pnlMain.add(btnDoubleNextLeft);
+		btnNextToFirst = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToFirst.setBounds(430, 540, 70, 35);
+		pnlMain.add(btnNextToFirst);
 
-		txtIndex = new MyTextField("2222");
-		txtIndex.setBounds(590, 540, 90, 35);
-		pnlMain.add(txtIndex);
+		txtPaging = new PnTextFiledPaging(90, 35);
+		txtPaging.setBounds(590, 540, 90, 35);
+		txtPaging.setTextColor(Color.WHITE);
+		pnlMain.add(txtPaging);
 
 		btnSearch.addMouseListener(this);
 		tblTableServiceType.addMouseListener(this);
@@ -268,6 +257,10 @@ public class PnLoaiDichVu extends JPanel
 		btnRefresh.addActionListener(this);
 		btnSearch.addActionListener(this);
 		btnUpdate.addActionListener(this);
+		btnNextToLast.addActionListener(this);
+		btnNextToLeft.addActionListener(this);
+		btnNextToRight.addActionListener(this);
+		btnNextToFirst.addActionListener(this);
 
 		allLoaded();
 	}
@@ -281,17 +274,17 @@ public class PnLoaiDichVu extends JPanel
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Object object = e.getSource();
-		if (object.equals(btnBack)) {
+		Object o = e.getSource();
+		if (o.equals(btnBack)) {
 			fDieuHuong winNavigation = new fDieuHuong(staffLogin);
 			this.setVisible(false);
 			winNavigation.setVisible(true);
-		} else if (object.equals(btnAdd)) {
+		} else if (o.equals(btnAdd)) {
 			if (validData()) {
 				String message = "";
 				if (validData()) {
 					LoaiDichVu serviceType = getServiceTypeDataInForm();
-					Boolean result = LoaiDichVuDAO.getInstance().insertService(serviceType);
+					Boolean result = serviceTypeDAO.insertService(serviceType);
 					String name = "loại dịch vụ";
 					if (result) {
 						message = "Thêm " + name + " mới thành công";
@@ -311,18 +304,18 @@ public class PnLoaiDichVu extends JPanel
 					}
 				}
 			}
-		} else if (object.equals(btnRefresh)) {
+		} else if (o.equals(btnRefresh)) {
 			txtServiceTypeID.setText("");
 			txtServiceTypeName.setText("");
 			btnUpdate.setEnabledCustom(false);
 			btnAdd.setEnabledCustom(true);
 			removeSelectionInterval();
-		} else if (object.equals(btnSearch)) {
+		} else if (o.equals(btnSearch)) {
 			searchEventUsingBtnSearch();
-		} else if (object.equals(btnUpdate)) {
+		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
 				LoaiDichVu serviceType = getServiceTypeDataInForm();
-				LoaiDichVu serviceTypeOld = LoaiDichVuDAO.getInstance().getServiceTypeById(serviceType.getMaLDV());
+				LoaiDichVu serviceTypeOld = serviceTypeDAO.getServiceTypeById(serviceType.getMaLDV());
 				String message = "";
 				String name = "loại dịch vụ";
 				int selectedRow = tblTableServiceType.getSelectedRow();
@@ -335,7 +328,7 @@ public class PnLoaiDichVu extends JPanel
 					int choose = JOptionPane.showConfirmDialog(this, message, "Xác nhận cập nhật thông tin " + name,
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 					if (choose == JOptionPane.OK_OPTION) {
-						Boolean result = LoaiDichVuDAO.getInstance().updateInfoServiceType(serviceType);
+						Boolean result = serviceTypeDAO.updateInfoServiceType(serviceType);
 						if (result) {
 							message = "Cập nhật thông tin " + name + " thành công";
 							updateRow(selectedRow, serviceType);
@@ -351,6 +344,18 @@ public class PnLoaiDichVu extends JPanel
 					}
 				}
 			}
+		} else if (o.equals(btnNextToLeft)) {
+			txtPaging.subtractOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToRight)) {
+			txtPaging.plusOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToFirst)) {
+			txtPaging.toTheFirstPage();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToLast)) {
+			txtPaging.toTheLastPage();
+			searchEventUsingBtnSearch();
 		}
 	}
 
@@ -358,6 +363,7 @@ public class PnLoaiDichVu extends JPanel
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
 		if (o.equals(cboSearch)) {
+			txtPaging.toTheFirstPage();
 			String searchType = cboSearch.getSelectedItem().toString();
 			txtKeyWord.setText("");
 			if (searchType.equalsIgnoreCase("Tất cả")) {
@@ -464,7 +470,11 @@ public class PnLoaiDichVu extends JPanel
 	 */
 	public void allLoaded() {
 		reSizeColumnTable();
-		loadServiceTypeList(LoaiDichVuDAO.getInstance().getServiceTypeList());
+		int totalLine = serviceTypeDAO.getTotalLineOfServiceTypeList();
+		txtPaging.setCurrentPage(1);
+		txtPaging.setTotalPage(getLastPage(totalLine));
+		ArrayList<LoaiDichVu> serviceTypeList = serviceTypeDAO.getServiceTypeListAndPageNumber(1, lineNumberDisplayed);
+		loadServiceTypeList(serviceTypeList, 1);
 	}
 
 	/**
@@ -473,7 +483,7 @@ public class PnLoaiDichVu extends JPanel
 	 * @return {@code String}: mã dịch vụ mới
 	 */
 	private String createNewServiceTypeID() {
-		String lastStrId = LoaiDichVuDAO.getInstance().getLastServiceTypeID();
+		String lastStrId = serviceTypeDAO.getLastServiceTypeID();
 		String idStr = "LDV";
 		int oldNumberId = 0;
 		if (lastStrId.equalsIgnoreCase("") == false || lastStrId != null) {
@@ -559,11 +569,12 @@ public class PnLoaiDichVu extends JPanel
 	 * Hiển thị danh sách loại dịch vụ
 	 * 
 	 * @param serviceTypeList {@code ArrayList <LoaiDichVu>}: danh sách loại dịch vụ
+	 * @param currentPage  {@code int}: số của trang hiện tại
 	 */
-	private void loadServiceTypeList(ArrayList<LoaiDichVu> serviceTypeList) {
+	private void loadServiceTypeList(ArrayList<LoaiDichVu> serviceTypeList, int currentPage) {
 		modelTable.getDataVector().removeAllElements();
 		modelTable.fireTableDataChanged();
-		int i = 1;
+		int i = 1 + (currentPage - 1) * lineNumberDisplayed;
 		for (LoaiDichVu item : serviceTypeList) {
 			addRow(i++, item);
 		}
@@ -593,8 +604,13 @@ public class PnLoaiDichVu extends JPanel
 	private void searchEventUsingBtnSearch() {
 		ArrayList<LoaiDichVu> serviceTypeList = null;
 		String keyword = txtKeyWord.getText().trim();
-		serviceTypeList = LoaiDichVuDAO.getInstance().getServiceTypeListByName(keyword);
-		loadServiceTypeList(serviceTypeList);
+		int currentPage = txtPaging.getCurrentPage();
+		int totalLine = serviceTypeDAO.getTotalLineOfServiceTypeListByName(keyword);
+
+		serviceTypeList = serviceTypeDAO.getServiceTypeListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+		int lastPage = getLastPage(totalLine);
+		txtPaging.setTotalPage(lastPage);
+		loadServiceTypeList(serviceTypeList, currentPage);
 	}
 
 	/**
@@ -610,5 +626,19 @@ public class PnLoaiDichVu extends JPanel
 	 */
 	public JButton getBtnBack() {
 		return btnBack;
+	}
+
+	/**
+	 * tính số trang của bảng dựa trên tổng số khách hàng tìm được
+	 * 
+	 * @param totalLine {@code int} tổng số khách hàng tìm được
+	 * @return {@code int} số trang
+	 */
+	public int getLastPage(int totalLine) {
+		int lastPage = totalLine / lineNumberDisplayed;
+		if (totalLine % lineNumberDisplayed != 0) {
+			lastPage++;
+		}
+		return lastPage;
 	}
 }

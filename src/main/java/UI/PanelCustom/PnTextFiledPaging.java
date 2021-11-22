@@ -119,7 +119,7 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
         int key = e.getKeyCode();
         InputEventHandler handler = new InputEventHandler();
         if (o.equals(txtPaging)) {
-            handler.enterOnlyNumbers(key, txtPaging, 20);
+            handler.enterOnlyNumbersAndUnLimitInput(key, txtPaging);
         }
     }
 
@@ -128,7 +128,7 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * 
      * @param font {@code Font}: font chữ
      */
-    public void setFontCustom(Font font) {
+    public void setTextFont(Font font) {
         int size = font.getSize();
         int style = font.getStyle();
         this.fontTxt = font.deriveFont(style, size);
@@ -142,7 +142,7 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * 
      * @param color {@code Color}: màu chữ
      */
-    public void setForegroundCustom(Color color) {
+    public void setTextColor(Color color) {
         txtPaging.setForeground(color);
         txtPaging.setCaretColor(color);
         lblPaging.setForeground(color);
@@ -154,7 +154,7 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * 
      * @param color {@code Color}: màu nền
      */
-    public void setBackgroundCustom(Color color) {
+    public void setBackgroundColor(Color color) {
         this.backgroundColor = color;
         this.setBackground(color);
     }
@@ -165,7 +165,22 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
      * @param pageNumber {@code int}: số trang hiện tại
      */
     public void setCurrentPage(int pageNumber) {
+        if (pageNumber < 1) {
+            pageNumber = 1;
+        }
         txtPaging.setText(String.valueOf(pageNumber));
+    }
+
+    /**
+     * Cập nhật tổng số trang
+     * 
+     * @param totalPage {@code int}: tổng số trang
+     */
+    public void setTotalPage(int totalPage) {
+        if (totalPage < 1) {
+            totalPage = 1;
+        }
+        lblPaging.setText(String.valueOf(totalPage));
     }
 
     /**
@@ -178,15 +193,6 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
     }
 
     /**
-     * Cập nhật tổng số trang
-     * 
-     * @param totalPage {@code int}: tổng số trang
-     */
-    public void setTotalPage(int totalPage) {
-        lblPaging.setText(String.valueOf(totalPage));
-    }
-
-    /**
      * Lấy số trang hiện tại
      * 
      * @return {@code int}: số trang hiện tại
@@ -194,19 +200,34 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
     public int getCurrentPage() {
         String currentPageStr = txtPaging.getText();
         String totalPageStr = lblPaging.getText();
+
         if (currentPageStr.equals("")) {
             currentPageStr = "1";
         } else if (currentPageStr.equals("0")) {
             currentPageStr = "1";
         }
-        if(totalPageStr.equals("")){
+
+        if (totalPageStr.equals("")) {
             totalPageStr = "1";
         } else if (totalPageStr.equals("0")) {
             totalPageStr = "1";
         }
-        int currentPage = Integer.parseInt(currentPageStr);
-        int totalPage = Integer.parseInt(totalPageStr);
-        if(currentPage > totalPage){
+
+        int totalPage = 0;
+        try {
+            totalPage = Integer.parseInt(totalPageStr);
+        } catch (Exception e) {
+            totalPage = 1;
+        }
+
+        int currentPage = 0;
+        try {
+            currentPage = Integer.parseInt(currentPageStr);
+        } catch (Exception e) {
+            currentPage = totalPage;
+        }
+
+        if (currentPage > totalPage) {
             currentPage = totalPage;
         } else if (currentPage < 1) {
             currentPage = 1;

@@ -250,8 +250,18 @@ public class test {
             // }
             // System.out.println("Time in 24Hours =" + new
             // SimpleDateFormat("HH:mm").format(date));
-            String d = "123456";
-            System.out.println(d.substring(0, 1));
+            int value1 = 0;
+            int value2 = 0;
+            try {
+                String value1Str = "1";
+                String value2Str = "93476376487364863864876348";
+                value1 = Integer.parseInt(value1Str);
+                value2 = Integer.parseInt(value2Str);
+            } catch (Exception e) {
+
+            }
+            System.out.println(value1);
+            System.out.println(value2);
             break;
         }
 

@@ -11,8 +11,7 @@ import javax.swing.table.*;
 
 import DAO.*;
 import Event_Handlers.InputEventHandler;
-import UI.fDieuHuong;
-import UI.fQuanTri;
+import UI.*;
 import entity.*;
 
 public class PnPhong extends JPanel implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
@@ -43,13 +42,15 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	private JTextField txtLocation, txtBFieldSearch, txtKeyWord, txtBFieldSearchType, txtRoomID;
 	private JTextField txtBFieldRoomStatus, txtBFieldRoomType;
 	private JLabel lblLocation, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnNextRight, btnDoubleNextRight;
-	private MyButton btnNextLeft, btnDoubleNextLeft;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnNextToRight, btnNextToLast;
+	private MyButton btnNextToLeft, btnNextToFirst;
 	private JComboBox<String> cboSearch, cboSearchType, cboRoomType, cboRoomStatus;
 	private PnTextFiledPaging txtPaging;
+	private int lineNumberDisplayed = 10;
 
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
+	private PhongDAO roomDAO = PhongDAO.getInstance();
 
 	public PnPhong(NhanVien staff) {
 		this.staffLogin = staff;
@@ -227,7 +228,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
 		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách phòng");
-		pnlTable.setBounds(18, 270, 1220, 260);
+		pnlTable.setBounds(18, 270, 1220, 265);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã phòng", "Tình trạng ", "Vị trí", "Loại phòng" };
 		modelTableRoom = new DefaultTableModel(cols, 0);
@@ -237,46 +238,43 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 				return false;
 			}
 		};
-		tblTableRoom.setBackground(new Color(255, 255, 255, 0));
-		tblTableRoom.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableRoom);
 		tblTableRoom.setRowHeight(21);
-		tblTableRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tblTableRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tblTableRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scrTable = new JScrollPane(tblTableRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 20, 1200, 230);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableRoom);
+		scrTable.setBounds(10, 20, 1200, 235);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
 
-		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
-		btnNextRight.setBounds(690, 540, 70, 35);
-		pnlMain.add(btnNextRight);
+		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextToRight.setBounds(690, 540, 70, 35);
+		pnlMain.add(btnNextToRight);
 
-		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextRight.setBounds(770, 540, 70, 35);
-		pnlMain.add(btnDoubleNextRight);
+		btnNextToLast = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLast.setBounds(770, 540, 70, 35);
+		pnlMain.add(btnNextToLast);
 
-		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnNextLeft.setBounds(510, 540, 70, 35);
-		pnlMain.add(btnNextLeft);
+		btnNextToLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLeft.setBounds(510, 540, 70, 35);
+		pnlMain.add(btnNextToLeft);
 
-		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextLeft.setBounds(430, 540, 70, 35);
-		pnlMain.add(btnDoubleNextLeft);
+		btnNextToFirst = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToFirst.setBounds(430, 540, 70, 35);
+		pnlMain.add(btnNextToFirst);
 
 		txtPaging = new PnTextFiledPaging(90, 35);
 		txtPaging.setBounds(590, 540, 90, 35);
+		txtPaging.setTextColor(Color.WHITE);
 		pnlMain.add(txtPaging);
 
 		btnAdd.addActionListener(this);
 		btnRefresh.addActionListener(this);
 		btnSearch.addActionListener(this);
 		btnUpdate.addActionListener(this);
+		btnNextToLast.addActionListener(this);
+		btnNextToLeft.addActionListener(this);
+		btnNextToRight.addActionListener(this);
+		btnNextToFirst.addActionListener(this);
 
 		tblTableRoom.addMouseListener(this);
 		txtLocation.addMouseListener(this);
@@ -324,7 +322,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 			String message = "";
 			if (validData()) {
 				Phong room = getRoomDataInForm();
-				Boolean insertResult = PhongDAO.getInstance().insertRoom(room);
+				Boolean insertResult = roomDAO.insertRoom(room);
 				String name = "phòng";
 				if (insertResult) {
 					message = "Thêm " + name + " mới thành công";
@@ -344,7 +342,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
 				Phong newRoom = getRoomDataInForm();
-				Phong oldRoomType = PhongDAO.getInstance().getRoomByRoomId(newRoom.getMaPhong());
+				Phong oldRoomType = roomDAO.getRoomByRoomId(newRoom.getMaPhong());
 				String message = "";
 				int selectedRow = tblTableRoom.getSelectedRow();
 				String name = "phòng";
@@ -358,7 +356,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 							"Xác nhận cập nhật thông tin " + name + "", JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
 					if (confirmUpdate == JOptionPane.OK_OPTION) {
-						Boolean updateResult = PhongDAO.getInstance().updateInfoRoom(newRoom);
+						Boolean updateResult = roomDAO.updateInfoRoom(newRoom);
 						if (updateResult) {
 							message = "Cập nhật thông tin " + name + " thành công";
 							updateRow(selectedRow, newRoom);
@@ -375,6 +373,18 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 			}
 		} else if (o.equals(btnSearch)) {
 			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToLeft)) {
+			txtPaging.subtractOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToRight)) {
+			txtPaging.plusOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToFirst)) {
+			txtPaging.toTheFirstPage();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToLast)) {
+			txtPaging.toTheLastPage();
+			searchEventUsingBtnSearch();
 		}
 	}
 
@@ -382,6 +392,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
 		if (o.equals(cboSearch)) {
+			txtPaging.toTheFirstPage();
 			String searchType = cboSearch.getSelectedItem().toString();
 			txtKeyWord.setText("");
 			if (searchType.equalsIgnoreCase("Vị trí") || searchType.equalsIgnoreCase("Tất cả")) {
@@ -535,7 +546,11 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		loadRoomTypeList();
 		String roomStatusStr = cboRoomStatus.getSelectedItem().toString().trim();
 		int roomStatus = roomStatusStr.equalsIgnoreCase("Phòng Trống") ? 0 : 1;
-		loadRoomList(PhongDAO.getInstance().getRoomListByStatus(roomStatus));
+		int totalLine = roomDAO.getTotalLineOfRoomListByStatus(roomStatus);
+		txtPaging.setCurrentPage(1);
+		txtPaging.setTotalPage(getLastPage(totalLine));
+		ArrayList<Phong> roomList = roomDAO.getRoomListByStatusAndPageNumber(roomStatus, 1, lineNumberDisplayed);
+		loadRoomList(roomList, 1);
 	}
 
 	/**
@@ -558,7 +573,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	 * @return {@code String}: mã nhân viên mới
 	 */
 	private String createNewRoomID() {
-		String lastStaffId = PhongDAO.getInstance().getLastRoomID();
+		String lastStaffId = roomDAO.getLastRoomID();
 		String idStr = "P";
 		int oldNumberStaffID = 0;
 		if (lastStaffId.equalsIgnoreCase("") == false || lastStaffId != null) {
@@ -637,12 +652,13 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	/**
 	 * Hiển thị danh sách phòng
 	 * 
-	 * @param roomList {@code ArrayList<Phong>}: danh sách phòng
+	 * @param roomList    {@code ArrayList<Phong>}: danh sách phòng
+	 * @param currentPage {@code int}: số của trang hiện tại
 	 */
-	private void loadRoomList(ArrayList<Phong> roomList) {
+	private void loadRoomList(ArrayList<Phong> roomList, int currentPage) {
 		modelTableRoom.getDataVector().removeAllElements();
 		modelTableRoom.fireTableDataChanged();
-		int i = 1;
+		int i = 1 + (currentPage - 1) * lineNumberDisplayed;
 		for (Phong item : roomList) {
 			addRow(i++, item);
 		}
@@ -684,6 +700,9 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		ArrayList<Phong> roomList = null;
 		Object keyword = "";
+		String keywordStr = "";
+		int currentPage = txtPaging.getCurrentPage();
+		int totalLine = 1;
 		switch (searchTypeName) {
 		case "Tình trạng phòng":
 			keyword = cboSearchType.getSelectedItem();
@@ -691,21 +710,28 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 			if (keyword != null) {
 				roomStatus = keyword.toString().equalsIgnoreCase("Phòng trống") ? 0 : 1;
 			}
-			roomList = PhongDAO.getInstance().getRoomListByStatus(roomStatus);
+			totalLine = roomDAO.getTotalLineOfRoomListByStatus(roomStatus);
+			roomList = roomDAO.getRoomListByStatusAndPageNumber(roomStatus, currentPage, lineNumberDisplayed);
 			break;
 		case "Loại phòng":
 			keyword = cboSearchType.getSelectedItem();
 			if (keyword == null) {
 				keyword = cboRoomStatus.getItemAt(0).toString().trim();
 			}
-			roomList = PhongDAO.getInstance().getRoomListByRoomTypeName(keyword.toString());
+			keywordStr = keyword.toString();
+			totalLine = roomDAO.getTotalLineOfRoomListByRoomTypeName(keywordStr);
+			roomList = roomDAO.getRoomListByRoomTypeNameAndPageNumber(keywordStr, currentPage, lineNumberDisplayed);
 			break;
 		case "Vị trí":
 			keyword = txtKeyWord.getText().trim();
-			roomList = PhongDAO.getInstance().getRoomListByLocation(keyword.toString());
+			keywordStr = keyword.toString();
+			totalLine = roomDAO.getTotalLineOfRoomListByLocation(keywordStr);
+			roomList = roomDAO.getRoomListByLocationAndPageNumber(keywordStr, currentPage, lineNumberDisplayed);
 			break;
 		}
-		loadRoomList(roomList);
+		int lastPage = getLastPage(totalLine);
+		txtPaging.setTotalPage(lastPage);
+		loadRoomList(roomList, currentPage);
 	}
 
 	/**
@@ -721,5 +747,19 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	 */
 	public JButton getBtnBack() {
 		return btnBack;
+	}
+
+	/**
+	 * tính số trang của bảng dựa trên tổng số khách hàng tìm được
+	 * 
+	 * @param totalLine {@code int} tổng số khách hàng tìm được
+	 * @return {@code int} số trang
+	 */
+	public int getLastPage(int totalLine) {
+		int lastPage = totalLine / lineNumberDisplayed;
+		if (totalLine % lineNumberDisplayed != 0) {
+			lastPage++;
+		}
+		return lastPage;
 	}
 }

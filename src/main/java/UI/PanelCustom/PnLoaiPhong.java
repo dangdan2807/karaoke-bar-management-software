@@ -9,14 +9,10 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import DAO.LoaiPhongDAO;
-import DAO.NhanVienDAO;
-import DAO.ValidationData;
+import DAO.*;
 import Event_Handlers.InputEventHandler;
-import UI.fDieuHuong;
-import UI.fQuanTri;
-import entity.LoaiPhong;
-import entity.NhanVien;
+import UI.*;
+import entity.*;
 
 /**
  * Giao diện quản lý loại phòng của phần mềm
@@ -66,6 +62,7 @@ public class PnLoaiPhong extends JPanel
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 	private int lineNumberDisplayed = 10;
+	private LoaiPhongDAO roomTypeDAO = LoaiPhongDAO.getInstance();
 
 	public PnLoaiPhong(NhanVien staff) {
 		this.staffLogin = staff;
@@ -212,8 +209,7 @@ public class PnLoaiPhong extends JPanel
 		lblRoomTypeID.setBounds(60, 35, 120, 20);
 		pnlInfo.add(lblRoomTypeID);
 
-		txtRoomTypeId = new JTextField();
-		txtRoomTypeId.setText("");
+		txtRoomTypeId = new JTextField("");
 		txtRoomTypeId.setBounds(185, 35, 180, 20);
 		txtRoomTypeId.setToolTipText("Mã loại phòng");
 		CustomUI.getInstance().setCustomTextFieldOff(txtRoomTypeId);
@@ -224,8 +220,7 @@ public class PnLoaiPhong extends JPanel
 		lblRoomTypeName.setBounds(520, 35, 120, 20);
 		pnlInfo.add(lblRoomTypeName);
 
-		txtRoomTypeName = new JTextField();
-		txtRoomTypeName.setText("");
+		txtRoomTypeName = new JTextField("");
 		txtRoomTypeName.setBounds(639, 35, 180, 20);
 		txtRoomTypeName.setToolTipText("Tên loại phòng");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtRoomTypeName);
@@ -238,6 +233,7 @@ public class PnLoaiPhong extends JPanel
 		pnlTable.setBounds(18, 270, 1220, 260);
 		pnlTable.setOpaque(false);
 		String[] cols = { "STT", "Mã loại phòng", "Tên loại phòng ", "Sức chứa", "Giá tiền" };
+
 		modelTableTypeRoom = new DefaultTableModel(cols, 0) {
 			@Override
 			public boolean isCellEditable(int i, int i1) {
@@ -245,18 +241,10 @@ public class PnLoaiPhong extends JPanel
 			}
 		};
 		tblTableTypeRoom = new JTable(modelTableTypeRoom);
-		tblTableTypeRoom.setBackground(new Color(255, 255, 255, 0));
-		tblTableTypeRoom.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableTypeRoom);
 		tblTableTypeRoom.setRowHeight(21);
-		tblTableTypeRoom.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tblTableTypeRoom.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tblTableTypeRoom.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		JScrollPane scrTable = new JScrollPane(tblTableTypeRoom, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrTable.getViewport().setBackground(Color.WHITE);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableTypeRoom);
 		scrTable.setBounds(10, 20, 1200, 230);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
@@ -279,7 +267,7 @@ public class PnLoaiPhong extends JPanel
 
 		txtPaging = new PnTextFiledPaging(90, 35);
 		txtPaging.setBounds(590, 540, 90, 35);
-		txtPaging.setForegroundCustom(Color.WHITE);
+		txtPaging.setTextColor(Color.WHITE);
 		pnlMain.add(txtPaging);
 
 		btnAdd.addActionListener(this);
@@ -326,7 +314,7 @@ public class PnLoaiPhong extends JPanel
 			String message = "";
 			if (validData()) {
 				LoaiPhong roomType = getRoomTypeDataInForm();
-				Boolean insertResult = LoaiPhongDAO.getInstance().insertRoomType(roomType);
+				Boolean insertResult = roomTypeDAO.insertRoomType(roomType);
 				String name = "loại phòng";
 				if (insertResult) {
 					message = "Thêm " + name + " mới thành công";
@@ -358,7 +346,7 @@ public class PnLoaiPhong extends JPanel
 		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
 				LoaiPhong newRoomType = getRoomTypeDataInForm();
-				LoaiPhong oldRoomType = LoaiPhongDAO.getInstance().getRoomTypeById(newRoomType.getMaLP());
+				LoaiPhong oldRoomType = roomTypeDAO.getRoomTypeById(newRoomType.getMaLP());
 				String message = "";
 				int selectedRow = tblTableTypeRoom.getSelectedRow();
 				String name = "loại phòng";
@@ -372,7 +360,7 @@ public class PnLoaiPhong extends JPanel
 							"Xác nhận cập nhật thông tin " + name + "", JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
 					if (confirmUpdate == JOptionPane.OK_OPTION) {
-						Boolean updateResult = LoaiPhongDAO.getInstance().updateInfoRoomType(newRoomType);
+						Boolean updateResult = roomTypeDAO.updateInfoRoomType(newRoomType);
 						if (updateResult) {
 							message = "Cập nhật thông tin " + name + " thành công";
 							updateRow(selectedRow, newRoomType);
@@ -494,13 +482,10 @@ public class PnLoaiPhong extends JPanel
 	public void keyPressed(KeyEvent e) {
 		Object o = e.getSource();
 		int key = e.getKeyCode();
-		if (o.equals(((JSpinner.DefaultEditor) spnSearchPrice.getEditor()).getTextField()) || o.equals(txtKeyWord)) {
+		if (o.equals(txtKeyWord) || o.equals(((JSpinner.DefaultEditor) spnSearchPrice.getEditor()).getTextField())
+				|| o.equals(txtPaging.getTextFieldPaging())) {
 			if (key == KeyEvent.VK_ENTER)
 				searchEventUsingBtnSearch();
-		} else if (o.equals(txtPaging.getTextFieldPaging())) {
-			if (key == KeyEvent.VK_ENTER) {
-				searchEventUsingBtnSearch();
-			}
 		}
 	}
 
@@ -549,12 +534,11 @@ public class PnLoaiPhong extends JPanel
 	 */
 	public void allLoaded() {
 		reSizeColumnTable();
-		int totalLine = LoaiPhongDAO.getInstance().getTotalLineOfRoomTypeList();
-		txtPaging.setTotalPage(getLastPage(totalLine));
+		int totalLine = roomTypeDAO.getTotalLineOfRoomTypeList();
 		txtPaging.setCurrentPage(1);
-		ArrayList<LoaiPhong> roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListAndPageNumber(1,
-				lineNumberDisplayed);
-		loadRoomTypeList(roomTypeList);
+		txtPaging.setTotalPage(getLastPage(totalLine));
+		ArrayList<LoaiPhong> roomTypeList = roomTypeDAO.getRoomTypeListAndPageNumber(1, lineNumberDisplayed);
+		loadRoomTypeList(roomTypeList, 1);
 	}
 
 	/**
@@ -577,7 +561,7 @@ public class PnLoaiPhong extends JPanel
 	 * @return {@code String}: mã dịch vụ mới
 	 */
 	private String createNewServiceTypeID() {
-		String lastStrId = LoaiPhongDAO.getInstance().getLastRoomTypeId();
+		String lastStrId = roomTypeDAO.getLastRoomTypeId();
 		String idStr = "LP";
 		int oldNumberId = 0;
 		if (lastStrId.equalsIgnoreCase("") == false || lastStrId != null) {
@@ -654,11 +638,12 @@ public class PnLoaiPhong extends JPanel
 	 * Hiển thị danh sách loại phòng
 	 * 
 	 * @param roomTypeList {@code ArrayList<DichVu>}: danh sách loại phòng
+	 * @param currentPage  {@code int}: số của trang hiện tại
 	 */
-	private void loadRoomTypeList(ArrayList<LoaiPhong> roomTypeList) {
+	private void loadRoomTypeList(ArrayList<LoaiPhong> roomTypeList, int currentPage) {
 		modelTableTypeRoom.getDataVector().removeAllElements();
 		modelTableTypeRoom.fireTableDataChanged();
-		int i = 1;
+		int i = 1 + (currentPage - 1) * lineNumberDisplayed;
 		for (LoaiPhong item : roomTypeList) {
 			addRow(i++, item);
 		}
@@ -695,22 +680,20 @@ public class PnLoaiPhong extends JPanel
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
 		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			totalLine = LoaiPhongDAO.getInstance().getTotalLineOfRoomTypeList();
-			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListAndPageNumber(currentPage, lineNumberDisplayed);
+			totalLine = roomTypeDAO.getTotalLineOfRoomTypeList();
+			roomTypeList = roomTypeDAO.getRoomTypeListAndPageNumber(currentPage, lineNumberDisplayed);
 		} else if (searchTypeName.equalsIgnoreCase("Tên loại phòng")) {
 			keyword = txtKeyWord.getText().trim();
-			totalLine = LoaiPhongDAO.getInstance().getTotalLineOfRoomTypeListByName(keyword);
-			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByNameAndPageNumber(keyword, currentPage,
-					lineNumberDisplayed);
+			totalLine = roomTypeDAO.getTotalLineOfRoomTypeListByName(keyword);
+			roomTypeList = roomTypeDAO.getRoomTypeListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
 		} else if (searchTypeName.equalsIgnoreCase("Giá cho thuê")) {
 			String priceStr = spnSearchPrice.getValue().toString().replaceAll("\\.[0]+$", "");
-			totalLine = LoaiPhongDAO.getInstance().getTotalLineOfRoomTypeListByPrice(priceStr);
-			roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeListByPriceAndPageNumber(priceStr, currentPage,
-					lineNumberDisplayed);
+			totalLine = roomTypeDAO.getTotalLineOfRoomTypeListByPrice(priceStr);
+			roomTypeList = roomTypeDAO.getRoomTypeListByPriceAndPageNumber(priceStr, currentPage, lineNumberDisplayed);
 		}
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);
-		loadRoomTypeList(roomTypeList);
+		loadRoomTypeList(roomTypeList, currentPage);
 	}
 
 	/**
