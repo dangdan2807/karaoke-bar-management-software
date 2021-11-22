@@ -6,6 +6,17 @@ import java.util.ArrayList;
 
 import entity.HoaDon;
 
+/**
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code HoaDon}
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 09/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ */
 public class HoaDonDAO {
     private static HoaDonDAO instance = new HoaDonDAO();
     public static int UNPAID = 0;

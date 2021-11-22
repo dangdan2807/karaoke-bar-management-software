@@ -14,6 +14,17 @@ import Event_Handlers.InputEventHandler;
 import UI.*;
 import entity.*;
 
+/**
+ * Giao diện quản lý phòng
+ * <p>
+ * Người tham gia thiết kế: Võ Minh Hiếu
+ * <p>
+ * Ngày tạo: 24/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ */
 public class PnPhong extends JPanel implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**
 	 * 
@@ -46,8 +57,8 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	private MyButton btnNextToLeft, btnNextToFirst;
 	private JComboBox<String> cboSearch, cboSearchType, cboRoomType, cboRoomStatus;
 	private PnTextFiledPaging txtPaging;
+	
 	private int lineNumberDisplayed = 10;
-
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 	private PhongDAO roomDAO = PhongDAO.getInstance();

@@ -16,6 +16,17 @@ import UI.fDieuHuong;
 import UI.fQuanTri;
 import entity.*;
 
+/**
+ * Giao diện quản lý hóa đơn của phần mềm
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 01/11/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm phân trang cho phần mềm
+ */
 public class PnHoaDon extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**

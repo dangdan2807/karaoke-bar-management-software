@@ -5,6 +5,17 @@ import java.awt.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.border.*;
 
+/**
+ * Lớp này dùng để thiết lập các thuộc tính cho các thành phần trong giao diện
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh, Võ Minh Hiếu
+ * <p>
+ * Ngày tạo: 01/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm giải thích lớp javadoc
+ */
 public class CustomUI {
 	private static CustomUI instance = new CustomUI();
 	public static Border BORDER_BOTTOM_FOCUS = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#FCA120"));

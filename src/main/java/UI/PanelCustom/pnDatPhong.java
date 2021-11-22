@@ -17,6 +17,17 @@ import Event_Handlers.InputEventHandler;
 import UI.fQuanLyDatPhong;
 import entity.*;
 
+/**
+ * Giao diện quản lý đặt phòng
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 01/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm phân trang cho phần mềm
+ */
 public class pnDatPhong extends JPanel
 		implements ActionListener, MouseListener, ItemListener, ChangeListener, FocusListener, KeyListener {
 	/**

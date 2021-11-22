@@ -15,6 +15,14 @@ import java.sql.Date;
 
 /**
  * {@code kDatePicker} dùng để tạo 1 {@code JPanel} có thể dùng để chọn ngày
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 23/04/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm giải thích lớp javadoc
  */
 public class kDatePicker extends JPanel implements ActionListener, MouseListener {
 	private JTextField txt;

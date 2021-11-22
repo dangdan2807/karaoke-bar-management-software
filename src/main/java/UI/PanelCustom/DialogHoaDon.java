@@ -15,6 +15,17 @@ import javax.swing.table.*;
 import DAO.*;
 import entity.*;
 
+/**
+ * Giao diện thanh toán hóa đơn
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 03/11/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm giải thích lớp javadoc
+ */
 public class DialogHoaDon extends JDialog implements ActionListener {
 	private JTextField txtBillId, txtStaffName, txtCustomerName, txtRoomId, txtRoomTypeName, txtRoomPrice, txtStartTime,
 			txtEndTime, txtUsedTime, txtTotalPriceService, txtTotalPriceRoom, txtVAT, txtTotalPriceBill;

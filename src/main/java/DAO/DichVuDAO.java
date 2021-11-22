@@ -5,6 +5,17 @@ import java.util.ArrayList;
 
 import entity.DichVu;
 
+/**
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code DichVu}
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu
+ * <p>
+ * Ngày tạo: 11/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ */
 public class DichVuDAO {
     private static DichVuDAO instance = new DichVuDAO();
 
@@ -21,7 +32,7 @@ public class DichVuDAO {
      */
     public ArrayList<DichVu> getServiceList() {
         ArrayList<DichVu> dataList = new ArrayList<DichVu>();
-        String query = "{CALL USP_getServiceList}";
+        String query = "{CALL USP_getServiceList()}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {
@@ -31,6 +42,41 @@ public class DichVuDAO {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    /**
+     * Lấy danh sách tất cả dịch vụ theo trang
+     * 
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<DichVu>}: danh sách dịch vụ
+     */
+    public ArrayList<DichVu> getServiceListAndPageNumber(int currentPage, int lineNumberDisplayed) {
+        ArrayList<DichVu> dataList = new ArrayList<DichVu>();
+        String query = "{CALL USP_getServiceListAndPageNumber( ? , ? )}";
+        Object[] parameter = new Object[] { currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new DichVu(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy số lượng dịch vụ
+     * 
+     * @return {@code int}: số lượng dịch vụ
+     */
+    public int getTotalLineOfServiceList() {
+        String query = "{CALL USP_getTotalLineOfServiceList()}";
+        Object[] parameter = new Object[] {};
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**
@@ -55,6 +101,44 @@ public class DichVuDAO {
     }
 
     /**
+     * Lấy danh sách dịch vụ theo tên loại dịch vụ
+     * 
+     * @param serviceTypeName     {@code String}: tên loại dịch vụ
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<DichVu>}: danh sách dịch vụ
+     */
+    public ArrayList<DichVu> getServiceListByServiceTypeNameAndPageNumber(String serviceTypeName, int currentPage,
+            int lineNumberDisplayed) {
+        ArrayList<DichVu> dataList = new ArrayList<DichVu>();
+        String query = "{CALL USP_getServiceListByServiceTypeNameAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { serviceTypeName, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new DichVu(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy số lượng loại phòng
+     * 
+     * @param serviceTypeName {@code String}: tên loại dịch vụ
+     * @return {@code int}: số lượng loại phòng
+     */
+    public int getTotalLineOfServiceListByServiceTypeName(String serviceTypeName) {
+        String query = "{CALL USP_getTotalLineOfServiceListByServiceTypeName( ? )}";
+        Object[] parameter = new Object[] { serviceTypeName };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
+
+    /**
      * Lấy danh sách dịch vụ theo tên dịch vụ
      * 
      * @param serviceName {@code String}: tên dịch vụ
@@ -73,6 +157,44 @@ public class DichVuDAO {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    /**
+     * Lấy danh sách dịch vụ theo tên dịch vụ và số trang
+     * 
+     * @param serviceName         {@code String}: tên dịch vụ
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<DichVu>}: danh sách dịch vụ
+     */
+    public ArrayList<DichVu> getServiceListByNameAndPageNumber(String serviceName, int currentPage,
+            int lineNumberDisplayed) {
+        ArrayList<DichVu> dataList = new ArrayList<DichVu>();
+        String query = "{CALL USP_getServiceListByNameAndPageNumber( ? , ? , ? )}";
+        Object[] parameter = new Object[] { serviceName, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        try {
+            while (rs.next()) {
+                dataList.add(new DichVu(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy số lượng loại phòng
+     * 
+     * @param serviceName {@code String}: tên dịch vụ
+     * @return {@code int}: số lượng loại phòng
+     */
+    public int getTotalLineOfServiceListByName(String serviceName) {
+        String query = "{CALL USP_getTotalLineOfServiceListByName( ? )}";
+        Object[] parameter = new Object[] { serviceName };
+        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**

@@ -8,7 +8,7 @@ import entity.LoaiPhong;
 /**
  * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code LoaiPhong}
  * <p>
- * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu, Huỳnh Tuấn Anh
+ * Người tham gia thiết kế: Võ Minh Hiếu
  * <p>
  * Ngày tạo: 03/10/2021
  * <p>
@@ -32,7 +32,7 @@ public class LoaiPhongDAO {
      */
     public ArrayList<LoaiPhong> getRoomTypeList() {
         ArrayList<LoaiPhong> dataList = new ArrayList<LoaiPhong>();
-        String query = "{CALL USP_getRoomTypeList}";
+        String query = "{CALL USP_getRoomTypeList()}";
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {

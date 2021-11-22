@@ -11,6 +11,17 @@ import entity.NhanVien;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code CTDichVu}
+ * <p>
+ * Người tham gia thiết kế: Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 13/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ */
 public class fDieuHuong extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 8033841194327699528L;

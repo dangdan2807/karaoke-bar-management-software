@@ -5,6 +5,17 @@ import java.sql.SQLException;
 
 import entity.TaiKhoan;
 
+/**
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code TaiKhoan}
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 02/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm, sửa các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
+ */
 public class TaiKhoanDAO {
     private static TaiKhoanDAO instance = new TaiKhoanDAO();
 

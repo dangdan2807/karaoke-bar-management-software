@@ -6,6 +6,14 @@ import javax.swing.JTextField;
 /**
  * Lớp này sử dụng để kiểm tra dữ liệu nhập vào của người dùng và giới hạn số
  * lượng nhập vào
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 16/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm giải thích lớp javadoc
  */
 public class InputEventHandler {
 

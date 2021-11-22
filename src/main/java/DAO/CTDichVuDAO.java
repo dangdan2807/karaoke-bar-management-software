@@ -7,14 +7,9 @@ import entity.CTDichVu;
 import entity.DichVu;
 
 /**
- * Thêm, sửa, đọc dữ liệu từ database:
- * <ul>
- * <li>{@code java.sql.Date} sang {@code java.util.Date}</li>
- * <li>{@code java.sql.Date} sang {@code String}</li>
- * <li>{@code java.sql.Timestamp} sang {@code String}</li>
- * </ul>
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code CTDichVu}
  * <p>
- * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
+ * Người tham gia thiết kế: Phạm Đăng Đan
  * <p>
  * Ngày tạo: 13/10/2021
  * <p>

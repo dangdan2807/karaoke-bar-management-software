@@ -14,13 +14,24 @@ import java.text.DecimalFormat;
 
 import javax.swing.border.TitledBorder;
 
+/**
+ * Giao diện cập nhật thông tin cá nhân của người dùng đăng nhập vào hệ thống
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 13/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ */
 public class fThongTinCaNhan extends JDialog
         implements ActionListener, KeyListener, MouseListener, FocusListener, ItemListener {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -7162277696412530687L;
-	private JLabel lblUsername, lblFullName, lblPassword, lblNewPassword, lblReNewPassword, lblGender;
+     * 
+     */
+    private static final long serialVersionUID = -7162277696412530687L;
+    private JLabel lblUsername, lblFullName, lblPassword, lblNewPassword, lblReNewPassword, lblGender;
     private JLabel lblSalary;
     private JTextField txtUsername, txtFullName, txtPassword, txtNewPassword, txtReNewPassword;
     private JTextField txtCMND, txtPhoneNumber, txtPosition, txtSalary, txtEmpID;
@@ -246,7 +257,7 @@ public class fThongTinCaNhan extends JDialog
         txtReNewPassword.setBounds(153, 125, 250, 25);
         CustomUI.getInstance().setCustomTextFieldOff(txtReNewPassword);
         pnlPasswordInfo.add(txtReNewPassword);
-        
+
         btnUpdate = new MyButton(130, 35, "Đổi thông tin", gra, updateInfoIcon.getImage(), 30, 19);
         btnUpdate.setBounds(790, 415, 130, 35);
         pnlMain.add(btnUpdate);
@@ -300,7 +311,7 @@ public class fThongTinCaNhan extends JDialog
 
     @Override
     public void keyPressed(KeyEvent e) {
-        
+
     }
 
     @Override
@@ -594,6 +605,11 @@ public class fThongTinCaNhan extends JDialog
         }
     }
 
+    /**
+     * Lấy thông tin nhân viên đang đăng nhập
+     * 
+     * @return
+     */
     public NhanVien getNewStaffInfo() {
         return staffLogin;
     }

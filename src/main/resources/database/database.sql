@@ -551,14 +551,6 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getAccountList
-AS
-BEGIN
-    SELECT tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
-    FROM dbo.TaiKhoan tk
-END
-GO
-
 
 -- loại dịch vụ
 CREATE PROC USP_getServiceTypeList
@@ -743,6 +735,46 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_getServiceListByNameAndPageNumber
+    @serviceName NVARCHAR(100),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @keyword NVARCHAR(102) = N'%' + @serviceName + N'%'
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH serviceShow AS (
+        SELECT dv.maDichVu, dv.tenDichVu, dv.giaBan, dv.soLuongTon,
+            ldv.maLDV, ldv.tenLDV
+        FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
+        WHERE dv.maLDV = ldv.maLDV
+            AND dbo.fuConvertToUnsign(dv.tenDichVu) LIKE dbo.fuConvertToUnsign(@keyword)
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM serviceShow
+    WHERE maDichVu NOT IN (
+        SELECT TOP (@exceptRows)
+        maDichVu
+        FROM serviceShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfServiceListByName
+    @serviceName NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @keyword NVARCHAR(102) = N'%' + @serviceName + N'%'
+    SELECT COUNT(*) AS totalLine
+    FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
+    WHERE dv.maLDV = ldv.maLDV
+        AND dbo.fuConvertToUnsign(dv.tenDichVu) LIKE dbo.fuConvertToUnsign(@keyword)
+END
+GO
+
 CREATE PROC USP_getServiceListByNameAndServiceTypeName
     @serviceName NVARCHAR(100),
     @serviceTypeName NVARCHAR(100)
@@ -768,12 +800,84 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_getServiceListAndPageNumber
+    @numberPage INT,
+    @lineNumberDisplayed INT    
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH serviceShow AS (
+        SELECT dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
+            ldv.tenLDV, ldv.maLDV
+        FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
+        WHERE dv.maLDV = ldv.maLDV
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM serviceShow
+    WHERE maDichVu NOT IN (
+        SELECT TOP (@exceptRows)
+        maDichVu
+        FROM serviceShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfServiceList
+AS
+BEGIN
+    SELECT COUNT(*) AS totalLine
+    FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
+    WHERE dv.maLDV = ldv.maLDV
+END
+GO
+
 CREATE PROC USP_getServiceListByServiceTypeName
     @ServiceTypeName NVARCHAR(100)
 AS
 BEGIN
     SELECT dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
         ldv.tenLDV, ldv.maLDV
+    FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
+    WHERE dv.maLDV = ldv.maLDV
+        AND ldv.tenLDV = @ServiceTypeName
+END
+GO
+
+CREATE PROC USP_getServiceListByServiceTypeNameAndPageNumber
+    @ServiceTypeName NVARCHAR(100),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    ;WITH serviceShow AS (
+        SELECT dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
+            ldv.tenLDV, ldv.maLDV
+        FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
+        WHERE dv.maLDV = ldv.maLDV
+            AND ldv.tenLDV = @ServiceTypeName
+    )
+
+    SELECT TOP (@selectRows) *
+    FROM serviceShow
+    WHERE maDichVu NOT IN (
+        SELECT TOP (@exceptRows)
+        maDichVu
+        FROM serviceShow
+    )
+END
+GO
+
+CREATE PROC USP_getTotalLineOfServiceListByServiceTypeName
+    @ServiceTypeName NVARCHAR(100)
+AS
+BEGIN
+    SELECT COUNT(*) AS totalLine
     FROM dbo.DichVu dv, dbo.LoaiDichVu ldv
     WHERE dv.maLDV = ldv.maLDV
         AND ldv.tenLDV = @ServiceTypeName
@@ -1230,8 +1334,6 @@ BEGIN
         AND dv.maLDV = ldv.maLDV
 END
 GO
--- exec USP_getServiceDetailListByBillId 'HD2021100100001'
--- go
 
 CREATE PROC USP_getServiceDetailByBillIdAndServiceId
     @billId VARCHAR(15),
@@ -1486,9 +1588,9 @@ BEGIN
     WHERE kh.maKH NOT IN (
         -- lấy danh sách mã khách hàng chưa thanh toán hóa đơn
         SELECT hd.maKH
-    FROM dbo.HoaDon hd, dbo.KhachHang kh1
-    WHERE hd.maKH = kh1.maKH
-        AND hd.tinhTrangHD = 0
+        FROM dbo.HoaDon hd, dbo.KhachHang kh1
+        WHERE hd.maKH = kh1.maKH
+            AND hd.tinhTrangHD = 0
     )
     GROUP BY kh.maKH, kh.hoTen, kh.cmnd, kh.gioiTinh, 
     kh.ngaySinh, kh.soDienThoai

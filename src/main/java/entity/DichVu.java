@@ -3,6 +3,17 @@ package entity;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Lớp dịch vụ
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 01/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm javadoc
+ */
 public class DichVu {
 	private String maDichVu;
 	private String tenDichVu;

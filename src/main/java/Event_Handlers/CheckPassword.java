@@ -6,9 +6,17 @@ import javax.swing.JOptionPane;
 import UI.fDieuHuong;
 
 /**
- * {@code CheckPassword} là 1 {@code Thread} dùng để kiểm tra mật khẩu khi
- * đăng nhập có phải và mặc định hay không và sẽ xuất thông báo yêu cầu đổi mật
- * khẩu mới
+ * {@code CheckPassword} là 1 {@code Thread} dùng để kiểm tra mật khẩu khi đăng
+ * nhập có phải và mặc định hay không và sẽ xuất thông báo yêu cầu đổi mật khẩu
+ * mới
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 05/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm giải thích lớp javadoc
  */
 public class CheckPassword extends Thread {
     private String password;
@@ -22,10 +30,10 @@ public class CheckPassword extends Thread {
      * yêu cầu đổi mật khẩu và sẽ vô hiệu xóa 2 nút quản trị và quá lý đặt phòng
      * </p>
      * 
-     * @param password {@code String}: mật khẩu cần kiểm tra
-     * @param btnFirst     {@code JButton}: nhận sự kiện
-     * @param btnSecond     {@code JButton}: nhận sự kiện
-     * @param frame    {@code fDieuHuong}: nhận sự kiện
+     * @param password  {@code String}: mật khẩu cần kiểm tra
+     * @param btnFirst  {@code JButton}: nhận sự kiện
+     * @param btnSecond {@code JButton}: nhận sự kiện
+     * @param frame     {@code fDieuHuong}: nhận sự kiện
      */
     public CheckPassword(String password, JButton btnFirst, JButton btnSecond, fDieuHuong frame) {
         this.password = password;

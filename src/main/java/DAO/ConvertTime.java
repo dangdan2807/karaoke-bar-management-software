@@ -6,7 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * Chuyển đổi thời gian:
+ * Lớp này dùng để chuyển đổi thời gian sang các định dạng khác nhau:
  * <ul>
  * <li>{@code java.sql.Date} sang {@code java.util.Date}</li>
  * <li>{@code java.sql.Date} sang {@code String}</li>

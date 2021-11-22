@@ -10,12 +10,23 @@ import DAO.NhanVienDAO;
 import UI.PanelCustom.*;
 import entity.NhanVien;
 
+/**
+ * Khung của giao diện quản trị hệ thống
+ * <p>
+ * Người tham gia thiết kế: Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 10/10/2021
+ * <p>
+ * Lần cập nhật cuối: 14/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ */
 public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 2840284348303179625L;
-	private static fQuanTri instance;
+     * 
+     */
+    private static final long serialVersionUID = 2840284348303179625L;
+    private static fQuanTri instance;
     private JButton btnBackStaff, btnBackCustomer, btnBackRoomType, btnBackRoom, btnBackServiceType;
     private JButton btnBackService, btnBackBill;
 

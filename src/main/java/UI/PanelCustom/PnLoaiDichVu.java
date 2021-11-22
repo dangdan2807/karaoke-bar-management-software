@@ -14,6 +14,17 @@ import Event_Handlers.InputEventHandler;
 import UI.*;
 import entity.*;
 
+/**
+ * Giao diện quản lý loại dịch vụ của phần mềm
+ * <p>
+ * Người tham gia thiết kế: Võ Minh Hiếu
+ * <p>
+ * Ngày tạo: 17/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm phân trang cho phần mềm
+ */
 public class PnLoaiDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**

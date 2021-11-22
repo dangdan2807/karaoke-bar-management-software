@@ -12,6 +12,17 @@ import DAO.KhachHangDAO;
 import Event_Handlers.InputEventHandler;
 import entity.KhachHang;
 
+/**
+ * Giao diện chọn khách hàng
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 30/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm giải thích lớp javadoc
+ */
 public class DialogChonKhachHang extends JDialog
 		implements ActionListener, MouseListener, FocusListener, KeyListener, ItemListener {
 	/**

@@ -10,6 +10,17 @@ import DAO.NhanVienDAO;
 import UI.PanelCustom.*;
 import entity.NhanVien;
 
+/**
+ * khung giao diện quản lý đặt phòng
+ * <p>
+ * Người tham gia thiết kế: Võ Minh Hiếu
+ * <p>
+ * Ngày tạo: 11/10/2021
+ * <p>
+ * Lần cập nhật cuối: 17/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ */
 public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeListener {
     /**
 	 * 

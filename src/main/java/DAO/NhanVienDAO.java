@@ -10,7 +10,7 @@ import entity.TaiKhoan;
 /**
  * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code NhanVien}
  * <p>
- * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
  * <p>
  * Ngày tạo: 04/10/2021
  * <p>

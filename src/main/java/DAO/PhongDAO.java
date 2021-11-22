@@ -5,6 +5,17 @@ import java.util.*;
 
 import entity.Phong;
 
+/**
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code Phong}
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 10/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm, sửa các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
+ */
 public class PhongDAO {
     private static PhongDAO instance = new PhongDAO();
     public static int ROOM_WIDTH = 90;
@@ -24,7 +35,7 @@ public class PhongDAO {
      * @return {@code ArrayList<Phong>}: danh sách phòng
      */
     public ArrayList<Phong> getRoomList() {
-        String query = "{CALL USP_getRoomList}";
+        String query = "{CALL USP_getRoomList()}";
         ArrayList<Phong> dataList = new ArrayList<Phong>();
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
@@ -127,7 +138,7 @@ public class PhongDAO {
      * @return {@code ArrayList<Phong>}: danh sách phòng trống
      */
     public ArrayList<Phong> getListAvailableRoom() {
-        String query = "{CALL USP_getListAvailableRoom}";
+        String query = "{CALL USP_getListAvailableRoom()}";
         Object[] parameter = new Object[] {};
         ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
         ArrayList<Phong> dsPhong = new ArrayList<Phong>();
