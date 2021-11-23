@@ -46,10 +46,28 @@ public class PnHoaDon extends JPanel
 
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon nextIconRight = new ImageIcon(
+			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(
+			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(
+			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 
 	private NhanVien staffLogin = null;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
+
+	private MyButton btnNextToRight;
+
+	private MyButton btnNextToLast;
+
+	private MyButton btnNextToLeft;
+
+	private MyButton btnNextToFirst;
+
+	private PnTextFiledPaging txtPaging;
 
 	public PnHoaDon(NhanVien staff) {
 		this.staffLogin = staff;
@@ -104,7 +122,7 @@ public class PnHoaDon extends JPanel
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(10, 41, 1238, 110);
+		pnlInfo.setBounds(10, 41, 1238, 100);
 		pnlMain.add(pnlInfo);
 
 		dpToDate = new kDatePicker(250, 20);
@@ -139,7 +157,7 @@ public class PnHoaDon extends JPanel
 
 		btnRefresh = new MyButton(100, 35, "Làm mới", gra, CustomUI.REFRESH_ICON.getImage(), 27, 19, 6, 5);
 		btnRefresh.setToolTipText("Làm mới form");
-		btnRefresh.setBounds(1116, 70, 100, 35);
+		btnRefresh.setBounds(1116, 60, 100, 35);
 		pnlInfo.add(btnRefresh);
 
 		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(), 26, 19, 5, 5);
@@ -149,7 +167,7 @@ public class PnHoaDon extends JPanel
 
 		lblSearch = new JLabel("Lọc theo:");
 		CustomUI.getInstance().setCustomLabel(lblSearch);
-		lblSearch.setBounds(187, 70, 105, 20);
+		lblSearch.setBounds(187, 60, 105, 20);
 		pnlInfo.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
@@ -160,16 +178,16 @@ public class PnHoaDon extends JPanel
 		cboSearch.addItem("Mã hóa đơn");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
-		cboSearch.setBounds(290, 70, 250, 20);
+		cboSearch.setBounds(290, 60, 250, 20);
 		pnlInfo.add(cboSearch);
 
 		JLabel lpKeyWord = new JLabel("Từ khóa:");
 		CustomUI.getInstance().setCustomLabel(lpKeyWord);
-		lpKeyWord.setBounds(642, 70, 105, 20);
+		lpKeyWord.setBounds(642, 60, 105, 20);
 		pnlInfo.add(lpKeyWord);
 
 		txtKeyWord = new JTextField();
-		txtKeyWord.setBounds(747, 70, 250, 20);
+		txtKeyWord.setBounds(747, 60, 250, 20);
 		txtKeyWord.setForeground(Color.WHITE);
 		txtKeyWord.setFont(new Font("Dialog", Font.PLAIN, 14));
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
@@ -186,8 +204,16 @@ public class PnHoaDon extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(8, 151, 1240, 434);
+		pnlTable.setBounds(8, 130, 1240, 440);
 		pnlTable.setOpaque(false);
+		
+		
+		JPanel pnlTableBill = new JPanel(null);
+		pnlTableBill.setLayout(null);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTableBill, "Danh sách hóa đơn");
+		pnlTableBill.setOpaque(false);
+		pnlTableBill.setBounds(10, 0, 1220, 182);
+		pnlTable.add(pnlTableBill);
 
 		String[] colsTableBill = { "STT", "Mã hóa đơn", "Ngày đặt ", "Ngày trả", "Mã phòng", "Tên khách hàng",
 				"Tên Nhân viên", "Tổng tiền" };
@@ -199,12 +225,41 @@ public class PnHoaDon extends JPanel
 		};
 
 		tblTableBill = new JTable(modelTableBill);
+		tblTableBill.setLocation(620, 0);
 		tblTableBill.setRowHeight(21);
 		CustomUI.getInstance().setCustomTable(tblTableBill);
 		JScrollPane scrTableBill = CustomUI.getInstance().setCustomScrollPane(tblTableBill);
-		scrTableBill.setBounds(10, 35, 1220, 182);
-		pnlTable.add(scrTableBill);
+		scrTableBill.setBounds(10, 20, 1200, 152);
+		pnlTableBill.add(scrTableBill);
 
+		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextToRight.setBounds(690, 185, 70, 35);
+		pnlTable.add(btnNextToRight);
+
+		btnNextToLast = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLast.setBounds(770, 185, 70, 35);
+		pnlTable.add(btnNextToLast);
+
+		btnNextToLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLeft.setBounds(510, 185, 70, 35);
+		pnlTable.add(btnNextToLeft);
+
+		btnNextToFirst = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToFirst.setBounds(430, 185, 70, 35);
+		pnlTable.add(btnNextToFirst);
+
+		txtPaging = new PnTextFiledPaging(90, 35);
+		txtPaging.setBounds(590, 185, 91, 36);
+		txtPaging.setTextColor(Color.WHITE);
+		pnlTable.add(txtPaging);
+		
+		JPanel pnlTableBillInfo = new JPanel(null);
+		pnlTableBillInfo.setLayout(null);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTableBillInfo, "Chi tiết hóa đơn");
+		pnlTableBillInfo.setOpaque(false);
+		pnlTableBillInfo.setBounds(10, 220, 1220, 220);
+		pnlTable.add(pnlTableBillInfo);
+		
 		String[] colsBillInfo = { "STT", "Tên dịch vụ ", "Số lượng đặt", "Giá tiền", "Thành tiền" };
 		modelTableBillInfo = new DefaultTableModel(colsBillInfo, 0) {
 			@Override
@@ -213,11 +268,12 @@ public class PnHoaDon extends JPanel
 			}
 		};
 		tblTableBillInfo = new JTable(modelTableBillInfo);
+		tblTableBillInfo.setLocation(620, 0);
 		tblTableBillInfo.setRowHeight(21);
 		CustomUI.getInstance().setCustomTable(tblTableBillInfo);
 		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPane(tblTableBillInfo);
-		scrTableBillInfo.setBounds(10, 252, 1220, 175);
-		pnlTable.add(scrTableBillInfo);
+		scrTableBillInfo.setBounds(10, 20, 1200, 190);
+		pnlTableBillInfo.add(scrTableBillInfo);
 		pnlMain.add(pnlTable);
 
 		btnRefresh.addActionListener(this);

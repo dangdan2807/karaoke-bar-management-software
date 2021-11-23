@@ -43,25 +43,41 @@ public class DialogChonKhachHang extends JDialog
 
 	private ImageIcon logoApp = CustomUI.LOGO_APP;
 	private ImageIcon background = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(810, 450, Image.SCALE_SMOOTH));
+			CustomUI.BACKGROUND.getImage().getScaledInstance(900, 500, Image.SCALE_SMOOTH));
 	private ImageIcon searchIcon = new ImageIcon(
 			CustomUI.SEARCH_ICON.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
 	private ImageIcon manIcon = new ImageIcon(
 			CustomUI.MAN_ICON.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 	private ImageIcon womanIcon = new ImageIcon(
 			CustomUI.WOMAN_ICON.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
-
+	private ImageIcon nextIconRight = new ImageIcon(
+			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(
+			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(
+			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon addIcon = new ImageIcon(
+			CustomUI.ADD_ICON.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+	
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
 	private KhachHang khachHang = null;
+	private MyButton btnNextToRight;
+	private MyButton btnNextToLast;
+	private MyButton btnNextToLeft;
+	private MyButton btnNextToFirst;
+	private PnTextFiledPaging txtNumPage;
+	private MyButton btnAddCustomerNew;
 
 	/**
 	 * Constructor mặc định không tham số
 	 */
 	public DialogChonKhachHang() {
 		setTitle("Chọn khách hàng");
-		setSize(805, 450);
+		setSize(900, 500);
 		setIconImage(logoApp.getImage());
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -83,7 +99,7 @@ public class DialogChonKhachHang extends JDialog
 				g2.drawImage(bgMain, 0, 0, null);
 			}
 		};
-		pnlMain.setBounds(0, 0, 800, 400);
+		pnlMain.setBounds(0, 0, 900, 450);
 		pnlMain.setBackground(Color.WHITE);
 		getContentPane().add(pnlMain);
 		pnlMain.setLayout(null);
@@ -93,7 +109,7 @@ public class DialogChonKhachHang extends JDialog
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Danh sách khách hàng ", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		pnlCustomerList.setBackground(Color.WHITE);
-		pnlCustomerList.setBounds(5, 0, 500, 378);
+		pnlCustomerList.setBounds(5, 20, 500, 378);
 		pnlCustomerList.setOpaque(false);
 		pnlMain.add(pnlCustomerList);
 		pnlCustomerList.setLayout(new BorderLayout(0, 0));
@@ -120,90 +136,90 @@ public class DialogChonKhachHang extends JDialog
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Thông tin khách hàng ", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		pnlCustomerInfo.setBackground(Color.WHITE);
-		pnlCustomerInfo.setBounds(510, 119, 274, 197);
+		pnlCustomerInfo.setBounds(510, 170, 365, 220);
 		pnlMain.add(pnlCustomerInfo);
 		pnlCustomerInfo.setLayout(null);
 		pnlCustomerInfo.setOpaque(false);
 
 		JLabel lblCustomerId = new JLabel("Mã KH: ");
 		CustomUI.getInstance().setCustomLabel(lblCustomerId);
-		lblCustomerId.setBounds(10, 24, 83, 14);
+		lblCustomerId.setBounds(20, 29, 110, 15);
 		pnlCustomerInfo.add(lblCustomerId);
 
 		txtCustomerId = new JTextField();
-		txtCustomerId.setBounds(105, 21, 159, 20);
+		txtCustomerId.setBounds(145, 25, 200, 20);
 		txtCustomerId.setColumns(10);
 		CustomUI.getInstance().setCustomTextFieldOff(txtCustomerId);
 		pnlCustomerInfo.add(txtCustomerId);
 
 		JLabel lblCustomerName = new JLabel("Tên KH: ");
 		CustomUI.getInstance().setCustomLabel(lblCustomerName);
-		lblCustomerName.setBounds(10, 52, 83, 14);
+		lblCustomerName.setBounds(20, 57, 110, 15);
 		pnlCustomerInfo.add(lblCustomerName);
 
 		txtCustomerName = new JTextField();
-		txtCustomerName.setBounds(105, 49, 159, 20);
+		txtCustomerName.setBounds(145, 52, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtCustomerName);
 		pnlCustomerInfo.add(txtCustomerName);
 
 		JLabel lblCMND = new JLabel("CMNN/CCCD: ");
 		CustomUI.getInstance().setCustomLabel(lblCMND);
-		lblCMND.setBounds(10, 80, 95, 14);
+		lblCMND.setBounds(20, 85, 110, 15);
 		pnlCustomerInfo.add(lblCMND);
 
 		txtCMND = new JTextField();
-		txtCMND.setBounds(105, 77, 159, 20);
+		txtCMND.setBounds(145, 80, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtCMND);
 		pnlCustomerInfo.add(txtCMND);
 
 		JLabel lblPhoneNumber = new JLabel("SDT: ");
 		CustomUI.getInstance().setCustomLabel(lblPhoneNumber);
-		lblPhoneNumber.setBounds(10, 108, 83, 14);
+		lblPhoneNumber.setBounds(20, 113, 110, 15);
 		pnlCustomerInfo.add(lblPhoneNumber);
 
 		txtPhoneNumber = new JTextField();
-		txtPhoneNumber.setBounds(105, 105, 159, 20);
+		txtPhoneNumber.setBounds(145, 108, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtPhoneNumber);
 		pnlCustomerInfo.add(txtPhoneNumber);
 
 		JLabel lblNgaySinh = new JLabel("Ngày sinh: ");
 		CustomUI.getInstance().setCustomLabel(lblNgaySinh);
-		lblNgaySinh.setBounds(10, 136, 83, 14);
+		lblNgaySinh.setBounds(20, 141, 110, 15);
 		pnlCustomerInfo.add(lblNgaySinh);
 
 		txtBirthDay = new JTextField();
-		txtBirthDay.setBounds(105, 133, 159, 20);
+		txtBirthDay.setBounds(145, 136, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtBirthDay);
 		pnlCustomerInfo.add(txtBirthDay);
 
 		JLabel lblGender = new JLabel("Giới tính: ");
 		CustomUI.getInstance().setCustomLabel(lblGender);
-		lblGender.setBounds(10, 164, 83, 14);
+		lblGender.setBounds(20, 168, 110, 14);
 		pnlCustomerInfo.add(lblGender);
 
 		txtGender = new JTextField();
 		txtGender.setColumns(10);
-		txtGender.setBounds(105, 161, 159, 20);
+		txtGender.setBounds(145, 165, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtGender);
 		pnlCustomerInfo.add(txtGender);
 
 		JPanel pnlSearch = new JPanel();
 		pnlSearch.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
-				"Thông tin khách hàng ", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
+				"Tìm khách hàng ", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		pnlSearch.setBackground(Color.WHITE);
-		pnlSearch.setBounds(510, 0, 274, 116);
+		pnlSearch.setBounds(510, 20, 365, 130);
 		pnlSearch.setOpaque(false);
 		pnlMain.add(pnlSearch);
 		pnlSearch.setLayout(null);
 
 		JLabel lblSearchType = new JLabel("Lọc theo: ");
 		CustomUI.getInstance().setCustomLabel(lblSearchType);
-		lblSearchType.setBounds(10, 23, 77, 14);
+		lblSearchType.setBounds(20, 23, 110, 14);
 		pnlSearch.add(lblSearchType);
 
 		cboSearch = new JComboBox<String>();
-		cboSearch.setBounds(97, 21, 167, 20);
+		cboSearch.setBounds(145, 21, 200, 20);
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên Khách hàng");
 		cboSearch.addItem("CMND/CCCD");
@@ -214,26 +230,56 @@ public class DialogChonKhachHang extends JDialog
 
 		JLabel lblSearch = new JLabel("Từ khóa: ");
 		CustomUI.getInstance().setCustomLabel(lblSearch);
-		lblSearch.setBounds(10, 57, 77, 14);
+		lblSearch.setBounds(20, 60, 110, 14);
 		pnlSearch.add(lblSearch);
 
 		txtKeyword = new JTextField();
-		txtKeyword.setBounds(97, 54, 167, 20);
+		txtKeyword.setBounds(145, 54, 200, 20);
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyword);
 		pnlSearch.add(txtKeyword);
 
 		btnSearch = new MyButton(150, 30, "Tìm khách hàng", new Dimension(100, 17), searchIcon.getImage(),
 				new Dimension(16, 18), gra);
 		((MyButton) btnSearch).setFontCustom(new Font("Dialog", Font.BOLD, 13));
-		btnSearch.setBounds(62, 80, 150, 30);
+		btnSearch.setBounds(107, 85, 150, 30);
 		pnlSearch.add(btnSearch);
+		
+		btnAddCustomerNew = new MyButton(150, 30, "Thêm khách mới", new Dimension(103, 17), addIcon.getImage(),
+				new Dimension(18, 18), gra);
+		((MyButton) btnAddCustomerNew).setFontCustom(new Font("Dialog", Font.BOLD, 13));
+		btnAddCustomerNew.setBounds(530, 410, 150, 30);
+		pnlMain.add(btnAddCustomerNew);
 
-		btnChooseCustomer = new MyButton(150, 30, "Chọn khách hàng", new Dimension(115, 17), null, new Dimension(0, 0),
+		btnChooseCustomer = new MyButton(150, 30, "Chọn khách hàng", new Dimension(112, 17), null, new Dimension(0, 0),
 				gra);
 		((MyButton) btnChooseCustomer).setFontCustom(new Font("Dialog", Font.BOLD, 13));
-		btnChooseCustomer.setBounds(572, 323, 150, 30);
+		btnChooseCustomer.setBounds(707, 410, 150, 30);
 		pnlMain.add(btnChooseCustomer);
 
+		
+		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextToRight.setBounds(305, 405, 70, 35);
+		pnlMain.add(btnNextToRight);
+
+		btnNextToLast = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLast.setBounds(385, 405, 70, 35);
+		pnlMain.add(btnNextToLast);
+
+		btnNextToLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLeft.setBounds(125, 405, 70, 35);
+		pnlMain.add(btnNextToLeft);
+
+		btnNextToFirst = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToFirst.setBounds(45, 405, 70, 35);
+		pnlMain.add(btnNextToFirst);
+
+		txtNumPage = new PnTextFiledPaging(90, 35);
+		txtNumPage.setTextColor(Color.white);
+		txtNumPage.setBounds(205, 405, 90, 35);
+		pnlMain.add(txtNumPage);
+		
+		
+		
 		btnChooseCustomer.addActionListener(this);
 		btnSearch.addActionListener(this);
 
