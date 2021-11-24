@@ -1,11 +1,14 @@
 package UI;
 
 import javax.swing.*;
+
+import DAO.Impl.NhanVienDAOImpl;
+import DAO.Impl.TaiKhoanDAOImpl;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.rmi.RemoteException;
 
-import DAO.NhanVienDAO;
-import DAO.TaiKhoanDAO;
 import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.MyButton;
 import entity.NhanVien;
@@ -37,7 +40,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 			CustomUI.LOGIN_ICON.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 
 	private GradientPaint gra = new GradientPaint(0, 0, Color.decode("#900a9c"), 250, 0, Color.decode("#00cccb"));
-	TaiKhoanDAO taiKhoanDAO = TaiKhoanDAO.getInstance();
+	TaiKhoanDAOImpl taiKhoanDAO = TaiKhoanDAOImpl.getInstance();
 
 	/**
 	 * Constructor form đăng nhập
@@ -160,14 +163,23 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 			// nếu tài khoản, mật khẩu hợp lệ và không bị vô hiệu hóa thì đăng nhập thành
 			// công
 			if (loginResult) {
-				NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername(username);
-				// kiểm tra tài khoản có bị vô hiệu hóa hay không
-				if (staff.getTaiKhoan().getTinhTrangTK() == true) {
-					fDieuHuong winDieuHuong = new fDieuHuong(staff);
-					this.setVisible(false);
-					winDieuHuong.setVisible(true);
-				} else {
-					showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
+				NhanVien staff = null;
+				try {
+					staff = NhanVienDAOImpl.getInstance().getStaffByUsername(username);
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
+				}
+				if (staff != null)
+					// kiểm tra tài khoản có bị vô hiệu hóa hay không
+					if (staff.getTaiKhoan().getTinhTrangTK() == true) {
+						fDieuHuong winDieuHuong = new fDieuHuong(staff);
+						this.setVisible(false);
+						winDieuHuong.setVisible(true);
+					} else {
+						showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
+					}
+				else {
+					showMessage("Tài khoản không tồn tại");
 				}
 			} else {
 				showMessage("Sai tài khoản hoặc mật khẩu");
@@ -259,7 +271,12 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	 *         </ul>
 	 */
 	private boolean login(String username, String password) {
-		boolean result = TaiKhoanDAO.getInstance().login(username, password);
+		boolean result = false;
+		try {
+			result = TaiKhoanDAOImpl.getInstance().login(username, password);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 }

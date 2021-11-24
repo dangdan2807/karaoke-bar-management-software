@@ -1,13 +1,13 @@
 USE master
 GO
 
--- Drop DATABASE QuanLyQuanKaraoke
+-- Drop DATABASE QuanLyQuanKaraokeRMI
 -- GO
 
-CREATE DATABASE QuanLyQuanKaraoke
+CREATE DATABASE QuanLyQuanKaraokeRMI
 GO
 
-USE QuanLyQuanKaraoke
+USE QuanLyQuanKaraokeRMI
 GO
 
 
@@ -15,7 +15,7 @@ GO
 CREATE TABLE TaiKhoan
 (
     tenDangNhap VARCHAR(100) NOT NULL PRIMARY KEY,
-    matKhau VARCHAR(100) NOT NULL DEFAULT(N'123456'),
+    matKhau VARCHAR(100) NOT NULL DEFAULT('123456'),
     -- 0. vô hiệu hóa || 1. kích hoạt
     tinhTrangTK BIT NOT NULL DEFAULT(1)
 )
@@ -30,9 +30,9 @@ CREATE TABLE NhanVien
     gioiTinh BIT NOT NULL,
     ngaySinh DATE,
     soDienThoai VARCHAR(10),
-    chucVu NVARCHAR(100) NOT NULL,
-    mucLuong MONEY NOT NULL,
-    trangThaiNV NVARCHAR(100) NULL,
+    chucVu NVARCHAR(100) NOT NULL DEFAULT(N'Nhân Viên'),
+    mucLuong MONEY NOT NULL DEFAULT(0),
+    trangThaiNV NVARCHAR(100) NOT NULL DEFAULT(N'Đang làm'),
 
     taiKhoan VARCHAR(100) NOT NULL,
 
@@ -43,10 +43,10 @@ GO
 CREATE TABLE KhachHang
 (
     maKH VARCHAR(10) NOT NULL PRIMARY KEY,
-    cmnd VARCHAR(12) NOT NULL,
     hoTen NVARCHAR(100) NOT NULL DEFAULT(N''),
-    soDienThoai VARCHAR(10),
     ngaySinh DATE,
+    cmnd VARCHAR(12) NOT NULL,
+    soDienThoai VARCHAR(10),
     -- 0. nam | 1. nữ
     gioiTinh BIT NOT NULL
 )
@@ -58,7 +58,6 @@ CREATE TABLE LoaiDichVu
     tenLDV NVARCHAR(100) NOT NULL DEFAULT(N''),
 )
 GO
-
 
 CREATE TABLE DichVu
 (
@@ -491,7 +490,6 @@ GO
 
 
 -- truy vấn
-
 -- chuyển đổi kí tự có dấu thành không dấu và ngược lại
 CREATE FUNCTION [dbo].[fuConvertToUnsign] ( @strInput NVARCHAR(4000) ) 
 RETURNS NVARCHAR(4000) 
@@ -530,9 +528,10 @@ CREATE PROC USP_Login
     @password NVARCHAR(100)
 AS
 BEGIN
-    SELECT tk.matKhau, tk.tenDangNhap, tk.tinhTrangTK
+    SELECT tk.tenDangNhap,  tk.matKhau, tk.tinhTrangTK
     FROM dbo.TaiKhoan tk
-    WHERE tenDangNhap = @username AND matKhau = @password
+    WHERE tenDangNhap = @username 
+        AND matKhau = @password
 END
 GO
 
@@ -2303,8 +2302,9 @@ CREATE PROC USP_getStaffByUsername
     @tenDangNhap VARCHAR(100)
 AS
 BEGIN
-    SELECT nv.maNhanVien, nv.cmnd AS cmndNV, nv.hoTen AS hoTenNV, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.chucVu, nv.mucLuong, nv.gioiTinh AS gioiTinhNV, nv.trangThaiNV,
+    SELECT nv.maNhanVien, nv.cmnd, nv.hoTen, nv.ngaySinh,
+        nv.soDienThoai, nv.chucVu, nv.mucLuong, nv.gioiTinh, 
+        nv.trangThaiNV, nv.taiKhoan,
         tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
     FROM dbo.TaiKhoan tk, dbo.NhanVien nv
     WHERE tk.tenDangNhap = nv.taiKhoan
@@ -2316,9 +2316,9 @@ CREATE PROC USP_getStaffByBillId
     @billId VARCHAR(15)
 AS
 BEGIN
-    SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
-        nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-        nv.soDienThoai AS sdtNV, nv.trangThaiNV,
+    SELECT nv.chucVu, nv.cmnd, nv.gioiTinh,
+        nv.hoTen, nv.maNhanVien, nv.mucLuong, nv.ngaySinh,
+        nv.soDienThoai, nv.trangThaiNV, nv.taiKhoan,
         tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
     FROM dbo.TaiKhoan tk, dbo.NhanVien nv, dbo.HoaDon hd
     WHERE tk.tenDangNhap = nv.taiKhoan
@@ -2347,13 +2347,13 @@ CREATE PROC USP_getStaffListByWorkingStatusAndPageNumber
     @lineNumberDisplayed INT
 AS
 BEGIN
-    DECLARE @selectRows INT =@lineNumberDisplayed
+    DECLARE @selectRows INT = @lineNumberDisplayed
     DECLARE @exceptRows INT = (@numberPage - 1) *@lineNumberDisplayed
 
     ;WITH staffShow AS (
-        SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
-            nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-            nv.soDienThoai AS sdtNV, nv.trangThaiNV,
+        SELECT nv.chucVu, nv.cmnd, nv.gioiTinh,
+            nv.hoTen, nv.maNhanVien, nv.mucLuong, nv.ngaySinh,
+            nv.soDienThoai, nv.trangThaiNV, nv.taiKhoan,
             tk.tinhTrangTK, tk.tenDangNhap, tk.matKhau
         FROM dbo.NhanVien nv, dbo.TaiKhoan tk
         WHERE nv.taiKhoan = tk.tenDangNhap
@@ -2374,7 +2374,7 @@ CREATE PROC USP_getTotalLineOfStaffListByWorkingStatus
     @workingStatus NVARCHAR(100)
 AS
 BEGIN
-    SELECT COUNT(*)
+    SELECT COUNT(*) as totalLine
     FROM dbo.NhanVien nv, dbo.TaiKhoan tk
     WHERE nv.taiKhoan = tk.tenDangNhap
         AND nv.trangThaiNV = @workingStatus
@@ -2400,7 +2400,7 @@ CREATE PROC USP_insertStaff
     @position NVARCHAR(100),
     @salary MONEY,
     @status NVARCHAR(100),
-    @gender INT,
+    @gender BIT,
     @username VARCHAR(100)
 AS
 BEGIN
@@ -2419,8 +2419,8 @@ BEGIN
 
     IF @isExitsUsername IS NULL
     BEGIN
-        PRINT 0
         ROLLBACK
+        PRINT 0
     END
     ELSE
     BEGIN
@@ -2573,9 +2573,9 @@ BEGIN
     DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
 
     ;WITH staffShow AS (
-        SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
-            nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-            nv.soDienThoai AS sdtNV, nv.trangThaiNV,
+        SELECT nv.chucVu, nv.cmnd , nv.gioiTinh ,
+            nv.hoTen , nv.maNhanVien, nv.mucLuong, nv.ngaySinh ,
+            nv.soDienThoai , nv.trangThaiNV, nv.taiKhoan,
             tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
         FROM dbo.NhanVien nv, dbo.TaiKhoan tk
         WHERE nv.taiKhoan = tk.tenDangNhap
@@ -2614,9 +2614,9 @@ BEGIN
     DECLARE @name NVARCHAR(102) = N'%'+ @fullName + N'%'
 
     ;WITH staffShow AS (
-        SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
-            nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-            nv.soDienThoai AS sdtNV, nv.trangThaiNV,
+        SELECT nv.chucVu, nv.cmnd, nv.gioiTinh,
+            nv.hoTen, nv.maNhanVien, nv.mucLuong, nv.ngaySinh,
+            nv.soDienThoai, nv.trangThaiNV, nv.taiKhoan,
             tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
         FROM dbo.NhanVien nv, dbo.TaiKhoan tk
         WHERE nv.taiKhoan = tk.tenDangNhap
@@ -2656,9 +2656,9 @@ BEGIN
     DECLARE @rePhoneNumber VARCHAR(12) = '%'+ @phoneNumber + '%'
 
     ;WITH staffShow AS (
-        SELECT nv.chucVu, nv.cmnd AS cmndNV, nv.gioiTinh AS gioiTinhNV,
-            nv.hoTen AS hoTenNV, nv.maNhanVien, nv.mucLuong, nv.ngaySinh AS ngaySinhNV,
-            nv.soDienThoai AS sdtNV, nv.trangThaiNV,
+        SELECT nv.chucVu, nv.cmnd, nv.gioiTinh,
+            nv.hoTen, nv.maNhanVien, nv.mucLuong, nv.ngaySinh,
+            nv.soDienThoai, nv.trangThaiNV, nv.taiKhoan,
             tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
         FROM dbo.NhanVien nv, dbo.TaiKhoan tk
         WHERE nv.taiKhoan = tk.tenDangNhap
