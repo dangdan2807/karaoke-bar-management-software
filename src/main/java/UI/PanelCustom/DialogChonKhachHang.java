@@ -60,6 +60,8 @@ public class DialogChonKhachHang extends JDialog
 			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon addIcon = new ImageIcon(
 			CustomUI.ADD_ICON.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+	private ImageIcon chooseIcon = new ImageIcon(
+			CustomUI.CHOOSE_CUSTOMER_ICON.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
 	
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
@@ -238,22 +240,22 @@ public class DialogChonKhachHang extends JDialog
 		CustomUI.getInstance().setCustomTextFieldOff(txtKeyword);
 		pnlSearch.add(txtKeyword);
 
-		btnSearch = new MyButton(150, 30, "Tìm khách hàng", new Dimension(100, 17), searchIcon.getImage(),
-				new Dimension(16, 18), gra);
+		btnSearch = new MyButton(100, 30, "Tìm", new Dimension(25, 17), searchIcon.getImage(),
+				new Dimension(18, 18), gra);
 		((MyButton) btnSearch).setFontCustom(new Font("Dialog", Font.BOLD, 13));
-		btnSearch.setBounds(107, 85, 150, 30);
+		btnSearch.setBounds(132, 85, 100, 30);
 		pnlSearch.add(btnSearch);
 		
-		btnAddCustomerNew = new MyButton(150, 30, "Thêm khách mới", new Dimension(103, 17), addIcon.getImage(),
+		btnAddCustomerNew = new MyButton(100, 30, "Thêm mới", new Dimension(64, 17), addIcon.getImage(),
 				new Dimension(18, 18), gra);
 		((MyButton) btnAddCustomerNew).setFontCustom(new Font("Dialog", Font.BOLD, 13));
-		btnAddCustomerNew.setBounds(530, 410, 150, 30);
+		btnAddCustomerNew.setBounds(560, 410, 100, 30);
 		pnlMain.add(btnAddCustomerNew);
 
-		btnChooseCustomer = new MyButton(150, 30, "Chọn khách hàng", new Dimension(112, 17), null, new Dimension(0, 0),
+		btnChooseCustomer = new MyButton(100, 30, "Chọn", new Dimension(34, 17), chooseIcon.getImage(), new Dimension(18, 18),
 				gra);
 		((MyButton) btnChooseCustomer).setFontCustom(new Font("Dialog", Font.BOLD, 13));
-		btnChooseCustomer.setBounds(707, 410, 150, 30);
+		btnChooseCustomer.setBounds(724, 410, 100, 30);
 		pnlMain.add(btnChooseCustomer);
 
 		
