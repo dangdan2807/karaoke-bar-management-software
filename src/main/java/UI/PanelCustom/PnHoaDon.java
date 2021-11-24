@@ -155,13 +155,13 @@ public class PnHoaDon extends JPanel
 		lblFromDate.setBounds(187, 26, 105, 20);
 		pnlInfo.add(lblFromDate);
 
-		btnRefresh = new MyButton(100, 35, "Làm mới", gra, CustomUI.REFRESH_ICON.getImage(), 27, 19, 6, 5);
-		btnRefresh.setToolTipText("Làm mới form");
-		btnRefresh.setBounds(1116, 60, 100, 35);
+		btnRefresh = new MyButton(150, 35, "Xuất hóa đơn", gra, CustomUI.REFRESH_ICON.getImage(), 40, 19, 6, 5);
+		btnRefresh.setToolTipText("Xuất hóa đơn");
+		btnRefresh.setBounds(1065, 60, 150, 35);
 		pnlInfo.add(btnRefresh);
 
-		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(), 26, 19, 5, 5);
-		btnSearch.setBounds(1116, 20, 100, 35);
+		btnSearch = new MyButton(150, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(), 50, 19, 5, 5);
+		btnSearch.setBounds(1065, 20, 150, 35);
 		btnSearch.setToolTipText("Tìm kiếm thông tin nhân viên theo từ khóa");
 		pnlInfo.add(btnSearch);
 
@@ -257,7 +257,7 @@ public class PnHoaDon extends JPanel
 		pnlTableBillInfo.setLayout(null);
 		CustomUI.getInstance().setBorderTitlePanelTable(pnlTableBillInfo, "Chi tiết hóa đơn");
 		pnlTableBillInfo.setOpaque(false);
-		pnlTableBillInfo.setBounds(10, 220, 1220, 220);
+		pnlTableBillInfo.setBounds(10, 220, 1220, 223);
 		pnlTable.add(pnlTableBillInfo);
 		
 		String[] colsBillInfo = { "STT", "Tên dịch vụ ", "Số lượng đặt", "Giá tiền", "Thành tiền" };
@@ -272,7 +272,7 @@ public class PnHoaDon extends JPanel
 		tblTableBillInfo.setRowHeight(21);
 		CustomUI.getInstance().setCustomTable(tblTableBillInfo);
 		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPane(tblTableBillInfo);
-		scrTableBillInfo.setBounds(10, 20, 1200, 190);
+		scrTableBillInfo.setBounds(10, 20, 1200, 193);
 		pnlTableBillInfo.add(scrTableBillInfo);
 		pnlMain.add(pnlTable);
 
