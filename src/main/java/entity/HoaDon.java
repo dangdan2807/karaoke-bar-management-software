@@ -1,11 +1,12 @@
 package entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
+
+import javax.persistence.*;
 
 /**
  * Lớp hóa đơn
@@ -18,16 +19,39 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * Nội dung cập nhật: thêm javadoc
  */
-public class HoaDon {
+@Entity
+public class HoaDon implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2844505970804194259L;
+
+	@Id
+	@Column(columnDefinition = "VARCHAR(15)")
 	private String maHoaDon;
+
+	@Column(columnDefinition = "DATETIME default getdate()", nullable = false)
 	private Timestamp ngayGioDat;
+
+	@Column(columnDefinition = "DATETIME")
 	private Timestamp ngayGioTra;
+
+	@Column(columnDefinition = "INT default 0", nullable = false)
 	private int tinhTrangHD;
 
+	@ManyToOne
+	@JoinColumn(name = "maNhanVien", nullable = false)
 	private NhanVien nhanVien;
-	private KhachHang khachHang;
+
+	@ManyToOne
+	@JoinColumn(name = "maPhong", nullable = false)
 	private Phong phong;
 
+	@ManyToOne
+	@JoinColumn(name = "maKH", nullable = false)
+	private KhachHang khachHang;
+
+	@OneToMany(mappedBy = "hoaDon")
 	private List<CTDichVu> dsCTDichVu;
 
 	/**
@@ -288,17 +312,6 @@ public class HoaDon {
 	 */
 	public HoaDon() {
 		dsCTDichVu = new ArrayList<CTDichVu>();
-	}
-
-	/**
-	 * Tạo 1 {@code HoaDon} từ kết quả truy vấn nhận được từ cơ sở dữ liệu
-	 * 
-	 * @param rs {@code ResultSet}: kết quả truy vấn từ cơ sở dữ liệu
-	 * @throws SQLException {@code SQLException}: lỗi truy vấn
-	 */
-	public HoaDon(ResultSet rs) throws SQLException {
-		this(rs.getString("maHoaDon"), rs.getTimestamp("ngayGioDat"), rs.getTimestamp("ngayGioTra"),
-				rs.getInt("tinhTrangHD"));
 	}
 
 	@Override

@@ -1,8 +1,10 @@
 package entity;
 
+import java.io.Serializable;
+import java.util.*;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import javax.persistence.*;
 
 /**
  * Lớp nhân viên
@@ -15,18 +17,46 @@ import java.sql.SQLException;
  * <p>
  * Nội dung cập nhật: thêm javadoc
  */
-public class NhanVien {
+@Entity
+public class NhanVien implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6647153255333085766L;
+
+	@Id
+	@Column(columnDefinition = "VARCHAR(10)")
 	private String maNhanVien;
+
+	@Column(columnDefinition = "NVARCHAR(100) default N''", nullable = false)
 	private String hoTen;
+	
+	@Column(columnDefinition = "VARCHAR(12)", nullable = false)
 	private String cmnd;
-	private Date ngaySinh;
-	private String soDienThoai;
+	
+	@Column(columnDefinition = "BIT", nullable = false)
 	private Boolean gioiTinh;
+	
+	@Column(columnDefinition = "DATE")
+	private Date ngaySinh;
+	
+	@Column(columnDefinition = "VARCHAR(10)")
+	private String soDienThoai;
+	
+	@Column(columnDefinition = "NVARCHAR(100) default N'Nhân Viên'", nullable = false)
 	private String chucVu;
+	
+	@Column(columnDefinition = "MONEY default 0", nullable = false)
 	private Double mucLuong;
+	@Column(columnDefinition = "NVARCHAR(100) default N'Đang làm'", nullable = false)
 	private String trangThaiNV;
 
+	@OneToOne
+	@JoinColumn(name = "taiKhoan", nullable = false)
 	private TaiKhoan taiKhoan;
+
+	@OneToMany(mappedBy = "nhanVien", fetch = FetchType.LAZY)
+	private Set<HoaDon> hoaDon;
 
 	/**
 	 * Lấy trạng thái nhân viên
@@ -261,18 +291,6 @@ public class NhanVien {
 	 * Tạo 1 {@code NhanVien} không tham số
 	 */
 	public NhanVien() {
-	}
-
-	/**
-	 * Tạo 1 {@code NhanVien} từ kết quả truy vấn nhận được từ cơ sở dữ liệu
-	 * 
-	 * @param rs {@code ResultSet} kết quả truy vấn
-	 * @throws SQLException {@code SQLException}: lỗi truy vấn
-	 */
-	public NhanVien(ResultSet rs) throws SQLException {
-		this(rs.getString("maNhanVien"), rs.getString("cmndNV"), rs.getString("hoTenNV"), rs.getDate("ngaySinhNV"),
-				rs.getString("sdtNV"), rs.getString("chucVu"), rs.getDouble("mucLuong"), rs.getBoolean("gioiTinhNV"),
-				rs.getString("trangThaiNV"), new TaiKhoan(rs));
 	}
 
 	@Override

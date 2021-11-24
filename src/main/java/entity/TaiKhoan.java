@@ -1,7 +1,9 @@
 package entity;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.io.Serializable;
+
+import javax.persistence.*;
 
 /**
  * Lớp tài khoản nhân viên
@@ -14,10 +16,22 @@ import java.sql.SQLException;
  * <p>
  * Nội dung cập nhật: thêm javadoc
  */
-public class TaiKhoan {
+@Entity
+public class TaiKhoan implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4669986007368687239L;
+	@Id
+	@Column(columnDefinition = "VARCHAR(100)")
 	private String tenDangNhap;
+	@Column(columnDefinition = "VARCHAR(100) default '123456'", nullable = false)
 	private String matKhau;
+	@Column(columnDefinition = "BIT default 1", nullable = false)
 	private Boolean tinhTrangTK;
+
+	@OneToOne(mappedBy = "taiKhoan")
+	private NhanVien nhanVien;
 
 	/**
 	 * Lấy tên đăng nhập
@@ -103,17 +117,6 @@ public class TaiKhoan {
 	 * Tạo 1 {@code TaiKhoan} không tham số
 	 */
 	public TaiKhoan() {
-	}
-
-	/**
-	 * Tạo 1 {@code TaiKhoan} từ kết quả truy vấn nhận được từ cơ sở dữ liệu
-	 * 
-	 * @param rs {@code ResultSet} kết quả truy vấn
-	 * @return {@code TaiKhoan} tài khoản
-	 * @throws SQLException
-	 */
-	public TaiKhoan(ResultSet rs) throws SQLException {
-		this(rs.getString("tenDangNhap"), rs.getString("matKhau"), rs.getBoolean("tinhTrangTK"));
 	}
 
 	@Override

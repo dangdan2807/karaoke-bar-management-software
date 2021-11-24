@@ -1,7 +1,9 @@
 package entity;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.Serializable;
+import java.util.Set;
+
+import javax.persistence.*;
 
 /**
  * Lớp phòng cho thuê
@@ -14,12 +16,29 @@ import java.sql.SQLException;
  * <p>
  * Nội dung cập nhật: thêm javadoc
  */
-public class Phong {
+@Entity
+public class Phong implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1883396537100026926L;
+
+	@Id
+	@Column(columnDefinition = "VARCHAR(5)")
 	private String maPhong;
+
+	@Column(columnDefinition = "INT default 0", nullable = false)
 	private int tinhTrangP;
+
+	@Column(columnDefinition = "NVARCHAR(100) default N''", nullable = false)
 	private String viTri;
 
+	@ManyToOne
+	@JoinColumn(name = "maLP", nullable = false)
 	private LoaiPhong loaiPhong;
+
+	@OneToMany(mappedBy = "phong", fetch = FetchType.LAZY)
+	private Set<HoaDon> hoaDon;
 
 	/**
 	 * Lấy mã phòng
@@ -121,16 +140,6 @@ public class Phong {
 	 * Tạo 1 {@code Phong} không tham số
 	 */
 	public Phong() {
-	}
-
-	/**
-	 * Tạo 1 {@code Phong} từ kết quả truy vấn nhận được từ cơ sở dữ liệu
-	 * 
-	 * @param rs {@code ResultSet} kết quả truy vấn
-	 * @throws SQLException {@code SQLException}: lỗi truy vấn
-	 */
-	public Phong(ResultSet rs) throws SQLException {
-		this(rs.getString("maPhong"), rs.getInt("tinhTrangP"), rs.getString("viTri"), new LoaiPhong(rs));
 	}
 
 	@Override

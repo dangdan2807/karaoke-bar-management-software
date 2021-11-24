@@ -1,7 +1,10 @@
 package entity;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.Serializable;
+import java.util.Set;
+
+import javax.persistence.*;
+
 
 /**
  * Lớp loại phòng
@@ -14,11 +17,28 @@ import java.sql.SQLException;
  * <p>
  * Nội dung cập nhật: thêm javadoc
  */
-public class LoaiPhong {
+@Entity
+public class LoaiPhong implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3527612861880594213L;
+
+	@Id
+	@Column(columnDefinition = "VARCHAR(5)")
 	private String maLP;
+	
+	@Column(columnDefinition = "NVARCHAR(100) default N''", nullable = false)
 	private String tenLP;
+
+	@Column(columnDefinition = "INT default 0 CHECK(sucChua >= 0)", nullable = false)
 	private int sucChua;
+
+	@Column(columnDefinition = "MONEY default 0 CHECK(giaTien >= 0)", nullable = false)
 	private Double giaTien;
+
+	@OneToMany(mappedBy = "loaiPhong", fetch = FetchType.LAZY)
+	private Set<Phong> phong;
 
 	/**
 	 * Lấy mã loại phòng
@@ -120,16 +140,6 @@ public class LoaiPhong {
 	 * Tạo 1 loại phòng không tham số
 	 */
 	public LoaiPhong() {
-	}
-
-	/**
-	 * Tạo 1 loại {@code Phong} từ kết quả truy vấn nhận được từ cơ sở dữ liệu
-	 * 
-	 * @param rs {@code ResultSet}
-	 * @throws SQLException
-	 */
-	public LoaiPhong(ResultSet rs) throws SQLException {
-		this(rs.getString("maLP"), rs.getString("tenLP"), rs.getInt("sucChua"), rs.getDouble("giaTien"));
 	}
 
 	@Override

@@ -1,7 +1,11 @@
 package entity;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
+import javax.persistence.*;
 
 /**
  * Lớp dịch vụ
@@ -14,13 +18,32 @@ import java.sql.SQLException;
  * <p>
  * Nội dung cập nhật: thêm javadoc
  */
-public class DichVu {
+@Entity
+public class DichVu implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1920818359055571615L;
+
+	@Id
+	@Column(columnDefinition = "VARCHAR(6)")
 	private String maDichVu;
+
+	@Column(columnDefinition = "NVARCHAR(100) default N''", nullable = false)
 	private String tenDichVu;
+
+	@Column(columnDefinition = "MONEY default 0 CHECK(giaBan >= 0)", nullable = false)
 	private Double giaBan;
+
+	@Column(columnDefinition = "INT default 0 CHECK(soLuongTon >= 0)", nullable = false)
 	private int soLuongTon;
 
+	@ManyToOne
+	@JoinColumn(name = "maLDV", nullable = false)
 	private LoaiDichVu loaiDV;
+
+	@OneToMany(mappedBy = "dichVu")
+	private List<CTDichVu> dsCTDichVu;
 
 	/**
 	 * Lấy loại dịch vụ của dịch vụ

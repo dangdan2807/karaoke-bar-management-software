@@ -1,7 +1,11 @@
 package entity;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
+
+import javax.persistence.*;
 
 /**
  * Lớp loại dịch vụ
@@ -14,10 +18,21 @@ import java.sql.SQLException;
  * <p>
  * Nội dung cập nhật: thêm javadoc
  */
-public class LoaiDichVu {
+@Entity
+public class LoaiDichVu implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2194057142602248712L;
+	@Id
+	@Column(columnDefinition = "VARCHAR(6)")
 	private String maLDV;
+	@Column(columnDefinition = "NVARCHAR(100) default N''", nullable = false)
 	private String tenLDV;
 
+	@OneToMany(mappedBy = "loaiDV", fetch = FetchType.LAZY)
+	private Set<DichVu> dichVu;
+	
 	/**
 	 * Lấy mã loại dịch vụ
 	 * 

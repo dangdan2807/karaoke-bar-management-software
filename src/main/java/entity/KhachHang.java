@@ -1,8 +1,10 @@
 package entity;
 
+import java.io.Serializable;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Set;
+
+import javax.persistence.*;
 
 /**
  * Lớp khách hàng
@@ -15,13 +17,34 @@ import java.sql.SQLException;
  * <p>
  * Nội dung cập nhật: thêm javadoc
  */
-public class KhachHang {
+@Entity
+public class KhachHang implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2809714085417793383L;
+
+	@Id
+	@Column(columnDefinition = "VARCHAR(10)")
 	private String maKH;
+	
+	@Column(columnDefinition = "NVARCHAR(100) default N''", nullable = false)
 	private String hoTen;
+	
+	@Column(columnDefinition = "DATE")
 	private Date ngaySinh;
+	
+	@Column(columnDefinition = "VARCHAR(12)", nullable = false)
 	private String cmnd;
+
+	@Column(columnDefinition = "VARCHAR(10)")
 	private String soDienThoai;
+
+	@Column(columnDefinition = "BIT", nullable = false)
 	private Boolean gioiTinh;
+
+	@OneToMany(mappedBy = "khachHang", fetch = FetchType.LAZY)
+	private Set<HoaDon> hoaDon;
 
 	/**
 	 * Lấy mã khách hàng đặt phòng
@@ -175,17 +198,6 @@ public class KhachHang {
 	 * Tạo 1 {@code KhachHang} không tham số
 	 */
 	public KhachHang() {
-	}
-
-	/**
-	 * Tạo 1 {@code KhachHang} từ kết quả truy vấn nhận được từ cơ sở dữ liệu
-	 * 
-	 * @param rs {@code ResultSet} kết quả truy vấn
-	 * @throws SQLException
-	 */
-	public KhachHang(ResultSet rs) throws SQLException {
-		this(rs.getString("maKH"), rs.getString("cmndKH"), rs.getString("hoTenKH"), rs.getString("sdtKH"),
-				rs.getDate("ngaySinhKH"), rs.getBoolean("gioiTinhKH"));
 	}
 
 	@Override

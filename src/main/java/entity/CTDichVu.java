@@ -1,7 +1,8 @@
 package entity;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.Serializable;
+
+import javax.persistence.*;
 
 /**
  * Lớp chi tiết dịch vụ
@@ -14,11 +15,29 @@ import java.sql.SQLException;
  * <p>
  * Nội dung cập nhật: thêm javadoc
  */
-public class CTDichVu {
-	private int soLuongDat;
-	private double donGia;
+@Entity
+@IdClass(CTDichVuPK.class)
+public class CTDichVu implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3647809579675358546L;
 
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "maDichVu", columnDefinition = "VARCHAR(6)")
 	private DichVu dichVu;
+
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "maHoaDon", columnDefinition = "VARCHAR(15)")
+	private HoaDon hoaDon;
+
+	@Column(columnDefinition = "INT DEFAULT 1 CHECK(soLuongDat > 0)", nullable = false)
+	private int soLuongDat;
+
+	@Column(columnDefinition = "MONEY DEFAULT 0 CHECK(donGia >= 0)", nullable = false)
+	private double donGia;
 
 	/**
 	 * Lây đơn giá bán ở thời điểm tạo hóa đơn
@@ -91,16 +110,6 @@ public class CTDichVu {
 	 * Tạo 1 {@code CTDichVu} với không tham số
 	 */
 	public CTDichVu() {
-	}
-
-	/**
-	 * Tạo 1 {@code CTDichVu} từ kết quả truy vấn nhận được từ cơ sở dữ liệu
-	 * 
-	 * @param rs {@code ResultSet}: Kết quả truy vấn
-	 * @throws SQLException {@code SQLException}: lỗi truy vấn
-	 */
-	public CTDichVu(ResultSet rs) throws SQLException {
-		this(rs.getInt("soLuongDat"), rs.getDouble("donGia"), new DichVu(rs));
 	}
 
 	@Override
