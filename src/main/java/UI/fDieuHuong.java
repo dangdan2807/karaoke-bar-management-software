@@ -37,7 +37,9 @@ public class fDieuHuong extends JFrame implements ActionListener {
             CustomUI.MANAGER_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
     private ImageIcon logoutIcon = CustomUI.LOGOUT_ICON;
     private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
-            Color.decode("#FAFFD1"));;
+            Color.decode("#FAFFD1"));
+    private JLabel lblNewLabel;
+    private JLabel lbStaffName;;
 
     /**
      * Constructor form điều hướng
@@ -130,6 +132,18 @@ public class fDieuHuong extends JFrame implements ActionListener {
         checkPermission(type);
         CheckPassword t = new CheckPassword(staffLogin.getTaiKhoan().getMatKhau(), btnBookingManagement,
                 btnSystemManagement, this);
+        
+        lblNewLabel = new JLabel("Nhân viên:");
+        lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 15));
+        lblNewLabel.setForeground(Color.WHITE);
+        lblNewLabel.setBounds(20, 0, 80, 30);
+        pnlMain.add(lblNewLabel);
+        
+        lbStaffName = new JLabel("Huỳnh Tuấn Anh");
+        lbStaffName.setForeground(Color.WHITE);
+        lbStaffName.setFont(new Font("Dialog", Font.BOLD, 15));
+        lbStaffName.setBounds(110, 0, 200, 30);
+        pnlMain.add(lbStaffName);
         t.start();
     }
 
