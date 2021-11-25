@@ -2103,10 +2103,10 @@ CREATE PROC USP_getRoomTypeNameById
     @roomId VARCHAR(5)
 AS
 BEGIN
-    SELECT lp.tenLP
+    SELECT TOP 1 lp.tenLP
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
-        AND p.maPhong = @roomId
+        AND p.maLP = @roomId
 END
 GO
 

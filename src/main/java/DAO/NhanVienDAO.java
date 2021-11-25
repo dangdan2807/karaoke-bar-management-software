@@ -6,6 +6,17 @@ import java.util.ArrayList;
 
 import entity.NhanVien;
 
+/**
+ * Lớp interface cửa lớp {@code NhanVienDAO}
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 04/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm, sửa các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
+ */
 public interface NhanVienDAO extends Remote {
     /**
      * Lấy danh sách tất cả nhân viên đang làm việc

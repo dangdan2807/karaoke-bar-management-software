@@ -19,9 +19,9 @@ public interface KhachHangDAO extends Remote {
             throws RemoteException;
 
     /**
-     * Lấy số lượng nhân viên
+     * Lấy số lượng khách hàng
      * 
-     * @return {@code int}: số lượng nhân viên
+     * @return {@code int}: số lượng khách hàng
      * @throws RemoteException Bắt lỗi Remote
      */
     public int getTotalLineOfCustomerList() throws RemoteException;
@@ -43,7 +43,7 @@ public interface KhachHangDAO extends Remote {
      * Lấy số lượng khách hàng dựa theo tên khách hàng
      * 
      * @param customerName {@code String}: tên khách hàng
-     * @return {@code int}: số lượng nhân viên
+     * @return {@code int}: số lượng khách hàng
      * @throws RemoteException Bắt lỗi Remote
      */
     public int getTotalLineOfCustomerListByName(String customerName) throws RemoteException;
@@ -65,7 +65,7 @@ public interface KhachHangDAO extends Remote {
      * Lấy số lượng khách hàng dựa theo số điện thoại
      * 
      * @param phoneNumber {@code String}: số điện thoại của khách hàng
-     * @return {@code int}: số lượng nhân viên
+     * @return {@code int}: số lượng khách hàng
      * @throws RemoteException Bắt lỗi Remote
      */
     public int getTotalLineOfCustomerListByPhoneNumber(String phoneNumber) throws RemoteException;
@@ -180,7 +180,7 @@ public interface KhachHangDAO extends Remote {
      *               <li>{@code true} thì là Nữ</li>
      *               <li>{@code false} thì là Nam</li>
      *               </ul>
-     * @return {@code int}: số lượng nhân viên
+     * @return {@code int}: số lượng khách hàng
      * @throws RemoteException Bắt lỗi Remote
      */
     public int getTotalLineOfCustomerListByGender(boolean gender) throws RemoteException;

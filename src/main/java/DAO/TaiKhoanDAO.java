@@ -5,6 +5,17 @@ import java.rmi.RemoteException;
 
 import entity.TaiKhoan;
 
+/**
+ * interface cho lớp {@code TaiKhoanDAO}
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 02/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm, sửa các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
+ */
 public interface TaiKhoanDAO extends Remote {
     /**
      * kiểm tra thông tin đăng nhập đăng nhập

@@ -82,9 +82,9 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     }
 
     /**
-     * Lấy số lượng nhân viên
+     * Lấy số lượng khách hàng
      * 
-     * @return {@code int}: số lượng nhân viên
+     * @return {@code int}: số lượng khách hàng
      * @throws RemoteException Bắt lỗi Remote
      */
     @Override
@@ -138,7 +138,7 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
      * Lấy số lượng khách hàng dựa theo tên khách hàng
      * 
      * @param customerName {@code String}: tên khách hàng
-     * @return {@code int}: số lượng nhân viên
+     * @return {@code int}: số lượng khách hàng
      * @throws RemoteException Bắt lỗi Remote
      */
     @Override
@@ -192,7 +192,7 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
      * Lấy số lượng khách hàng dựa theo số điện thoại
      * 
      * @param phoneNumber {@code String}: số điện thoại của khách hàng
-     * @return {@code int}: số lượng nhân viên
+     * @return {@code int}: số lượng khách hàng
      * @throws RemoteException Bắt lỗi Remote
      */
     @Override
@@ -477,7 +477,7 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
      *               <li>{@code true} thì là Nữ</li>
      *               <li>{@code false} thì là Nam</li>
      *               </ul>
-     * @return {@code int}: số lượng nhân viên
+     * @return {@code int}: số lượng khách hàng
      * @throws RemoteException Bắt lỗi Remote
      */
     @Override

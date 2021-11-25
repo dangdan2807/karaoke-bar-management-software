@@ -64,12 +64,12 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
     @SuppressWarnings("unchecked")
     public ArrayList<NhanVien> getStaffListByWorkingStatusAndPageNumber(String workingStatus, int currentPage,
             int lineNumberDisplayed) throws RemoteException {
-        ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         String query = "{CALL USP_getStaffListByWorkingStatusAndPageNumber(?, ?, ?)}";
+        ArrayList<NhanVien> dataList = new ArrayList<>();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            staffList = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class).setParameter(1, workingStatus)
+            dataList = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class).setParameter(1, workingStatus)
                     .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
@@ -77,7 +77,7 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
             e.printStackTrace();
         }
         em.close();
-        return staffList;
+        return dataList;
     }
 
     /**
