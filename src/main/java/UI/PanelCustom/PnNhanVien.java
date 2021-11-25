@@ -4,12 +4,15 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.*;
-import Event_Handlers.InputEventHandler;
+import DAO.Impl.NhanVienDAOImpl;
+import DAO.Impl.TaiKhoanDAOImpl;
+import Event_Handlers.*;
 import UI.*;
 import entity.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -69,7 +72,7 @@ public class PnNhanVien extends JPanel
 	private boolean isResetPassword = false;
 	private boolean isInsertStaff = false;
 	private int lineNumberDisplayed = 10;
-	private NhanVienDAO staffDAO = NhanVienDAO.getInstance();
+	private NhanVienDAO staffDAO = NhanVienDAOImpl.getInstance();
 
 	/**
 	 * Constructor form quản lý nhân viên
@@ -447,7 +450,13 @@ public class PnNhanVien extends JPanel
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+			NhanVien staff = null;
+			try {
+				staff = NhanVienDAOImpl.getInstance().getStaffByUsername("phamdangdan");
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			new fQuanTri(staff).setVisible(true);
 		});
 	}
@@ -673,12 +682,17 @@ public class PnNhanVien extends JPanel
 	private void allLoaded() {
 		reSizeColumnTable();
 		String workingStatus = cboSearchType.getSelectedItem().toString().trim();
-		int totalLine = staffDAO.getTotalLineOfStaffListByWorkingStatus(workingStatus);
-		txtPaging.setCurrentPage(1);
-		txtPaging.setTotalPage(getLastPage(totalLine));
-		ArrayList<NhanVien> staffList = staffDAO.getStaffListByWorkingStatusAndPageNumber(workingStatus, 1,
-				lineNumberDisplayed);
-		loadStaffList(staffList, 1);
+		int totalLine = 1;
+		try {
+			totalLine = staffDAO.getTotalLineOfStaffListByWorkingStatus(workingStatus);
+			txtPaging.setCurrentPage(1);
+			txtPaging.setTotalPage(getLastPage(totalLine));
+			ArrayList<NhanVien> staffList = staffDAO.getStaffListByWorkingStatusAndPageNumber(workingStatus, 1,
+					lineNumberDisplayed);
+			loadStaffList(staffList, 1);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -746,7 +760,12 @@ public class PnNhanVien extends JPanel
 				showMessage(txtUsername, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			TaiKhoan account = TaiKhoanDAO.getInstance().getAccountByUsername(username);
+			TaiKhoan account = null;
+			try {
+				account = TaiKhoanDAOImpl.getInstance().getAccountByUsername(username);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 			if (account != null) {
 				message = "Tài khoản đã tồn tại, vui lòng nhập tài khoản khác";
 				showMessage(txtUsername, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
@@ -762,7 +781,12 @@ public class PnNhanVien extends JPanel
 	 * @return {@code String}: mã nhân viên mới
 	 */
 	private String createNewStaffID() {
-		String lastStaffId = staffDAO.getLastStaffID();
+		String lastStaffId = "";
+		try {
+			lastStaffId = staffDAO.getLastStaffID();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		String idStr = "NV";
 		int oldNumberStaffID = 0;
 		if (lastStaffId.equalsIgnoreCase("") == false || lastStaffId != null) {
@@ -803,7 +827,12 @@ public class PnNhanVien extends JPanel
 		if (isResetPassword == true || isInsertStaff == true)
 			account.setMatKhau("123456");
 		else {
-			NhanVien staff = staffDAO.getStaffByUsername(username);
+			NhanVien staff = null;
+			try {
+				staff = staffDAO.getStaffByUsername(username);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 			String password = staff.getTaiKhoan().getMatKhau();
 			account.setMatKhau(password);
 		}
@@ -918,42 +947,48 @@ public class PnNhanVien extends JPanel
 	 * tìm kiếm nhân viên dựa trên điều kiện khi kích hoạt event trên btnSearch
 	 */
 	private void searchEventUsingBtnSearch() {
-		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
-		ArrayList<NhanVien> staffList = null;
-		String keyword = "";
-		int currentPage = txtPaging.getCurrentPage();
-		int totalLine = 1;
-		if (searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
-			keyword = "Đang làm";
-			if (cboSearchType.getSelectedItem() != null) {
-				keyword = cboSearchType.getSelectedItem().toString().trim();
+		try {
+			String searchTypeName = cboSearch.getSelectedItem().toString().trim();
+			ArrayList<NhanVien> staffList = null;
+			String keyword = "";
+			int currentPage = txtPaging.getCurrentPage();
+			int totalLine = 1;
+			if (searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
+				keyword = "Đang làm";
+				if (cboSearchType.getSelectedItem() != null) {
+					keyword = cboSearchType.getSelectedItem().toString().trim();
+				}
+				totalLine = staffDAO.getTotalLineOfStaffListByWorkingStatus(keyword);
+				staffList = staffDAO.getStaffListByWorkingStatusAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
+			} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
+				keyword = txtKeyWord.getText().trim();
+				totalLine = staffDAO.getTotalLineByStaffName(keyword);
+				staffList = staffDAO.getStaffListByStaffNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+			} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
+				keyword = txtKeyWord.getText().trim();
+				if (keyword.matches("^[\\d]{0,10}$")) {
+					totalLine = staffDAO.getTotalLineByPhoneNumber(keyword);
+					staffList = staffDAO.getStaffListByPhoneNumberAndPageNumber(keyword, currentPage,
+							lineNumberDisplayed);
+				} else {
+					String message = "Sổ điện phải phải là số, không được quá 10 số";
+					showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+				}
+			} else if (searchTypeName.equalsIgnoreCase("Chức vụ")) {
+				keyword = "Nhân viên";
+				if (cboSearchType.getSelectedItem() != null) {
+					keyword = cboSearchType.getSelectedItem().toString().trim();
+				}
+				totalLine = staffDAO.getTotalLineByPosition(keyword);
+				staffList = staffDAO.getStaffListByPositionAndPageNumber(keyword, currentPage, lineNumberDisplayed);
 			}
-			totalLine = staffDAO.getTotalLineOfStaffListByWorkingStatus(keyword);
-			staffList = staffDAO.getStaffListByWorkingStatusAndPageNumber(keyword, currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
-			keyword = txtKeyWord.getText().trim();
-			totalLine = staffDAO.getTotalLineByStaffName(keyword);
-			staffList = staffDAO.getStaffListByStaffNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-			keyword = txtKeyWord.getText().trim();
-			if (keyword.matches("^[\\d]{0,10}$")) {
-				totalLine = staffDAO.getTotalLineByPhoneNumber(keyword);
-				staffList = staffDAO.getStaffListByPhoneNumberAndPageNumber(keyword, currentPage, lineNumberDisplayed);
-			} else {
-				String message = "Sổ điện phải phải là số, không được quá 10 số";
-				showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
-			}
-		} else if (searchTypeName.equalsIgnoreCase("Chức vụ")) {
-			keyword = "Nhân viên";
-			if (cboSearchType.getSelectedItem() != null) {
-				keyword = cboSearchType.getSelectedItem().toString().trim();
-			}
-			totalLine = staffDAO.getTotalLineByPosition(keyword);
-			staffList = staffDAO.getStaffListByPositionAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+			int lastPage = getLastPage(totalLine);
+			txtPaging.setTotalPage(lastPage);
+			loadStaffList(staffList, currentPage);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		int lastPage = getLastPage(totalLine);
-		txtPaging.setTotalPage(lastPage);
-		loadStaffList(staffList, currentPage);
 	}
 
 	/**
@@ -993,7 +1028,12 @@ public class PnNhanVien extends JPanel
 		if (validData()) {
 			NhanVien staff = getStaffDataInForm();
 			if (staff.getChucVu().equalsIgnoreCase("chủ quán")) {
-				Boolean result = staffDAO.insertStaff(staff);
+				Boolean result = false;
+				try {
+					result = staffDAO.insertStaff(staff);
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
 				String name = "nhân viên";
 				if (result) {
 					message = "Thêm " + name + " mới thành công";
@@ -1029,7 +1069,12 @@ public class PnNhanVien extends JPanel
 			boolean isUpdateStatus = isManager && staff.getTrangThaiNV().equalsIgnoreCase("Đã nghỉ");
 			boolean isUpdateManager = isManager && staff.getChucVu().equalsIgnoreCase("Nhân viên");
 			if (!isUpdateStatus && !isUpdateManager) {
-				String staffName = staffDAO.getStaffNameById(staff.getMaNhanVien());
+				String staffName = "";
+				try {
+					staffName = staffDAO.getStaffNameById(staff.getMaNhanVien());
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
+				}
 				int selectedRow = tblTableStaff.getSelectedRow();
 				String name = "nhân viên";
 				if (selectedRow == -1) {
@@ -1043,10 +1088,14 @@ public class PnNhanVien extends JPanel
 							JOptionPane.QUESTION_MESSAGE);
 					if (choose == JOptionPane.OK_OPTION) {
 						Boolean result = false;
-						if (isResetPassword || staff.getTaiKhoan().getTinhTrangTK() == false) {
-							result = staffDAO.updateInfoStaffAndAccount(staff);
-						} else {
-							result = staffDAO.updateInfoStaff(staff);
+						try {
+							if (isResetPassword || staff.getTaiKhoan().getTinhTrangTK() == false) {
+								result = staffDAO.updateInfoStaffAndAccount(staff);
+							} else {
+								result = staffDAO.updateInfoStaff(staff);
+							}
+						} catch (RemoteException e) {
+							e.printStackTrace();
 						}
 						if (result) {
 							message = "Cập nhật thông tin " + name + " thành công";

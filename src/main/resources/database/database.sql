@@ -1432,8 +1432,8 @@ BEGIN
     DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
 
     ;WITH customerShow AS (
-        SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-            kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+        SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+            kh.maKH, kh.ngaySinh, kh.soDienThoai
         FROM dbo.KhachHang kh
     )
 
@@ -1459,8 +1459,8 @@ CREATE PROC USP_getCustomerById
     @customerId VARCHAR(10)
 AS
 BEGIN
-    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+        kh.maKH, kh.ngaySinh, kh.soDienThoai
     FROM dbo.KhachHang kh
     WHERE kh.maKH = @customerId
 END
@@ -1477,8 +1477,8 @@ BEGIN
     DECLARE @keyword NVARCHAR(102) = N'%' + @customerName + N'%'
 
     ;WITH customerShow AS (
-        SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-            kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+        SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+            kh.maKH, kh.ngaySinh, kh.soDienThoai
         FROM dbo.KhachHang kh
         WHERE dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
     )
@@ -1514,8 +1514,8 @@ BEGIN
     DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
 
     ;WITH customerShow AS (
-        SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-            kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+        SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+            kh.maKH, kh.ngaySinh, kh.soDienThoai
         FROM dbo.KhachHang kh
         WHERE kh.gioiTinh = @gender
     )
@@ -1551,8 +1551,8 @@ BEGIN
     DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
 
     ;WITH customerShow AS (
-        SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-            kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+        SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+            kh.maKH, kh.ngaySinh, kh.soDienThoai
         FROM dbo.KhachHang kh
         WHERE kh.soDienThoai LIKE @keyword
     )
@@ -1581,8 +1581,8 @@ GO
 CREATE PROC USP_getCustomerListUnBooked
 AS
 BEGIN
-    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+        kh.maKH, kh.ngaySinh, kh.soDienThoai
     FROM dbo.KhachHang kh, dbo.HoaDon hd
     WHERE kh.maKH NOT IN (
         -- lấy danh sách mã khách hàng chưa thanh toán hóa đơn
@@ -1601,8 +1601,8 @@ CREATE PROC USP_getCustomerListUnBookedByCMND
 AS
 BEGIN
     DECLARE @keyword NVARCHAR(14) = N'%' + @cmnd + N'%'
-    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+        kh.maKH, kh.ngaySinh, kh.soDienThoai
     FROM dbo.KhachHang kh, dbo.HoaDon hd
     WHERE kh.maKH NOT IN (
         -- lấy danh sách mã khách hàng chưa thanh toán hóa đơn
@@ -1622,8 +1622,8 @@ CREATE PROC USP_getCustomerListUnBookedByPhoneNumber
 AS
 BEGIN
     DECLARE @keyword NVARCHAR(12) = N'%' + @phoneNumber + N'%'
-    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+        kh.maKH, kh.ngaySinh, kh.soDienThoai
     FROM dbo.KhachHang kh, dbo.HoaDon hd
     WHERE kh.maKH NOT IN (
         -- lấy danh sách mã khách hàng chưa thanh toán hóa đơn
@@ -1633,6 +1633,27 @@ BEGIN
             AND hd.tinhTrangHD = 0
     )
         AND dbo.fuConvertToUnsign(kh.soDienThoai) LIKE dbo.fuConvertToUnsign(@keyword)
+    GROUP BY kh.maKH, kh.hoTen, kh.cmnd, kh.gioiTinh, 
+    kh.ngaySinh, kh.soDienThoai
+END
+GO
+
+CREATE PROC USP_getCustomerListUnBookedByName
+    @fullName NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @keyword NVARCHAR(102) = N'%' + @fullName + N'%'
+    SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+        kh.maKH, kh.ngaySinh, kh.soDienThoai
+    FROM dbo.KhachHang kh, dbo.HoaDon hd
+    WHERE kh.maKH NOT IN (
+        -- lấy danh sách mã khách hàng chưa thanh toán hóa đơn
+        SELECT hd.maKH
+        FROM dbo.HoaDon hd, dbo.KhachHang kh1
+        WHERE hd.maKH = kh1.maKH
+            AND hd.tinhTrangHD = 0
+    )
+        AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
     GROUP BY kh.maKH, kh.hoTen, kh.cmnd, kh.gioiTinh, 
     kh.ngaySinh, kh.soDienThoai
 END
@@ -1723,8 +1744,8 @@ CREATE PROC USP_getCustomerByBillId
     @billId VARCHAR(15)
 AS
 BEGIN
-    SELECT kh.cmnd AS cmndKH, kh.gioiTinh AS gioiTinhKH, kh.hoTen AS hoTenKH,
-        kh.maKH, kh.ngaySinh AS ngaySinhKH, kh.soDienThoai AS sdtKH
+    SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+        kh.maKH, kh.ngaySinh, kh.soDienThoai
     FROM dbo.KhachHang kh, dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
         AND hd.maKH = kh.maKH

@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import DAO.ConvertTime;
 import DAO.KhachHangDAO;
-import Event_Handlers.InputEventHandler;
+import DAO.Impl.KhachHangDAOImpl;
+import Event_Handlers.*;
 import entity.KhachHang;
 
 /**
@@ -247,7 +247,7 @@ public class DialogChonKhachHang extends JDialog
 
 		cboSearch.addItemListener(this);
 
-		LoadCustomerList(KhachHangDAO.getInstance().getCustomerListUnBooked());
+		LoadCustomerList(KhachHangDAOImpl.getInstance().getCustomerListUnBooked());
 	}
 
 	public static void main(String[] args) {

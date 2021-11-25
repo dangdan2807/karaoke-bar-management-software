@@ -2,8 +2,10 @@ package UI;
 
 import javax.swing.*;
 
-import DAO.Impl.NhanVienDAOImpl;
-import DAO.Impl.TaiKhoanDAOImpl;
+import DAO.NhanVienDAO;
+import DAO.TaiKhoanDAO;
+// import DAO.Impl.NhanVienDAOImpl;
+// import DAO.Impl.TaiKhoanDAOImpl;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -40,7 +42,8 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 			CustomUI.LOGIN_ICON.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 
 	private GradientPaint gra = new GradientPaint(0, 0, Color.decode("#900a9c"), 250, 0, Color.decode("#00cccb"));
-	TaiKhoanDAOImpl taiKhoanDAO = TaiKhoanDAOImpl.getInstance();
+	TaiKhoanDAO accountDAO = null;
+	NhanVienDAO staffDAO = null;
 
 	/**
 	 * Constructor form đăng nhập
@@ -165,7 +168,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 			if (loginResult) {
 				NhanVien staff = null;
 				try {
-					staff = NhanVienDAOImpl.getInstance().getStaffByUsername(username);
+					staff = staffDAO.getStaffByUsername(username);
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 				}
@@ -273,7 +276,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	private boolean login(String username, String password) {
 		boolean result = false;
 		try {
-			result = TaiKhoanDAOImpl.getInstance().login(username, password);
+			result = accountDAO.login(username, password);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

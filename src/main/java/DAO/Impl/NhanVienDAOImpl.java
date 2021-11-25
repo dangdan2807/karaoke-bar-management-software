@@ -64,9 +64,9 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
     @SuppressWarnings("unchecked")
     public ArrayList<NhanVien> getStaffListByWorkingStatusAndPageNumber(String workingStatus, int currentPage,
             int lineNumberDisplayed) throws RemoteException {
+        ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         String query = "{CALL USP_getStaffListByWorkingStatusAndPageNumber(?, ?, ?)}";
         EntityTransaction tr = em.getTransaction();
-        ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         try {
             tr.begin();
             staffList = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class).setParameter(1, workingStatus)
@@ -101,7 +101,6 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
             e.printStackTrace();
         }
         em.close();
-
         return result;
     }
 
@@ -178,18 +177,12 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query)
-                    .setParameter(1, staff.getMaNhanVien())
-                    .setParameter(2, staff.getCmnd())
-                    .setParameter(3, staff.getHoTen())
-                    .setParameter(4, staff.getNgaySinh())
-                    .setParameter(5, staff.getSoDienThoai())
-                    .setParameter(6, staff.getChucVu())
-                    .setParameter(7, staff.getMucLuong())
-                    .setParameter(8, staff.getTrangThaiNV())
-                    .setParameter(9, staff.getGioiTinh())
-                    .setParameter(10, staff.getTaiKhoan().getTenDangNhap())
-                    .executeUpdate();
+            result = (int) em.createNativeQuery(query).setParameter(1, staff.getMaNhanVien())
+                    .setParameter(2, staff.getCmnd()).setParameter(3, staff.getHoTen())
+                    .setParameter(4, staff.getNgaySinh()).setParameter(5, staff.getSoDienThoai())
+                    .setParameter(6, staff.getChucVu()).setParameter(7, staff.getMucLuong())
+                    .setParameter(8, staff.getTrangThaiNV()).setParameter(9, staff.getGioiTinh())
+                    .setParameter(10, staff.getTaiKhoan().getTenDangNhap()).executeUpdate();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -284,11 +277,8 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         ArrayList<NhanVien> staffList = new ArrayList<NhanVien>();
         try {
             tr.begin();
-            staffList = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class)
-                    .setParameter(1, position)
-                    .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed)
-                    .getResultList();
+            staffList = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class).setParameter(1, position)
+                    .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -340,11 +330,8 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            staffList = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class)
-                    .setParameter(1, staffName)
-                    .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed)
-                    .getResultList();
+            staffList = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class).setParameter(1, staffName)
+                    .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -396,11 +383,8 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            staffList = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class)
-                    .setParameter(1, phoneNumber)
-                    .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed)
-                    .getResultList();
+            staffList = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class).setParameter(1, phoneNumber)
+                    .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
