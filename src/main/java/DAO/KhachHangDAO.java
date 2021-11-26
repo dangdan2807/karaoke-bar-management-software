@@ -6,6 +6,17 @@ import java.util.ArrayList;
 
 import entity.KhachHang;
 
+/**
+ * Lớp interface cho lớp {@code KhachHang}
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu, Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 11/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ */
 public interface KhachHangDAO extends Remote {
     /**
      * Lấy ra danh sách khách hàng theo từng trang

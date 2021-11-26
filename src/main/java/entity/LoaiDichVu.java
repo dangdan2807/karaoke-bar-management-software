@@ -1,8 +1,6 @@
 package entity;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -93,17 +91,6 @@ public class LoaiDichVu implements Serializable {
 	 * Tạo 1 {@code LoaiDichVu} không tham số
 	 */
 	public LoaiDichVu() {
-	}
-
-	/**
-	 * Tạo 1 {@code LoaiDichVu} từ kết quả truy vấn nhận được từ cơ sở dữ liệu
-	 * 
-	 * @param rs {@code ResultSet}: kết quả truy vấn
-	 * @return {@code LoaiDichVu}: loại dịch vụ được tìm thấy
-	 * @throws SQLException nếu có lỗi trong quá trình lấy dữ liệu
-	 */
-	public LoaiDichVu(ResultSet rs) throws SQLException {
-		this(rs.getString("maLDV"), rs.getString("tenLDV"));
 	}
 
 	@Override

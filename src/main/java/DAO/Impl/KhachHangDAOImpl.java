@@ -12,7 +12,7 @@ import Util.HibernateUtil;
 import entity.KhachHang;
 
 /**
- * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code DichVu}
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code KhachHang}
  * <p>
  * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu, Huỳnh Tuấn Anh
  * <p>
@@ -422,7 +422,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, customer.getMaKH())
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, customer.getMaKH())
                     .setParameter(2, customer.getCmnd())
                     .setParameter(3, customer.getHoTen())
                     .setParameter(4, customer.getGioiTinh())
