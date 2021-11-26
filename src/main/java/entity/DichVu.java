@@ -1,8 +1,6 @@
 package entity;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.*;
@@ -165,17 +163,6 @@ public class DichVu implements Serializable {
 	 * Tạo 1 {@code DichVu} không tham số
 	 */
 	public DichVu() {
-	}
-
-	/**
-	 * Tạo 1 {@code DichVu} từ kết quả truy vấn nhận được từ cơ sở dữ liệu
-	 * 
-	 * @param rs {@code ResultSet}: kết quả truy vấn
-	 * @throws SQLException {@code SQLException}: lỗi truy vấn
-	 */
-	public DichVu(ResultSet rs) throws SQLException {
-		this(rs.getString("maDichVu"), rs.getString("tenDichVu"), rs.getDouble("giaBan"), rs.getInt("soLuongTon"),
-				new LoaiDichVu(rs));
 	}
 
 	@Override

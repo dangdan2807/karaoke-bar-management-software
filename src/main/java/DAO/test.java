@@ -9,21 +9,22 @@ import entity.*;
 
 public class test {
     public static void main(String[] args) {
-        ArrayList<LoaiDichVu> list = new ArrayList<>();
+        ArrayList<DichVu> list = new ArrayList<>();
         // LoaiDichVu rs = null;
         // int rs = 0;
         // String rs = "";
         boolean rs = false;
-        int check = 1;
+        int check = 0;
         int currentPage = 1;
         int lineNumberDisplayed = 10;
-        String data = "LDV012";
+        String data = "Lẫu";
         boolean gender = true;
         try {
-            if (check == 0) {
-                list = LoaiDichVuDAOImpl.getInstance().getServiceTypeListByNameAndPageNumber(data ,currentPage, lineNumberDisplayed);
+            DichVuDAO request = new DichVuDAOImpl();
+            if (check == 1) {
+                list = request.getServiceListByNameAndServiceTypeName(data, "Lẫu");
                 if (list.size() > 0) {
-                    for (LoaiDichVu i : list) {
+                    for (DichVu i : list) {
                         System.out.println(i.toString());
                     }
                 } else {
@@ -31,7 +32,8 @@ public class test {
                 }
             } else {
                 LoaiDichVu serviceType = new LoaiDichVu("LDV112", "Món bò 1");
-                rs = LoaiDichVuDAOImpl.getInstance().updateInfoServiceType(serviceType);
+                DichVu service = new DichVu("DV1067", "Lẫu lẫu 1", 800.0, 10, serviceType);
+                rs = request.updateInfoService(service);
                 // if (rs) {
                     System.out.println(rs);
                 // } else {
