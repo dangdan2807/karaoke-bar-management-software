@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import entity.LoaiDichVu;
 
 /**
- * Lớp interface cho lớp {@code LoaiDichVuDAO}
+ * Lớp interface cho lớp {@code LoaiDichVuDAOImpl}
  * <p>
  * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu
  * <p>

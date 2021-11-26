@@ -24,8 +24,6 @@ import entity.KhachHang;
  */
 public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDAO {
     private static KhachHangDAOImpl instance;
-    public static int TABLE_WIDTH = 225;
-    public static int TABLE_HEIGHT = 80;
 
     private EntityManager em;
 
@@ -361,7 +359,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, customer.getMaKH())
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, customer.getMaKH())
                     .setParameter(2, customer.getCmnd())
                     .setParameter(3, customer.getHoTen())
                     .setParameter(4, customer.getGioiTinh())

@@ -39,19 +39,19 @@ public class HoaDon implements Serializable {
 	@Column(columnDefinition = "INT default 0", nullable = false)
 	private int tinhTrangHD;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maNhanVien", nullable = false)
 	private NhanVien nhanVien;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maPhong", nullable = false)
 	private Phong phong;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maKH", nullable = false)
 	private KhachHang khachHang;
 
-	@OneToMany(mappedBy = "hoaDon")
+	@OneToMany(mappedBy = "hoaDon", fetch = FetchType.LAZY)
 	private List<CTDichVu> dsCTDichVu;
 
 	/**
@@ -286,6 +286,8 @@ public class HoaDon implements Serializable {
 	 * 
 	 * @param maHoaDon   {@code String}: mã hóa đơn
 	 * @param ngayGioDat {@code Timestamp}: ngày giờ đặt
+	 * @param ngayGioTra   {@code Timestamp}: ngày giờ tính tiền
+	 * @param tinhTrangHD {@code int}: tình trạng hóa đơn
 	 */
 	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD) {
 		this.maHoaDon = maHoaDon;
@@ -335,9 +337,8 @@ public class HoaDon implements Serializable {
 	 * @return {@code double}: tiền hóa đơn
 	 */
 	public Double tinhTongTienHoaDon() {
-		Double tongTienHD = tinhTongTienDichVu() + tinhTienPhong();
-		Double vat = tongTienHD * 0.1;
-		return tongTienHD + vat;
+		Double tongTienHD = (tinhTongTienDichVu() + tinhTienPhong()) * 1.1;
+		return tongTienHD;
 	}
 
 	/**

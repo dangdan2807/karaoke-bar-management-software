@@ -3,6 +3,7 @@ package UI;
 import javax.swing.*;
 
 import DAO.NhanVienDAO;
+import DAO.Impl.NhanVienDAOImpl;
 import Event_Handlers.CheckPassword;
 import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.MyButton;
@@ -10,6 +11,7 @@ import entity.NhanVien;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.rmi.RemoteException;
 
 /**
  * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code CTDichVu}
@@ -37,7 +39,8 @@ public class fDieuHuong extends JFrame implements ActionListener {
             CustomUI.MANAGER_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
     private ImageIcon logoutIcon = CustomUI.LOGOUT_ICON;
     private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
-            Color.decode("#FAFFD1"));;
+            Color.decode("#FAFFD1"));
+    private static NhanVienDAO staffDAO = NhanVienDAOImpl.getInstance();
 
     /**
      * Constructor form điều hướng
@@ -135,7 +138,12 @@ public class fDieuHuong extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
         // NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("nhanvien1");
-        NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+        NhanVien staff = null;
+        try {
+            staff = staffDAO.getStaffByUsername("phamdangdan");
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         new fDieuHuong(staff).setVisible(true);
     }
 

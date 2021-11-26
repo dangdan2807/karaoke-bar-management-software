@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import entity.Phong;
 
 /**
- * Lớp interface cho lớp {@code PhongDAO}
+ * Lớp interface cho lớp {@code PhongDAOImpl}
  * <p>
  * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
  * <p>

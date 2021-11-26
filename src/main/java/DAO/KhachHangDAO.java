@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import entity.KhachHang;
 
 /**
- * Lớp interface cho lớp {@code KhachHang}
+ * Lớp interface cho lớp {@code KhachHangDAOImpl}
  * <p>
  * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu, Huỳnh Tuấn Anh
  * <p>
@@ -18,6 +18,9 @@ import entity.KhachHang;
  * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
  */
 public interface KhachHangDAO extends Remote {
+    public static int TABLE_WIDTH = 225;
+    public static int TABLE_HEIGHT = 80;
+
     /**
      * Lấy ra danh sách khách hàng theo từng trang
      * 

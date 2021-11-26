@@ -6,7 +6,7 @@ import java.rmi.RemoteException;
 import entity.TaiKhoan;
 
 /**
- * interface cho lớp {@code TaiKhoanDAO}
+ * interface cho lớp {@code TaiKhoanDAOImpl}
  * <p>
  * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
  * <p>

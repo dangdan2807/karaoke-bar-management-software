@@ -99,7 +99,6 @@ CREATE TABLE HoaDon
     ngayGioTra DATETIME,
     -- 0. chưa thanh toán | 1. đã thanh toán
     tinhTrangHD INT NOT NULL DEFAULT(0),
-    TongTien MONEY NOT NULL DEFAULT(0) CHECK(TongTien >= 0),
     maNhanVien VARCHAR(10) NOT NULL,
     maKH VARCHAR(10) NOT NULL,
     maPhong VARCHAR(5) NOT NULL,
@@ -116,7 +115,6 @@ CREATE TABLE CTDichVu
     maHoaDon VARCHAR(15) NOT NULL,
     soLuongDat INT NOT NULL DEFAULT(1) CHECK(soLuongDat > 0),
     donGia MONEY NOT NULL DEFAULT(0) CHECK(donGia >= 0),
-    tienDichVu MONEY NOT NULL DEFAULT(0) CHECK(tienDichVu >= 0),
     PRIMARY KEY (maDichVu, maHoaDon),
     FOREIGN KEY (maDichVU) REFERENCES dbo.DichVu (maDichVu),
     FOREIGN KEY (maHoaDon) REFERENCES dbo.HoaDon (maHoaDon)
@@ -128,9 +126,6 @@ GO
 INSERT INTO dbo.LoaiDichVu
     (maLDV, tenLDV)
 VALUES
-    -- ('LDV001', N'Thức ăn'),
-    -- ('LDV002', N'Đồ uống'),
-
     ('LDV001', N'Thạch Dừa'),
     ('LDV002', N'Đồ uống có cồn'),
     ('LDV003', N'Sinh tố'),
@@ -454,38 +449,38 @@ VALUES
 GO
 
 INSERT INTO dbo.HoaDon
-    (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, TongTien, maNhanVien, maKH, maPhong)
+    (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, maNhanVien, maKH, maPhong)
 VALUES
-    ('HD2021100100001' , '2021-10-01 10:00:00', '2021-10-01 12:00:00', 1, 379500, 'NV00000001', 'KH00000001', 'P0001'),
-    ('HD2021100100002' , '2021-10-01 15:00:00', '2021-10-01 17:00:00', 1, 376200, 'NV00000003', 'KH00000003', 'P0002'),
-    ('HD2021100100003' , '2021-10-01 15:30:00', '2021-10-01 18:00:00', 1, 453200, 'NV00000004', 'KH00000004', 'P0003'),
-    ('HD2021100200001' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 330000, 'NV00000002', 'KH00000002', 'P0004'),
-    ('HD2021100200002' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 330000, 'NV00000002', 'KH00000002', 'P0005')
+    ('HD2021100100001' , '2021-10-01 10:00:00', '2021-10-01 12:00:00', 1, 'NV00000001', 'KH00000001', 'P0001'),
+    ('HD2021100100002' , '2021-10-01 15:00:00', '2021-10-01 17:00:00', 1, 'NV00000003', 'KH00000003', 'P0002'),
+    ('HD2021100100003' , '2021-10-01 15:30:00', '2021-10-01 18:00:00', 1, 'NV00000004', 'KH00000004', 'P0003'),
+    ('HD2021100200001' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 'NV00000002', 'KH00000002', 'P0004'),
+    ('HD2021100200002' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 'NV00000002', 'KH00000002', 'P0005')
 GO
 
 INSERT INTO dbo.CTDichVu
-    (maDichVu, maHoaDon, soLuongDat, donGia, tienDichVu)
+    (maDichVu, maHoaDon, soLuongDat, donGia)
 VALUES
-    ('DV0001', 'HD2021100100001', 1, 30000, 30000),
-    ('DV0002', 'HD2021100100001', 2, 35000, 70000),
-    ('DV0003', 'HD2021100100001', 2, 35000, 70000),
-    ('DV0113', 'HD2021100100001', 3, 5000, 150000),
+    ('DV0001', 'HD2021100100001', 1, 30000),
+    ('DV0002', 'HD2021100100001', 2, 35000),
+    ('DV0003', 'HD2021100100001', 2, 35000),
+    ('DV0113', 'HD2021100100001', 3, 5000),
 
-    ('DV0003', 'HD2021100100002', 2, 35000, 70000),
-    ('DV0002', 'HD2021100100002', 2, 35000, 70000),
-    ('DV0004', 'HD2021100100002', 1, 42000, 42000),
+    ('DV0003', 'HD2021100100002', 2, 35000),
+    ('DV0002', 'HD2021100100002', 2, 35000),
+    ('DV0004', 'HD2021100100002', 1, 42000),
 
-    ('DV0001', 'HD2021100100003', 1, 30000, 30000),
-    ('DV0003', 'HD2021100100003', 2, 75000, 70000),
-    ('DV0007', 'HD2021100100003', 1, 32000, 32000),
+    ('DV0001', 'HD2021100100003', 1, 30000),
+    ('DV0003', 'HD2021100100003', 2, 75000),
+    ('DV0007', 'HD2021100100003', 1, 32000),
 
-    ('DV0002', 'HD2021100200001', 2, 35000, 70000),
-    ('DV0001', 'HD2021100200001', 4, 30000, 120000),
-    ('DV0005', 'HD2021100200001', 1, 30000, 30000),
+    ('DV0002', 'HD2021100200001', 2, 35000),
+    ('DV0001', 'HD2021100200001', 4, 30000),
+    ('DV0005', 'HD2021100200001', 1, 30000),
 
-    ('DV0002', 'HD2021100200002', 2, 35000, 70000),
-    ('DV0001', 'HD2021100200002', 4, 30000, 120000),
-    ('DV0005', 'HD2021100200002', 1, 30000, 30000)
+    ('DV0002', 'HD2021100200002', 2, 35000),
+    ('DV0001', 'HD2021100200002', 4, 30000),
+    ('DV0005', 'HD2021100200002', 1, 30000)
 GO
 
 
@@ -534,11 +529,6 @@ BEGIN
         AND matKhau = @password
 END
 GO
-
--- Update dbo.TaiKhoan
---     SET tinhTrangTK = 1
---     WHERE tenDangNhap = 'phamdangdan'
--- GO
 
 CREATE PROC USP_getAccountByUsername
     @username VARCHAR(100)
@@ -974,13 +964,20 @@ BEGIN
 END
 GO
 
+-- SELECT * FROM dbo.HoaDon
+-- where maHoaDon = 'HD2021100100001'
+
+-- update dbo.HoaDon 
+-- set tinhTrangHD = 0
+-- where maHoaDon = 'HD2021100100001'
+-- go
 
 -- hóa đơn
 CREATE PROC USP_getUncheckBillByRoomId
     @roomId VARCHAR(5)
 AS
 BEGIN
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD
     FROM dbo.HoaDon hd, dbo.Phong p
     WHERE hd.maPhong = p.maPhong
         AND p.maPhong = @roomId
@@ -993,7 +990,7 @@ CREATE PROC USP_getBillByBillId
 AS
 BEGIN
     SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        hd.TongTien
+    hd.maKH, hd.maNhanVien, hd.maPhong
     FROM dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
 END
@@ -1010,9 +1007,9 @@ BEGIN
     DECLARE @isExitsBillId VARCHAR(15)
     BEGIN TRANSACTION
     INSERT INTO dbo.HoaDon
-        (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, TongTien, maNhanVien, maKH, maPhong)
+        (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, maNhanVien, maKH, maPhong)
     VALUES
-        (@billId, @orderDate, NULL, 0, 0.0, @staffId, @customerId, @roomId)
+        (@billId, @orderDate, NULL, 0, @staffId, @customerId, @roomId)
 
     SELECT @isExitsBillId = hd.maHoaDon
     FROM dbo.HoaDon hd
@@ -1022,7 +1019,6 @@ BEGIN
         AND hd.maKH = @customerId
         AND hd.maPhong = @roomId
         AND hd.tinhTrangHD = 0
-        AND hd.TongTien = 0.0
         AND hd.ngayGioTra IS NULL
 
     IF @isExitsBillId IS NULL
@@ -1050,21 +1046,19 @@ GO
 
 CREATE PROC USP_payment
     @billId VARCHAR(15),
-    @paymentDate DATETIME,
-    @totalPrice MONEY
+    @paymentDate DATETIME
 AS
 BEGIN
     DECLARE @roomId VARCHAR(5)
     DECLARE @isExitsBillId VARCHAR(15) = NULL
     BEGIN TRANSACTION
     UPDATE dbo.HoaDon 
-        SET tinhTrangHD = 1 , TongTien = @totalPrice, ngayGioTra = @paymentDate
+        SET tinhTrangHD = 1, ngayGioTra = @paymentDate
         WHERE maHoaDon = @billId
 
     SELECT @isExitsBillId = hd.maHoaDon
     FROM dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
-        AND hd.TongTien = @totalPrice
         AND hd.tinhTrangHD = 1
         AND hd.ngayGioTra = @paymentDate
 
@@ -1089,14 +1083,66 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getTotalPriceBill
+ALTER PROC USP_getTotalPriceBill
     @billId VARCHAR(15)
 AS
 BEGIN
-    SELECT TOP 1
-        hd.TongTien
+    -- tính số giờ đã thuê
+    DECLARE @totalHour FLOAT = 0
+    DECLARE @startTime DATETIME
+    DECLARE @endTime DATETIME
+    DECLARE @roomID VARCHAR(5)
+    DECLARE @totalPriceRoom MONEY = 0
+    DECLARE @totalPriceService MONEY = 0
+    DECLARE @totalPriceBill MONEY = 0
+
+    SELECT @startTime = hd.ngayGioDat, @endTime = hd.ngayGioTra, @roomID = hd.maPhong
     FROM dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
+
+    IF (@startTime IS NULL) OR (@endTime IS NULL)
+    BEGIN
+        PRINT 0
+    END
+    ELSE
+    BEGIN
+        SELECT @totalHour = DATEDIFF(minute, @startTime, @endTime)
+        SELECT @totalHour = @totalHour / 15 * 0.25
+        IF (@totalHour < 1.0)
+        BEGIN
+            SELECT @totalHour = 1.0
+        END
+
+        -- tính tổng tiền phòng
+        SELECT @totalPriceRoom = lp.giaTien * @totalHour
+        FROM dbo.Phong p, dbo.LoaiPhong lp
+        WHERE p.maPhong = @roomID
+            AND p.maLP = lp.maLP
+
+        IF (@totalPriceRoom IS NULL) 
+            OR (@totalPriceRoom < 0) 
+            OR (@totalPriceRoom = '')
+        BEGIN
+            SELECT @totalPriceRoom = 0
+        END
+
+        -- tính tồng tiền dịch vụ
+        SELECT @totalPriceService = SUM(ctdv.donGia * ctdv.soLuongDat)
+        FROM dbo.CTDichVu ctdv
+        WHERE ctdv.maHoaDon = @billId
+
+        IF (@totalPriceService IS NULL) 
+            OR (@totalPriceService < 0) 
+            OR (@totalPriceService = '')
+        BEGIN
+            SELECT @totalPriceService = 0
+        END
+
+        -- tính tổng tiền hóa đơn
+        SET @totalPriceBill = (@totalPriceRoom + @totalPriceService) * 1.1
+        -- PRINT(@totalPriceBill)
+        SELECT TOP 1 @totalPriceBill
+    END
 END
 GO
 
@@ -1113,20 +1159,24 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+        hd.maNhanVien, hd.maKH, hd.maPhong
         FROM dbo.HoaDon hd
         WHERE hd.tinhTrangHD = 1
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+        hd.maNhanVien, hd.maKH, hd.maPhong
     END
     ELSE
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+        hd.maNhanVien, hd.maKH, hd.maPhong
         FROM dbo.HoaDon hd
         WHERE hd.tinhTrangHD = 1
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+        hd.maNhanVien, hd.maKH, hd.maPhong
     END
 END
 GO
@@ -1147,19 +1197,19 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             kh.maKH, kh.hoTen, kh.soDienThoai
         FROM dbo.HoaDon hd, dbo.KhachHang kh
         WHERE hd.tinhTrangHD = 1
             AND hd.maKH = kh.maKH
             AND kh.soDienThoai LIKE @keyword
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
         kh.maKH, kh.hoTen, kh.soDienThoai
     END
     ELSE
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             kh.maKH, kh.hoTen, kh.soDienThoai
         FROM dbo.HoaDon hd, dbo.KhachHang kh
         WHERE hd.tinhTrangHD = 1
@@ -1167,7 +1217,7 @@ BEGIN
             AND kh.soDienThoai LIKE @keyword
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
         kh.maKH, kh.hoTen, kh.soDienThoai
     END
 END
@@ -1188,19 +1238,19 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             kh.maKH, kh.hoTen, kh.soDienThoai
         FROM dbo.HoaDon hd, dbo.KhachHang kh
         WHERE hd.tinhTrangHD = 1
             AND hd.maKH = kh.maKH
             AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
         kh.maKH, kh.hoTen, kh.soDienThoai
     END
     ELSE
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             kh.maKH, kh.hoTen, kh.soDienThoai
         FROM dbo.HoaDon hd, dbo.KhachHang kh
         WHERE hd.tinhTrangHD = 1
@@ -1208,7 +1258,7 @@ BEGIN
             AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
         kh.maKH, kh.hoTen, kh.soDienThoai
     END
 END
@@ -1229,19 +1279,19 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             nv.maNhanVien, nv.hoTen, nv.soDienThoai
         FROM dbo.HoaDon hd, dbo.NhanVien nv
         WHERE hd.tinhTrangHD = 1
             AND hd.maNhanVien = nv.maNhanVien
             AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
         nv.maNhanVien, nv.hoTen, nv.soDienThoai
     END
     ELSE
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             nv.maNhanVien, nv.hoTen, nv.soDienThoai
         FROM dbo.HoaDon hd, dbo.NhanVien nv
         WHERE hd.tinhTrangHD = 1
@@ -1249,7 +1299,7 @@ BEGIN
             AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
         nv.maNhanVien, nv.hoTen, nv.soDienThoai
     END
 END
@@ -1270,19 +1320,19 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             nv.maNhanVien, nv.hoTen, nv.soDienThoai
         FROM dbo.HoaDon hd, dbo.NhanVien nv
         WHERE hd.tinhTrangHD = 1
             AND hd.maNhanVien = nv.maNhanVien
             AND hd.maHoaDon LIKE @keyword
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
         nv.maNhanVien, nv.hoTen, nv.soDienThoai
     END
     ELSE
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             nv.maNhanVien, nv.hoTen, nv.soDienThoai
         FROM dbo.HoaDon hd, dbo.NhanVien nv
         WHERE hd.tinhTrangHD = 1
@@ -1290,7 +1340,7 @@ BEGIN
             AND hd.maHoaDon LIKE @keyword
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD, hd.TongTien,
+        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
         nv.maNhanVien, nv.hoTen, nv.soDienThoai
     END
 END
@@ -1322,7 +1372,7 @@ CREATE PROC USP_getServiceDetailListByBillId
     @billId VARCHAR(15)
 AS
 BEGIN
-    SELECT ctdv.soLuongDat, ctdv.maHoaDon, ctdv.tienDichVu, ctdv.donGia,
+    SELECT ctdv.soLuongDat, ctdv.maHoaDon, ctdv.donGia,
         dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
         ldv.maLDV, ldv.tenLDV
     FROM dbo.CTDichVu ctdv,
@@ -1367,7 +1417,6 @@ AS
 BEGIN
     DECLARE @isExitsCTDichVu VARCHAR(15)
     DECLARE @oldQuantity INT = 0
-    DECLARE @totalPriceService MONEY = 0.0
     DECLARE @quantityInStock INT = 0
 
     SELECT @quantityInStock = dv.soLuongTon
@@ -1386,10 +1435,8 @@ BEGIN
         DECLARE @newQuantity INT = @quantityOrder + @oldQuantity
         IF(@newQuantity > 0)
         BEGIN
-            SET @totalPriceService = @newQuantity * @price
             UPDATE dbo.CTDichVu
                 SET soLuongDat = @newQuantity,
-                    tienDichVu = @totalPriceService,
                     donGia = @price
                 WHERE maHoaDon = @billId
                 AND maDichVu = @serviceId
@@ -1407,11 +1454,10 @@ BEGIN
     -- hóa đơn không tồn tại -> tạo mới
     ELSE
         BEGIN
-        SET @totalPriceService = @quantityOrder * @price
         INSERT INTO dbo.CTDichVu
-            (maHoaDon, maDichVu, soLuongDat, donGia, tienDichVu)
+            (maHoaDon, maDichVu, soLuongDat, donGia)
         VALUES
-            (@billId, @serviceId, @quantityOrder, @price, @totalPriceService)
+            (@billId, @serviceId, @quantityOrder, @price)
 
         UPDATE dbo.DichVu
             SET soLuongTon = @quantityInStock - @quantityOrder
@@ -2025,11 +2071,6 @@ BEGIN
         AND p.tinhTrangP = @roomStatus
 END
 GO
-
-select * 
-from dbo.Phong p
-where p.maPhong = 'P0101'
-go
 
 CREATE PROC USP_updateInfoRoom
     @roomId VARCHAR(5),

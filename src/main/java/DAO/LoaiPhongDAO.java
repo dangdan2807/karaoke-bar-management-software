@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import entity.LoaiPhong;
 
 /**
- * Lớp interface cho lớp {@code LoaiPhongDAO}
+ * Lớp interface cho lớp {@code LoaiPhongDAOImpl}
  * <p>
  * Người tham gia thiết kế: Võ Minh Hiếu
  * <p>

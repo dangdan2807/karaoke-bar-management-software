@@ -2,42 +2,51 @@ package DAO;
 
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import DAO.Impl.*;
+import Util.HibernateUtil;
 import entity.*;
 
 public class test {
     public static void main(String[] args) {
-        ArrayList<DichVu> list = new ArrayList<>();
-        // LoaiDichVu rs = null;
+        // HibernateUtil.getInstance().getEntityManager();
+        ArrayList<HoaDon> list = new ArrayList<HoaDon>();
+        HoaDon rs = null;
         // int rs = 0;
         // String rs = "";
-        boolean rs = false;
+        // boolean rs = false;
+        // Double rs = 0.0;
         int check = 0;
         int currentPage = 1;
         int lineNumberDisplayed = 10;
-        String data = "Lẫu";
-        boolean gender = true;
+        String data = "P0001";
         try {
-            DichVuDAO request = new DichVuDAOImpl();
-            if (check == 1) {
-                list = request.getServiceListByNameAndServiceTypeName(data, "Lẫu");
+            HoaDonDAO request = new HoaDonDAOImpl();
+            if (check == 0) {
+                Date startDate = Date.valueOf("2021-10-01");
+                Date endDate = Date.valueOf("2021-12-01");
+                list = request.getBillListByDateAndBillId("HD2021112600001" ,startDate, endDate, "NV00000001");
                 if (list.size() > 0) {
-                    for (DichVu i : list) {
+                    for (HoaDon i : list) {
                         System.out.println(i.toString());
                     }
                 } else {
                     System.out.println(0);
                 }
             } else {
-                LoaiDichVu serviceType = new LoaiDichVu("LDV112", "Món bò 1");
-                DichVu service = new DichVu("DV1067", "Lẫu lẫu 1", 800.0, 10, serviceType);
-                rs = request.updateInfoService(service);
+                NhanVien staff = new NhanVien("NV00000001");
+                KhachHang customer = new KhachHang("KH00000001");
+                Phong room = new Phong("P0001");
+                Timestamp startDate = Timestamp.valueOf("2021-10-01 10:00:00");
+                Timestamp endDate = new Timestamp(System.currentTimeMillis());
+                HoaDon bill = new HoaDon("HD2021112600001", startDate, 0, staff, customer, room);
+                rs = request.getUncheckBillByRoomId("P0001");
                 // if (rs) {
-                    System.out.println(rs);
+                System.out.println(rs);
                 // } else {
-                    // System.out.println("null");
+                // System.out.println("null");
                 // }
             }
         } catch (RemoteException e) {

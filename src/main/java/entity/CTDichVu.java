@@ -29,7 +29,7 @@ public class CTDichVu implements Serializable {
 	private DichVu dichVu;
 
 	@Id
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maHoaDon", columnDefinition = "VARCHAR(15)")
 	private HoaDon hoaDon;
 

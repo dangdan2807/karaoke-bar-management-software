@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import entity.NhanVien;
 
 /**
- * Lớp interface cửa lớp {@code NhanVienDAO}
+ * Lớp interface cửa lớp {@code NhanVienDAOImpl}
  * <p>
  * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
  * <p>
