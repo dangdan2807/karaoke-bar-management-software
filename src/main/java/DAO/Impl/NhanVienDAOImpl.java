@@ -178,11 +178,16 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         try {
             tr.begin();
             result = (int) em.createNativeQuery(query).setParameter(1, staff.getMaNhanVien())
-                    .setParameter(2, staff.getCmnd()).setParameter(3, staff.getHoTen())
-                    .setParameter(4, staff.getNgaySinh()).setParameter(5, staff.getSoDienThoai())
-                    .setParameter(6, staff.getChucVu()).setParameter(7, staff.getMucLuong())
-                    .setParameter(8, staff.getTrangThaiNV()).setParameter(9, staff.getGioiTinh())
-                    .setParameter(10, staff.getTaiKhoan().getTenDangNhap()).executeUpdate();
+                    .setParameter(2, staff.getCmnd())
+                    .setParameter(3, staff.getHoTen())
+                    .setParameter(4, staff.getNgaySinh())
+                    .setParameter(5, staff.getSoDienThoai())
+                    .setParameter(6, staff.getChucVu())
+                    .setParameter(7, staff.getMucLuong())
+                    .setParameter(8, staff.getTrangThaiNV())
+                    .setParameter(9, staff.getGioiTinh())
+                    .setParameter(10, staff.getTaiKhoan().getTenDangNhap())
+                    .executeUpdate();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -211,10 +216,15 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         try {
             tr.begin();
             result = (int) em.createNativeQuery(query).setParameter(1, staff.getMaNhanVien())
-                    .setParameter(2, staff.getCmnd()).setParameter(3, staff.getHoTen())
-                    .setParameter(4, staff.getNgaySinh()).setParameter(5, staff.getSoDienThoai())
-                    .setParameter(6, staff.getChucVu()).setParameter(7, staff.getMucLuong())
-                    .setParameter(8, staff.getTrangThaiNV()).setParameter(9, staff.getGioiTinh()).executeUpdate();
+                    .setParameter(2, staff.getCmnd())
+                    .setParameter(3, staff.getHoTen())
+                    .setParameter(4, staff.getNgaySinh())
+                    .setParameter(5, staff.getSoDienThoai())
+                    .setParameter(6, staff.getChucVu())
+                    .setParameter(7, staff.getMucLuong())
+                    .setParameter(8, staff.getTrangThaiNV())
+                    .setParameter(9, staff.getGioiTinh())
+                    .executeUpdate();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -244,12 +254,18 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         try {
             tr.begin();
             result = (int) em.createNativeQuery(query).setParameter(1, staff.getMaNhanVien())
-                    .setParameter(2, staff.getCmnd()).setParameter(3, staff.getHoTen())
-                    .setParameter(4, staff.getNgaySinh()).setParameter(5, staff.getSoDienThoai())
-                    .setParameter(6, staff.getChucVu()).setParameter(7, staff.getMucLuong())
-                    .setParameter(8, staff.getTrangThaiNV()).setParameter(9, staff.getGioiTinh())
-                    .setParameter(10, taiKhoan.getTenDangNhap()).setParameter(11, taiKhoan.getMatKhau())
-                    .setParameter(12, taiKhoan.getTinhTrangTK()).executeUpdate();
+                    .setParameter(2, staff.getCmnd())
+                    .setParameter(3, staff.getHoTen())
+                    .setParameter(4, staff.getNgaySinh())
+                    .setParameter(5, staff.getSoDienThoai())
+                    .setParameter(6, staff.getChucVu())
+                    .setParameter(7, staff.getMucLuong())
+                    .setParameter(8, staff.getTrangThaiNV())
+                    .setParameter(9, staff.getGioiTinh())
+                    .setParameter(10, taiKhoan.getTenDangNhap())
+                    .setParameter(11, taiKhoan.getMatKhau())
+                    .setParameter(12, taiKhoan.getTinhTrangTK())
+                    .executeUpdate();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();

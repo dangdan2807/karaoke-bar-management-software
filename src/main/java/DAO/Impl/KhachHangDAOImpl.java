@@ -65,8 +65,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     @Override
     public ArrayList<KhachHang> getCustomerListAndPageNumber(int currentPage, int lineNumberDisplayed)
             throws RemoteException {
-        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListAndPageNumber( ? , ? )}";
+        ArrayList<KhachHang> dataList = new ArrayList<>();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -332,7 +332,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            data = (KhachHang) em.createNativeQuery(query, KhachHang.class).setParameter(1, customerId).getSingleResult();
+            data = (KhachHang) em.createNativeQuery(query, KhachHang.class).setParameter(1, customerId)
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -454,8 +455,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     @Override
     public ArrayList<KhachHang> getCustomerListByGenderAndPageNumber(boolean gender, int currentPage,
             int lineNumberDisplayed) throws RemoteException {
-        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListByGenderAndPageNumber( ? , ? , ? )}";
+        ArrayList<KhachHang> dataList = new ArrayList<>();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();

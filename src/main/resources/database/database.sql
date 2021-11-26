@@ -1901,9 +1901,14 @@ BEGIN
     DECLARE @isExitsOldRoomId VARCHAR(6)
     DECLARE @isExitsNewRoomId VARCHAR(6)
     BEGIN TRANSACTION
-    EXEC USP_updateRoomStatus 0, @oldRoomId
-    EXEC USP_updateRoomStatus 1, @newRoomId
+    
+    UPDATE dbo.Phong
+    SET tinhTrangP = 0
+    WHERE maPhong = @oldRoomId
 
+    UPDATE dbo.Phong
+    SET tinhTrangP = 1
+    WHERE maPhong = @newRoomId
 
     SELECT @isExitsOldRoomId = p.maPhong
     FROM dbo.Phong p
@@ -2020,6 +2025,11 @@ BEGIN
         AND p.tinhTrangP = @roomStatus
 END
 GO
+
+select * 
+from dbo.Phong p
+where p.maPhong = 'P0101'
+go
 
 CREATE PROC USP_updateInfoRoom
     @roomId VARCHAR(5),

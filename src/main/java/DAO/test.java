@@ -9,34 +9,35 @@ import entity.*;
 
 public class test {
     public static void main(String[] args) {
-        ArrayList<LoaiPhong> list = new ArrayList<>();
-        LoaiPhong rs = null;
+        ArrayList<Phong> list = new ArrayList<>();
+        Phong rs = null;
         // int rs = 0;
         // String rs = "";
         // boolean rs = false;
-        int currentPage = 1;
         int check = 1;
+        int currentPage = 1;
         int lineNumberDisplayed = 10;
-        String data = "8";
+        String data = "HD2021100100001";
         boolean gender = true;
         try {
             if (check == 0) {
-                list = LoaiPhongDAOImpl.getInstance().getRoomTypeListByPriceAndPageNumber(data, currentPage,
-                        lineNumberDisplayed);
+                list = PhongDAOImpl.getInstance().getRoomListByStatusAndPageNumber(0, currentPage, lineNumberDisplayed);
                 if (list.size() > 0) {
-                    for (LoaiPhong kh : list) {
+                    for (Phong kh : list) {
                         System.out.println(kh.toString());
                     }
                 } else {
                     System.out.println(0);
                 }
             } else {
-                LoaiPhong roomType = new LoaiPhong("LP004", "1005", 15, 8.0);
-                rs = LoaiPhongDAOImpl.getInstance().getRoomTypeByName("1005");
+                LoaiPhong roomType = new LoaiPhong("LP001", "5 người", 5, 80000.0);
+                Phong room = new Phong("P0101", 0, "Tầng 1", roomType);
+                rs = PhongDAOImpl.getInstance().getRoomByBillId(data);
+                // rs = PhongDAOImpl.getInstance().updateRoomStatus("P0001", 1);
                 // if (rs) {
-                System.out.println(rs);
+                    System.out.println(rs);
                 // } else {
-                // System.out.println("null");
+                    // System.out.println("null");
                 // }
             }
         } catch (RemoteException e) {
