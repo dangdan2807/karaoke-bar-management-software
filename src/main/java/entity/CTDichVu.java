@@ -139,7 +139,7 @@ public class CTDichVu implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CTDichVu [dichVu=" + dichVu + ", soLuongDat=" + soLuongDat + "]";
+		return "CTDichVu [dichVu=" + dichVu + ", donGia=" + donGia + ", soLuongDat=" + soLuongDat + "]";
 	}
 
 	/**
