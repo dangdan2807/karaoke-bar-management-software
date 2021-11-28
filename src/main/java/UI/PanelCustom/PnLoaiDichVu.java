@@ -3,6 +3,7 @@ package UI.PanelCustom;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.Naming;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import javax.swing.table.*;
 
 import DAO.*;
 import Event_Handlers.InputEventHandler;
+import Event_Handlers.ValidationData;
 import UI.*;
 import entity.*;
 
@@ -62,9 +64,14 @@ public class PnLoaiDichVu extends JPanel
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private int lineNumberDisplayed = 10;
 	private NhanVien staffLogin = null;
-	private LoaiDichVuDAO serviceTypeDAO = LoaiDichVuDAO.getInstance();
+	private SecurityManager securityManager = System.getSecurityManager();
 
 	public PnLoaiDichVu(NhanVien staff) {
+		if (securityManager == null) {
+			System.setProperty("java.security.policy", "policy/policy.policy");
+			System.setSecurityManager(new SecurityManager());
+		}
+
 		this.staffLogin = staff;
 		setSize(1270, 630);
 		this.setLayout(null);
@@ -226,7 +233,7 @@ public class PnLoaiDichVu extends JPanel
 		tblTableServiceType.setRowHeight(21);
 		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableServiceType);
 		scrTable.setBounds(10, 20, 1200, 235);
-		
+
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
 
@@ -278,7 +285,13 @@ public class PnLoaiDichVu extends JPanel
 
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+			NhanVien staff = null;
+			try {
+				NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+				staff = staffDAO.getStaffByUsername("phamdangdan");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			new fQuanTri(staff).setVisible(true);
 		});
 	}
@@ -295,24 +308,34 @@ public class PnLoaiDichVu extends JPanel
 				String message = "";
 				if (validData()) {
 					LoaiDichVu serviceType = getServiceTypeDataInForm();
-					Boolean result = serviceTypeDAO.insertService(serviceType);
+					Boolean result = false;
+					try {
+						LoaiDichVuDAO serviceTypeDAO = (LoaiDichVuDAO) Naming
+								.lookup("rmi://localhost:1099/serviceTypeDAO");
+						result = serviceTypeDAO.insertService(serviceType);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					String name = "loại dịch vụ";
 					if (result) {
+						txtPaging.toTheLastPage();
+						searchEventUsingBtnSearch();
 						message = "Thêm " + name + " mới thành công";
 						txtServiceTypeID.setText(serviceType.getMaLDV());
-						int stt = tblTableServiceType.getRowCount();
-						addRow(stt, serviceType);
-						int lastIndex = tblTableServiceType.getRowCount() - 1;
-						tblTableServiceType.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-						tblTableServiceType
-								.scrollRectToVisible(tblTableServiceType.getCellRect(lastIndex, lastIndex, true));
-						JOptionPane.showMessageDialog(this, message);
+						// int stt = tblTableServiceType.getRowCount();
+						// addRow(stt, serviceType);
+						// int lastIndex = tblTableServiceType.getRowCount() - 1;
+						// tblTableServiceType.getSelectionModel().setSelectionInterval(lastIndex,
+						// lastIndex);
+						// tblTableServiceType
+						// .scrollRectToVisible(tblTableServiceType.getCellRect(lastIndex, lastIndex,
+						// true));
 						btnAdd.setEnabledCustom(false);
 						btnUpdate.setEnabledCustom(true);
 					} else {
 						message = "Thêm " + name + " mới thất bại";
-						JOptionPane.showMessageDialog(this, message);
 					}
+					JOptionPane.showMessageDialog(this, message);
 				}
 			}
 		} else if (o.equals(btnRefresh)) {
@@ -326,7 +349,15 @@ public class PnLoaiDichVu extends JPanel
 		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
 				LoaiDichVu serviceType = getServiceTypeDataInForm();
-				LoaiDichVu serviceTypeOld = serviceTypeDAO.getServiceTypeById(serviceType.getMaLDV());
+				LoaiDichVu serviceTypeOld = null;
+				try {
+					LoaiDichVuDAO serviceTypeDAO = (LoaiDichVuDAO) Naming
+							.lookup("rmi://localhost:1099/serviceTypeDAO");
+					serviceTypeOld = serviceTypeDAO.getServiceTypeById(serviceType.getMaLDV());
+					;
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				String message = "";
 				String name = "loại dịch vụ";
 				int selectedRow = tblTableServiceType.getSelectedRow();
@@ -339,7 +370,14 @@ public class PnLoaiDichVu extends JPanel
 					int choose = JOptionPane.showConfirmDialog(this, message, "Xác nhận cập nhật thông tin " + name,
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 					if (choose == JOptionPane.OK_OPTION) {
-						Boolean result = serviceTypeDAO.updateInfoServiceType(serviceType);
+						Boolean result = false;
+						try {
+							LoaiDichVuDAO serviceTypeDAO = (LoaiDichVuDAO) Naming
+									.lookup("rmi://localhost:1099/serviceTypeDAO");
+							result = serviceTypeDAO.updateInfoServiceType(serviceType);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 						if (result) {
 							message = "Cập nhật thông tin " + name + " thành công";
 							updateRow(selectedRow, serviceType);
@@ -481,10 +519,18 @@ public class PnLoaiDichVu extends JPanel
 	 */
 	public void allLoaded() {
 		reSizeColumnTable();
-		int totalLine = serviceTypeDAO.getTotalLineOfServiceTypeList();
+		ArrayList<LoaiDichVu> serviceTypeList = new ArrayList<>();
 		txtPaging.setCurrentPage(1);
-		txtPaging.setTotalPage(getLastPage(totalLine));
-		ArrayList<LoaiDichVu> serviceTypeList = serviceTypeDAO.getServiceTypeListAndPageNumber(1, lineNumberDisplayed);
+		try {
+			LoaiDichVuDAO serviceTypeDAO = (LoaiDichVuDAO) Naming
+					.lookup("rmi://localhost:1099/serviceTypeDAO");
+			int totalLine = serviceTypeDAO.getTotalLineOfServiceTypeList();
+			txtPaging.setTotalPage(getLastPage(totalLine));
+			serviceTypeList = serviceTypeDAO.getServiceTypeListAndPageNumber(1,
+					lineNumberDisplayed);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		loadServiceTypeList(serviceTypeList, 1);
 	}
 
@@ -494,7 +540,15 @@ public class PnLoaiDichVu extends JPanel
 	 * @return {@code String}: mã dịch vụ mới
 	 */
 	private String createNewServiceTypeID() {
-		String lastStrId = serviceTypeDAO.getLastServiceTypeID();
+		String lastStrId = "";
+		try {
+			LoaiDichVuDAO serviceTypeDAO = (LoaiDichVuDAO) Naming
+					.lookup("rmi://localhost:1099/serviceTypeDAO");
+			lastStrId = serviceTypeDAO.getLastServiceTypeID();
+			lastStrId = serviceTypeDAO.getLastServiceTypeID();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		String idStr = "LDV";
 		int oldNumberId = 0;
 		if (lastStrId.equalsIgnoreCase("") == false || lastStrId != null) {
@@ -580,7 +634,7 @@ public class PnLoaiDichVu extends JPanel
 	 * Hiển thị danh sách loại dịch vụ
 	 * 
 	 * @param serviceTypeList {@code ArrayList <LoaiDichVu>}: danh sách loại dịch vụ
-	 * @param currentPage  {@code int}: số của trang hiện tại
+	 * @param currentPage     {@code int}: số của trang hiện tại
 	 */
 	private void loadServiceTypeList(ArrayList<LoaiDichVu> serviceTypeList, int currentPage) {
 		modelTable.getDataVector().removeAllElements();
@@ -616,9 +670,16 @@ public class PnLoaiDichVu extends JPanel
 		ArrayList<LoaiDichVu> serviceTypeList = null;
 		String keyword = txtKeyWord.getText().trim();
 		int currentPage = txtPaging.getCurrentPage();
-		int totalLine = serviceTypeDAO.getTotalLineOfServiceTypeListByName(keyword);
-
-		serviceTypeList = serviceTypeDAO.getServiceTypeListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+		int totalLine = 1;
+		try {
+			LoaiDichVuDAO serviceTypeDAO = (LoaiDichVuDAO) Naming
+					.lookup("rmi://localhost:1099/serviceTypeDAO");
+			totalLine = serviceTypeDAO.getTotalLineOfServiceTypeListByName(keyword);
+			serviceTypeList = serviceTypeDAO.getServiceTypeListByNameAndPageNumber(keyword, currentPage,
+					lineNumberDisplayed);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);
 		loadServiceTypeList(serviceTypeList, currentPage);
