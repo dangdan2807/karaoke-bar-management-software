@@ -24,7 +24,6 @@ import entity.DichVu;
  * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
  */
 public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO {
-    private static CTDichVuDAOImpl instance;
     private EntityManager em;
 
     /**
@@ -34,21 +33,6 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
      */
     public CTDichVuDAOImpl() throws RemoteException {
         em = HibernateUtil.getInstance().getEntityManager();
-    }
-
-    /**
-     * Sử dụng kiến trúc singleton để tạo ra 1 đối tượng duy nhất
-     * 
-     * @return {@code CTDichVuDAOImpl}
-     */
-    public static CTDichVuDAOImpl getInstance() {
-        if (instance == null)
-            try {
-                instance = new CTDichVuDAOImpl();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        return instance;
     }
 
     /**
@@ -63,6 +47,7 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
     public ArrayList<CTDichVu> getServiceDetailListByRoomId(String roomId) throws RemoteException {
         ArrayList<CTDichVu> dataList = new ArrayList<CTDichVu>();
         String query = "{CALL USP_getServiceDetailListByRoomId( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -73,7 +58,6 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -89,6 +73,7 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
     public ArrayList<CTDichVu> getServiceDetailListByBillId(String billId) throws RemoteException {
         ArrayList<CTDichVu> dataList = new ArrayList<CTDichVu>();
         String query = "{CALL USP_getServiceDetailListByBillId( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -99,7 +84,6 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -119,6 +103,7 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
     public CTDichVu getServiceDetailByBillIdAndServiceId(String billId, String serviceId) throws RemoteException {
         CTDichVu result = null;
         String query = "{CALL USP_getServiceDetailByBillIdAndServiceId( ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -131,7 +116,6 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -152,6 +136,7 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
     public boolean insertServiceDetail(CTDichVu serviceDetail, int quantity, String billId) throws RemoteException {
         String query = "{CALL USP_insertServiceDetail( ? , ? , ? , ? )}";
         DichVu service = serviceDetail.getDichVu();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -167,7 +152,6 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 }

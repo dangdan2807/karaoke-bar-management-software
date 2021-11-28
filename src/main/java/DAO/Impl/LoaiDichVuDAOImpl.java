@@ -23,7 +23,6 @@ import entity.LoaiDichVu;
  * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
  */
 public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVuDAO {
-    private static LoaiDichVuDAOImpl instance;
     private EntityManager em;
 
     /**
@@ -33,21 +32,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
      */
     public LoaiDichVuDAOImpl() throws RemoteException {
         em = HibernateUtil.getInstance().getEntityManager();
-    }
-
-    /**
-     * Sử dụng kiến trúc singleton để tạo ra 1 đối tượng duy nhất
-     * 
-     * @return {@code LoaiDichVuDAOImpl}
-     */
-    public static LoaiDichVuDAOImpl getInstance() {
-        if (instance == null)
-            try {
-                instance = new LoaiDichVuDAOImpl();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        return instance;
     }
 
     /**
@@ -61,6 +45,7 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
     public ArrayList<LoaiDichVu> getServiceTypeList() throws RemoteException {
         String query = "{CALL USP_getServiceTypeList()}";
         ArrayList<LoaiDichVu> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -70,7 +55,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -87,6 +71,7 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
     public ArrayList<LoaiDichVu> getServiceTypeListAndPageNumber(int currentPage, int lineNumberDisplayed) throws RemoteException {
         String query = "{CALL USP_getServiceTypeListAndPageNumber( ? , ? )}";
         ArrayList<LoaiDichVu> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -97,7 +82,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -109,6 +93,7 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
      */
     public int getTotalLineOfServiceTypeList() throws RemoteException {
         String query = "{CALL USP_getTotalLineOfServiceTypeList()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -119,7 +104,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -138,6 +122,7 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             int lineNumberDisplayed) throws RemoteException {
         String query = "{CALL USP_getServiceTypeListByNameAndPageNumber( ? , ? , ? )}";
         ArrayList<LoaiDichVu> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -148,7 +133,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -162,6 +146,7 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
     @Override
     public int getTotalLineOfServiceTypeListByName(String serviceTypeName) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfServiceTypeListByName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -172,7 +157,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -190,6 +174,7 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
     @Override
     public LoaiDichVu getServiceTypeByName(String serviceTypeName) throws RemoteException {
         String query = "{CALL USP_getServiceTypeByName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         LoaiDichVu result = null;
         try {
@@ -200,7 +185,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -217,6 +201,7 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
     @Override
     public String getLastServiceTypeID() throws RemoteException {
         String query = "{CALL USP_getLastServiceTypeID()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         String result = "";
         try {
@@ -227,7 +212,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -245,6 +229,7 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
     @Override
     public LoaiDichVu getServiceTypeById(String serviceTypeID) throws RemoteException {
         String query = "{CALL USP_getServiceTypeById( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         LoaiDichVu result = null;
         try {
@@ -255,7 +240,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -273,6 +257,7 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
     @Override
     public Boolean insertService(LoaiDichVu serviceType) throws RemoteException {
         String query = "{CALL USP_insertServiceType( ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -286,7 +271,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -303,6 +287,7 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
      */
     public Boolean updateInfoServiceType(LoaiDichVu serviceType) throws RemoteException {
         String query = "{CALL USP_updateInfoServiceType( ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -316,7 +301,6 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 }

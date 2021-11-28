@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.Naming;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.ConvertTime;
+import Event_Handlers.ExportBill;
 import entity.*;
 
 /**
@@ -52,11 +55,19 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 
 	public DialogHoaDon(HoaDon bill) {
 		this.bill = bill;
-		NhanVien staff = NhanVienDAO.getInstance().getStaffByBillId(bill.getMaHoaDon());
+		NhanVien staff = null;
+		KhachHang customer = null;
+		try {
+			NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+			KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+			staff = staffDAO.getStaffByBillId(bill.getMaHoaDon());
+			bill.setNhanVien(staff);
+			customer = customerDAO.getCustomerByBillId(bill.getMaHoaDon());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		bill.setNhanVien(staff);
-		KhachHang customer = KhachHangDAO.getInstance().getCustomerByBillId(bill.getMaHoaDon());
 		bill.setKhachHang(customer);
-
 		setSize(800, 720);
 		setIconImage(logoApp.getImage());
 		// setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -159,7 +170,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		CustomUI.getInstance().setCustomTable(tblTableBillInfo);
 		tblTableBillInfo.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 16));
 		tblTableBillInfo.getTableHeader().setBackground(new Color(255, 255, 255, 0));
-		// tblTableBillInfo.getTableHeader().setForeground(Color.BLACK);
+		tblTableBillInfo.getTableHeader().setForeground(Color.WHITE);
 		tblTableBillInfo.setOpaque(false);
 		tblTableBillInfo.setShowGrid(false);
 		tblTableBillInfo.setRowHeight(25);
@@ -354,11 +365,19 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			String billId = "HD2021100100001";
-			HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billId);
-			Phong room = PhongDAO.getInstance().getRoomByBillId(billId);
-			bill.setPhong(room);
-			ArrayList<CTDichVu> billInfoList = CTDichVuDAO.getInstance().getServiceDetailListByBillId(billId);
-			bill.setDsCTDichVu(billInfoList);
+			HoaDon bill = new HoaDon();
+			try {
+				HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
+				PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+				CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDetailDAO");
+				bill = billDAO.getBillByBillId(billId);
+				Phong room = roomDAO.getRoomByBillId(billId);
+				bill.setPhong(room);
+				ArrayList<CTDichVu> serviceDetail = serviceDetailDAO.getServiceDetailListByBillId(billId);
+				bill.setDsCTDichVu(serviceDetail);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			new DialogHoaDon(bill).setVisible(true);
 		});
 	}
@@ -379,8 +398,13 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(null, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (o.equals(btnPayment)) {
-			Double totalPriceBill = bill.tinhTongTienHoaDon();
-			boolean isPaid = HoaDonDAO.getInstance().payment(bill.getMaHoaDon(), bill.getNgayGioTra(), totalPriceBill);
+			boolean isPaid = false;
+			try {
+				HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
+				isPaid = billDAO.payment(bill.getMaHoaDon(), bill.getNgayGioTra());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 			if (isPaid) {
 				paid = isPaid;
 				btnExportExcel.setEnabledCustom(true);

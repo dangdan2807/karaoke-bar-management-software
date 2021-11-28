@@ -23,7 +23,6 @@ import entity.DichVu;
  * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
  */
 public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
-    private static DichVuDAOImpl instance;
     private EntityManager em;
 
     /**
@@ -33,21 +32,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
      */
     public DichVuDAOImpl() throws RemoteException {
         em = HibernateUtil.getInstance().getEntityManager();
-    }
-
-    /**
-     * Sử dụng kiến trúc singleton để tạo ra 1 đối tượng duy nhất
-     * 
-     * @return {@code DichVuDAOImpl}
-     */
-    public static DichVuDAOImpl getInstance() {
-        if (instance == null)
-            try {
-                instance = new DichVuDAOImpl();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        return instance;
     }
 
     /**
@@ -61,6 +45,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
     public ArrayList<DichVu> getServiceList() throws RemoteException {
         String query = "{CALL USP_getServiceList()}";
         ArrayList<DichVu> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -70,7 +55,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -88,6 +72,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             throws RemoteException {
         String query = "{CALL USP_getServiceListAndPageNumber( ? , ? )}";
         ArrayList<DichVu> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -98,7 +83,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -110,6 +94,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
      */
     public int getTotalLineOfServiceList() throws RemoteException {
         String query = "{CALL USP_getTotalLineOfServiceList()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -120,7 +105,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -136,6 +120,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
     public ArrayList<DichVu> getServiceListByServiceTypeName(String serviceTypeName) throws RemoteException {
         String query = "{CALL USP_getServiceListByServiceTypeName( ? )}";
         ArrayList<DichVu> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -146,7 +131,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -165,6 +149,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             int lineNumberDisplayed) throws RemoteException {
         String query = "{CALL USP_getServiceListByServiceTypeNameAndPageNumber( ? , ? , ? )}";
         ArrayList<DichVu> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -175,7 +160,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -188,6 +172,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
      */
     public int getTotalLineOfServiceListByServiceTypeName(String serviceTypeName) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfServiceListByServiceTypeName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -198,7 +183,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -214,6 +198,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
     public ArrayList<DichVu> getServiceListByName(String serviceName) throws RemoteException {
         ArrayList<DichVu> dataList = new ArrayList<DichVu>();
         String query = "{CALL USP_getServiceListByName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -224,7 +209,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -243,6 +227,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             int lineNumberDisplayed) throws RemoteException {
         ArrayList<DichVu> dataList = new ArrayList<DichVu>();
         String query = "{CALL USP_getServiceListByNameAndPageNumber( ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -253,7 +238,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -267,6 +251,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
     @Override
     public int getTotalLineOfServiceListByName(String serviceName) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfServiceListByName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -277,7 +262,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -294,6 +278,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
     public ArrayList<DichVu> getServiceListByNameAndServiceTypeName(String serviceName, String serviceTypeName) throws RemoteException {
         ArrayList<DichVu> dataList = new ArrayList<DichVu>();
         String query = "{CALL USP_getServiceListByNameAndServiceTypeName( ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -304,7 +289,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -321,6 +305,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
     @Override
     public String getLastServiceID() throws RemoteException {
         String query = "{CALL USP_getLastServiceId}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         String result = "";
         try {
@@ -331,7 +316,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -349,6 +333,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
     @Override
     public boolean insertService(DichVu service) throws RemoteException {
         String query = "{CALL USP_insertService( ? , ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -365,7 +350,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -383,6 +367,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
     @Override
     public String getServiceNameById(String serviceId) throws RemoteException {
         String query = "{CALL  USP_getServiceNameById( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         String result = "";
         try {
@@ -393,7 +378,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -411,6 +395,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
     @Override
     public Boolean updateInfoService(DichVu service) throws RemoteException {
         String query = "{CALL USP_updateInfoService( ? , ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -427,7 +412,6 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 }

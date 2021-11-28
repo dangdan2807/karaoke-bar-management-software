@@ -27,8 +27,6 @@ import entity.*;
  * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
  */
 public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
-    private static HoaDonDAOImpl instance;
-
     private EntityManager em;
 
     /**
@@ -38,21 +36,6 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
      */
     public HoaDonDAOImpl() throws RemoteException {
         em = HibernateUtil.getInstance().getEntityManager();
-    }
-
-    /**
-     * Sử dụng kiến trúc singleton để tạo ra 1 đối tượng duy nhất
-     * 
-     * @return {@code HoaDonDAOImpl}
-     */
-    public static HoaDonDAOImpl getInstance() {
-        if (instance == null)
-            try {
-                instance = new HoaDonDAOImpl();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        return instance;
     }
 
     /**
@@ -70,11 +53,13 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
     public HoaDon getUncheckBillByRoomId(String roomId) throws RemoteException {
         String query = "{CALL USP_getUncheckBillByRoomId( ? )}";
         HoaDon result = null;
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         Object[] list = null;
         try {
             tr.begin();
-            list = (Object[]) em.createNativeQuery(query).setParameter(1, roomId).getSingleResult();
+            list = (Object[]) em.createNativeQuery(query)
+                    .setParameter(1, roomId).getSingleResult();
             tr.commit();
             String billID = (String) list[0];
             Timestamp startTime = (Timestamp) list[1];
@@ -88,7 +73,6 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -103,29 +87,31 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    // @SuppressWarnings("unchecked")
     @Override
     public HoaDon getBillByBillId(String billId) throws RemoteException {
         String query = "{CALL USP_getBillByBillId( ? )}";
         HoaDon result = null;
+        em.clear();
         EntityTransaction tr = em.getTransaction();
-        Object[] list = null;
+        Object[] list = new Object[7];
         try {
             tr.begin();
-            list = (Object[]) em.createNativeQuery(query).setParameter(1, billId).getSingleResult();
+            list = (Object[]) em.createNativeQuery(query)
+                    .setParameter(1, billId).getSingleResult();
             tr.commit();
             String billID = (String) list[0];
             Timestamp startTime = (Timestamp) list[1];
             Timestamp endTime = (Timestamp) list[2];
             int status = (int) list[3];
             NhanVien staff = new NhanVien((String) list[4]);
-            KhachHang customer = (KhachHang) list[5];
+            KhachHang customer = new KhachHang((String) list[5]);
             Phong room = new Phong((String) list[6]);
             result = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -142,6 +128,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
     @Override
     public String getLastBillId() throws RemoteException {
         String query = "{CALL USP_getLastBillId()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         String result = "";
         try {
@@ -152,7 +139,6 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -170,6 +156,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
     @Override
     public boolean insertBill(HoaDon bill) throws RemoteException {
         String query = "{CALL USP_insertBill( ? , ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -186,16 +173,15 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
     /**
      * Thanh toán hóa đơn
      * 
-     * @param billId     {@code String}: mã hóa đơn
-     * @param paymentDate  {@code Timestamp}: ngày giờ thanh toán
-     * @param totalPrice {@code Double}: tổng tiền thanh toán
+     * @param billId      {@code String}: mã hóa đơn
+     * @param paymentDate {@code Timestamp}: ngày giờ thanh toán
+     * @param totalPrice  {@code Double}: tổng tiền thanh toán
      * @return {@code boolean}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu thêm thành công thì trả về {@code true}</li>
@@ -206,6 +192,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
     @Override
     public boolean payment(String billId, Timestamp paymentDate) throws RemoteException {
         String query = "{CALL USP_payment( ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -219,7 +206,6 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -237,18 +223,19 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
     @Override
     public Double getTotalPriceBill(String billId) throws RemoteException {
         String query = "{CALL USP_getTotalPriceBill( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         Double result = 0.0;
         try {
             tr.begin();
-            BigDecimal db = (BigDecimal) em.createNativeQuery(query).setParameter(1, billId).getSingleResult();
+            BigDecimal db = (BigDecimal) em.createNativeQuery(query)
+                    .setParameter(1, billId).getSingleResult();
             result = db.doubleValue();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -266,6 +253,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
     public ArrayList<HoaDon> getBillListByDate(Date fromDate, Date toDate, String staffId) throws RemoteException {
         String query = "{CALL USP_getBillListByDate( ? , ? , ? )}";
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         List<Object[]> list = new ArrayList<>();
         try {
@@ -281,7 +269,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 Timestamp endTime = (Timestamp) e[2];
                 int status = (int) e[3];
                 NhanVien staff = new NhanVien((String) e[4]);
-                KhachHang customer = (KhachHang) e[5];
+                KhachHang customer = new KhachHang((String) e[5]);
                 Phong room = new Phong((String) e[6]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
                 dataList.add(bill);
@@ -310,6 +298,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
             String staffId) throws RemoteException {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
         String query = "{CALL USP_getBillListByDateAndCustomerPhoneNumber( ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         List<Object[]> list = new ArrayList<>();
         try {
@@ -326,7 +315,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 Timestamp endTime = (Timestamp) e[2];
                 int status = (int) e[3];
                 NhanVien staff = new NhanVien((String) e[4]);
-                KhachHang customer = (KhachHang) e[5];
+                KhachHang customer = new KhachHang((String) e[5]);
                 Phong room = new Phong((String) e[6]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
                 dataList.add(bill);
@@ -354,6 +343,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
             String staffId) throws RemoteException {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
         String query = "{CALL USP_getBillListByDateAndCustomerName( ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         List<Object[]> list = new ArrayList<>();
         try {
@@ -370,7 +360,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 Timestamp endTime = (Timestamp) e[2];
                 int status = (int) e[3];
                 NhanVien staff = new NhanVien((String) e[4]);
-                KhachHang customer = (KhachHang) e[5];
+                KhachHang customer = new KhachHang((String) e[5]);
                 Phong room = new Phong((String) e[6]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
                 dataList.add(bill);
@@ -399,6 +389,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
             String staffId) throws RemoteException {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
         String query = "{CALL USP_getBillListByDateAndStaffName( ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         List<Object[]> list = new ArrayList<>();
         try {
@@ -415,7 +406,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 Timestamp endTime = (Timestamp) e[2];
                 int status = (int) e[3];
                 NhanVien staff = new NhanVien((String) e[4]);
-                KhachHang customer = (KhachHang) e[5];
+                KhachHang customer = new KhachHang((String) e[5]);
                 Phong room = new Phong((String) e[6]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
                 dataList.add(bill);
@@ -439,9 +430,11 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public ArrayList<HoaDon> getBillListByDateAndBillId(String billId, Date fromDate, Date toDate, String staffId) throws RemoteException {
+    public ArrayList<HoaDon> getBillListByDateAndBillId(String billId, Date fromDate, Date toDate, String staffId)
+            throws RemoteException {
         ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
         String query = "{CALL USP_getBillListByDateAndBillId( ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         List<Object[]> list = new ArrayList<>();
         try {
@@ -458,7 +451,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 Timestamp endTime = (Timestamp) e[2];
                 int status = (int) e[3];
                 NhanVien staff = new NhanVien((String) e[4]);
-                KhachHang customer = (KhachHang) e[5];
+                KhachHang customer = new KhachHang((String) e[5]);
                 Phong room = new Phong((String) e[6]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
                 dataList.add(bill);
