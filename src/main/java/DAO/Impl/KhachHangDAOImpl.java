@@ -23,8 +23,6 @@ import entity.KhachHang;
  * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
  */
 public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDAO {
-    private static KhachHangDAOImpl instance;
-
     private EntityManager em;
 
     /**
@@ -34,21 +32,6 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
      */
     public KhachHangDAOImpl() throws RemoteException {
         em = HibernateUtil.getInstance().getEntityManager();
-    }
-
-    /**
-     * Sử dụng kiến trúc singleton để tạo ra 1 đối tượng duy nhất
-     * 
-     * @return {@code KhachHangDAOImpl}
-     */
-    public static KhachHangDAOImpl getInstance() {
-        if (instance == null)
-            try {
-                instance = new KhachHangDAOImpl();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        return instance;
     }
 
     /**
@@ -65,17 +48,18 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
             throws RemoteException {
         String query = "{CALL USP_getCustomerListAndPageNumber( ? , ? )}";
         ArrayList<KhachHang> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class).setParameter(1, currentPage)
+            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, currentPage)
                     .setParameter(2, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -88,6 +72,7 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     @Override
     public int getTotalLineOfCustomerList() throws RemoteException {
         String query = "{CALL USP_getTotalLineOfCustomerList()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -98,7 +83,6 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -118,17 +102,19 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
             int lineNumberDisplayed) throws RemoteException {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListByNameAndPageNumber( ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class).setParameter(1, customerName)
-                    .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
+            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, customerName)
+                    .setParameter(2, currentPage)
+                    .setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -142,17 +128,18 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     @Override
     public int getTotalLineOfCustomerListByName(String customerName) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfCustomerListByName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, customerName).getSingleResult();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, customerName).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -172,17 +159,19 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
             int lineNumberDisplayed) throws RemoteException {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListByPhoneNumberAndPageNumber( ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class).setParameter(1, phoneNumber)
-                    .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
+            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, phoneNumber)
+                    .setParameter(2, currentPage)
+                    .setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -196,17 +185,18 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     @Override
     public int getTotalLineOfCustomerListByPhoneNumber(String phoneNumber) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfCustomerListByPhoneNumber( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, phoneNumber).getSingleResult();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, phoneNumber).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -221,16 +211,17 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     public ArrayList<KhachHang> getCustomerListUnBooked() throws RemoteException {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListUnBooked()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class).getResultList();
+            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -246,17 +237,17 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     public ArrayList<KhachHang> getCustomerListUnBookedByName(String customerName) throws RemoteException {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListUnBookedByName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class).setParameter(1, customerName)
-                    .getResultList();
+            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, customerName).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -272,17 +263,17 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     public ArrayList<KhachHang> getCustomerListUnBookedByCMND(String cmnd) throws RemoteException {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListUnBookedByCMND( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class).setParameter(1, cmnd)
-                    .getResultList();
+            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, cmnd).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -298,17 +289,17 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     public ArrayList<KhachHang> getCustomerListUnBookedByPhoneNumber(String phoneNumber) throws RemoteException {
         ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
         String query = "{CALL USP_getCustomerListUnBookedByPhoneNumber( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class).setParameter(1, phoneNumber)
-                    .getResultList();
+            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, phoneNumber).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -327,17 +318,17 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     public KhachHang getCustomerById(String customerId) throws RemoteException {
         KhachHang data = null;
         String query = "{CALL USP_getCustomerById( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            data = (KhachHang) em.createNativeQuery(query, KhachHang.class).setParameter(1, customerId)
-                    .getSingleResult();
+            data = (KhachHang) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, customerId).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return data;
     }
 
@@ -355,6 +346,7 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     @Override
     public boolean insertCustomer(KhachHang customer) throws RemoteException {
         String query = "{CALL USP_insertCustomer( ? , ? , ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -366,13 +358,12 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
                     .setParameter(4, customer.getGioiTinh())
                     .setParameter(5, customer.getSoDienThoai())
                     .setParameter(6, customer.getNgaySinh())
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -389,6 +380,7 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     @Override
     public String getLastCustomerId() throws RemoteException {
         String query = "{CALL USP_getLastCustomerId()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         String result = "";
         try {
@@ -399,7 +391,6 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -417,6 +408,7 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     @Override
     public boolean updateCustomerInfo(KhachHang customer) throws RemoteException {
         String query = "{CALL USP_updateCustomerInfo( ? , ? , ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -428,13 +420,12 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
                     .setParameter(4, customer.getGioiTinh())
                     .setParameter(5, customer.getSoDienThoai())
                     .setParameter(6, customer.getNgaySinh())
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -457,11 +448,14 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
             int lineNumberDisplayed) throws RemoteException {
         String query = "{CALL USP_getCustomerListByGenderAndPageNumber( ? , ? , ? )}";
         ArrayList<KhachHang> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class).setParameter(1, gender)
-                    .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
+            dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, gender)
+                    .setParameter(2, currentPage)
+                    .setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -484,17 +478,18 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     @Override
     public int getTotalLineOfCustomerListByGender(boolean gender) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfCustomerListByGender( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, gender).getSingleResult();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, gender).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -512,16 +507,17 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
     public KhachHang getCustomerByBillId(String billId) {
         KhachHang data = null;
         String query = "{CALL USP_getCustomerByBillId( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            data = (KhachHang) em.createNativeQuery(query, KhachHang.class).setParameter(1, billId).getSingleResult();
+            data = (KhachHang) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, billId).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return data;
     }
 }

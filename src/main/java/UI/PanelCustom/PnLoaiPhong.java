@@ -3,6 +3,7 @@ package UI.PanelCustom;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.Naming;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import javax.swing.table.*;
 
 import DAO.*;
 import Event_Handlers.InputEventHandler;
+import Event_Handlers.ValidationData;
 import UI.*;
 import entity.*;
 
@@ -62,9 +64,14 @@ public class PnLoaiPhong extends JPanel
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 	private int lineNumberDisplayed = 10;
-	private LoaiPhongDAO roomTypeDAO = LoaiPhongDAO.getInstance();
+	private SecurityManager securityManager = System.getSecurityManager();
 
 	public PnLoaiPhong(NhanVien staff) {
+		if (securityManager == null) {
+			System.setProperty("java.security.policy", "policy/policy.policy");
+			System.setSecurityManager(new SecurityManager());
+		}
+
 		this.staffLogin = staff;
 		setSize(1270, 630);
 		this.setLayout(null);
@@ -302,7 +309,13 @@ public class PnLoaiPhong extends JPanel
 
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+			NhanVien staff = null;
+			try {
+				NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+				staff = staffDAO.getStaffByUsername("phamdangdan");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			new fQuanTri(staff).setVisible(true);
 		});
 	}
@@ -314,16 +327,24 @@ public class PnLoaiPhong extends JPanel
 			String message = "";
 			if (validData()) {
 				LoaiPhong roomType = getRoomTypeDataInForm();
-				Boolean insertResult = roomTypeDAO.insertRoomType(roomType);
+				Boolean insertResult = false;
+				try {
+					LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+					insertResult = roomTypeDAO.insertRoomType(roomType);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				String name = "loại phòng";
 				if (insertResult) {
+					txtPaging.toTheLastPage();
+					searchEventUsingBtnSearch();
 					message = "Thêm " + name + " mới thành công";
 					txtRoomTypeId.setText(roomType.getMaLP());
-					int stt = tblTableTypeRoom.getRowCount();
-					addRow(stt, roomType);
-					int lastIndex = tblTableTypeRoom.getRowCount() - 1;
-					tblTableTypeRoom.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-					tblTableTypeRoom.scrollRectToVisible(tblTableTypeRoom.getCellRect(lastIndex, lastIndex, true));
+					// int stt = tblTableTypeRoom.getRowCount();
+					// addRow(stt, roomType);
+					// int lastIndex = tblTableTypeRoom.getRowCount() - 1;
+					// tblTableTypeRoom.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+					// tblTableTypeRoom.scrollRectToVisible(tblTableTypeRoom.getCellRect(lastIndex, lastIndex, true));
 					btnAdd.setEnabledCustom(false);
 					btnUpdate.setEnabledCustom(true);
 				} else {
@@ -346,7 +367,13 @@ public class PnLoaiPhong extends JPanel
 		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
 				LoaiPhong newRoomType = getRoomTypeDataInForm();
-				LoaiPhong oldRoomType = roomTypeDAO.getRoomTypeById(newRoomType.getMaLP());
+				LoaiPhong oldRoomType = null;
+				try {
+					LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+					oldRoomType = roomTypeDAO.getRoomTypeById(newRoomType.getMaLP());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				String message = "";
 				int selectedRow = tblTableTypeRoom.getSelectedRow();
 				String name = "loại phòng";
@@ -360,7 +387,13 @@ public class PnLoaiPhong extends JPanel
 							"Xác nhận cập nhật thông tin " + name + "", JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
 					if (confirmUpdate == JOptionPane.OK_OPTION) {
-						Boolean updateResult = roomTypeDAO.updateInfoRoomType(newRoomType);
+						Boolean updateResult = false;
+						try {
+							LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+							updateResult = roomTypeDAO.updateInfoRoomType(newRoomType);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 						if (updateResult) {
 							message = "Cập nhật thông tin " + name + " thành công";
 							updateRow(selectedRow, newRoomType);
@@ -534,11 +567,16 @@ public class PnLoaiPhong extends JPanel
 	 */
 	public void allLoaded() {
 		reSizeColumnTable();
-		int totalLine = roomTypeDAO.getTotalLineOfRoomTypeList();
-		txtPaging.setCurrentPage(1);
-		txtPaging.setTotalPage(getLastPage(totalLine));
-		ArrayList<LoaiPhong> roomTypeList = roomTypeDAO.getRoomTypeListAndPageNumber(1, lineNumberDisplayed);
-		loadRoomTypeList(roomTypeList, 1);
+		try {
+			LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+			int totalLine = roomTypeDAO.getTotalLineOfRoomTypeList();
+			txtPaging.setCurrentPage(1);
+			txtPaging.setTotalPage(getLastPage(totalLine));
+			ArrayList<LoaiPhong> roomTypeList = roomTypeDAO.getRoomTypeListAndPageNumber(1, lineNumberDisplayed);
+			loadRoomTypeList(roomTypeList, 1);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	/**
@@ -561,7 +599,14 @@ public class PnLoaiPhong extends JPanel
 	 * @return {@code String}: mã dịch vụ mới
 	 */
 	private String createNewServiceTypeID() {
-		String lastStrId = roomTypeDAO.getLastRoomTypeId();
+		String lastStrId = "";
+		try {
+			LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+			lastStrId = roomTypeDAO.getLastRoomTypeId();
+			lastStrId = roomTypeDAO.getLastRoomTypeId();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		String idStr = "LP";
 		int oldNumberId = 0;
 		if (lastStrId.equalsIgnoreCase("") == false || lastStrId != null) {
@@ -679,21 +724,29 @@ public class PnLoaiPhong extends JPanel
 		String keyword = "";
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
-		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			totalLine = roomTypeDAO.getTotalLineOfRoomTypeList();
-			roomTypeList = roomTypeDAO.getRoomTypeListAndPageNumber(currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Tên loại phòng")) {
-			keyword = txtKeyWord.getText().trim();
-			totalLine = roomTypeDAO.getTotalLineOfRoomTypeListByName(keyword);
-			roomTypeList = roomTypeDAO.getRoomTypeListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Giá cho thuê")) {
-			String priceStr = spnSearchPrice.getValue().toString().replaceAll("\\.[0]+$", "");
-			totalLine = roomTypeDAO.getTotalLineOfRoomTypeListByPrice(priceStr);
-			roomTypeList = roomTypeDAO.getRoomTypeListByPriceAndPageNumber(priceStr, currentPage, lineNumberDisplayed);
+		try {
+			LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+
+			if (searchTypeName.equalsIgnoreCase("Tất cả")) {
+				totalLine = roomTypeDAO.getTotalLineOfRoomTypeList();
+				roomTypeList = roomTypeDAO.getRoomTypeListAndPageNumber(currentPage, lineNumberDisplayed);
+			} else if (searchTypeName.equalsIgnoreCase("Tên loại phòng")) {
+				keyword = txtKeyWord.getText().trim();
+				totalLine = roomTypeDAO.getTotalLineOfRoomTypeListByName(keyword);
+				roomTypeList = roomTypeDAO.getRoomTypeListByNameAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
+			} else if (searchTypeName.equalsIgnoreCase("Giá cho thuê")) {
+				String priceStr = spnSearchPrice.getValue().toString().replaceAll("\\.[0]+$", "");
+				totalLine = roomTypeDAO.getTotalLineOfRoomTypeListByPrice(priceStr);
+				roomTypeList = roomTypeDAO.getRoomTypeListByPriceAndPageNumber(priceStr, currentPage,
+						lineNumberDisplayed);
+			}
+			int lastPage = getLastPage(totalLine);
+			txtPaging.setTotalPage(lastPage);
+			loadRoomTypeList(roomTypeList, currentPage);
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
-		int lastPage = getLastPage(totalLine);
-		txtPaging.setTotalPage(lastPage);
-		loadRoomTypeList(roomTypeList, currentPage);
 	}
 
 	/**

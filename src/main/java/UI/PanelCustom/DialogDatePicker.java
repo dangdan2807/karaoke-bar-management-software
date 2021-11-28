@@ -24,7 +24,7 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
      * 
      */
     private static final long serialVersionUID = 6679826367296394635L;
-    private int width = 450, heightPn = 210, widthPn = width - 20;
+    private int width = 450, heightPn = 220, widthPn = width - 20;
     private JButton[] button = new JButton[49];
     private String day = "";
     private int month = Calendar.getInstance().get(Calendar.MONTH);
@@ -42,7 +42,7 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
      */
     public DialogDatePicker() {
         setTitle("Chọn ngày");
-        setSize(447, 240);
+        setSize(447, 250);
         setResizable(false);
         setLocationRelativeTo(null);
 

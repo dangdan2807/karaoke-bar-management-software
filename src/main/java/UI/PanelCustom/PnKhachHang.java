@@ -3,6 +3,7 @@ package UI.PanelCustom;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.Naming;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -10,15 +11,10 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import DAO.ConvertTime;
-import DAO.KhachHangDAO;
-import DAO.NhanVienDAO;
-import DAO.ValidationData;
-import Event_Handlers.InputEventHandler;
-import UI.fDieuHuong;
-import UI.fQuanTri;
-import entity.KhachHang;
-import entity.NhanVien;
+import DAO.*;
+import Event_Handlers.*;
+import UI.*;
+import entity.*;
 
 /**
  * Giao diện quản lý khách hàng của phần mềm
@@ -71,9 +67,14 @@ public class PnKhachHang extends JPanel
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 	private int lineNumberDisplayed = 10;
-	private KhachHangDAO customerDAO = KhachHangDAO.getInstance();
+	private SecurityManager securityManager = System.getSecurityManager();
 
 	public PnKhachHang(NhanVien staff) {
+		if (securityManager == null) {
+			System.setProperty("java.security.policy", "policy/policy.policy");
+			System.setSecurityManager(new SecurityManager());
+		}
+
 		this.staffLogin = staff;
 		setSize(1270, 630);
 		this.setLayout(null);
@@ -347,7 +348,13 @@ public class PnKhachHang extends JPanel
 
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+			NhanVien staff = null;
+			try {
+				NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+				staff = staffDAO.getStaffByUsername("phamdangdan");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			new fQuanTri(staff).setVisible(true);
 		});
 	}
@@ -547,11 +554,16 @@ public class PnKhachHang extends JPanel
 	 */
 	private void allLoaded() {
 		reSizeColumnTable();
-		int totalLine = customerDAO.getTotalLineOfCustomerList();
-		txtPaging.setTotalPage(getLastPage(totalLine));
 		txtPaging.setCurrentPage(1);
-		ArrayList<KhachHang> customerList = customerDAO.getCustomerListAndPageNumber(1, lineNumberDisplayed);
-		loadCustomerList(customerList, 1);
+		try {
+			KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+			int totalLine = customerDAO.getTotalLineOfCustomerList();
+			txtPaging.setTotalPage(getLastPage(totalLine));
+			ArrayList<KhachHang> customerList = customerDAO.getCustomerListAndPageNumber(1, lineNumberDisplayed);
+			loadCustomerList(customerList, 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -592,10 +604,17 @@ public class PnKhachHang extends JPanel
 	 * @return {@code String}: mã khách hàng mới
 	 */
 	private String createNewStaffID() {
-		String lastCustomerId = customerDAO.getLastCustomerId();
+		String lastCustomerId = "";
+		try {
+			KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+			customerDAO.getLastCustomerId();
+			lastCustomerId = customerDAO.getLastCustomerId();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		String idStr = "KH";
 		int oldNumberCustomerID = 0;
-		if (lastCustomerId.equalsIgnoreCase("") == false || lastCustomerId != null) {
+		if (lastCustomerId.equalsIgnoreCase("") == false && lastCustomerId != null) {
 			oldNumberCustomerID = Integer.parseInt(lastCustomerId.replace(idStr, ""));
 		}
 
@@ -635,16 +654,25 @@ public class PnKhachHang extends JPanel
 		String message = "";
 		if (validData()) {
 			KhachHang customer = getCustomerDataInForm();
-			Boolean result = customerDAO.insertCustomer(customer);
+			Boolean result = false;
+			try {
+				KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+				result = customerDAO.insertCustomer(customer);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			String name = "khách hàng";
 			if (result) {
+				txtPaging.toTheLastPage();
+				searchEventUsingBtnSearch();
 				message = "Thêm " + name + " mới thành công";
 				txtCustomerID.setText(customer.getMaKH());
-				int stt = tblTableCustomer.getRowCount();
-				addRow(stt, customer);
-				int lastIndex = tblTableCustomer.getRowCount() - 1;
-				tblTableCustomer.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-				tblTableCustomer.scrollRectToVisible(tblTableCustomer.getCellRect(lastIndex, lastIndex, true));
+				// int stt = tblTableCustomer.getRowCount();
+				// addRow(stt, customer);
+				// int i = 1 + (txtPaging.getTotalPage() - 1) * lineNumberDisplayed;
+				// int lastIndex = i + tblTableCustomer.getRowCount();
+				// tblTableCustomer.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+				// tblTableCustomer.scrollRectToVisible(tblTableCustomer.getCellRect(lastIndex, lastIndex, true));
 				btnAdd.setEnabledCustom(false);
 				btnUpdate.setEnabledCustom(true);
 			} else {
@@ -660,7 +688,13 @@ public class PnKhachHang extends JPanel
 	private void updateStaffInfo() {
 		if (validData()) {
 			KhachHang customer = getCustomerDataInForm();
-			String staffName = customerDAO.getCustomerById(customer.getMaKH()).getHoTen();
+			String staffName = "";
+			try {
+				KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+				staffName = customerDAO.getCustomerById(customer.getMaKH()).getHoTen();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			String message = "";
 			int selectedRow = tblTableCustomer.getSelectedRow();
 			String name = "khách hàng";
@@ -673,7 +707,13 @@ public class PnKhachHang extends JPanel
 				int choose = JOptionPane.showConfirmDialog(this, message, "Xác nhận cập nhật thông tin " + name + "",
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (choose == JOptionPane.OK_OPTION) {
-					Boolean result = customerDAO.updateCustomerInfo(customer);
+					Boolean result = false;
+					try {
+						KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+						result = customerDAO.updateCustomerInfo(customer);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					if (result) {
 						message = "Cập nhật thông tin " + name + " thành công";
 						updateRow(selectedRow, customer);
@@ -765,32 +805,40 @@ public class PnKhachHang extends JPanel
 		String keyword = "";
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
-		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			totalLine = customerDAO.getTotalLineOfCustomerList();
-			customerList = customerDAO.getCustomerListAndPageNumber(currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Tên khách hàng")) {
-			keyword = txtKeyWord.getText().trim();
-			totalLine = customerDAO.getTotalLineOfCustomerListByName(keyword);
-			customerList = customerDAO.getCustomerListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-			keyword = txtKeyWord.getText().trim().replace("-", "");
-			if (keyword.matches("^[\\d]{0,10}$")) {
-				totalLine = customerDAO.getTotalLineOfCustomerListByPhoneNumber(keyword);
-				customerList = customerDAO.getCustomerListByPhoneNumberAndPageNumber(keyword, currentPage,
+		try {
+			KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+
+			if (searchTypeName.equalsIgnoreCase("Tất cả")) {
+				totalLine = customerDAO.getTotalLineOfCustomerList();
+				customerList = customerDAO.getCustomerListAndPageNumber(currentPage, lineNumberDisplayed);
+			} else if (searchTypeName.equalsIgnoreCase("Tên khách hàng")) {
+				keyword = txtKeyWord.getText().trim();
+				totalLine = customerDAO.getTotalLineOfCustomerListByName(keyword);
+				customerList = customerDAO.getCustomerListByNameAndPageNumber(keyword, currentPage,
 						lineNumberDisplayed);
-			} else {
-				String message = "Sổ điện phải phải là số, không được quá 10 số";
-				showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+			} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
+				keyword = txtKeyWord.getText().trim().replace("-", "");
+				if (keyword.matches("^[\\d]{0,10}$")) {
+					totalLine = customerDAO.getTotalLineOfCustomerListByPhoneNumber(keyword);
+					customerList = customerDAO.getCustomerListByPhoneNumberAndPageNumber(keyword, currentPage,
+							lineNumberDisplayed);
+				} else {
+					String message = "Sổ điện phải phải là số, không được quá 10 số";
+					showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+				}
+			} else if (searchTypeName.equalsIgnoreCase("Giới tính")) {
+				String genderStr = cboSearchGender.getSelectedItem().toString().trim();
+				boolean gender = genderStr.equalsIgnoreCase("Nữ") ? true : false;
+				totalLine = customerDAO.getTotalLineOfCustomerListByGender(gender);
+				customerList = customerDAO.getCustomerListByGenderAndPageNumber(gender, currentPage,
+						lineNumberDisplayed);
 			}
-		} else if (searchTypeName.equalsIgnoreCase("Giới tính")) {
-			String genderStr = cboSearchGender.getSelectedItem().toString().trim();
-			boolean gender = genderStr.equalsIgnoreCase("Nữ") ? true : false;
-			totalLine = customerDAO.getTotalLineOfCustomerListByGender(gender);
-			customerList = customerDAO.getCustomerListByGenderAndPageNumber(gender, currentPage, lineNumberDisplayed);
+			int lastPage = getLastPage(totalLine);
+			txtPaging.setTotalPage(lastPage);
+			loadCustomerList(customerList, currentPage);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		int lastPage = getLastPage(totalLine);
-		txtPaging.setTotalPage(lastPage);
-		loadCustomerList(customerList, currentPage);
 	}
 
 	/**

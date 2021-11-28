@@ -23,7 +23,6 @@ import entity.Phong;
  * Nội dung cập nhật: thêm, sửa các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
  */
 public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
-    private static PhongDAOImpl instance;
     private EntityManager em;
 
     /**
@@ -33,21 +32,6 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      */
     public PhongDAOImpl() throws RemoteException {
         em = HibernateUtil.getInstance().getEntityManager();
-    }
-
-    /**
-     * Sử dụng kiến trúc singleton để tạo ra 1 đối tượng duy nhất
-     * 
-     * @return {@code NhanVienDAOImpl}
-     */
-    public static PhongDAOImpl getInstance() {
-        if (instance == null)
-            try {
-                instance = new PhongDAOImpl();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        return instance;
     }
 
     /**
@@ -61,16 +45,17 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     public ArrayList<Phong> getRoomList() throws RemoteException {
         String query = "{CALL USP_getRoomList()}";
         ArrayList<Phong> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class).getResultList();
+            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -88,17 +73,18 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     @Override
     public Phong getRoomByRoomId(String roomId) throws RemoteException {
         String query = "{CALL USP_getRoomByRoomId( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         Phong result = null;
         try {
             tr.begin();
-            result = (Phong) em.createNativeQuery(query, Phong.class).setParameter(1, roomId).getResultList();
+            result = (Phong) em.createNativeQuery(query, Phong.class)
+                    .setParameter(1, roomId).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -113,18 +99,18 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     @Override
     public ArrayList<Phong> getRoomListByRoomTypeName(String roomTypeName) throws RemoteException {
         String query = "{CALL USP_getRoomListByRoomTypeName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         ArrayList<Phong> dataList = new ArrayList<>();
         try {
             tr.begin();
-            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class).setParameter(1, roomTypeName)
-                    .getResultList();
+            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
+                    .setParameter(1, roomTypeName).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -143,17 +129,19 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
             int lineNumberDisplayed) throws RemoteException {
         String query = "{CALL USP_getRoomListByRoomTypeNameAndPageNumber( ? , ? , ? )}";
         ArrayList<Phong> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class).setParameter(1, roomTypeName)
-                    .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
+            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
+                    .setParameter(1, roomTypeName)
+                    .setParameter(2, currentPage)
+                    .setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -167,17 +155,18 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     @Override
     public int getTotalLineOfRoomListByRoomTypeName(String roomTypeName) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfRoomListByRoomTypeName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, roomTypeName).getSingleResult();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, roomTypeName).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -192,16 +181,17 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     public ArrayList<Phong> getListAvailableRoom() throws RemoteException {
         String query = "{CALL USP_getListAvailableRoom()}";
         ArrayList<Phong> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class).getResultList();
+            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -217,17 +207,17 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     public ArrayList<Phong> getListAvailableRoomByRoomTypeName(String roomTypeName) throws RemoteException {
         String query = "{CALL USP_getListAvailableRoomByRoomTypeName( ? )}";
         ArrayList<Phong> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class).setParameter(1, roomTypeName)
-                    .getResultList();
+            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
+                    .setParameter(1, roomTypeName).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -250,6 +240,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     @Override
     public boolean updateRoomStatus(String roomId, int status) throws RemoteException {
         String query = "{CALL USP_updateRoomStatus( ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -263,7 +254,6 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -283,6 +273,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     @Override
     public boolean switchRoom(String billId, String oldRoomId, String newRoomId) throws RemoteException {
         String query = "{CALL USP_switchRoom( ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -297,7 +288,6 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -316,20 +306,19 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
             int lineNumberDisplayed) throws RemoteException {
         String query = "{CALL USP_getRoomListByLocationAndPageNumber( ? , ? , ? )}";
         ArrayList<Phong> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
             dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
                     .setParameter(1, location)
                     .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed)
-                    .getResultList();
+                    .setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -343,17 +332,18 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     @Override
     public int getTotalLineOfRoomListByLocation(String location) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfRoomListByLocation( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, location).getSingleResult();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, location).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -377,11 +367,14 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     public ArrayList<Phong> getRoomListByStatusAndPageNumber(int roomStatus, int currentPage, int lineNumberDisplayed) throws RemoteException {
         String query = "{CALL USP_getRoomListByStatusAndPageNumber( ? , ? , ? )}";
         ArrayList<Phong> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class).setParameter(1, roomStatus)
-                    .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
+            dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
+                    .setParameter(1, roomStatus)
+                    .setParameter(2, currentPage)
+                    .setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -404,17 +397,18 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     @Override
     public int getTotalLineOfRoomListByStatus(int roomStatus) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfRoomListByStatus( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, roomStatus).getSingleResult();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, roomStatus).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -431,6 +425,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      */
     public Boolean updateInfoRoom(Phong room) throws RemoteException {
         String query = "{CALL USP_updateInfoRoom( ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -440,13 +435,12 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
                     .setParameter(2, room.getTinhTrangP())
                     .setParameter(3, room.getViTri())
                     .setParameter(4, room.getLoaiPhong().getMaLP())
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -463,6 +457,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      */
     public Boolean insertRoom(Phong room) throws RemoteException {
         String query = "{CALL USP_insertRoom( ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -472,13 +467,12 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
                     .setParameter(2, room.getTinhTrangP())
                     .setParameter(3, room.getViTri())
                     .setParameter(4, room.getLoaiPhong().getMaLP())
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -494,6 +488,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      */
     public String getLastRoomID() throws RemoteException {
         String query = "{CALL USP_getLastRoomId()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         String result = "";
         try {
@@ -504,7 +499,6 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -521,17 +515,18 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      */
     public Phong getRoomByBillId(String billId) throws RemoteException {
         String query = "{CALL USP_getRoomByBillId( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         Phong result = null;
         try {
             tr.begin();
-            result = (Phong) em.createNativeQuery(query, Phong.class).setParameter(1, billId).getSingleResult();
+            result = (Phong) em.createNativeQuery(query, Phong.class)
+                    .setParameter(1, billId).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 }

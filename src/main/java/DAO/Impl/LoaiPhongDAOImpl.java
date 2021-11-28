@@ -23,23 +23,7 @@ import DAO.LoaiPhongDAO;
  * Nội dung cập nhật: thêm, sửa các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
  */
 public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDAO {
-    private static LoaiPhongDAOImpl instance;
     private EntityManager em;
-
-    /**
-     * Sử dụng kiến trúc singleton để tạo ra 1 đối tượng duy nhất
-     * 
-     * @return {@code LoaiPhongDAOImpl}
-     */
-    public static LoaiPhongDAOImpl getInstance() {
-        if (instance == null)
-            try {
-                instance = new LoaiPhongDAOImpl();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        return instance;
-    }
 
     /**
      * Constructor mặc định không tham số
@@ -61,6 +45,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
     public ArrayList<LoaiPhong> getRoomTypeList() throws RemoteException {
         ArrayList<LoaiPhong> dataList = new ArrayList<LoaiPhong>();
         String query = "{CALL USP_getRoomTypeList()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -70,7 +55,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -88,6 +72,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             throws RemoteException {
         ArrayList<LoaiPhong> dataList = new ArrayList<LoaiPhong>();
         String query = "{CALL USP_getRoomTypeListAndPageNumber( ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -98,7 +83,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -111,6 +95,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
     @Override
     public int getTotalLineOfRoomTypeList() throws RemoteException {
         String query = "{CALL USP_getTotalLineOfRoomTypeList()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -121,7 +106,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -139,6 +123,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
     @Override
     public String getRoomTypeNameById(String roomId) throws RemoteException {
         String query = "{CALL USP_getRoomTypeNameById( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         String roomTypeName = "";
         try {
@@ -149,7 +134,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return roomTypeName;
     }
 
@@ -168,6 +152,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             int lineNumberDisplayed) throws RemoteException {
         String query = "{CALL USP_getRoomTypeListByNameAndPageNumber( ? , ? , ? )}";
         ArrayList<LoaiPhong> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -178,7 +163,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -192,6 +176,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
     @Override
     public int getTotalLineOfRoomTypeListByName(String roomTypeName) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfRoomTypeListByName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -202,7 +187,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -219,6 +203,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
     @Override
     public String getLastRoomTypeId() throws RemoteException {
         String query = "{CALL USP_getLastRoomTypeId()}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         String roomTypeId = "";
         try {
@@ -229,7 +214,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return roomTypeId;
     }
 
@@ -247,6 +231,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
     @Override
     public LoaiPhong getRoomTypeById(String roomTypeId) throws RemoteException {
         String query = "{CALL USP_getRoomTypeById( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         LoaiPhong result = null;
         try {
@@ -257,7 +242,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -275,6 +259,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
     @Override
     public Boolean insertRoomType(LoaiPhong roomType) throws RemoteException {
         String query = "{CALL USP_insertRoomType( ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -290,7 +275,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -308,6 +292,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
     @Override
     public Boolean updateInfoRoomType(LoaiPhong roomType) throws RemoteException {
         String query = "{CALL USP_updateInfoRoomType( ? , ? , ? , ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -323,7 +308,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result > 0;
     }
 
@@ -342,6 +326,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             int lineNumberDisplayed) throws RemoteException {
         String query = "{CALL USP_getRoomTypeListByPriceAndPageNumber( ? , ? , ? )}";
         ArrayList<LoaiPhong> dataList = new ArrayList<>();
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
@@ -352,7 +337,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return dataList;
     }
 
@@ -366,6 +350,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
     @Override
     public int getTotalLineOfRoomTypeListByPrice(String price) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfRoomTypeListByPrice( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
         try {
@@ -376,7 +361,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 
@@ -394,6 +378,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
     @Override
     public LoaiPhong getRoomTypeByName(String roomTypeName) throws RemoteException {
         String query = "{CALL USP_getRoomTypeByName( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         LoaiPhong result = null;
         try {
@@ -404,7 +389,6 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.rollback();
             e.printStackTrace();
         }
-        em.close();
         return result;
     }
 }

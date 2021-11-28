@@ -3,6 +3,7 @@ package UI.PanelCustom;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.Naming;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import javax.swing.table.*;
 
 import DAO.*;
 import Event_Handlers.InputEventHandler;
+import Event_Handlers.ValidationData;
 import UI.*;
 import entity.*;
 
@@ -57,13 +59,18 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	private MyButton btnNextToLeft, btnNextToFirst;
 	private JComboBox<String> cboSearch, cboSearchType, cboRoomType, cboRoomStatus;
 	private PnTextFiledPaging txtPaging;
-	
+
 	private int lineNumberDisplayed = 10;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
-	private PhongDAO roomDAO = PhongDAO.getInstance();
+	private SecurityManager securityManager = System.getSecurityManager();
 
 	public PnPhong(NhanVien staff) {
+		if (securityManager == null) {
+			System.setProperty("java.security.policy", "policy/policy.policy");
+			System.setSecurityManager(new SecurityManager());
+		}
+
 		this.staffLogin = staff;
 		setSize(1270, 630);
 		this.setLayout(null);
@@ -308,7 +315,13 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+			NhanVien staff = null;
+			try {
+				NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+				staff = staffDAO.getStaffByUsername("phamdangdan");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			new fQuanTri(staff).setVisible(true);
 		});
 	}
@@ -333,7 +346,13 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 			String message = "";
 			if (validData()) {
 				Phong room = getRoomDataInForm();
-				Boolean insertResult = roomDAO.insertRoom(room);
+				Boolean insertResult = false;
+				try {
+					PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+					insertResult = roomDAO.insertRoom(room);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				String name = "phòng";
 				if (insertResult) {
 					message = "Thêm " + name + " mới thành công";
@@ -353,7 +372,13 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
 				Phong newRoom = getRoomDataInForm();
-				Phong oldRoomType = roomDAO.getRoomByRoomId(newRoom.getMaPhong());
+				Phong oldRoomType = null;
+				try {
+					PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+					oldRoomType = roomDAO.getRoomByRoomId(newRoom.getMaPhong());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				String message = "";
 				int selectedRow = tblTableRoom.getSelectedRow();
 				String name = "phòng";
@@ -367,7 +392,13 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 							"Xác nhận cập nhật thông tin " + name + "", JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
 					if (confirmUpdate == JOptionPane.OK_OPTION) {
-						Boolean updateResult = roomDAO.updateInfoRoom(newRoom);
+						Boolean updateResult = false;
+						try {
+							PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+							updateResult = roomDAO.updateInfoRoom(newRoom);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 						if (updateResult) {
 							message = "Cập nhật thông tin " + name + " thành công";
 							updateRow(selectedRow, newRoom);
@@ -422,7 +453,13 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 					cboSearchType.addItem("Phòng đang sử dụng");
 				} else if (searchType.equalsIgnoreCase("Loại phòng")) {
 					cboSearchType.removeAllItems();
-					ArrayList<LoaiPhong> roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeList();
+					ArrayList<LoaiPhong> roomTypeList = new ArrayList<>();
+					try {
+						LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+						roomTypeList = roomTypeDAO.getRoomTypeList();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					for (LoaiPhong loaiPhong : roomTypeList) {
 						cboSearchType.addItem(loaiPhong.getTenLP());
 					}
@@ -557,11 +594,16 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		loadRoomTypeList();
 		String roomStatusStr = cboRoomStatus.getSelectedItem().toString().trim();
 		int roomStatus = roomStatusStr.equalsIgnoreCase("Phòng Trống") ? 0 : 1;
-		int totalLine = roomDAO.getTotalLineOfRoomListByStatus(roomStatus);
-		txtPaging.setCurrentPage(1);
-		txtPaging.setTotalPage(getLastPage(totalLine));
-		ArrayList<Phong> roomList = roomDAO.getRoomListByStatusAndPageNumber(roomStatus, 1, lineNumberDisplayed);
-		loadRoomList(roomList, 1);
+		try {
+			PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+			int totalLine = roomDAO.getTotalLineOfRoomListByStatus(roomStatus);
+			txtPaging.setCurrentPage(1);
+			txtPaging.setTotalPage(getLastPage(totalLine));
+			ArrayList<Phong> roomList = roomDAO.getRoomListByStatusAndPageNumber(roomStatus, 1, lineNumberDisplayed);
+			loadRoomList(roomList, 1);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	/**
@@ -584,7 +626,14 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	 * @return {@code String}: mã nhân viên mới
 	 */
 	private String createNewRoomID() {
-		String lastStaffId = roomDAO.getLastRoomID();
+		String lastStaffId = "";
+		try {
+			PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+			lastStaffId = roomDAO.getLastRoomID();
+			lastStaffId = roomDAO.getLastRoomID();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		String idStr = "P";
 		int oldNumberStaffID = 0;
 		if (lastStaffId.equalsIgnoreCase("") == false || lastStaffId != null) {
@@ -614,7 +663,13 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		int roomStatus = roomStatusStr.equalsIgnoreCase("Phòng Trống") ? 0 : 1;
 		String location = txtLocation.getText().trim();
 		String roomTypeName = cboRoomType.getSelectedItem().toString().trim();
-		LoaiPhong roomType = LoaiPhongDAO.getInstance().getRoomTypeByName(roomTypeName);
+		LoaiPhong roomType = new LoaiPhong();
+		try {
+			LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+			roomType = roomTypeDAO.getRoomTypeByName(roomTypeName);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		if (roomId.equals("") || roomId.length() <= 0) {
 			roomId = createNewRoomID();
 		}
@@ -679,7 +734,13 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	 * Hiển thị danh sách phòng
 	 */
 	private void loadRoomTypeList() {
-		ArrayList<LoaiPhong> roomTypeList = LoaiPhongDAO.getInstance().getRoomTypeList();
+		ArrayList<LoaiPhong> roomTypeList = new ArrayList<>();
+		try {
+			LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+			roomTypeList = roomTypeDAO.getRoomTypeList();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		for (LoaiPhong loaiPhong : roomTypeList) {
 			cboRoomType.addItem(loaiPhong.getTenLP());
 		}
@@ -714,35 +775,41 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		String keywordStr = "";
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
-		switch (searchTypeName) {
-		case "Tình trạng phòng":
-			keyword = cboSearchType.getSelectedItem();
-			int roomStatus = 0;
-			if (keyword != null) {
-				roomStatus = keyword.toString().equalsIgnoreCase("Phòng trống") ? 0 : 1;
+		try {
+			PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+			switch (searchTypeName) {
+				case "Tình trạng phòng":
+					keyword = cboSearchType.getSelectedItem();
+					int roomStatus = 0;
+					if (keyword != null) {
+						roomStatus = keyword.toString().equalsIgnoreCase("Phòng trống") ? 0 : 1;
+					}
+					totalLine = roomDAO.getTotalLineOfRoomListByStatus(roomStatus);
+					roomList = roomDAO.getRoomListByStatusAndPageNumber(roomStatus, currentPage, lineNumberDisplayed);
+					break;
+				case "Loại phòng":
+					keyword = cboSearchType.getSelectedItem();
+					if (keyword == null) {
+						keyword = cboRoomStatus.getItemAt(0).toString().trim();
+					}
+					keywordStr = keyword.toString();
+					totalLine = roomDAO.getTotalLineOfRoomListByRoomTypeName(keywordStr);
+					roomList = roomDAO.getRoomListByRoomTypeNameAndPageNumber(keywordStr, currentPage,
+							lineNumberDisplayed);
+					break;
+				case "Vị trí":
+					keyword = txtKeyWord.getText().trim();
+					keywordStr = keyword.toString();
+					totalLine = roomDAO.getTotalLineOfRoomListByLocation(keywordStr);
+					roomList = roomDAO.getRoomListByLocationAndPageNumber(keywordStr, currentPage, lineNumberDisplayed);
+					break;
 			}
-			totalLine = roomDAO.getTotalLineOfRoomListByStatus(roomStatus);
-			roomList = roomDAO.getRoomListByStatusAndPageNumber(roomStatus, currentPage, lineNumberDisplayed);
-			break;
-		case "Loại phòng":
-			keyword = cboSearchType.getSelectedItem();
-			if (keyword == null) {
-				keyword = cboRoomStatus.getItemAt(0).toString().trim();
-			}
-			keywordStr = keyword.toString();
-			totalLine = roomDAO.getTotalLineOfRoomListByRoomTypeName(keywordStr);
-			roomList = roomDAO.getRoomListByRoomTypeNameAndPageNumber(keywordStr, currentPage, lineNumberDisplayed);
-			break;
-		case "Vị trí":
-			keyword = txtKeyWord.getText().trim();
-			keywordStr = keyword.toString();
-			totalLine = roomDAO.getTotalLineOfRoomListByLocation(keywordStr);
-			roomList = roomDAO.getRoomListByLocationAndPageNumber(keywordStr, currentPage, lineNumberDisplayed);
-			break;
+			int lastPage = getLastPage(totalLine);
+			txtPaging.setTotalPage(lastPage);
+			loadRoomList(roomList, currentPage);
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
-		int lastPage = getLastPage(totalLine);
-		txtPaging.setTotalPage(lastPage);
-		loadRoomList(roomList, currentPage);
 	}
 
 	/**

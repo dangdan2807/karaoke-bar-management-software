@@ -5,6 +5,7 @@ import javax.swing.event.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.rmi.Naming;
 
 import DAO.NhanVienDAO;
 import UI.PanelCustom.*;
@@ -47,7 +48,7 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
      */
     public fQuanTri(NhanVien staff) {
         setTitle("Quản Lý Hệ Thống");
-        setSize(1280, 655);
+        setSize(1280, 665);
         setResizable(false);
         setIconImage(logoApp.getImage());
         setLocationRelativeTo(null);
@@ -70,40 +71,46 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         PnKhachHang pnlCustomer = new PnKhachHang(staffLogin);
         PnLoaiPhong pnlRoomType = new PnLoaiPhong(staffLogin);
         PnPhong pnlRoom = new PnPhong(staffLogin);
-        PnLoaiDichVu pnlServiceType = new PnLoaiDichVu(staffLogin);
-        PnDichVu pnlService = new PnDichVu(staffLogin);
-        PnHoaDon pnlBill = new PnHoaDon(staffLogin);
+        // PnLoaiDichVu pnlServiceType = new PnLoaiDichVu(staffLogin);
+        // PnDichVu pnlService = new PnDichVu(staffLogin);
+        // PnHoaDon pnlBill = new PnHoaDon(staffLogin);
 
         tabMain.addTab("Nhân viên", null, pnlStaff, "Quản lý Nhân viên");
         tabMain.addTab("Khách hàng", null, pnlCustomer, "Quản lý Khách hàng");
         tabMain.addTab("Loại phòng", null, pnlRoomType, "Quản lý loại phòng");
         tabMain.addTab("Phòng", null, pnlRoom, "Quản lý Phòng");
-        tabMain.addTab("Loại dịch vụ", null, pnlServiceType, "Quản lý loại dịch vụ");
-        tabMain.addTab("Dịch vụ", null, pnlService, "Quản lý dịch vụ");
-        tabMain.addTab("Hóa đơn", null, pnlBill, "Quản lý Hóa đơn");
+        // tabMain.addTab("Loại dịch vụ", null, pnlServiceType, "Quản lý loại dịch vụ");
+        // tabMain.addTab("Dịch vụ", null, pnlService, "Quản lý dịch vụ");
+        // tabMain.addTab("Hóa đơn", null, pnlBill, "Quản lý Hóa đơn");
         this.add(tabMain);
 
         btnBackStaff = pnlStaff.getBtnBack();
         btnBackCustomer = pnlCustomer.getBtnBack();
         btnBackRoomType = pnlRoomType.getBtnBack();
         btnBackRoom = pnlRoom.getBtnBack();
-        btnBackServiceType = pnlServiceType.getBtnBack();
-        btnBackService = pnlService.getBtnBack();
-        btnBackBill = pnlBill.getBtnBack();
+        // btnBackServiceType = pnlServiceType.getBtnBack();
+        // btnBackService = pnlService.getBtnBack();
+        // btnBackBill = pnlBill.getBtnBack();
 
         tabMain.addChangeListener(this);
         btnBackStaff.addActionListener(this);
         btnBackCustomer.addActionListener(this);
         btnBackRoomType.addActionListener(this);
         btnBackRoom.addActionListener(this);
-        btnBackServiceType.addActionListener(this);
-        btnBackService.addActionListener(this);
-        btnBackBill.addActionListener(this);
+        // btnBackServiceType.addActionListener(this);
+        // btnBackService.addActionListener(this);
+        // btnBackBill.addActionListener(this);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+            NhanVien staff = null;
+            try {
+                NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+                staff = staffDAO.getStaffByUsername("phamdangdan");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             new fQuanTri(staff).setVisible(true);
         });
     }
@@ -119,6 +126,10 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
 
     @Override
     public void stateChanged(ChangeEvent e) {
+        Object o = e.getSource();
+        if (o.equals(tabMain)) {
+            System.out.println(tabMain.getSelectedIndex());
+        }
     }
 
     /**
