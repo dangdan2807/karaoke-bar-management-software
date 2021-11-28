@@ -3,6 +3,7 @@ package UI.PanelCustom;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.Naming;
 import java.sql.Timestamp;
 import java.text.*;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.ConvertTime;
 import Event_Handlers.InputEventHandler;
 import UI.fQuanLyDatPhong;
 import entity.*;
@@ -71,6 +73,7 @@ public class pnDatPhong extends JPanel
 
 	private int location = -1;
 	private NhanVien staffLogin = null;
+	private boolean isDoubleClick = false;
 	private int selectedServiceIndex = -1;
 	private int selectedServiceOrderIndex = -1;
 	private KhachHang selectedCustomer = null;
@@ -78,7 +81,7 @@ public class pnDatPhong extends JPanel
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private ArrayList<DichVu> serviceList = new ArrayList<DichVu>();
 	private ArrayList<DichVu> serviceOrderList = new ArrayList<DichVu>();
-	private boolean isDoubleClick = false;
+	private SecurityManager securityManager = System.getSecurityManager();
 
 	/**
 	 * Hàm khởi tạo form
@@ -86,6 +89,11 @@ public class pnDatPhong extends JPanel
 	 * @param staff {@code NhanVien}: nhân viên đăng nhập
 	 */
 	public pnDatPhong(NhanVien staff) {
+		if (securityManager == null) {
+			System.setProperty("java.security.policy", "policy/policy.policy");
+			System.setSecurityManager(new SecurityManager());
+		}
+
 		this.staffLogin = staff;
 		setSize(1270, 690);
 		this.setLayout(null);
@@ -566,21 +574,18 @@ public class pnDatPhong extends JPanel
 		txtServiceName.addKeyListener(this);
 		txtOrderQuantity.addKeyListener(this);
 
-		showStaffName(staffLogin);
-		LoadRoomList(PhongDAO.getInstance().getRoomList());
-		reSizeColumnTableBillInfo();
-		loadCboRoomType();
-		loadCboRoom("Tất cả");
-		loadDSServiceType();
-		String serviceName = cboServiceType.getSelectedItem().toString();
-		serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceName);
-		loadServiceList(serviceList);
-		reSizeColumnTableService();
+		allLoaded();
 	}
 
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
+			NhanVien staff = null;
+			try {
+				NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+				staff = staffDAO.getStaffByUsername("phamdangdan");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			new fQuanLyDatPhong(staff).setVisible(true);
 		});
 	}
@@ -597,24 +602,32 @@ public class pnDatPhong extends JPanel
 				long millis = System.currentTimeMillis();
 				Timestamp startTime = new Timestamp(millis);
 				String roomID = txtRoomID.getText().trim();
-				Phong room = PhongDAO.getInstance().getRoomByRoomId(roomID);
-				String NewBillId = createNewBillId(startTime);
-				HoaDon bill = new HoaDon(NewBillId, startTime, HoaDonDAO.UNPAID, staffLogin, selectedCustomer, room);
-				boolean resultBill = HoaDonDAO.getInstance().insertBill(bill);
-				if (resultBill) {
-					JOptionPane.showMessageDialog(this, "Cho thuê phòng thành công");
-					String billID = HoaDonDAO.getInstance().getLastBillId();
-					PhongDAO.getInstance().updateRoomStatus(roomID, PhongDAO.RENT);
-					txtBillID.setText(String.valueOf(billID));
-					((MyButton) btnPayment).setEnabledCustom(true);
-					LoadRoomList(PhongDAO.getInstance().getRoomList());
-					String startTimeStr = ConvertTime.getInstance().convertTimeToString(startTime, formatTime);
-					txtStartTime.setText(startTimeStr);
-					((MyButton) btnChooseCustomer).setEnabledCustom(false);
-					((MyButton) btnRentRoom).setEnabledCustom(false);
-					((MyButton) btnPayment).setEnabledCustom(true);
-				} else {
-					JOptionPane.showMessageDialog(this, "Cho thuê phòng thất bại");
+				try {
+					PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+					HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
+
+					Phong room = roomDAO.getRoomByRoomId(roomID);
+					String NewBillId = createNewBillId(startTime);
+					HoaDon bill = new HoaDon(NewBillId, startTime, HoaDonDAO.UNPAID, staffLogin, selectedCustomer,
+							room);
+					boolean resultBill = billDAO.insertBill(bill);
+					if (resultBill) {
+						JOptionPane.showMessageDialog(this, "Cho thuê phòng thành công");
+						String billID = billDAO.getLastBillId();
+						roomDAO.updateRoomStatus(roomID, PhongDAO.RENT);
+						txtBillID.setText(String.valueOf(billID));
+						((MyButton) btnPayment).setEnabledCustom(true);
+						LoadRoomList(roomDAO.getRoomList());
+						String startTimeStr = ConvertTime.getInstance().convertTimeToString(startTime, formatTime);
+						txtStartTime.setText(startTimeStr);
+						((MyButton) btnChooseCustomer).setEnabledCustom(false);
+						((MyButton) btnRentRoom).setEnabledCustom(false);
+						((MyButton) btnPayment).setEnabledCustom(true);
+					} else {
+						JOptionPane.showMessageDialog(this, "Cho thuê phòng thất bại");
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
 			}
 		} else if (o.equals(btnOrderServices)) {
@@ -627,36 +640,46 @@ public class pnDatPhong extends JPanel
 				searchService(1);
 		} else if (o.equals(btnPayment)) {
 			String billID = txtBillID.getText().trim();
-			HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billID);
-			if (bill != null) {
-				Phong room = PhongDAO.getInstance().getRoomByBillId(billID);
-				bill.setPhong(room);
-				String billId = txtBillID.getText().trim();
-				ArrayList<CTDichVu> billInfoList = CTDichVuDAO.getInstance().getServiceDetailListByBillId(billId);
-				bill.setDsCTDichVu(billInfoList);
-				long millis = System.currentTimeMillis();
-				Timestamp endTime = new Timestamp(millis);
-				bill.setNgayGioTra(endTime);
-				Double totalPriceBill = bill.tinhTongTienHoaDon();
+			try {
+				PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+				HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
+				KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+				CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDetailDAO");
 
-				DialogHoaDon winPayment = new DialogHoaDon(bill);
-				winPayment.setModal(true);
-				winPayment.setVisible(true);
-				Boolean isPaid = winPayment.getPaid();
-				if (isPaid) {
-					LoadRoomList(PhongDAO.getInstance().getRoomList());
-					String endTimeStr = ConvertTime.getInstance().convertTimeToString(endTime, formatTime);
-					String startTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioDat(),
-							formatTime);
-					txtEndTime.setText(endTimeStr);
-					txtTotalPriceBill.setText(df.format(totalPriceBill));
-					txtBillID.setText(String.valueOf(bill.getMaHoaDon()));
-					String customerName = KhachHangDAO.getInstance().getCustomerByBillId(bill.getMaHoaDon()).getHoTen();
-					txtCustomerName.setText(customerName);
-					txtStartTime.setText(startTimeStr);
-				} else {
-					bill.setNgayGioTra(null);
+				HoaDon bill = billDAO.getBillByBillId(billID);
+				if (bill != null) {
+					Phong room = roomDAO.getRoomByBillId(billID);
+					bill.setPhong(room);
+					String billId = txtBillID.getText().trim();
+					ArrayList<CTDichVu> billInfoList = serviceDetailDAO.getServiceDetailListByBillId(billId);
+					bill.setDsCTDichVu(billInfoList);
+					long millis = System.currentTimeMillis();
+					Timestamp endTime = new Timestamp(millis);
+					bill.setNgayGioTra(endTime);
+					Double totalPriceBill = bill.tinhTongTienHoaDon();
+
+					DialogHoaDon winPayment = new DialogHoaDon(bill);
+					winPayment.setModal(true);
+					winPayment.setVisible(true);
+					Boolean isPaid = winPayment.getPaid();
+					if (isPaid) {
+						LoadRoomList(roomDAO.getRoomList());
+						String endTimeStr = ConvertTime.getInstance().convertTimeToString(endTime, formatTime);
+						String startTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioDat(),
+								formatTime);
+						txtEndTime.setText(endTimeStr);
+						txtTotalPriceBill.setText(df.format(totalPriceBill));
+						txtBillID.setText(String.valueOf(bill.getMaHoaDon()));
+						String customerName = customerDAO.getCustomerByBillId(bill.getMaHoaDon())
+								.getHoTen();
+						txtCustomerName.setText(customerName);
+						txtStartTime.setText(startTimeStr);
+					} else {
+						bill.setNgayGioTra(null);
+					}
 				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
 		} else if (o.equals(btnRefreshRoom)) {
 			String roomTypeName = cboRoomType.getSelectedItem().toString();
@@ -675,11 +698,29 @@ public class pnDatPhong extends JPanel
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 				} else {
 					String billId = txtBillID.getText().trim();
-					PhongDAO.getInstance().switchRoom(billId, RoomIdOld, roomIdNew);
-					LoadRoomList(PhongDAO.getInstance().getRoomList());
-					String roomTypeName = txtRoomTypeName.getText();
-					loadCboRoom(roomTypeName);
-					refreshBillForm();
+					ArrayList<Phong> roomList = new ArrayList<>();
+					boolean result = false;
+					try {
+						PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+						result = roomDAO.switchRoom(billId, RoomIdOld, roomIdNew);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+					if (result) {
+						try {
+							PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+							roomList = roomDAO.getRoomList();
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+						LoadRoomList(roomList);
+						String roomTypeName = txtRoomTypeName.getText();
+						loadCboRoom(roomTypeName);
+						refreshBillForm();
+					} else {
+						JOptionPane.showConfirmDialog(this, message, "Chuyển phòng thất bại",
+								JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		} else if (o.equals(btnChooseCustomer)) {
@@ -789,7 +830,13 @@ public class pnDatPhong extends JPanel
 			loadRoomListByRoomTypeName(roomTypeName);
 		} else if (o.equals(cboServiceType)) {
 			String serviceTypeName = cboServiceType.getSelectedItem().toString();
-			serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName);
+			ArrayList<DichVu> serviceList = new ArrayList<>();
+			try {
+				DichVuDAO serviceDAO = (DichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDAO");
+				serviceList = serviceDAO.getServiceListByServiceTypeName(serviceTypeName);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 			loadServiceList(serviceList);
 		} else if (o.equals(chkSearchService)) {
 			if (chkSearchService.isSelected()) {
@@ -860,6 +907,30 @@ public class pnDatPhong extends JPanel
 	}
 
 	/**
+	 * Chạy tất cả các hàm khi bắt đầu chạy form
+	 */
+	public void allLoaded() {
+		showStaffName(staffLogin);
+		reSizeColumnTableBillInfo();
+		loadCboRoomType();
+		loadCboRoom("Tất cả");
+		loadDSServiceType();
+		reSizeColumnTableService();
+		String serviceName = cboServiceType.getSelectedItem().toString();
+		ArrayList<Phong> roomList = new ArrayList<>();
+		try {
+			PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+			DichVuDAO serviceDAO = (DichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDAO");
+			roomList = roomDAO.getRoomList();
+			serviceList = serviceDAO.getServiceListByServiceTypeName(serviceName);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		LoadRoomList(roomList);
+		loadServiceList(serviceList);
+	}
+
+	/**
 	 * chuyển đổi tình trạng phòng từ số sang chuỗi
 	 * 
 	 * @param type {@code int}: tình trạng phòng
@@ -880,7 +951,13 @@ public class pnDatPhong extends JPanel
 	 * @param roomId {@code String}: mã phòng cần hiển thị
 	 */
 	private void loadRoom(String maPhong) {
-		Phong room = PhongDAO.getInstance().getRoomByRoomId(maPhong);
+		Phong room = null;
+		try {
+			PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+			room = roomDAO.getRoomByRoomId(maPhong);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		String statusP = convertRoomStatus(room.getTinhTrangP());
 		String roomID = room.getMaPhong();
 		String btnName = "<html><p style='text-align: center;'> " + roomID
@@ -902,20 +979,20 @@ public class pnDatPhong extends JPanel
 		btnRoomList[index].setIcon(roomIcon);
 		btnRoomList[index].setCursor(new Cursor(Cursor.HAND_CURSOR));
 		switch (statusP) {
-		case "Trống":
-			btnRoomList[index].setBackground(Color.decode("#00a65a"));
-			((MyButton) btnRentRoom).setEnabledCustom(false);
-			((MyButton) btnPayment).setEnabledCustom(false);
-			((MyButton) btnChooseCustomer).setEnabledCustom(false);
-			((MyButton) btnSwitchRoom).setEnabledCustom(false);
-			break;
-		default:
-			btnRoomList[index].setBackground(Color.decode("#3c8dbc"));
-			((MyButton) btnRentRoom).setEnabledCustom(false);
-			((MyButton) btnPayment).setEnabledCustom(true);
-			((MyButton) btnChooseCustomer).setEnabledCustom(false);
-			((MyButton) btnSwitchRoom).setEnabledCustom(true);
-			break;
+			case "Trống":
+				btnRoomList[index].setBackground(Color.decode("#00a65a"));
+				((MyButton) btnRentRoom).setEnabledCustom(false);
+				((MyButton) btnPayment).setEnabledCustom(false);
+				((MyButton) btnChooseCustomer).setEnabledCustom(false);
+				((MyButton) btnSwitchRoom).setEnabledCustom(false);
+				break;
+			default:
+				btnRoomList[index].setBackground(Color.decode("#3c8dbc"));
+				((MyButton) btnRentRoom).setEnabledCustom(false);
+				((MyButton) btnPayment).setEnabledCustom(true);
+				((MyButton) btnChooseCustomer).setEnabledCustom(false);
+				((MyButton) btnSwitchRoom).setEnabledCustom(true);
+				break;
 		}
 		pnlShowRoom.revalidate();
 		pnlShowRoom.repaint();
@@ -956,7 +1033,13 @@ public class pnDatPhong extends JPanel
 					if (location != -1) {
 						btnRoomList[location].setBorder(lineGray);
 					}
-					String roomTypeName = LoaiPhongDAO.getInstance().getRoomTypeNameById(roomID);
+					String roomTypeName = "";
+					try {
+						LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+						roomTypeName = roomTypeDAO.getRoomTypeNameById(roomID);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					if (roomTypeName == null) {
 						roomTypeName = "Tất cả";
 					}
@@ -965,9 +1048,22 @@ public class pnDatPhong extends JPanel
 					btnRoomList[selection].setBorder(lineRed);
 					showBillInfo(roomID);
 					txtRoomID.setText(roomID);
-					HoaDon bill = HoaDonDAO.getInstance().getUncheckBillByRoomId(roomID);
+
+					HoaDon bill = null;
+					try {
+						HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
+						bill = billDAO.getUncheckBillByRoomId(roomID);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					if (bill != null) {
-						KhachHang customer = KhachHangDAO.getInstance().getCustomerByBillId(bill.getMaHoaDon());
+						KhachHang customer = null;
+						try {
+							KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+							customer = customerDAO.getCustomerByBillId(bill.getMaHoaDon());
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 						txtCustomerName.setText(customer.getHoTen());
 						txtBillID.setText(String.valueOf(bill.getMaHoaDon()));
 						String format = formatTime;
@@ -991,23 +1087,29 @@ public class pnDatPhong extends JPanel
 						txtTotalPriceBill.setText("0.0");
 					}
 					spnOrderQuantity.setValue((int) 1);
-					Phong roomActiveE = PhongDAO.getInstance().getRoomByRoomId(roomID);
+					Phong roomActiveE = null;
+					try {
+						PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+						roomActiveE = roomDAO.getRoomByRoomId(roomID);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					txtRoomLocation.setText(roomActiveE.getViTri());
 					txtRoomTypeName.setText(roomActiveE.getLoaiPhong().getTenLP());
 					String status = convertRoomStatus(roomActiveE.getTinhTrangP());
 					switch (status) {
-					case "Trống":
-						((MyButton) btnRentRoom).setEnabledCustom(false);
-						((MyButton) btnPayment).setEnabledCustom(false);
-						((MyButton) btnChooseCustomer).setEnabledCustom(true);
-						((MyButton) btnSwitchRoom).setEnabledCustom(false);
-						break;
-					default:
-						((MyButton) btnRentRoom).setEnabledCustom(false);
-						((MyButton) btnPayment).setEnabledCustom(true);
-						((MyButton) btnChooseCustomer).setEnabledCustom(false);
-						((MyButton) btnSwitchRoom).setEnabledCustom(true);
-						break;
+						case "Trống":
+							((MyButton) btnRentRoom).setEnabledCustom(false);
+							((MyButton) btnPayment).setEnabledCustom(false);
+							((MyButton) btnChooseCustomer).setEnabledCustom(true);
+							((MyButton) btnSwitchRoom).setEnabledCustom(false);
+							break;
+						default:
+							((MyButton) btnRentRoom).setEnabledCustom(false);
+							((MyButton) btnPayment).setEnabledCustom(true);
+							((MyButton) btnChooseCustomer).setEnabledCustom(false);
+							((MyButton) btnSwitchRoom).setEnabledCustom(true);
+							break;
 					}
 				}
 			});
@@ -1022,15 +1124,21 @@ public class pnDatPhong extends JPanel
 
 				@Override
 				public void mouseExited(MouseEvent e) {
-					Phong roomActiveE = PhongDAO.getInstance().getRoomByRoomId(roomID);
+					Phong roomActiveE = null;
+					try {
+						PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+						roomActiveE = roomDAO.getRoomByRoomId(roomID);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					String status = convertRoomStatus(roomActiveE.getTinhTrangP());
 					switch (status) {
-					case "Trống":
-						btnRoomList[selection].setBackground(Color.decode("#00a65a"));
-						break;
-					default:
-						btnRoomList[selection].setBackground(Color.decode("#3c8dbc"));
-						break;
+						case "Trống":
+							btnRoomList[selection].setBackground(Color.decode("#00a65a"));
+							break;
+						default:
+							btnRoomList[selection].setBackground(Color.decode("#3c8dbc"));
+							break;
 					}
 					btnRoomList[selection].setForeground(Color.WHITE);
 				}
@@ -1050,10 +1158,15 @@ public class pnDatPhong extends JPanel
 	 */
 	private void loadCboRoom(String roomTypeName) {
 		ArrayList<Phong> roomList = new ArrayList<Phong>();
-		if (roomTypeName.equalsIgnoreCase("Tất cả")) {
-			roomList = PhongDAO.getInstance().getListAvailableRoom();
-		} else {
-			roomList = PhongDAO.getInstance().getListAvailableRoomByRoomTypeName(roomTypeName);
+		try {
+			PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+			if (roomTypeName.equalsIgnoreCase("Tất cả")) {
+				roomList = roomDAO.getListAvailableRoom();
+			} else {
+				roomList = roomDAO.getListAvailableRoomByRoomTypeName(roomTypeName);
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
 		cboRoomID.removeAllItems();
 		for (Phong room : roomList) {
@@ -1077,7 +1190,13 @@ public class pnDatPhong extends JPanel
 	 * @param roomId {@code String}: mã phòng
 	 */
 	private void showBillInfo(String maPhong) {
-		ArrayList<CTDichVu> dataList = CTDichVuDAO.getInstance().getServiceDetailListByRoomId(maPhong);
+		ArrayList<CTDichVu> dataList = new ArrayList<CTDichVu>();
+		try {
+			CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDetailDAO");
+			dataList = serviceDetailDAO.getServiceDetailListByRoomId(maPhong);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		int i = 1;
 		modelTableBill.getDataVector().removeAllElements();
 		modelTableBill.fireTableDataChanged();
@@ -1107,7 +1226,13 @@ public class pnDatPhong extends JPanel
 	 * Hiển thị danh sách loại phòng lên comboBox loại phòng
 	 */
 	private void loadCboRoomType() {
-		ArrayList<LoaiPhong> dataList = LoaiPhongDAO.getInstance().getRoomTypeList();
+		ArrayList<LoaiPhong> dataList = new ArrayList<LoaiPhong>();
+		try {
+			LoaiPhongDAO roomTypeDAO = (LoaiPhongDAO) Naming.lookup("rmi://localhost:1099/roomTypeDAO");
+			dataList = roomTypeDAO.getRoomTypeList();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		cboRoomType.addItem("Tất cả");
 		for (LoaiPhong roomType : dataList) {
 			cboRoomType.addItem(roomType.getTenLP());
@@ -1120,12 +1245,17 @@ public class pnDatPhong extends JPanel
 	 * @param roomTypeName {@code String}: tên loại phòng
 	 */
 	private void loadRoomListByRoomTypeName(String roomTypeName) {
-		ArrayList<Phong> dataList = null;
-		if (roomTypeName.equalsIgnoreCase("Tất cả"))
-			dataList = PhongDAO.getInstance().getRoomList();
-		else {
-			location = -1;
-			dataList = PhongDAO.getInstance().getRoomListByRoomTypeName(roomTypeName);
+		ArrayList<Phong> dataList = new ArrayList<Phong>();
+		try {
+			PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+			if (roomTypeName.equalsIgnoreCase("Tất cả"))
+				dataList = roomDAO.getRoomList();
+			else {
+				location = -1;
+				dataList = roomDAO.getRoomListByRoomTypeName(roomTypeName);
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
 		LoadRoomList(dataList);
 	}
@@ -1152,7 +1282,13 @@ public class pnDatPhong extends JPanel
 	 * Hiển thị danh sách loại dịch vụ
 	 */
 	private void loadDSServiceType() {
-		ArrayList<LoaiDichVu> serviceTypeList = LoaiDichVuDAO.getInstance().getServiceTypeList();
+		ArrayList<LoaiDichVu> serviceTypeList = new ArrayList<LoaiDichVu>();
+		try {
+			LoaiDichVuDAO serviceTypeDAO = (LoaiDichVuDAO) Naming.lookup("rmi://localhost:1099/serviceTypeDAO");
+			serviceTypeList = serviceTypeDAO.getServiceTypeList();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		for (LoaiDichVu item : serviceTypeList) {
 			cboServiceType.addItem(item.getTenLDV());
 		}
@@ -1185,14 +1321,20 @@ public class pnDatPhong extends JPanel
 	private void searchService(int isRefresh) {
 		String serviceName = txtServiceName.getText().trim();
 		String serviceTypeName = cboServiceType.getSelectedItem().toString().trim();
-		if (serviceName.equalsIgnoreCase("")) {
-			serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName);
-		} else {
-			if (isRefresh == 1) {
-				serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(serviceTypeName);
-			} else
-				serviceList = DichVuDAO.getInstance().getServiceListByNameAndServiceTypeName(serviceName,
-						serviceTypeName);
+		try {
+			DichVuDAO serviceDAO = (DichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDAO");
+
+			if (serviceName.equalsIgnoreCase("")) {
+				serviceList = serviceDAO.getServiceListByServiceTypeName(serviceTypeName);
+			} else {
+				if (isRefresh == 1) {
+					serviceList = serviceDAO.getServiceListByServiceTypeName(serviceTypeName);
+				} else
+					serviceList = serviceDAO.getServiceListByNameAndServiceTypeName(serviceName,
+							serviceTypeName);
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
 		loadServiceList(serviceList);
 	}
@@ -1248,7 +1390,14 @@ public class pnDatPhong extends JPanel
 	private static String createNewBillId(Timestamp date) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 		String dateStr = format.format(date);
-		String lastBillId = HoaDonDAO.getInstance().getLastBillId();
+		String lastBillId = "";
+		try {
+			HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
+			lastBillId = billDAO.getLastBillId();
+			lastBillId = billDAO.getLastBillId();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		String newIdStr = "HD" + dateStr;
 		int oldNumberBillId = 0;
 		// lấy 5 số cuối của hóa đơn
@@ -1325,34 +1474,61 @@ public class pnDatPhong extends JPanel
 
 				String roomID = txtRoomID.getText().trim();
 				String billID = txtBillID.getText().trim();
-				HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billID);
+				HoaDon bill = null;
+				try {
+					HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
+					bill = billDAO.getBillByBillId(billID);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				boolean result = false;
 				message = typeMessage + " dịch vụ thất bại";
 				boolean isUpdate = false;
 				if (!billID.equalsIgnoreCase("")) {
-					CTDichVu serviceInfo = CTDichVuDAO.getInstance().getServiceDetailByBillIdAndServiceId(billID,
-							service.getMaDichVu());
+					CTDichVu serviceDetail = null;
+					try {
+						CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
+								.lookup("rmi://localhost:1099/serviceDetailDAO");
+						serviceDetail = serviceDetailDAO.getServiceDetailByBillIdAndServiceId(billID,
+								service.getMaDichVu());
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					// nếu ctDichVu không tồn tại thì thêm mới
 					// nếu ctDichVu đã tồn tại thì cập nhật
 
 					// Thêm mới
 					int newOrderQuantity = 0;
-					if (serviceInfo == null) {
+					if (serviceDetail == null) {
 						isUpdate = false;
 						double servicePrice = service.getGiaBan();
-						serviceInfo = new CTDichVu(orderQuantity, servicePrice, service);
-						result = CTDichVuDAO.getInstance().insertServiceDetail(serviceInfo, orderQuantity,
-								bill.getMaHoaDon());
+						serviceDetail = new CTDichVu(orderQuantity, servicePrice, service);
+						try {
+							CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
+									.lookup("rmi://localhost:1099/serviceDetailDAO");
+							result = serviceDetailDAO.insertServiceDetail(serviceDetail, orderQuantity,
+									bill.getMaHoaDon());
+
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 						// cập nhật
 
 					} else {
 						int newQuantity = quantityInStock - orderQuantity;
-						newOrderQuantity = serviceInfo.getSoLuongDat() + orderQuantity;
-						if (serviceInfo.getSoLuongDat() > 0 && newQuantity >= 0) {
+						newOrderQuantity = serviceDetail.getSoLuongDat() + orderQuantity;
+						if (serviceDetail.getSoLuongDat() > 0 && newQuantity >= 0) {
 							isUpdate = true;
-							serviceInfo.setSoLuongDat(newOrderQuantity);
-							result = CTDichVuDAO.getInstance().insertServiceDetail(serviceInfo, orderQuantity,
-									bill.getMaHoaDon());
+							serviceDetail.setSoLuongDat(newOrderQuantity);
+							result = false;
+							try {
+								CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
+										.lookup("rmi://localhost:1099/serviceDetailDAO");
+								result = serviceDetailDAO.insertServiceDetail(serviceDetail, orderQuantity,
+										bill.getMaHoaDon());
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
 						} else {
 							message = "Số lượng đặt phải nhỏ hơn số lượng hiện có. Vui lòng nhập lại";
 						}
@@ -1414,11 +1590,24 @@ public class pnDatPhong extends JPanel
 				DichVu service = serviceOrderList.get(selectedServiceOrderIndex);
 				String roomID = txtRoomID.getText().trim();
 				String billID = txtBillID.getText().trim();
-				HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billID);
+				HoaDon bill = null;
+				try {
+					HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
+					bill = billDAO.getBillByBillId(billID);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				boolean result = false;
 				if (!billID.equalsIgnoreCase("")) {
-					CTDichVu serviceDetail = CTDichVuDAO.getInstance().getServiceDetailByBillIdAndServiceId(billID,
-							service.getMaDichVu());
+					CTDichVu serviceDetail = null;
+					try {
+						CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
+								.lookup("rmi://localhost:1099/serviceDetailDAO");
+						serviceDetail = serviceDetailDAO.getServiceDetailByBillIdAndServiceId(billID,
+								service.getMaDichVu());
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					// nếu ctDichVu đã tồn tại thì cập nhật
 					// nếu ctDichVu không tồn tại thì thông báo lỗi
 					int newOrderQuantity = 0;
@@ -1428,8 +1617,15 @@ public class pnDatPhong extends JPanel
 						serviceDetail.setSoLuongDat(newOrderQuantity);
 						quantityInStock = service.getSoLuongTon();
 						service.setSoLuongTon(quantityInStock + cancelQuantity);
-						result = CTDichVuDAO.getInstance().insertServiceDetail(serviceDetail, (-1) * cancelQuantity,
-								bill.getMaHoaDon());
+						result = false;
+						try {
+							CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
+									.lookup("rmi://localhost:1099/serviceDetailDAO");
+							result = serviceDetailDAO.insertServiceDetail(serviceDetail, (-1) * cancelQuantity,
+									bill.getMaHoaDon());
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 					} else {
 						message = "Dịch vụ này chưa được đặt";
 					}

@@ -8,7 +8,7 @@ import java.awt.event.*;
 /**
  * Tạo 1 {@code JButton} tự tùy chỉnh theo ý muốn
  * <p>
- * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu
+ * Người tham gia thiết kế: Phạm Đăng Đan, Đỗ Thị Tường Vi
  * <p>
  * Ngày tạo: 03/10/2021
  * <p>

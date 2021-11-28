@@ -306,7 +306,7 @@ VALUES
     ('NV00000001', '111111111', N'Phạm Đăng Đan', '2001-01-01', 0, '0312345678', N'Chủ quán', 1, 'phamdangdan', N'Đang làm'),
     ('NV00000002', '111111113', N'Huỳnh Tuấn Anh', '2001-01-01', 0, '0312345671', N'Nhân Viên', 3000000, 'huynhtuananh', N'Đang làm'),
     ('NV00000003', '111111112', N'Lăng Nhật Sang', '2001-01-01', 0, '0312345679', N'Nhân Viên', 3000000, 'langnhapsang', N'Đang làm'),
-    ('NV00000004', '111111114', N'Võ Minh Hiếu', '2001-01-01', 0, '0312345672', N'Nhân Viên', 3000000, 'vominhhieu', N'Đang làm'),
+    ('NV00000004', '111111114', N'Đỗ Thị Tường Vi', '2001-01-01', 0, '0312345672', N'Nhân Viên', 3000000, 'vominhhieu', N'Đang làm'),
     ('NV00000005', '111111115', N'Nguyễn Xuân Anh', '1999-06-14', 1, '0312345673', N'Nhân Viên', 3000000, 'nhanvien1', N'Đang làm'),
     ('NV00000006', '111111116', N'Trần Thị Ngọc Vân', '1998-07-17', 1, '0812144673', N'Nhân Viên', 2800000, 'nhanvien2', N'Đang làm'),
     ('NV00000007', '111111117', N'Trần Vinh Can', '1993-08-27', 0, '0715344673', N'Nhân Viên', 3100000, 'nhanvien3', N'Đang làm'),

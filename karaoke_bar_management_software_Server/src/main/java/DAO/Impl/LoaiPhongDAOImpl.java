@@ -14,7 +14,7 @@ import DAO.LoaiPhongDAO;
 /**
  * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code LoaiPhong}
  * <p>
- * Người tham gia thiết kế: Võ Minh Hiếu
+ * Người tham gia thiết kế: Đỗ Thị Tường Vi
  * <p>
  * Ngày tạo: 03/10/2021
  * <p>

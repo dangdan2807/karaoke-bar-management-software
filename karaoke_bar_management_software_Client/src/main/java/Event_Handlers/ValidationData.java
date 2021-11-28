@@ -16,7 +16,7 @@ import UI.PanelCustom.kDatePicker;
 /**
  * lớp này dùng để xác thực dữ liệu và thông báo lỗi
  * <p>
- * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh, Võ Minh Hiếu
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh, Đỗ Thị Tường Vi
  * <p>
  * Ngày tạo: 02/10/2021
  * <p>

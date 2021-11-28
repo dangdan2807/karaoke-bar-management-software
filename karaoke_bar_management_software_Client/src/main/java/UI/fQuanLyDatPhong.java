@@ -14,7 +14,7 @@ import entity.NhanVien;
 /**
  * khung giao diện quản lý đặt phòng
  * <p>
- * Người tham gia thiết kế: Võ Minh Hiếu
+ * Người tham gia thiết kế: Đỗ Thị Tường Vi
  * <p>
  * Ngày tạo: 11/10/2021
  * <p>

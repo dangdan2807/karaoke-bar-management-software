@@ -8,7 +8,7 @@ import javax.swing.border.*;
 /**
  * Lớp này dùng để thiết lập các thuộc tính cho các thành phần trong giao diện
  * <p>
- * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh, Võ Minh Hiếu
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh, Đỗ Thị Tường Vi
  * <p>
  * Ngày tạo: 01/10/2021
  * <p>
