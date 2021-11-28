@@ -12,6 +12,7 @@ GO
 
 
 -- tạo bảng
+-- tạo bảng
 CREATE TABLE TaiKhoan
 (
     tenDangNhap VARCHAR(100) NOT NULL PRIMARY KEY,
@@ -665,17 +666,17 @@ BEGIN
     FROM dbo.LoaiDichVu ldv
     WHERE ldv.maLDV = @servideTypeId
 
-    -- Nếu có thì print 1 (thành công)
-    -- Nếu không có thì print 0 (thất bại)
+    -- Nếu có thì trả về 1 (thành công)
+    -- Nếu không có thì trả về 0 (thất bại)
     IF @isExitsServiceTypeId IS NULL
     BEGIN
         ROLLBACK
-        PRINT 0
+        SELECT TOP 1 0
     END
     ELSE 
     BEGIN
         COMMIT
-        PRINT 1
+        SELECT TOP 1 1
     END
 END
 GO
@@ -698,12 +699,12 @@ BEGIN
 
     IF @isExitsId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
@@ -905,12 +906,12 @@ BEGIN
     IF @isExitsServiceId IS NULL
     BEGIN
         ROLLBACK
-        PRINT 0
+        SELECT TOP 1 0
     END
     ELSE 
     BEGIN
         COMMIT
-        PRINT 1
+        SELECT TOP 1 1
     END
 
 END
@@ -953,12 +954,12 @@ BEGIN
 
     IF @isExitsId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
@@ -1024,12 +1025,12 @@ BEGIN
 
     IF @isExitsBillId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
@@ -1065,7 +1066,7 @@ BEGIN
 
     IF (@isExitsBillId IS NULL)
         BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
         ELSE
@@ -1078,13 +1079,13 @@ BEGIN
             SET tinhTrangP = 0
             WHERE maPhong = @roomID
 
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
 GO
 
-ALTER PROC USP_getTotalPriceBill
+CREATE PROC USP_getTotalPriceBill
     @billId VARCHAR(15)
 AS
 BEGIN
@@ -1103,7 +1104,7 @@ BEGIN
 
     IF (@startTime IS NULL) OR (@endTime IS NULL)
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
     END
     ELSE
     BEGIN
@@ -1141,7 +1142,6 @@ BEGIN
 
         -- tính tổng tiền hóa đơn
         SET @totalPriceBill = (@totalPriceRoom + @totalPriceService) * 1.1
-        -- PRINT(@totalPriceBill)
         SELECT TOP 1 @totalPriceBill
     END
 END
@@ -1469,11 +1469,11 @@ BEGIN
                 SET soLuongTon = @quantityInStock - @quantityOrder
                 WHERE maDichVu = @serviceId
         END
-        PRINT 1
+        SELECT TOP 1 1
     END
     ELSE
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
     END
 END
 GO
@@ -1738,12 +1738,12 @@ BEGIN
 
     IF @isExitsId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
@@ -1786,12 +1786,12 @@ BEGIN
 
     IF @isExitsId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
@@ -1938,12 +1938,12 @@ BEGIN
 
     IF @isExitsId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
@@ -1993,12 +1993,12 @@ BEGIN
         OR @isExitsOldRoomId IS NULL
         OR @isExitsNewRoomId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
@@ -2107,12 +2107,12 @@ BEGIN
 
     IF @isExitsId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
@@ -2139,12 +2139,12 @@ BEGIN
     IF @isExitsId IS NULL
     BEGIN
         ROLLBACK
-        PRINT 0
+        SELECT TOP 1 0
     END
     ELSE 
     BEGIN
         COMMIT
-        PRINT 1
+        SELECT TOP 1 1
     END
 END
 GO
@@ -2333,12 +2333,12 @@ BEGIN
 
     IF @isExitsId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE 
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
@@ -2368,12 +2368,12 @@ BEGIN
 
     IF @isExitsId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
@@ -2467,8 +2467,7 @@ GO
 CREATE PROC USP_getLastStaffID
 AS
 BEGIN
-    SELECT TOP 1
-        nv.maNhanVien
+    SELECT TOP 1 nv.maNhanVien
     FROM dbo.NhanVien nv
     ORDER BY nv.maNhanVien DESC
 END
@@ -2503,7 +2502,7 @@ BEGIN
     IF @isExitsUsername IS NULL
     BEGIN
         ROLLBACK
-        PRINT 0
+        SELECT TOP 1 0
     END
     ELSE
     BEGIN
@@ -2522,19 +2521,19 @@ BEGIN
         IF @isExitsStaffId IS NULL
         BEGIN
             ROLLBACK
-            PRINT 0
+            SELECT TOP 1 0
         END
         ELSE 
         BEGIN
             COMMIT
-            PRINT 1
+            SELECT TOP 1 1
         END
     END
 END
 GO
 
 CREATE PROC USP_updateInfoStaff
-    @staffID VARCHAR(12),
+    @staffID VARCHAR(10),
     @cmnd VARCHAR(12),
     @fullName NVARCHAR(100),
     @birthDay DATE,
@@ -2542,7 +2541,7 @@ CREATE PROC USP_updateInfoStaff
     @position NVARCHAR(100),
     @salary MONEY,
     @status NVARCHAR(100),
-    @gender INT
+    @gender BIT
 AS
 BEGIN
     BEGIN TRANSACTION
@@ -2552,7 +2551,7 @@ BEGIN
         trangThaiNV = @status, gioiTinh = @gender
         WHERE maNhanVien = @staffID
 
-    DECLARE @isExitsId VARCHAR(6)
+    DECLARE @isExitsId VARCHAR(10)
     SELECT @isExitsId = nv.maNhanVien
     FROM dbo.NhanVien nv
     WHERE cmnd = @cmnd
@@ -2567,19 +2566,19 @@ BEGIN
 
     IF @isExitsId IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
     BEGIN
-        PRINT 1
+        SELECT TOP 1 1
         COMMIT
     END
 END
 GO
 
 CREATE PROC USP_updateInfoStaffAndAccount
-    @staffID VARCHAR(12),
+    @staffID VARCHAR(10),
     @cmnd VARCHAR(12),
     @fullName NVARCHAR(100),
     @birthDay DATE,
@@ -2587,7 +2586,7 @@ CREATE PROC USP_updateInfoStaffAndAccount
     @position NVARCHAR(100),
     @salary MONEY,
     @status NVARCHAR(100),
-    @gender INT,
+    @gender BIT,
     @username VARCHAR(100),
     @password NVARCHAR(100),
     @activeAccount BIT
@@ -2608,7 +2607,7 @@ BEGIN
 
     IF @isExitsUsername IS NULL
     BEGIN
-        PRINT 0
+        SELECT TOP 1 0
         ROLLBACK
     END
     ELSE
@@ -2619,7 +2618,7 @@ BEGIN
             trangThaiNV = @status, gioiTinh = @gender
             WHERE maNhanVien = @staffID
 
-        DECLARE @isExitsStaffId VARCHAR(6)
+        DECLARE @isExitsStaffId VARCHAR(10)
         SELECT @isExitsStaffId = nv.maNhanVien
         FROM dbo.NhanVien nv
         WHERE cmnd = @cmnd
@@ -2634,12 +2633,12 @@ BEGIN
 
         IF @isExitsStaffId IS NULL
         BEGIN
-            PRINT 0
+            SELECT TOP 1 0
             ROLLBACK
         END
         ELSE
         BEGIN
-            PRINT 1
+            SELECT TOP 1 1
             COMMIT
         END
     END

@@ -4,15 +4,13 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.*;
-import DAO.Impl.NhanVienDAOImpl;
-import DAO.Impl.TaiKhoanDAOImpl;
 import Event_Handlers.*;
 import UI.*;
 import entity.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.rmi.RemoteException;
+import java.rmi.Naming;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -72,7 +70,7 @@ public class PnNhanVien extends JPanel
 	private boolean isResetPassword = false;
 	private boolean isInsertStaff = false;
 	private int lineNumberDisplayed = 10;
-	private NhanVienDAO staffDAO = NhanVienDAOImpl.getInstance();
+	private SecurityManager securityManager = System.getSecurityManager();
 
 	/**
 	 * Constructor form quản lý nhân viên
@@ -80,6 +78,11 @@ public class PnNhanVien extends JPanel
 	 * @param staff {@code NhanVien}: nhân viên truy cập
 	 */
 	public PnNhanVien(NhanVien staff) {
+		if (securityManager == null) {
+			System.setProperty("java.security.policy", "policy/policy.policy");
+			System.setSecurityManager(new SecurityManager());
+		}
+
 		this.staffLogin = staff;
 		setLayout(null);
 		setSize(1270, 630);
@@ -452,9 +455,9 @@ public class PnNhanVien extends JPanel
 		SwingUtilities.invokeLater(() -> {
 			NhanVien staff = null;
 			try {
-				staff = NhanVienDAOImpl.getInstance().getStaffByUsername("phamdangdan");
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
+				NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+				staff = staffDAO.getStaffByUsername("phamdangdan");
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			new fQuanTri(staff).setVisible(true);
@@ -684,13 +687,14 @@ public class PnNhanVien extends JPanel
 		String workingStatus = cboSearchType.getSelectedItem().toString().trim();
 		int totalLine = 1;
 		try {
+			NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
 			totalLine = staffDAO.getTotalLineOfStaffListByWorkingStatus(workingStatus);
 			txtPaging.setCurrentPage(1);
 			txtPaging.setTotalPage(getLastPage(totalLine));
 			ArrayList<NhanVien> staffList = staffDAO.getStaffListByWorkingStatusAndPageNumber(workingStatus, 1,
 					lineNumberDisplayed);
 			loadStaffList(staffList, 1);
-		} catch (RemoteException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -762,8 +766,9 @@ public class PnNhanVien extends JPanel
 			}
 			TaiKhoan account = null;
 			try {
-				account = TaiKhoanDAOImpl.getInstance().getAccountByUsername(username);
-			} catch (RemoteException e) {
+				TaiKhoanDAO accountDAO = (TaiKhoanDAO) Naming.lookup("rmi://localhost:1099/accountDAO");
+				account = accountDAO.getAccountByUsername(username);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			if (account != null) {
@@ -781,20 +786,23 @@ public class PnNhanVien extends JPanel
 	 * @return {@code String}: mã nhân viên mới
 	 */
 	private String createNewStaffID() {
+		String newStaffIdStr = "";
 		String lastStaffId = "";
 		try {
+			NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+			staffDAO.getLastStaffID();
 			lastStaffId = staffDAO.getLastStaffID();
-		} catch (RemoteException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		String idStr = "NV";
 		int oldNumberStaffID = 0;
-		if (lastStaffId.equalsIgnoreCase("") == false || lastStaffId != null) {
+		if (!lastStaffId.equals("") && !lastStaffId.isEmpty() && lastStaffId != null) {
 			oldNumberStaffID = Integer.parseInt(lastStaffId.replace(idStr, ""));
 		}
 
 		int newStaffID = ++oldNumberStaffID;
-		String newStaffIdStr = idStr + newStaffID;
+		newStaffIdStr = idStr + newStaffID;
 		boolean flag = true;
 		while (flag) {
 			newStaffIdStr = newStaffIdStr.replace(idStr, idStr + "0");
@@ -824,13 +832,14 @@ public class PnNhanVien extends JPanel
 		String username = txtUsername.getText().trim();
 		TaiKhoan account = new TaiKhoan(username);
 		account.setTinhTrangTK(accountStatus);
-		if (isResetPassword == true || isInsertStaff == true)
+		if (isResetPassword == true || isInsertStaff == true) {
 			account.setMatKhau("123456");
-		else {
+		} else {
 			NhanVien staff = null;
 			try {
+				NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
 				staff = staffDAO.getStaffByUsername(username);
-			} catch (RemoteException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			String password = staff.getTaiKhoan().getMatKhau();
@@ -948,8 +957,9 @@ public class PnNhanVien extends JPanel
 	 */
 	private void searchEventUsingBtnSearch() {
 		try {
+			NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
 			String searchTypeName = cboSearch.getSelectedItem().toString().trim();
-			ArrayList<NhanVien> staffList = null;
+			ArrayList<NhanVien> staffList = new ArrayList<>();
 			String keyword = "";
 			int currentPage = txtPaging.getCurrentPage();
 			int totalLine = 1;
@@ -1027,22 +1037,26 @@ public class PnNhanVien extends JPanel
 		String message = "";
 		if (validData()) {
 			NhanVien staff = getStaffDataInForm();
-			if (staff.getChucVu().equalsIgnoreCase("chủ quán")) {
+			if (staff.getChucVu().equalsIgnoreCase("Nhân viên")) {
 				Boolean result = false;
 				try {
+					NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
 					result = staffDAO.insertStaff(staff);
-				} catch (RemoteException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				String name = "nhân viên";
 				if (result) {
+					txtPaging.toTheLastPage();
+					searchEventUsingBtnSearch();
 					message = "Thêm " + name + " mới thành công";
 					txtStaffID.setText(staff.getMaNhanVien());
-					int stt = tblTableStaff.getRowCount() + 1;
-					addRow(stt, staff);
-					int lastIndex = tblTableStaff.getRowCount() - 1;
-					tblTableStaff.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-					tblTableStaff.scrollRectToVisible(tblTableStaff.getCellRect(lastIndex, lastIndex, true));
+					// int stt = tblTableStaff.getRowCount() + 1;
+					// addRow(stt, staff);
+					// int lastIndex = tblTableStaff.getRowCount() - 1;
+					// tblTableStaff.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+					// tblTableStaff.scrollRectToVisible(tblTableStaff.getCellRect(lastIndex,
+					// 		lastIndex, true));
 					CustomUI.getInstance().setCustomTextFieldOff(txtUsername);
 					btnAdd.setEnabledCustom(false);
 					btnUpdate.setEnabledCustom(true);
@@ -1071,8 +1085,9 @@ public class PnNhanVien extends JPanel
 			if (!isUpdateStatus && !isUpdateManager) {
 				String staffName = "";
 				try {
+					NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
 					staffName = staffDAO.getStaffNameById(staff.getMaNhanVien());
-				} catch (RemoteException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				int selectedRow = tblTableStaff.getSelectedRow();
@@ -1089,12 +1104,13 @@ public class PnNhanVien extends JPanel
 					if (choose == JOptionPane.OK_OPTION) {
 						Boolean result = false;
 						try {
+							NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
 							if (isResetPassword || staff.getTaiKhoan().getTinhTrangTK() == false) {
 								result = staffDAO.updateInfoStaffAndAccount(staff);
 							} else {
 								result = staffDAO.updateInfoStaff(staff);
 							}
-						} catch (RemoteException e) {
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 						if (result) {

@@ -1,6 +1,6 @@
 package DAO.Impl;
 
-import java.rmi.RemoteException;
+import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 
 import javax.persistence.*;
@@ -21,8 +21,10 @@ import entity.TaiKhoan;
  * Nội dung cập nhật: thêm, sửa các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
  */
 public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO {
-    private static TaiKhoanDAOImpl instance;
-
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
     private EntityManager em;
 
     /**
@@ -32,21 +34,6 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
      */
     public TaiKhoanDAOImpl() throws RemoteException {
         em = HibernateUtil.getInstance().getEntityManager();
-    }
-
-    /**
-     * Sử dụng kiến trúc singleton để tạo ra 1 đối tượng duy nhất
-     * 
-     * @return {@code TaiKhoanDAOImpl}
-     */
-    public static TaiKhoanDAOImpl getInstance() {
-        if (instance == null)
-            try {
-                instance = new TaiKhoanDAOImpl();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        return instance;
     }
 
     /**
@@ -65,11 +52,13 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
     public boolean login(String username, String password) throws RemoteException {
         int count = 0;
         String query = "{CALL USP_Login(?, ?)}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         TaiKhoan account = null;
         try {
             tr.begin();
-            account = (TaiKhoan) em.createNativeQuery(query, TaiKhoan.class).setParameter(1, username)
+            account = (TaiKhoan) em.createNativeQuery(query, TaiKhoan.class)
+                    .setParameter(1, username)
                     .setParameter(2, password).getSingleResult();
             tr.commit();
             if (account != null)
@@ -95,16 +84,18 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
     @Override
     public TaiKhoan getAccountByUsername(String username) throws RemoteException {
         String query = "{CALL USP_getAccountByUsername( ? )}";
+        em.clear();
         EntityTransaction tr = em.getTransaction();
         TaiKhoan account = null;
         try {
             tr.begin();
-            account = (TaiKhoan) em.createNativeQuery(query, TaiKhoan.class).setParameter(1, username)
-                    .getSingleResult();
+            account = (TaiKhoan) em.createNativeQuery(query, TaiKhoan.class)
+                    .setParameter(1, username).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println(account);
         return account;
     }
 }

@@ -2,14 +2,12 @@ package UI;
 
 import javax.swing.*;
 
-import DAO.NhanVienDAO;
 import DAO.TaiKhoanDAO;
-// import DAO.Impl.NhanVienDAOImpl;
-// import DAO.Impl.TaiKhoanDAOImpl;
+import DAO.NhanVienDAO;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.rmi.RemoteException;
+import java.rmi.*;
 
 import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.MyButton;
@@ -42,20 +40,24 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 			CustomUI.LOGIN_ICON.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 
 	private GradientPaint gra = new GradientPaint(0, 0, Color.decode("#900a9c"), 250, 0, Color.decode("#00cccb"));
-	TaiKhoanDAO accountDAO = null;
-	NhanVienDAO staffDAO = null;
+
+	private SecurityManager securityManager = System.getSecurityManager();
 
 	/**
 	 * Constructor form đăng nhập
 	 */
 	public fDangNhap() {
+		if (securityManager == null) {
+			System.setProperty("java.security.policy", "policy/policy.policy");
+			System.setSecurityManager(new SecurityManager());
+		}
+
 		setTitle("Đăng nhập");
 		setSize(460, 650);
 		setIconImage(logoApp.getImage());
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 		createFormLogin();
 	}
 
@@ -168,8 +170,9 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 			if (loginResult) {
 				NhanVien staff = null;
 				try {
+					NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
 					staff = staffDAO.getStaffByUsername(username);
-				} catch (RemoteException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				if (staff != null)
@@ -276,8 +279,9 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	private boolean login(String username, String password) {
 		boolean result = false;
 		try {
+			TaiKhoanDAO accountDAO = (TaiKhoanDAO) Naming.lookup("rmi://localhost:1099/accountDAO");
 			result = accountDAO.login(username, password);
-		} catch (RemoteException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
