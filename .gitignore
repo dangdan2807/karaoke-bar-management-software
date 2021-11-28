@@ -1,7 +1,0 @@
-.settings/*
-.gitignore
-target/classes/*
-.vscode/*
-Coffee.jrxml
-*/test.java
-src/main/resources/bill/*
