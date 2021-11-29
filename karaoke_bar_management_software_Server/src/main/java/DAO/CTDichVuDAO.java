@@ -63,5 +63,5 @@ public interface CTDichVuDAO extends Remote {
      *         </ul>
      * @throws RemoteException Bắt lỗi Remote
      */
-    public boolean insertServiceDetail(CTDichVu serviceDetail, int quantity, String billId) throws RemoteException;
+    public boolean updateServiceDetail(CTDichVu serviceDetail, int quantity, String billId) throws RemoteException;
 }

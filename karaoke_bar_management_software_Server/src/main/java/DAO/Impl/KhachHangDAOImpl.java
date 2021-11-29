@@ -314,22 +314,28 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
      *         </ul>
      * @throws RemoteException Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public KhachHang getCustomerById(String customerId) throws RemoteException {
-        KhachHang data = null;
+        KhachHang result = null;
         String query = "{CALL USP_getCustomerById( ? )}";
         em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            data = (KhachHang) em.createNativeQuery(query, KhachHang.class)
-                    .setParameter(1, customerId).getSingleResult();
+            ArrayList<KhachHang> resultQuery = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, customerId).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = null;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        return data;
+        return result;
     }
 
     /**
@@ -377,6 +383,7 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
      *         </ul>
      * @throws RemoteException Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public String getLastCustomerId() throws RemoteException {
         String query = "{CALL USP_getLastCustomerId()}";
@@ -385,8 +392,14 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
         String result = "";
         try {
             tr.begin();
-            result = (String) em.createNativeQuery(query).getSingleResult();
+            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query)
+                    .getSingleResult();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = "";
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -503,21 +516,27 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
      *         <li>Nếu không tìm thấy thì trả về {@code null}</li>
      *         </ul>
      */
+    @SuppressWarnings("unchecked")
     @Override
     public KhachHang getCustomerByBillId(String billId) {
-        KhachHang data = null;
+        KhachHang result = null;
         String query = "{CALL USP_getCustomerByBillId( ? )}";
         em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            data = (KhachHang) em.createNativeQuery(query, KhachHang.class)
-                    .setParameter(1, billId).getSingleResult();
+            ArrayList<KhachHang> resultQuery = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
+                    .setParameter(1, billId).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = null;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        return data;
+        return result;
     }
 }

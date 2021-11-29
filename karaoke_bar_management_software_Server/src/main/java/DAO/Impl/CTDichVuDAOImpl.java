@@ -51,8 +51,8 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<CTDichVu>) em.createNativeQuery(query, CTDichVu.class).setParameter(1, roomId)
-                    .getResultList();
+            dataList = (ArrayList<CTDichVu>) em.createNativeQuery(query, CTDichVu.class)
+                    .setParameter(1, roomId).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -77,8 +77,8 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<CTDichVu>) em.createNativeQuery(query, CTDichVu.class).setParameter(1, billId)
-                    .getResultList();
+            dataList = (ArrayList<CTDichVu>) em.createNativeQuery(query, CTDichVu.class)
+                    .setParameter(1, billId).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -99,6 +99,7 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
      *         </ul>
      * @throws RemoteException Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public CTDichVu getServiceDetailByBillIdAndServiceId(String billId, String serviceId) throws RemoteException {
         CTDichVu result = null;
@@ -107,10 +108,15 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            result = (CTDichVu) em.createNativeQuery(query, CTDichVu.class)
+            ArrayList<CTDichVu> resultQuery = (ArrayList<CTDichVu>) em.createNativeQuery(query, CTDichVu.class)
                     .setParameter(1, billId)
                     .setParameter(2, serviceId)
-                    .getSingleResult();
+                    .getResultList();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = null;
+            }
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -133,8 +139,8 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
      * @throws RemoteException Bắt lỗi Remote
      */
     @Override
-    public boolean insertServiceDetail(CTDichVu serviceDetail, int quantity, String billId) throws RemoteException {
-        String query = "{CALL USP_insertServiceDetail( ? , ? , ? , ? )}";
+    public boolean updateServiceDetail(CTDichVu serviceDetail, int quantity, String billId) throws RemoteException {
+        String query = "{CALL USP_updateServiceDetail( ? , ? , ? , ? )}";
         DichVu service = serviceDetail.getDichVu();
         em.clear();
         EntityTransaction tr = em.getTransaction();
@@ -146,7 +152,7 @@ public class CTDichVuDAOImpl extends UnicastRemoteObject implements CTDichVuDAO 
                     .setParameter(2, billId)
                     .setParameter(3, quantity)
                     .setParameter(4, serviceDetail.getDonGia())
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();

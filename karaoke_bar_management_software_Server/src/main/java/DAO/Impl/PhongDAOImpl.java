@@ -70,6 +70,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Phong getRoomByRoomId(String roomId) throws RemoteException {
         String query = "{CALL USP_getRoomByRoomId( ? )}";
@@ -78,9 +79,14 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
         Phong result = null;
         try {
             tr.begin();
-            result = (Phong) em.createNativeQuery(query, Phong.class)
-                    .setParameter(1, roomId).getSingleResult();
+            ArrayList<Phong> resultQuery = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
+                    .setParameter(1, roomId).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = null;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -248,7 +254,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
             result = (int) em.createNativeQuery(query)
                     .setParameter(1, status)
                     .setParameter(2, roomId)
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -260,7 +266,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
     /**
      * Chuyển phòng đang cho thuê
      * 
-     * @param roomId {@code String}: mã hóa đơn cần chuyển phòng
+     * @param roomId    {@code String}: mã hóa đơn cần chuyển phòng
      * @param oldRoomId {@code String}: mã phòng cũ
      * @param newRoomId {@code String}: mã phòng mới
      * @return {@code boolean}: kết quả trả về của câu truy vấn
@@ -282,7 +288,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
                     .setParameter(1, billId)
                     .setParameter(2, oldRoomId)
                     .setParameter(3, newRoomId)
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -313,7 +319,8 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
             dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
                     .setParameter(1, location)
                     .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed).getResultList();
+                    .setParameter(3, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -364,7 +371,8 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public ArrayList<Phong> getRoomListByStatusAndPageNumber(int roomStatus, int currentPage, int lineNumberDisplayed) throws RemoteException {
+    public ArrayList<Phong> getRoomListByStatusAndPageNumber(int roomStatus, int currentPage, int lineNumberDisplayed)
+            throws RemoteException {
         String query = "{CALL USP_getRoomListByStatusAndPageNumber( ? , ? , ? )}";
         ArrayList<Phong> dataList = new ArrayList<>();
         em.clear();
@@ -374,7 +382,8 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
             dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
                     .setParameter(1, roomStatus)
                     .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed).getResultList();
+                    .setParameter(3, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -423,6 +432,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @Override
     public Boolean updateInfoRoom(Phong room) throws RemoteException {
         String query = "{CALL USP_updateInfoRoom( ? , ? , ? , ? )}";
         em.clear();
@@ -455,6 +465,7 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @Override
     public Boolean insertRoom(Phong room) throws RemoteException {
         String query = "{CALL USP_insertRoom( ? , ? , ? , ? )}";
         em.clear();
@@ -486,6 +497,8 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
+    @Override
     public String getLastRoomID() throws RemoteException {
         String query = "{CALL USP_getLastRoomId()}";
         em.clear();
@@ -493,8 +506,13 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
         String result = "";
         try {
             tr.begin();
-            result = (String) em.createNativeQuery(query).getSingleResult();
+            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = "";
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -513,6 +531,8 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
+    @Override
     public Phong getRoomByBillId(String billId) throws RemoteException {
         String query = "{CALL USP_getRoomByBillId( ? )}";
         em.clear();
@@ -520,9 +540,14 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
         Phong result = null;
         try {
             tr.begin();
-            result = (Phong) em.createNativeQuery(query, Phong.class)
-                    .setParameter(1, billId).getSingleResult();
+            ArrayList<Phong> resultQuery = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
+                    .setParameter(1, billId).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = null;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();

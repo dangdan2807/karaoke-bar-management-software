@@ -2,6 +2,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch App",
+            "request": "launch",
+            "mainClass": "App.App",
+            "projectName": "karaoke_bar_management_software_Client (2)"
+        },
+        {
+            "type": "java",
+            "name": "Launch fDangNhap",
+            "request": "launch",
+            "mainClass": "UI.fDangNhap",
+            "projectName": "karaoke_bar_management_software_Client (2)"
+        },
+        {
+            "type": "java",
+            "name": "Launch pnDatPhong",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.pnDatPhong",
+            "projectName": "karaoke_bar_management_software_Client (2)"
+        },
+        {
+            "type": "java",
             "name": "Launch PnHoaDon",
             "request": "launch",
             "mainClass": "UI.PanelCustom.PnHoaDon",

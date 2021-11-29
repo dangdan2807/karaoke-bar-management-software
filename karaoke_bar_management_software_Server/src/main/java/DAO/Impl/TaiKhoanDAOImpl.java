@@ -2,6 +2,7 @@ package DAO.Impl;
 
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 import javax.persistence.*;
 
@@ -22,9 +23,9 @@ import entity.TaiKhoan;
  */
 public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private EntityManager em;
 
     /**
@@ -48,21 +49,24 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
      *         </ul>
      * @throws RemoteException bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public boolean login(String username, String password) throws RemoteException {
         int count = 0;
-        String query = "{CALL USP_Login(?, ?)}";
+        String queryStr = "{CALL USP_Login(?, ?)}";
         em.clear();
         EntityTransaction tr = em.getTransaction();
-        TaiKhoan account = null;
         try {
             tr.begin();
-            account = (TaiKhoan) em.createNativeQuery(query, TaiKhoan.class)
+            ArrayList<TaiKhoan> accountList = (ArrayList<TaiKhoan>) em.createNativeQuery(queryStr, TaiKhoan.class)
                     .setParameter(1, username)
-                    .setParameter(2, password).getSingleResult();
+                    .setParameter(2, password).getResultList();
             tr.commit();
-            if (account != null)
+            if (accountList.size() > 0) {
                 count = 1;
+            } else {
+                count = 0;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -81,6 +85,7 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
      *         </ul>
      * @throws RemoteException bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public TaiKhoan getAccountByUsername(String username) throws RemoteException {
         String query = "{CALL USP_getAccountByUsername( ? )}";
@@ -89,9 +94,14 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
         TaiKhoan account = null;
         try {
             tr.begin();
-            account = (TaiKhoan) em.createNativeQuery(query, TaiKhoan.class)
-                    .setParameter(1, username).getSingleResult();
+            ArrayList<TaiKhoan> accountList = (ArrayList<TaiKhoan>) em.createNativeQuery(query, TaiKhoan.class)
+                    .setParameter(1, username).getResultList();
             tr.commit();
+            if(accountList.size() > 0) {
+                account = accountList.get(0);
+            } else {
+                account = null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

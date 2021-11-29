@@ -48,13 +48,13 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
     @SuppressWarnings("unchecked")
     public ArrayList<NhanVien> getStaffListByWorkingStatusAndPageNumber(String workingStatus, int currentPage,
             int lineNumberDisplayed) throws RemoteException {
-        String query = "{CALL USP_getStaffListByWorkingStatusAndPageNumber(?, ?, ?)}";
+        String queryStr = "{CALL USP_getStaffListByWorkingStatusAndPageNumber(?, ?, ?)}";
         ArrayList<NhanVien> dataList = new ArrayList<>();
         em.clear();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class)
+            dataList = (ArrayList<NhanVien>) em.createNativeQuery(queryStr, NhanVien.class)
                     .setParameter(1, workingStatus)
                     .setParameter(2, currentPage)
                     .setParameter(3, lineNumberDisplayed)
@@ -74,17 +74,23 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      * @return {@code int}: số lượng nhân viên
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public int getTotalLineOfStaffListByWorkingStatus(String workingStatus) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfStaffListByWorkingStatus( ? )}";
         em.clear();
         EntityTransaction tr = em.getTransaction();
-        int result = 0;
+        int result = 1;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query)
-                    .setParameter(1, workingStatus).getSingleResult();
+            ArrayList<Integer> resultQuery = (ArrayList<Integer>) em.createNativeQuery(query)
+                    .setParameter(1, workingStatus).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = 1;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -103,6 +109,7 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      *         </ul>
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public NhanVien getStaffByUsername(String username) throws RemoteException {
         String query = "{CALL USP_getStaffByUsername( ? )}";
@@ -111,9 +118,14 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         NhanVien staff = null;
         try {
             tr.begin();
-            staff = (NhanVien) em.createNativeQuery(query, NhanVien.class)
-                    .setParameter(1, username).getSingleResult();
+            ArrayList<NhanVien> resultQuery = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class)
+                    .setParameter(1, username).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                staff = resultQuery.get(0);
+            } else {
+                staff = null;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -131,16 +143,22 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      *         </ul>
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public String getLastStaffID() throws RemoteException {
-        String query = "{CALL USP_getLastStaffID()}";
+        String queryStr = "{CALL USP_getLastStaffID()}";
         em.clear();
         EntityTransaction tr = em.getTransaction();
         String result = "";
         try {
             tr.begin();
-            result = (String) em.createNativeQuery(query).getSingleResult();
+            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(queryStr).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = "";
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -160,6 +178,7 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      *         </ul>
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public boolean insertStaff(NhanVien staff) throws RemoteException {
         String query = "{CALL USP_insertStaff( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )}";
@@ -168,7 +187,8 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, staff.getMaNhanVien())
+            ArrayList<Integer> resultQuery = (ArrayList<Integer>) em.createNativeQuery(query)
+                    .setParameter(1, staff.getMaNhanVien())
                     .setParameter(2, staff.getCmnd())
                     .setParameter(3, staff.getHoTen())
                     .setParameter(4, staff.getNgaySinh())
@@ -178,8 +198,13 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
                     .setParameter(8, staff.getTrangThaiNV())
                     .setParameter(9, staff.getGioiTinh())
                     .setParameter(10, staff.getTaiKhoan().getTenDangNhap())
-                    .getSingleResult();
+                    .getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = 0;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -198,6 +223,7 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      *         </ul>
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Boolean updateInfoStaff(NhanVien staff) throws RemoteException {
         String query = "{CALL USP_updateInfoStaff( ?, ?, ?, ?, ?, ?, ?, ?, ? )}";
@@ -207,7 +233,7 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         try {
             BigDecimal decimal = new BigDecimal(staff.getMucLuong());
             tr.begin();
-            result = (int) em.createNativeQuery(query)
+            ArrayList<Integer> resultQuery = (ArrayList<Integer>) em.createNativeQuery(query)
                     .setParameter(1, staff.getMaNhanVien())
                     .setParameter(2, staff.getCmnd())
                     .setParameter(3, staff.getHoTen())
@@ -217,8 +243,13 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
                     .setParameter(7, decimal)
                     .setParameter(8, staff.getTrangThaiNV())
                     .setParameter(9, staff.getGioiTinh())
-                    .getSingleResult();
+                    .getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = 0;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             tr.rollback();
@@ -237,6 +268,7 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      *         </ul>
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Boolean updateInfoStaffAndAccount(NhanVien staff) throws RemoteException {
         String query = "{CALL USP_updateInfoStaffAndAccount( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )}";
@@ -246,7 +278,8 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, staff.getMaNhanVien())
+            ArrayList<Integer> resultQuery = (ArrayList<Integer>) em.createNativeQuery(query)
+                    .setParameter(1, staff.getMaNhanVien())
                     .setParameter(2, staff.getCmnd())
                     .setParameter(3, staff.getHoTen())
                     .setParameter(4, staff.getNgaySinh())
@@ -258,8 +291,13 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
                     .setParameter(10, taiKhoan.getTenDangNhap())
                     .setParameter(11, taiKhoan.getMatKhau())
                     .setParameter(12, taiKhoan.getTinhTrangTK())
-                    .getSingleResult();
+                    .getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = 0;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -305,17 +343,23 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      * @return {@code int}: số lượng nhân viên
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public int getTotalLineByPosition(String position) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfStaffListByPosition( ? )}";
         em.clear();
         EntityTransaction tr = em.getTransaction();
-        int result = 0;
+        int result = 1;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query)
-                    .setParameter(1, position).getSingleResult();
+            ArrayList<Integer> resultQuery = (ArrayList<Integer>) em.createNativeQuery(query)
+                    .setParameter(1, position).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = 1;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -361,17 +405,23 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      * @return {@code int}: số lượng nhân viên
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public int getTotalLineByStaffName(String staffName) throws RemoteException {
         String query = "{CALL USP_getTotalLineOfStaffListByStaffName( ? )}";
         em.clear();
         EntityTransaction tr = em.getTransaction();
-        int result = 0;
+        int result = 1;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query)
-                    .setParameter(1, staffName).getSingleResult();
+            ArrayList<Integer> resultQuery = (ArrayList<Integer>) em.createNativeQuery(query)
+                    .setParameter(1, staffName).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = 1;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -417,6 +467,7 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      * @return {@code int}: số lượng nhân viên
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public int getTotalLineByPhoneNumber(String phoneNumber) throws RemoteException {
         String query = "{CALL USP_getTotalLineStaffListByPhoneNumber( ? )}";
@@ -425,9 +476,14 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query)
-                    .setParameter(1, phoneNumber).getSingleResult();
+            ArrayList<Integer> resultQuery = (ArrayList<Integer>) em.createNativeQuery(query)
+                    .setParameter(1, phoneNumber).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = 0;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -446,22 +502,28 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      *         </ul>
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public String getStaffNameById(String staffId) throws RemoteException {
         String query = "{CALL USP_getStaffNameById( ? )}";
         em.clear();
         EntityTransaction tr = em.getTransaction();
-        String staffName = "";
+        String result = "";
         try {
             tr.begin();
-            staffName = (String) em.createNativeQuery(query)
-                    .setParameter(1, staffId).getSingleResult();
+            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query)
+                    .setParameter(1, staffId).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = "";
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
         }
-        return staffName;
+        return result;
     }
 
     /**
@@ -475,6 +537,7 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
      *         </ul>
      * @throws RemoteException Bắt lỗi remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public NhanVien getStaffByBillId(String billId) throws RemoteException {
         String query = "{CALL USP_getStaffByBillId( ? )}";
@@ -483,9 +546,14 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            staff = (NhanVien) em.createNativeQuery(query, NhanVien.class)
-                    .setParameter(1, billId).getSingleResult();
+            ArrayList<NhanVien> resultQuery = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class)
+                    .setParameter(1, billId).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                staff = resultQuery.get(0);
+            } else {
+                staff = null;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();

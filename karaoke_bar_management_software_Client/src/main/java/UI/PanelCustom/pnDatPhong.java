@@ -1508,7 +1508,7 @@ public class pnDatPhong extends JPanel
 						try {
 							CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
 									.lookup("rmi://localhost:1099/serviceDetailDAO");
-							result = serviceDetailDAO.insertServiceDetail(serviceDetail, orderQuantity,
+							result = serviceDetailDAO.updateServiceDetail(serviceDetail, orderQuantity,
 									bill.getMaHoaDon());
 
 						} catch (Exception e1) {
@@ -1526,7 +1526,7 @@ public class pnDatPhong extends JPanel
 							try {
 								CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
 										.lookup("rmi://localhost:1099/serviceDetailDAO");
-								result = serviceDetailDAO.insertServiceDetail(serviceDetail, orderQuantity,
+								result = serviceDetailDAO.updateServiceDetail(serviceDetail, orderQuantity,
 										bill.getMaHoaDon());
 							} catch (Exception e1) {
 								e1.printStackTrace();
@@ -1623,7 +1623,7 @@ public class pnDatPhong extends JPanel
 						try {
 							CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
 									.lookup("rmi://localhost:1099/serviceDetailDAO");
-							result = serviceDetailDAO.insertServiceDetail(serviceDetail, (-1) * cancelQuantity,
+							result = serviceDetailDAO.updateServiceDetail(serviceDetail, (-1) * cancelQuantity,
 									bill.getMaHoaDon());
 						} catch (Exception e1) {
 							e1.printStackTrace();

@@ -49,7 +49,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class).getResultList();
+            dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -76,7 +77,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class).setParameter(1, currentPage)
+            dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
+                    .setParameter(1, currentPage)
                     .setParameter(2, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
@@ -120,6 +122,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public String getRoomTypeNameById(String roomId) throws RemoteException {
         String query = "{CALL USP_getRoomTypeNameById( ? )}";
@@ -128,8 +131,14 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         String roomTypeName = "";
         try {
             tr.begin();
-            roomTypeName = (String) em.createNativeQuery(query).setParameter(1, roomId).getSingleResult();
+            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query)
+                    .setParameter(1, roomId).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                roomTypeName = resultQuery.get(0);
+            } else {
+                roomTypeName = "";
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -156,8 +165,10 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class).setParameter(1, roomTypeName)
-                    .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
+            dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
+                    .setParameter(1, roomTypeName)
+                    .setParameter(2, currentPage)
+                    .setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -181,7 +192,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, roomTypeName).getSingleResult();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, roomTypeName).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -200,6 +212,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public String getLastRoomTypeId() throws RemoteException {
         String query = "{CALL USP_getLastRoomTypeId()}";
@@ -208,8 +221,13 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         String roomTypeId = "";
         try {
             tr.begin();
-            roomTypeId = (String) em.createNativeQuery(query).getSingleResult();
+            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                roomTypeId = resultQuery.get(0);
+            } else {
+                roomTypeId = "";
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -228,6 +246,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public LoaiPhong getRoomTypeById(String roomTypeId) throws RemoteException {
         String query = "{CALL USP_getRoomTypeById( ? )}";
@@ -236,8 +255,14 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         LoaiPhong result = null;
         try {
             tr.begin();
-            result = (LoaiPhong) em.createNativeQuery(query, LoaiPhong.class).setParameter(1, roomTypeId).getSingleResult();
+            ArrayList<LoaiPhong> resultQuery = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
+                    .setParameter(1, roomTypeId).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = null;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -269,7 +294,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
                     .setParameter(2, roomType.getTenLP())
                     .setParameter(3, roomType.getSucChua())
                     .setParameter(4, roomType.getGiaTien())
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -302,7 +327,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
                     .setParameter(2, roomType.getTenLP())
                     .setParameter(3, roomType.getSucChua())
                     .setParameter(4, roomType.getGiaTien())
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -330,8 +355,10 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class).setParameter(1, price)
-                    .setParameter(2, currentPage).setParameter(3, lineNumberDisplayed).getResultList();
+            dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
+                    .setParameter(1, price)
+                    .setParameter(2, currentPage)
+                    .setParameter(3, lineNumberDisplayed).getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -355,7 +382,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, price).getSingleResult();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, price).getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -375,6 +403,7 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public LoaiPhong getRoomTypeByName(String roomTypeName) throws RemoteException {
         String query = "{CALL USP_getRoomTypeByName( ? )}";
@@ -383,8 +412,14 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         LoaiPhong result = null;
         try {
             tr.begin();
-            result = (LoaiPhong) em.createNativeQuery(query, LoaiPhong.class).setParameter(1, roomTypeName).getSingleResult();
+            ArrayList<LoaiPhong> resultQuery = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
+                    .setParameter(1, roomTypeName).getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = null;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();

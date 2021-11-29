@@ -9,7 +9,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import DAO.KhachHangDAO;
+// import DAO.KhachHangDAO;
 import Event_Handlers.*;
+// import entity.KhachHang;
 import entity.KhachHang;
 
 /**

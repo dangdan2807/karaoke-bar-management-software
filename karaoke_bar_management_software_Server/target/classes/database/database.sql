@@ -517,6 +517,8 @@ BEGIN
 END
 GO
 
+exec USP_Login 'phamdangdan', '1234567'
+go
 
 -- tài khoản
 CREATE PROC USP_Login
@@ -586,7 +588,7 @@ CREATE PROC USP_getServiceTypeByName
     @ServiceTypeName NVARCHAR(100)
 AS
 BEGIN
-    SELECT ldv.tenLDV, ldv.maLDV
+    SELECT TOP 1 ldv.tenLDV, ldv.maLDV
     FROM dbo.LoaiDichVu ldv
     WHERE ldv.tenLDV = @ServiceTypeName
 END
@@ -596,7 +598,7 @@ CREATE PROC USP_getServiceTypeById
     @ServiceTypeId VARCHAR(6)
 AS
 BEGIN
-    SELECT ldv.tenLDV, ldv.maLDV
+    SELECT TOP 1 ldv.tenLDV, ldv.maLDV
     FROM dbo.LoaiDichVu ldv
     WHERE ldv.maLDV = @ServiceTypeId
 END
@@ -605,8 +607,7 @@ GO
 CREATE PROC USP_getLastServiceTypeID
 AS
 BEGIN
-    SELECT TOP 1
-        ldv.maLDV
+    SELECT TOP 1 ldv.maLDV
     FROM dbo.LoaiDichVu ldv
     ORDER BY ldv.maLDV DESC
 END
@@ -921,7 +922,7 @@ CREATE PROC USP_getServiceNameById
     @servideId VARCHAR(6)
 AS
 BEGIN
-    SELECT dv.tenDichVu
+    SELECT TOP 1 dv.tenDichVu
     FROM dbo.DichVu dv
     WHERE dv.maDichVu = @servideId
 END
@@ -978,7 +979,7 @@ CREATE PROC USP_getUncheckBillByRoomId
     @roomId VARCHAR(5)
 AS
 BEGIN
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+    SELECT TOP 1 hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
     hd.maNhanVien, hd.maKH, hd.maPhong
     FROM dbo.HoaDon hd, dbo.Phong p
     WHERE hd.maPhong = p.maPhong
@@ -991,7 +992,7 @@ CREATE PROC USP_getBillByBillId
     @billId VARCHAR(15)
 AS
 BEGIN
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+    SELECT TOP 1 hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
     hd.maNhanVien, hd.maKH, hd.maPhong
     FROM dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
@@ -1390,7 +1391,7 @@ CREATE PROC USP_getServiceDetailByBillIdAndServiceId
     @serviceId VARCHAR(6)
 AS
 BEGIN
-    SELECT ctdv.soLuongDat, ctdv.donGia, ctdv.maHoaDon,
+    SELECT TOP 1 ctdv.soLuongDat, ctdv.donGia, ctdv.maHoaDon,
         dv.maDichVu, dv.giaBan, dv.soLuongTon, dv.tenDichVu,
         ldv.maLDV, ldv.tenLDV
     FROM dbo.CTDichVu ctdv,
@@ -1408,7 +1409,7 @@ END
 GO
 
 -- @quantityOrder có thể là số âm
-CREATE PROC USP_insertServiceDetail
+CREATE PROC USP_updateServiceDetail
     @serviceId VARCHAR(6),
     @billId VARCHAR(15),
     @quantityOrder INT,
@@ -1517,7 +1518,7 @@ CREATE PROC USP_getCustomerById
     @customerId VARCHAR(10)
 AS
 BEGIN
-    SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+    SELECT TOP 1 kh.cmnd, kh.gioiTinh, kh.hoTen,
         kh.maKH, kh.ngaySinh, kh.soDienThoai
     FROM dbo.KhachHang kh
     WHERE kh.maKH = @customerId
@@ -1753,8 +1754,7 @@ GO
 CREATE PROC USP_getLastCustomerId
 AS
 BEGIN
-    SELECT TOP 1
-        kh.maKH
+    SELECT TOP 1 kh.maKH
     FROM dbo.KhachHang kh
     ORDER BY kh.maKH DESC
 END
@@ -1802,7 +1802,7 @@ CREATE PROC USP_getCustomerByBillId
     @billId VARCHAR(15)
 AS
 BEGIN
-    SELECT kh.cmnd, kh.gioiTinh, kh.hoTen,
+    SELECT TOP 1 kh.cmnd, kh.gioiTinh, kh.hoTen,
         kh.maKH, kh.ngaySinh, kh.soDienThoai
     FROM dbo.KhachHang kh, dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
@@ -1826,7 +1826,7 @@ CREATE PROC USP_getRoomByRoomId
     @roomId VARCHAR(5)
 AS
 BEGIN
-    SELECT p.maPhong, p.tinhTrangP, p.viTri,
+    SELECT TOP 1 p.maPhong, p.tinhTrangP, p.viTri,
         lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
@@ -2287,8 +2287,7 @@ GO
 CREATE PROC USP_getLastRoomTypeId
 AS
 BEGIN
-    SELECT TOP 1
-        lp.maLP
+    SELECT TOP 1 lp.maLP
     FROM dbo.LoaiPhong lp
     ORDER BY lp.maLP DESC
 END
@@ -2298,7 +2297,7 @@ CREATE PROC USP_getRoomTypeById
     @roomTypeId VARCHAR(5)
 AS
 BEGIN
-    SELECT lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+    SELECT TOP 1 lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
     FROM dbo.LoaiPhong lp
     WHERE lp.maLP = @roomTypeId
 END
@@ -2308,7 +2307,7 @@ CREATE PROC USP_getRoomTypeByName
     @roomTypeName NVARCHAR(100)
 AS
 BEGIN
-    SELECT lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
+    SELECT TOP 1 lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
     FROM dbo.LoaiPhong lp
     WHERE lp.tenLP = @roomTypeName
 END
@@ -2386,7 +2385,7 @@ CREATE PROC USP_getStaffByUsername
     @tenDangNhap VARCHAR(100)
 AS
 BEGIN
-    SELECT nv.maNhanVien, nv.cmnd, nv.hoTen, nv.ngaySinh,
+    SELECT TOP 1 nv.maNhanVien, nv.cmnd, nv.hoTen, nv.ngaySinh,
         nv.soDienThoai, nv.chucVu, nv.mucLuong, nv.gioiTinh, 
         nv.trangThaiNV, nv.taiKhoan,
         tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
@@ -2400,7 +2399,7 @@ CREATE PROC USP_getStaffByBillId
     @billId VARCHAR(15)
 AS
 BEGIN
-    SELECT nv.chucVu, nv.cmnd, nv.gioiTinh,
+    SELECT TOP 1 nv.chucVu, nv.cmnd, nv.gioiTinh,
         nv.hoTen, nv.maNhanVien, nv.mucLuong, nv.ngaySinh,
         nv.soDienThoai, nv.trangThaiNV, nv.taiKhoan,
         tk.tenDangNhap, tk.matKhau, tk.tinhTrangTK
@@ -2774,7 +2773,7 @@ CREATE PROC USP_getStaffNameById
     @staffID VARCHAR(10)
 AS
 BEGIN
-    SELECT nv.hoTen
+    SELECT TOP 1 nv.hoTen
     FROM dbo.NhanVien nv
     WHERE nv.maNhanVien = @staffID
 END

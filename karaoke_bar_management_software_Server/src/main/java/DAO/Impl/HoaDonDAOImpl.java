@@ -49,26 +49,31 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public HoaDon getUncheckBillByRoomId(String roomId) throws RemoteException {
         String query = "{CALL USP_getUncheckBillByRoomId( ? )}";
         HoaDon result = null;
         em.clear();
         EntityTransaction tr = em.getTransaction();
-        Object[] list = null;
+        ArrayList<Object[]> list = new ArrayList<>();;
         try {
             tr.begin();
-            list = (Object[]) em.createNativeQuery(query)
-                    .setParameter(1, roomId).getSingleResult();
+            list = (ArrayList<Object[]>) em.createNativeQuery(query)
+                    .setParameter(1, roomId).getResultList();
             tr.commit();
-            String billID = (String) list[0];
-            Timestamp startTime = (Timestamp) list[1];
-            Timestamp endTime = (Timestamp) list[2];
-            int status = (int) list[3];
-            NhanVien staff = new NhanVien((String) list[4]);
-            KhachHang customer = new KhachHang((String) list[5]);
-            Phong room = new Phong((String) list[6]);
-            result = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
+            if (list.size() > 0) {
+                String billID = (String) list.get(0)[0];
+                Timestamp startTime = (Timestamp) list.get(0)[1];
+                Timestamp endTime = (Timestamp) list.get(0)[2];
+                int status = (int) list.get(0)[3];
+                NhanVien staff = new NhanVien((String) list.get(0)[4]);
+                KhachHang customer = new KhachHang((String) list.get(0)[5]);
+                Phong room = new Phong((String) list.get(0)[6]);
+                result = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
+            } else {
+                result = null;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -87,27 +92,31 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
-    // @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Override
     public HoaDon getBillByBillId(String billId) throws RemoteException {
         String query = "{CALL USP_getBillByBillId( ? )}";
         HoaDon result = null;
         em.clear();
         EntityTransaction tr = em.getTransaction();
-        Object[] list = new Object[7];
+        ArrayList<Object[]> list = new ArrayList<>();
         try {
             tr.begin();
-            list = (Object[]) em.createNativeQuery(query)
-                    .setParameter(1, billId).getSingleResult();
+            list = (ArrayList<Object[]>) em.createNativeQuery(query)
+                    .setParameter(1, billId).getResultList();
             tr.commit();
-            String billID = (String) list[0];
-            Timestamp startTime = (Timestamp) list[1];
-            Timestamp endTime = (Timestamp) list[2];
-            int status = (int) list[3];
-            NhanVien staff = new NhanVien((String) list[4]);
-            KhachHang customer = new KhachHang((String) list[5]);
-            Phong room = new Phong((String) list[6]);
-            result = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
+            if (list.size() > 0) {
+                String billID = (String) list.get(0)[0];
+                Timestamp startTime = (Timestamp) list.get(0)[1];
+                Timestamp endTime = (Timestamp) list.get(0)[2];
+                int status = (int) list.get(0)[3];
+                NhanVien staff = new NhanVien((String) list.get(0)[4]);
+                KhachHang customer = new KhachHang((String) list.get(0)[5]);
+                Phong room = new Phong((String) list.get(0)[6]);
+                result = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
+            } else {
+                result = null;
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -125,6 +134,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
      *         </ul>
      * @throws RemoteException - Bắt lỗi Remote
      */
+    @SuppressWarnings("unchecked")
     @Override
     public String getLastBillId() throws RemoteException {
         String query = "{CALL USP_getLastBillId()}";
@@ -133,8 +143,14 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
         String result = "";
         try {
             tr.begin();
-            result = (String) em.createNativeQuery(query).getSingleResult();
+            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query)
+                    .getResultList();
             tr.commit();
+            if (resultQuery.size() > 0) {
+                result = resultQuery.get(0);
+            } else {
+                result = "-1";
+            }
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();
@@ -167,7 +183,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                     .setParameter(3, bill.getNhanVien().getMaNhanVien())
                     .setParameter(4, bill.getKhachHang().getMaKH())
                     .setParameter(5, bill.getPhong().getMaPhong())
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -200,7 +216,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
             result = (int) em.createNativeQuery(query)
                     .setParameter(1, billId)
                     .setParameter(2, paymentDate)
-                    .executeUpdate();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
