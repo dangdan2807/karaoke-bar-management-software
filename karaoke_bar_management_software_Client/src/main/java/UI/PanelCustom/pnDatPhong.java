@@ -82,6 +82,8 @@ public class pnDatPhong extends JPanel
 	private ArrayList<DichVu> serviceList = new ArrayList<DichVu>();
 	private ArrayList<DichVu> serviceOrderList = new ArrayList<DichVu>();
 	private SecurityManager securityManager = System.getSecurityManager();
+	
+	private ConvertTime convertTime = ConvertTime.getInstance();
 
 	/**
 	 * Hàm khởi tạo form
@@ -615,10 +617,10 @@ public class pnDatPhong extends JPanel
 						JOptionPane.showMessageDialog(this, "Cho thuê phòng thành công");
 						String billID = billDAO.getLastBillId();
 						roomDAO.updateRoomStatus(roomID, PhongDAO.RENT);
-						txtBillID.setText(String.valueOf(billID));
+						txtBillID.setText(billID);
 						((MyButton) btnPayment).setEnabledCustom(true);
 						LoadRoomList(roomDAO.getRoomList());
-						String startTimeStr = ConvertTime.getInstance().convertTimeToString(startTime, formatTime);
+						String startTimeStr = convertTime.convertTimeToString(startTime, formatTime);
 						txtStartTime.setText(startTimeStr);
 						((MyButton) btnChooseCustomer).setEnabledCustom(false);
 						((MyButton) btnRentRoom).setEnabledCustom(false);
@@ -664,8 +666,8 @@ public class pnDatPhong extends JPanel
 					Boolean isPaid = winPayment.getPaid();
 					if (isPaid) {
 						LoadRoomList(roomDAO.getRoomList());
-						String endTimeStr = ConvertTime.getInstance().convertTimeToString(endTime, formatTime);
-						String startTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioDat(),
+						String endTimeStr = convertTime.convertTimeToString(endTime, formatTime);
+						String startTimeStr = convertTime.convertTimeToString(bill.getNgayGioDat(),
 								formatTime);
 						txtEndTime.setText(endTimeStr);
 						txtTotalPriceBill.setText(df.format(totalPriceBill));
@@ -1072,10 +1074,10 @@ public class pnDatPhong extends JPanel
 						String startTimeStr = "";
 						String endTimeStr = "";
 						if (startTime != null) {
-							startTimeStr = ConvertTime.getInstance().convertTimeToString(startTime, format);
+							startTimeStr = convertTime.convertTimeToString(startTime, format);
 						}
 						if (endTime != null) {
-							endTimeStr = ConvertTime.getInstance().convertTimeToString(endTime, format);
+							endTimeStr = convertTime.convertTimeToString(endTime, format);
 						}
 						txtStartTime.setText(startTimeStr);
 						txtEndTime.setText(endTimeStr);

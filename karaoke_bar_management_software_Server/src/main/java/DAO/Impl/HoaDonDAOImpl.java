@@ -66,7 +66,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
             Timestamp endTime = (Timestamp) list[2];
             int status = (int) list[3];
             NhanVien staff = new NhanVien((String) list[4]);
-            KhachHang customer = (KhachHang) list[5];
+            KhachHang customer = new KhachHang((String) list[5]);
             Phong room = new Phong((String) list[6]);
             result = new HoaDon(billID, startTime, endTime, status, staff, customer, room);
         } catch (Exception e) {
