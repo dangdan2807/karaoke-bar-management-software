@@ -11,6 +11,7 @@ import javax.swing.table.*;
 
 import DAO.*;
 import Event_Handlers.InputEventHandler;
+import Event_Handlers.ValidationData;
 import UI.*;
 import entity.*;
 
@@ -255,7 +256,7 @@ public class PnDichVu extends JPanel
 		CustomUI.getInstance().setCustomTable(tblTableService);
 		tblTableService.setRowHeight(21);
 
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableService);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableService);
 		scrTable.setBounds(10, 20, 1200, 235);
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);

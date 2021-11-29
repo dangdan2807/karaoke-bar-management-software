@@ -11,6 +11,7 @@ import javax.swing.table.*;
 
 import DAO.*;
 import Event_Handlers.InputEventHandler;
+import Event_Handlers.ValidationData;
 import UI.*;
 import entity.*;
 
@@ -243,7 +244,7 @@ public class PnLoaiPhong extends JPanel
 		tblTableTypeRoom = new JTable(modelTableTypeRoom);
 		CustomUI.getInstance().setCustomTable(tblTableTypeRoom);
 		tblTableTypeRoom.setRowHeight(21);
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableTypeRoom);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableTypeRoom);
 		scrTable.setBounds(10, 20, 1200, 230);
 
 		pnlTable.add(scrTable);

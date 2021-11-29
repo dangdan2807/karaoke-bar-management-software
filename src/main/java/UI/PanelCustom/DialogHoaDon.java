@@ -13,6 +13,8 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.ConvertTime;
+import Event_Handlers.ExportBill;
 import entity.*;
 
 /**
@@ -163,7 +165,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		tblTableBillInfo.setOpaque(false);
 		tblTableBillInfo.setShowGrid(false);
 		tblTableBillInfo.setRowHeight(25);
-		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPane(tblTableBillInfo);
+		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableBillInfo);
 		scrTableBillInfo.setBounds(1, 1, 777, 199);
 		pnTable.add(scrTableBillInfo);
 
@@ -379,8 +381,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(null, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (o.equals(btnPayment)) {
-			Double totalPriceBill = bill.tinhTongTienHoaDon();
-			boolean isPaid = HoaDonDAO.getInstance().payment(bill.getMaHoaDon(), bill.getNgayGioTra(), totalPriceBill);
+			boolean isPaid = HoaDonDAO.getInstance().payment(bill.getMaHoaDon(), bill.getNgayGioTra());
 			if (isPaid) {
 				paid = isPaid;
 				btnExportExcel.setEnabledCustom(true);

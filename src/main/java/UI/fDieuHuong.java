@@ -38,8 +38,7 @@ public class fDieuHuong extends JFrame implements ActionListener {
     private ImageIcon logoutIcon = CustomUI.LOGOUT_ICON;
     private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
             Color.decode("#FAFFD1"));
-    private JLabel lblNewLabel;
-    private JLabel lbStaffName;;
+    private JLabel lblNewLabel, lblStaffName;
 
     /**
      * Constructor form điều hướng
@@ -139,11 +138,11 @@ public class fDieuHuong extends JFrame implements ActionListener {
         lblNewLabel.setBounds(20, 0, 80, 30);
         pnlMain.add(lblNewLabel);
         
-        lbStaffName = new JLabel("Huỳnh Tuấn Anh");
-        lbStaffName.setForeground(Color.WHITE);
-        lbStaffName.setFont(new Font("Dialog", Font.BOLD, 15));
-        lbStaffName.setBounds(110, 0, 200, 30);
-        pnlMain.add(lbStaffName);
+        lblStaffName = new JLabel(staffLogin.getHoTen());
+        lblStaffName.setForeground(Color.WHITE);
+        lblStaffName.setFont(new Font("Dialog", Font.BOLD, 15));
+        lblStaffName.setBounds(110, 0, 200, 30);
+        pnlMain.add(lblStaffName);
         t.start();
     }
 

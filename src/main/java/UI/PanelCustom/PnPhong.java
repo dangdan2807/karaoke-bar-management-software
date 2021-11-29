@@ -11,6 +11,7 @@ import javax.swing.table.*;
 
 import DAO.*;
 import Event_Handlers.InputEventHandler;
+import Event_Handlers.ValidationData;
 import UI.*;
 import entity.*;
 
@@ -251,7 +252,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		};
 		CustomUI.getInstance().setCustomTable(tblTableRoom);
 		tblTableRoom.setRowHeight(21);
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableRoom);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableRoom);
 		scrTable.setBounds(10, 20, 1200, 235);
 
 		pnlTable.add(scrTable);

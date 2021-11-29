@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import DAO.ConvertTime;
 import DAO.KhachHangDAO;
 import DAO.NhanVienDAO;
-import DAO.ValidationData;
+import Event_Handlers.ConvertTime;
 import Event_Handlers.InputEventHandler;
+import Event_Handlers.ValidationData;
 import UI.fDieuHuong;
 import UI.fQuanTri;
 import entity.KhachHang;
@@ -286,7 +286,7 @@ public class PnKhachHang extends JPanel
 		tblTableCustomer = new JTable(modelTable);
 		CustomUI.getInstance().setCustomTable(tblTableCustomer);
 		tblTableCustomer.setRowHeight(21);
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableCustomer);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableCustomer);
 		scrTable.setBounds(10, 20, 1200, 235);
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);

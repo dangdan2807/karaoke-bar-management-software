@@ -13,6 +13,7 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.ConvertTime;
 import Event_Handlers.InputEventHandler;
 import UI.fQuanLyDatPhong;
 import entity.*;
@@ -250,7 +251,7 @@ public class pnDatPhong extends JPanel
 		tblTableBill = new JTable(modelTableBill);
 		CustomUI.getInstance().setCustomTable(tblTableBill);
 
-		JScrollPane scrTableBill = CustomUI.getInstance().setCustomScrollPane(tblTableBill);
+		JScrollPane scrTableBill = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableBill);
 		pnlOrderList.add(scrTableBill, BorderLayout.CENTER);
 		pnlBill.setLayout(new BorderLayout(0, 0));
 
@@ -531,7 +532,7 @@ public class pnDatPhong extends JPanel
 		tblTableService.setRowHeight(21);
 		CustomUI.getInstance().setCustomTable(tblTableService);
 
-		JScrollPane scrProductList = CustomUI.getInstance().setCustomScrollPane(tblTableService);
+		JScrollPane scrProductList = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableService);
 		pnlServiceList.add(scrProductList);
 
 		btnSwitchRoom.addActionListener(this);
@@ -631,8 +632,7 @@ public class pnDatPhong extends JPanel
 			if (bill != null) {
 				Phong room = PhongDAO.getInstance().getRoomByBillId(billID);
 				bill.setPhong(room);
-				String billId = txtBillID.getText().trim();
-				ArrayList<CTDichVu> billInfoList = CTDichVuDAO.getInstance().getServiceDetailListByBillId(billId);
+				ArrayList<CTDichVu> billInfoList = CTDichVuDAO.getInstance().getServiceDetailListByBillId(billID);
 				bill.setDsCTDichVu(billInfoList);
 				long millis = System.currentTimeMillis();
 				Timestamp endTime = new Timestamp(millis);
@@ -1462,5 +1462,12 @@ public class pnDatPhong extends JPanel
 	 */
 	public JButton getBtnBack() {
 		return btnBack;
+	}
+
+	/**
+	 * Lấy nút chọn khách hàng
+	 */
+	public JButton getBtnChooseCustomer() {
+		return btnChooseCustomer;
 	}
 }

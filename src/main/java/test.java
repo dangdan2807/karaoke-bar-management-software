@@ -148,7 +148,7 @@ public class test {
         switch (key) {
         case 0:
             System.out.println(billId);
-            // final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
+            final String workingDir = System.getProperty("user.dir") + "/src/main/java/";
             // System.out.println(workingDir + "");
             // URL location =
             // Test.class.getProtectionDomain().getCodeSource().getLocation();

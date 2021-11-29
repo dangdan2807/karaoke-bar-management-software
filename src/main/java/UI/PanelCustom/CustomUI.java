@@ -27,6 +27,7 @@ public class CustomUI {
 	private Font fontNormal = new Font("Dialog", Font.PLAIN, 14);
 
 	private static String pathImg = "src/main/resources/images/";
+	public static String PATH_EXPORT_BILL = System.getProperty("user.dir") + "/src/main/resources/bill/";
 	public static final ImageIcon ADD_ICON = new ImageIcon(pathImg + "blueAdd_16.png");
 	public static final ImageIcon TRASH_ICON = new ImageIcon(pathImg + "trash_16.png");
 	public static final ImageIcon REFRESH_ICON = new ImageIcon(pathImg + "refresh_16.png");
@@ -281,12 +282,26 @@ public class CustomUI {
 	}
 
 	/**
-	 * tùy chỉnh nhanh {@code JScrollPane}
+	 * tùy chỉnh nhanh {@code JScrollPane} không thể scroll
+	 * 
+	 * @param tbl {@code JTable}: table nhận JScrollPane tùy chỉnh
+	 */
+	public JScrollPane setCustomScrollPaneNoScroll(JTable tbl) {
+		JScrollPane src = new JScrollPane(tbl, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		src.setOpaque(false);
+		src.getViewport().setOpaque(false);
+		src.getViewport().setBackground(Color.WHITE);
+		return src;
+	}
+
+	/**
+	 * tùy chỉnh nhanh {@code JScrollPane} có thể scroll
 	 * 
 	 * @param tbl {@code JTable}: table nhận JScrollPane tùy chỉnh
 	 */
 	public JScrollPane setCustomScrollPane(JTable tbl) {
-		JScrollPane src = new JScrollPane(tbl, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+		JScrollPane src = new JScrollPane(tbl, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		src.setOpaque(false);
 		src.getViewport().setOpaque(false);

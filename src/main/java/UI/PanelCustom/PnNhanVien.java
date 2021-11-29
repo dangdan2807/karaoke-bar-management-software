@@ -4,7 +4,9 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.ConvertTime;
 import Event_Handlers.InputEventHandler;
+import Event_Handlers.ValidationData;
 import UI.*;
 import entity.*;
 
@@ -367,7 +369,7 @@ public class PnNhanVien extends JPanel
 		tblTableStaff = new JTable(modelTableStaff);
 		CustomUI.getInstance().setCustomTable(tblTableStaff);
 		tblTableStaff.setRowHeight(21);
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPane(tblTableStaff);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableStaff);
 		scrTable.setBounds(10, 20, 1200, 235);
 
 		pnlTable.add(scrTable);

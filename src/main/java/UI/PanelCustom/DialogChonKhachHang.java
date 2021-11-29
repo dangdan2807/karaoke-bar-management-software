@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import DAO.ConvertTime;
 import DAO.KhachHangDAO;
+import Event_Handlers.ConvertTime;
 import Event_Handlers.InputEventHandler;
 import entity.KhachHang;
 
@@ -40,6 +40,8 @@ public class DialogChonKhachHang extends JDialog
 	private JButton btnSearch, btnChooseCustomer;
 	private JPanel pnlShowCustomer;
 	private JTextField txtBFieldSearch;
+	private MyButton btnNextToRight, btnNextToLast, btnNextToLeft, btnNextToFirst, btnAddCustomerNew;
+	private PnTextFiledPaging txtNumPage;
 
 	private ImageIcon logoApp = CustomUI.LOGO_APP;
 	private ImageIcon background = new ImageIcon(
@@ -62,17 +64,11 @@ public class DialogChonKhachHang extends JDialog
 			CustomUI.ADD_ICON.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
 	private ImageIcon chooseIcon = new ImageIcon(
 			CustomUI.CHOOSE_CUSTOMER_ICON.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
-	
+
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
 	private KhachHang khachHang = null;
-	private MyButton btnNextToRight;
-	private MyButton btnNextToLast;
-	private MyButton btnNextToLeft;
-	private MyButton btnNextToFirst;
-	private PnTextFiledPaging txtNumPage;
-	private MyButton btnAddCustomerNew;
 
 	/**
 	 * Constructor mặc định không tham số
@@ -83,6 +79,7 @@ public class DialogChonKhachHang extends JDialog
 		setIconImage(logoApp.getImage());
 		setResizable(false);
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		createUI();
 	}
@@ -245,20 +242,20 @@ public class DialogChonKhachHang extends JDialog
 		((MyButton) btnSearch).setFontCustom(new Font("Dialog", Font.BOLD, 13));
 		btnSearch.setBounds(132, 85, 100, 30);
 		pnlSearch.add(btnSearch);
-		
+
 		btnAddCustomerNew = new MyButton(100, 30, "Thêm mới", new Dimension(64, 17), addIcon.getImage(),
 				new Dimension(18, 18), gra);
 		((MyButton) btnAddCustomerNew).setFontCustom(new Font("Dialog", Font.BOLD, 13));
 		btnAddCustomerNew.setBounds(560, 410, 100, 30);
 		pnlMain.add(btnAddCustomerNew);
 
-		btnChooseCustomer = new MyButton(100, 30, "Chọn", new Dimension(34, 17), chooseIcon.getImage(), new Dimension(18, 18),
+		btnChooseCustomer = new MyButton(100, 30, "Chọn", new Dimension(34, 17), chooseIcon.getImage(),
+				new Dimension(18, 18),
 				gra);
 		((MyButton) btnChooseCustomer).setFontCustom(new Font("Dialog", Font.BOLD, 13));
 		btnChooseCustomer.setBounds(724, 410, 100, 30);
 		pnlMain.add(btnChooseCustomer);
 
-		
 		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
 		btnNextToRight.setBounds(305, 405, 70, 35);
 		pnlMain.add(btnNextToRight);
@@ -279,9 +276,7 @@ public class DialogChonKhachHang extends JDialog
 		txtNumPage.setTextColor(Color.white);
 		txtNumPage.setBounds(205, 405, 90, 35);
 		pnlMain.add(txtNumPage);
-		
-		
-		
+
 		btnChooseCustomer.addActionListener(this);
 		btnSearch.addActionListener(this);
 
@@ -525,19 +520,19 @@ public class DialogChonKhachHang extends JDialog
 		ArrayList<KhachHang> customerList = new ArrayList<KhachHang>();
 		String keyword = txtKeyword.getText().trim();
 		switch (searchTypeName) {
-		case "Tất cả":
-			txtKeyword.setText("");
-			customerList = KhachHangDAO.getInstance().getCustomerListUnBooked();
-			break;
-		case "Tên Khách hàng":
-			customerList = KhachHangDAO.getInstance().getCustomerListUnBookedByName(keyword);
-			break;
-		case "CMND/CCCD":
-			customerList = KhachHangDAO.getInstance().getCustomerListUnBookedByCMND(keyword);
-			break;
-		case "Số điện thoại":
-			customerList = KhachHangDAO.getInstance().getCustomerListUnBookedByPhoneNumber(keyword);
-			break;
+			case "Tất cả":
+				txtKeyword.setText("");
+				customerList = KhachHangDAO.getInstance().getCustomerListUnBooked();
+				break;
+			case "Tên Khách hàng":
+				customerList = KhachHangDAO.getInstance().getCustomerListUnBookedByName(keyword);
+				break;
+			case "CMND/CCCD":
+				customerList = KhachHangDAO.getInstance().getCustomerListUnBookedByCMND(keyword);
+				break;
+			case "Số điện thoại":
+				customerList = KhachHangDAO.getInstance().getCustomerListUnBookedByPhoneNumber(keyword);
+				break;
 		}
 		LoadCustomerList(customerList);
 	}
