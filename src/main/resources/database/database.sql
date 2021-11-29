@@ -1717,7 +1717,7 @@ END
 GO
 
 -- @quantityOrder có thể là số âm
-CREATE PROC USP_insertServiceDetail
+CREATE PROC USP_updateServiceDetail
     @serviceId VARCHAR(6),
     @billId VARCHAR(15),
     @quantityOrder INT,

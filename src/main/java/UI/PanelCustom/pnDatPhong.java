@@ -1341,7 +1341,7 @@ public class pnDatPhong extends JPanel
 						isUpdate = false;
 						double servicePrice = service.getGiaBan();
 						serviceInfo = new CTDichVu(orderQuantity, servicePrice, service);
-						result = CTDichVuDAO.getInstance().insertServiceDetail(serviceInfo, orderQuantity,
+						result = CTDichVuDAO.getInstance().updateServiceDetail(serviceInfo, orderQuantity,
 								bill.getMaHoaDon());
 						// cập nhật
 
@@ -1351,7 +1351,7 @@ public class pnDatPhong extends JPanel
 						if (serviceInfo.getSoLuongDat() > 0 && newQuantity >= 0) {
 							isUpdate = true;
 							serviceInfo.setSoLuongDat(newOrderQuantity);
-							result = CTDichVuDAO.getInstance().insertServiceDetail(serviceInfo, orderQuantity,
+							result = CTDichVuDAO.getInstance().updateServiceDetail(serviceInfo, orderQuantity,
 									bill.getMaHoaDon());
 						} else {
 							message = "Số lượng đặt phải nhỏ hơn số lượng hiện có. Vui lòng nhập lại";
@@ -1428,7 +1428,7 @@ public class pnDatPhong extends JPanel
 						serviceDetail.setSoLuongDat(newOrderQuantity);
 						quantityInStock = service.getSoLuongTon();
 						service.setSoLuongTon(quantityInStock + cancelQuantity);
-						result = CTDichVuDAO.getInstance().insertServiceDetail(serviceDetail, (-1) * cancelQuantity,
+						result = CTDichVuDAO.getInstance().updateServiceDetail(serviceDetail, (-1) * cancelQuantity,
 								bill.getMaHoaDon());
 					} else {
 						message = "Dịch vụ này chưa được đặt";

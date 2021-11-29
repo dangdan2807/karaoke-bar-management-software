@@ -106,8 +106,8 @@ public class CTDichVuDAO {
      *         <li>Nếu thất bại thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean insertServiceDetail(CTDichVu serviceDetail, int quantity, String billId) {
-        String query = "{CALL USP_insertServiceDetail( ? , ? , ? , ? )}";
+    public boolean updateServiceDetail(CTDichVu serviceDetail, int quantity, String billId) {
+        String query = "{CALL USP_updateServiceDetail( ? , ? , ? , ? )}";
         DichVu service = serviceDetail.getDichVu();
         Object[] parameter = new Object[] { service.getMaDichVu(), billId, quantity, serviceDetail.getDonGia() };
         int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);

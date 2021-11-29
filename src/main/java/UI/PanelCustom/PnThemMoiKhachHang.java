@@ -1,8 +1,6 @@
 package UI.PanelCustom;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -52,7 +50,7 @@ public class PnThemMoiKhachHang extends JFrame{
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				Graphics2D g2 = (Graphics2D) g;
+				// Graphics2D g2 = (Graphics2D) g;
 //				g2.drawImage(bg.getImage(), 0, 0, null);
 				setFont(new Font("Dialog", Font.BOLD, 24));
 //				g2.setColor(Color.decode("#9B17EB"));
