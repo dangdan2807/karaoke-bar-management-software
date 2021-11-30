@@ -1,3 +1,5 @@
-target/classes/*
+/target/classes/*
 karaoke_bar_management_software_Client/target/classes/*
 karaoke_bar_management_software_Server/target/classes/*
+karaoke_bar_management_software_Server/target/classes/App/*
+karaoke_bar_management_software_Server/target/classes/DAO/Impl/*
