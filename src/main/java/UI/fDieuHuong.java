@@ -26,7 +26,9 @@ public class fDieuHuong extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 8033841194327699528L;
     private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
+    private JLabel lblStaffName, lblStaffNameTxt;
     private NhanVien staffLogin = null;
+
     private final String STAFF = "Nhân viên", MANAGER = "Chủ quán";
     private ImageIcon logoApp = CustomUI.LOGO_APP;
     private ImageIcon profileIcon = new ImageIcon(
@@ -38,7 +40,6 @@ public class fDieuHuong extends JFrame implements ActionListener {
     private ImageIcon logoutIcon = CustomUI.LOGOUT_ICON;
     private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
             Color.decode("#FAFFD1"));
-    private JLabel lblNewLabel, lblStaffName;
 
     /**
      * Constructor form điều hướng
@@ -128,21 +129,22 @@ public class fDieuHuong extends JFrame implements ActionListener {
         btnLogOut.addActionListener(this);
         btnSystemManagement.addActionListener(this);
 
+        lblStaffName = new JLabel("Nhân viên:");
+        lblStaffName.setFont(new Font("Dialog", Font.BOLD, 15));
+        lblStaffName.setForeground(Color.WHITE);
+        lblStaffName.setBounds(20, 0, 80, 30);
+        pnlMain.add(lblStaffName);
+        
+        lblStaffNameTxt = new JLabel(staffLogin.getHoTen());
+        lblStaffNameTxt.setForeground(Color.WHITE);
+        lblStaffNameTxt.setFont(new Font("Dialog", Font.BOLD, 15));
+        lblStaffNameTxt.setBounds(110, 0, 200, 30);
+        pnlMain.add(lblStaffNameTxt);
+        
         checkPermission(type);
         CheckPassword t = new CheckPassword(staffLogin.getTaiKhoan().getMatKhau(), btnBookingManagement,
                 btnSystemManagement, this);
         
-        lblNewLabel = new JLabel("Nhân viên:");
-        lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 15));
-        lblNewLabel.setForeground(Color.WHITE);
-        lblNewLabel.setBounds(20, 0, 80, 30);
-        pnlMain.add(lblNewLabel);
-        
-        lblStaffName = new JLabel(staffLogin.getHoTen());
-        lblStaffName.setForeground(Color.WHITE);
-        lblStaffName.setFont(new Font("Dialog", Font.BOLD, 15));
-        lblStaffName.setBounds(110, 0, 200, 30);
-        pnlMain.add(lblStaffName);
         t.start();
     }
 

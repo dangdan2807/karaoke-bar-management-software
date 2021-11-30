@@ -59,6 +59,7 @@ public class PnHoaDon extends JPanel
 	private ImageIcon doubleNextLeftIcon = new ImageIcon(
 			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
+	private ImageIcon billIcon = CustomUI.BILL_ICON;
 
 	private NhanVien staffLogin = null;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
@@ -155,7 +156,7 @@ public class PnHoaDon extends JPanel
 		lblFromDate.setBounds(187, 26, 105, 20);
 		pnlInfo.add(lblFromDate);
 
-		btnExportBill = new MyButton(150, 35, "Xuất hóa đơn", gra, CustomUI.REFRESH_ICON.getImage(), 40, 19, 6, 5);
+		btnExportBill = new MyButton(150, 35, "Xuất hóa đơn", gra, billIcon.getImage(), 40, 19, 6, 5);
 		btnExportBill.setToolTipText("Xuất hóa đơn");
 		btnExportBill.setBounds(1065, 60, 150, 35);
 		pnlInfo.add(btnExportBill);
@@ -343,7 +344,6 @@ public class PnHoaDon extends JPanel
 				JOptionPane.showMessageDialog(this, "Bạn chưa chọn hóa đơn để xuất", "Thông báo",
 						JOptionPane.WARNING_MESSAGE);
 			}
-
 		} else if (o.equals(btnSearch)) {
 			searchEventUsingBtnSearch();
 		} else if (o.equals(btnNextToLeft)) {

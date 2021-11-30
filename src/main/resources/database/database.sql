@@ -1165,11 +1165,13 @@ BEGIN
     IF(@position = N'Chủ quán')
     BEGIN
         ;WITH billShow AS (
-            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            hd.maNhanVien, hd.maKH, hd.maPhong
             FROM dbo.HoaDon hd
             WHERE hd.tinhTrangHD = 1
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            hd.maNhanVien, hd.maKH, hd.maPhong
         )
 
         SELECT TOP (@selectRows) *
@@ -1183,12 +1185,14 @@ BEGIN
     ELSE
     BEGIN
         ;WITH billShow AS (
-            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            hd.maNhanVien, hd.maKH, hd.maPhong
             FROM dbo.HoaDon hd
             WHERE hd.tinhTrangHD = 1
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
                 AND hd.maNhanVien = @staffId
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            hd.maNhanVien, hd.maKH, hd.maPhong
         )
 
         SELECT TOP (@selectRows) *
@@ -1219,7 +1223,6 @@ BEGIN
         FROM dbo.HoaDon hd
         WHERE hd.tinhTrangHD = 1
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD
     END
     ELSE
     BEGIN
@@ -1228,7 +1231,6 @@ BEGIN
         WHERE hd.tinhTrangHD = 1
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD
     END
 END
 GO
@@ -1322,8 +1324,6 @@ BEGIN
             AND hd.maKH = kh.maKH
             AND kh.soDienThoai LIKE @keyword
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        kh.maKH, kh.hoTen, kh.soDienThoai
     END
     ELSE
     BEGIN
@@ -1334,8 +1334,6 @@ BEGIN
                 AND kh.soDienThoai LIKE @keyword
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
                 AND hd.maNhanVien = @staffId
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            kh.maKH, kh.hoTen, kh.soDienThoai
     END
 END
 GO
@@ -1428,8 +1426,6 @@ BEGIN
             AND hd.maKH = kh.maKH
             AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        kh.maKH, kh.hoTen, kh.soDienThoai
     END
     ELSE
     BEGIN
@@ -1440,8 +1436,6 @@ BEGIN
             AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        kh.maKH, kh.hoTen, kh.soDienThoai
     END
 END
 GO
@@ -1533,8 +1527,6 @@ BEGIN
             AND hd.maNhanVien = nv.maNhanVien
             AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        nv.maNhanVien, nv.hoTen, nv.soDienThoai
     END
     ELSE
     BEGIN
@@ -1545,8 +1537,6 @@ BEGIN
             AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        nv.maNhanVien, nv.hoTen, nv.soDienThoai
     END
 END
 GO
@@ -1637,8 +1627,6 @@ BEGIN
             AND hd.maNhanVien = nv.maNhanVien
             AND hd.maHoaDon LIKE @keyword
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        nv.maNhanVien, nv.hoTen, nv.soDienThoai
     END
     ELSE
     BEGIN
@@ -1649,8 +1637,6 @@ BEGIN
                 AND hd.maHoaDon LIKE @keyword
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
                 AND hd.maNhanVien = @staffId
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            nv.maNhanVien, nv.hoTen, nv.soDienThoai
     END
 END
 GO

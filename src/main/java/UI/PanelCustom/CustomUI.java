@@ -51,6 +51,7 @@ public class CustomUI {
 	public static final ImageIcon RENT_ROOM_ICON = new ImageIcon(pathImg + "rent_room_16.png");
 	public static final ImageIcon PDF_ICON = new ImageIcon(pathImg + "pdf_16.png");
 	public static final ImageIcon EXCEL_ICON = new ImageIcon(pathImg + "excel_16.png");
+	public static final ImageIcon BILL_ICON = new ImageIcon(pathImg + "bill_16.png");
 	public static final ImageIcon LOGO_ICON = new ImageIcon(pathImg + "Logo.png");
 	public static final ImageIcon LOGO_APP = new ImageIcon(pathImg + "login_logo_512.png");
 	public static final ImageIcon NEXT_RIGHT_ICON = new ImageIcon(pathImg + "nextRight.png");

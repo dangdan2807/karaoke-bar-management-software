@@ -994,7 +994,7 @@ public class PnNhanVien extends JPanel
 		String message = "";
 		if (validData()) {
 			NhanVien staff = getStaffDataInForm();
-			if (staff.getChucVu().equalsIgnoreCase("chủ quán")) {
+			if (staff.getChucVu().equalsIgnoreCase("Nhân viên")) {
 				Boolean result = staffDAO.insertStaff(staff);
 				String name = "nhân viên";
 				if (result) {

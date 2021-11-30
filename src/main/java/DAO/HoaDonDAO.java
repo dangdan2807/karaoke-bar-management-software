@@ -184,7 +184,7 @@ public class HoaDonDAO {
      * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
      * @param staffId  {@code String}: mã nhân viên
-     * @return {@code int}: danh sách hóa đơn
+     * @return {@code int}: tổng số hóa đơn
      */
     public int getTotalLineOfBillList(Date fromDate, Date toDate, String staffId) {
         String query = "{CALL USP_getTotalLineOfBillListByDate( ? , ? , ? )}";
@@ -226,10 +226,11 @@ public class HoaDonDAO {
     /**
      * Lấy số lượng hóa đơn trong khoảng ngày được chọn, số điện thoại khách hàng và số trang
      * 
+     * @param phoneNumber {@code String}: Số điện thoại
      * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
      * @param staffId  {@code String}: mã nhân viên
-     * @return {@code int}: danh sách hóa đơn
+     * @return {@code int}: số lượng hóa đơn
      */
     public int getTotalLineOfBillListByDateAndCustomerPhoneNumber(String phoneNumber, Date fromDate, Date toDate,
             String staffId) {
@@ -274,7 +275,7 @@ public class HoaDonDAO {
      * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
      * @param staffId  {@code String}: mã nhân viên
-     * @return {@code int}: danh sách hóa đơn
+     * @return {@code int}: số lượng hóa đơn
      */
     public int getTotalLineOfBillListByDateAndCustomerName(String customerName, Date fromDate, Date toDate,
             String staffId) {
@@ -319,7 +320,7 @@ public class HoaDonDAO {
      * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
      * @param staffId  {@code String}: mã nhân viên
-     * @return {@code int}: danh sách hóa đơn
+     * @return {@code int}: số lượng hóa đơn
      */
     public int getTotalLineOfBillListByDateAndStaffName(String staffName, Date fromDate, Date toDate,
             String staffId) {
@@ -337,6 +338,8 @@ public class HoaDonDAO {
      * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
      * @param staffId  {@code String}: mã nhân viên
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      */
     public ArrayList<HoaDon> getBillListByDateAndBillIdAndPageNumber(String billId, Date fromDate, Date toDate,
@@ -358,10 +361,11 @@ public class HoaDonDAO {
     /**
      * Lấy số lượng hóa đơn trong khoảng ngày được chọn, mã hóa đơn
      * 
+     * @param billId   {@code String}: Mã hóa đơn
      * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
      * @param staffId  {@code String}: mã nhân viên
-     * @return {@code int}: danh sách hóa đơn
+     * @return {@code int}: số lượng hóa đơn
      */
     public int getTotalLineOfBillListByDateAndBillId(String BillId, Date fromDate, Date toDate,
             String staffId) {
