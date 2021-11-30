@@ -2,7 +2,6 @@ package UI;
 
 import javax.swing.*;
 
-import DAO.NhanVienDAO;
 import Event_Handlers.CheckPassword;
 import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.MyButton;
@@ -10,7 +9,6 @@ import entity.NhanVien;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.rmi.Naming;
 
 /**
  * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code CTDichVu}
@@ -146,17 +144,6 @@ public class fDieuHuong extends JFrame implements ActionListener {
         CheckPassword t = new CheckPassword(staffLogin.getTaiKhoan().getMatKhau(), btnBookingManagement,
                 btnSystemManagement, this);
         t.start();
-    }
-
-    public static void main(String[] args) {
-        NhanVien staff = null;
-        try {
-            NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
-            staff = staffDAO.getStaffByUsername("phamdangdan");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        new fDieuHuong(staff).setVisible(true);
     }
 
     @Override

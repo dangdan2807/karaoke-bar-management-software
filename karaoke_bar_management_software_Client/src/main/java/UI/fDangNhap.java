@@ -154,10 +154,6 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		txtUsername.addFocusListener(this);
 	}
 
-	public static void main(String[] args) {
-		new fDangNhap().setVisible(true);
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();

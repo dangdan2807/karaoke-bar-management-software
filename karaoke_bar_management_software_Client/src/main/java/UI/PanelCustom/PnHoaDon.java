@@ -2,7 +2,6 @@ package UI.PanelCustom;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.InvocationTargetException;
 import java.rmi.Naming;
 import java.sql.Date;
 import java.text.DecimalFormat;
@@ -16,7 +15,6 @@ import Event_Handlers.ConvertTime;
 import Event_Handlers.ExportBill;
 import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
-import UI.fQuanTri;
 import entity.*;
 
 /**
@@ -294,19 +292,6 @@ public class PnHoaDon extends JPanel
 
 		cboSearch.addItemListener(this);
 		allLoaded();
-	}
-
-	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = null;
-			try {
-				NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
-				staff = staffDAO.getStaffByUsername("phamdangdan");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			new fQuanTri(staff).setVisible(true);
-		});
 	}
 
 	@Override

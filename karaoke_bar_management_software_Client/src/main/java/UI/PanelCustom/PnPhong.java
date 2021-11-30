@@ -2,7 +2,6 @@ package UI.PanelCustom;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.InvocationTargetException;
 import java.rmi.Naming;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -311,19 +310,6 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		cboSearchType.addItemListener(this);
 
 		allLoaded();
-	}
-
-	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = null;
-			try {
-				NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
-				staff = staffDAO.getStaffByUsername("phamdangdan");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			new fQuanTri(staff).setVisible(true);
-		});
 	}
 
 	@Override

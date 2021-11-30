@@ -1,5 +1,9 @@
 package App;
 
+import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.SwingUtilities;
+
 import UI.fDangNhap;
 
 /**
@@ -13,8 +17,10 @@ import UI.fDangNhap;
  * <p>
  */
 public class App {
-    public static void main(String[] args) {
-        fDangNhap login = new fDangNhap();
-        login.setVisible(true);
+    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+        SwingUtilities.invokeLater(() -> {
+            fDangNhap login = new fDangNhap();
+            login.setVisible(true);
+		});
     }
 }

@@ -292,18 +292,6 @@ public class fThongTinCaNhan extends JDialog
 		showInfoStaff(staffLogin);
 	}
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			try {
-				NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
-				NhanVien staff = staffDAO.getStaffByUsername("phamdangdan");
-				new fDieuHuong(staff).setVisible(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();

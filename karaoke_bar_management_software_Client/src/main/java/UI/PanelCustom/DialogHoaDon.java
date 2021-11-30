@@ -3,11 +3,9 @@ package UI.PanelCustom;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
 import java.rmi.Naming;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.border.*;
@@ -360,26 +358,6 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		btnBack.addActionListener(this);
 
 		allLoaded();
-	}
-
-	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		SwingUtilities.invokeLater(() -> {
-			String billId = "HD2021100100001";
-			HoaDon bill = new HoaDon();
-			try {
-				HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
-				PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
-				CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDetailDAO");
-				bill = billDAO.getBillByBillId(billId);
-				Phong room = roomDAO.getRoomByBillId(billId);
-				bill.setPhong(room);
-				ArrayList<CTDichVu> serviceDetail = serviceDetailDAO.getServiceDetailListByBillId(billId);
-				bill.setDsCTDichVu(serviceDetail);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			new DialogHoaDon(bill).setVisible(true);
-		});
 	}
 
 	@Override
