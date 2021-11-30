@@ -105,13 +105,57 @@ public interface HoaDonDAO extends Remote {
     /**
      * Lấy danh sách hóa đơn trong khoảng ngày được chọn và tìm theo mã nhân viên
      * 
-     * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
-     * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
-     * @param staffId  {@code String}: mã nhân viên
+     * @param fromDate            {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate              {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId             {@code String}: mã nhân viên
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      * @throws RemoteException - Bắt lỗi Remote
      */
-    public ArrayList<HoaDon> getBillListByDate(Date fromDate, Date toDate, String staffId) throws RemoteException;
+    public ArrayList<HoaDon> getBillListByDateAndPageNumber(Date fromDate, Date toDate, String staffId,
+            int currentPage,
+            int lineNumberDisplayed) throws RemoteException;
+
+    /**
+     * Lấy số lượng hóa đơn trong khoản ngày được chọn và số trang
+     * 
+     * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId  {@code String}: mã nhân viên
+     * @return {@code int}: tổng số hóa đơn
+     * @throws RemoteException - Bắt lỗi Remote
+     */
+    public int getTotalLineOfBillList(Date fromDate, Date toDate, String staffId) throws RemoteException;
+
+    /**
+     * Lấy danh sách hóa đơn trong khoản ngày được chọn và số điện thoại của khách
+     * hàng
+     * 
+     * @param phoneNumber         {@code String}: Số điện thoại
+     * @param fromDate            {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate              {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId             {@code String}: mã nhân viên
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
+     */
+    public ArrayList<HoaDon> getBillListByDateAndCustomerPhoneNumberAndPageNumber(String phoneNumber, Date fromDate,
+            Date toDate,
+            String staffId, int currentPage, int lineNumberDisplayed) throws RemoteException;
+
+    /**
+     * Lấy số lượng hóa đơn trong khoảng ngày được chọn, số điện thoại khách hàng và số trang
+     * 
+     * @param phoneNumber {@code String}: Số điện thoại
+     * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId  {@code String}: mã nhân viên
+     * @return {@code int}: số lượng hóa đơn
+     * * @throws RemoteException - Bắt lỗi Remote
+     */
+    public int getTotalLineOfBillListByDateAndCustomerPhoneNumber(String phoneNumber, Date fromDate, Date toDate,
+            String staffId) throws RemoteException;
 
     /**
      * Lấy danh sách hóa đơn trong khoản ngày được chọn và số điện thoại của khách
@@ -124,20 +168,21 @@ public interface HoaDonDAO extends Remote {
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      * @throws RemoteException - Bắt lỗi Remote
      */
-    public ArrayList<HoaDon> getBillListByDateAndCustomerPhoneNumber(String phoneNumber, Date fromDate, Date toDate,
-            String staffId) throws RemoteException;
+    public ArrayList<HoaDon> getBillListByDateAndCustomerNameAndPageNumber(String customerName, Date fromDate,
+            Date toDate,
+            String staffId, int currentPage, int lineNumberDisplayed) throws RemoteException;
 
     /**
-     * Lấy danh sách hóa đơn trong khoản ngày được chọn và tên của khách hàng
+     * Lấy số lượng hóa đơn trong khoảng ngày được chọn, số điện thoại khách hàng
      * 
-     * @param customerName {@code String}: Tên khách hàng
-     * @param fromDate     {@code java.sql.Date}: ngày bắt đầu thống kê
-     * @param toDate       {@code java.sql.Date}: ngày kết thúc thống kê
-     * @param staffId      {@code String}: mã nhân viên
-     * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
+     * @param phoneNumber {@code String}: Số điện thoại
+     * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId  {@code String}: mã nhân viên
+     * @return {@code int}: số lượng hóa đơn
      * @throws RemoteException - Bắt lỗi Remote
      */
-    public ArrayList<HoaDon> getBillListByDateAndCustomerName(String customerName, Date fromDate, Date toDate,
+    public int getTotalLineOfBillListByDateAndCustomerName(String customerName, Date fromDate, Date toDate,
             String staffId) throws RemoteException;
 
     /**
@@ -148,10 +193,24 @@ public interface HoaDonDAO extends Remote {
      * @param fromDate  {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate    {@code java.sql.Date}: ngày kết thúc thống kê
      * @param staffId   {@code String}: mã nhân viên
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      * @throws RemoteException - Bắt lỗi Remote
      */
-    public ArrayList<HoaDon> getBillListByDateAndStaffName(String staffName, Date fromDate, Date toDate,
+    public ArrayList<HoaDon> getBillListByDateAndStaffNameAndPageNumber(String staffName, Date fromDate, Date toDate,
+            String staffId, int currentPage, int lineNumberDisplayed) throws RemoteException;
+
+    /**
+     * Lấy số lượng hóa đơn trong khoảng ngày được chọn, tên nhân viên
+     * 
+     * @param staffName {@code String}: Tên nhân viên
+     * @param fromDate  {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate    {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId   {@code String}: mã nhân viên
+     * @return {@code int}: số lượng hóa đơn
+     */
+    public int getTotalLineOfBillListByDateAndStaffName(String staffName, Date fromDate, Date toDate,
             String staffId) throws RemoteException;
 
     /**
@@ -161,9 +220,24 @@ public interface HoaDonDAO extends Remote {
      * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
      * @param staffId  {@code String}: mã nhân viên
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
      * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
      * @throws RemoteException - Bắt lỗi Remote
      */
-    public ArrayList<HoaDon> getBillListByDateAndBillId(String billId, Date fromDate, Date toDate, String staffId)
+    public ArrayList<HoaDon> getBillListByDateAndBillIdAndPageNumber(String billId, Date fromDate, Date toDate,
+            String staffId, int currentPage, int lineNumberDisplayed)
             throws RemoteException;
+    
+    /**
+     * Lấy số lượng hóa đơn trong khoảng ngày được chọn, mã hóa đơn
+     * 
+     * @param billId   {@code String}: Mã hóa đơn
+     * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId  {@code String}: mã nhân viên
+     * @return {@code int}: danh sách hóa đơn
+     */
+    public int getTotalLineOfBillListByDateAndBillId(String BillId, Date fromDate, Date toDate,
+            String staffId) throws RemoteException;
 }

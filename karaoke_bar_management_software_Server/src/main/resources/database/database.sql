@@ -517,9 +517,6 @@ BEGIN
 END
 GO
 
-exec USP_Login 'phamdangdan', '1234567'
-go
-
 -- tài khoản
 CREATE PROC USP_Login
     @username NVARCHAR(100),
@@ -1148,7 +1145,67 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_getBillListByDate
+CREATE PROC USP_getBillListByDateAndPageNumber
+    @startDate DATE,
+    @endDate DATE,
+    @staffId VARCHAR(10),
+    @numberPage INT,
+    @lineNumberDisplayed INT    
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
+    DECLARE @position NVARCHAR(100)
+    SELECT @position = nv.chucVu
+    FROM dbo.NhanVien nv
+    WHERE nv.maNhanVien = @staffId
+
+    IF(@position = N'Chủ quán')
+    BEGIN
+        ;WITH billShow AS (
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            hd.maNhanVien, hd.maKH, hd.maPhong
+            FROM dbo.HoaDon hd
+            WHERE hd.tinhTrangHD = 1
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            hd.maNhanVien, hd.maKH, hd.maPhong
+        )
+
+        SELECT TOP (@selectRows) *
+        FROM billShow
+        WHERE maHoaDon NOT IN (
+            SELECT TOP (@exceptRows)
+            maHoaDon
+            FROM billShow
+        )
+    END
+    ELSE
+    BEGIN
+        ;WITH billShow AS (
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            hd.maNhanVien, hd.maKH, hd.maPhong
+            FROM dbo.HoaDon hd
+            WHERE hd.tinhTrangHD = 1
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+                AND hd.maNhanVien = @staffId
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            hd.maNhanVien, hd.maKH, hd.maPhong
+        )
+
+        SELECT TOP (@selectRows) *
+        FROM billShow
+        WHERE maHoaDon NOT IN (
+            SELECT TOP (@exceptRows)
+            maHoaDon
+            FROM billShow
+        )
+    END
+END
+GO
+
+CREATE PROC USP_getTotalLineOfBillListByDate
     @startDate DATE,
     @endDate DATE,
     @staffId VARCHAR(10)
@@ -1161,29 +1218,90 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        hd.maNhanVien, hd.maKH, hd.maPhong
+        SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd
         WHERE hd.tinhTrangHD = 1
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        hd.maNhanVien, hd.maKH, hd.maPhong
     END
     ELSE
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        hd.maNhanVien, hd.maKH, hd.maPhong
+        SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd
         WHERE hd.tinhTrangHD = 1
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        hd.maNhanVien, hd.maKH, hd.maPhong
     END
 END
 GO
 
-CREATE PROC USP_getBillListByDateAndCustomerPhoneNumber
+CREATE PROC USP_getBillListByDateAndCustomerPhoneNumberAndPageNumber
+    @phoneNumber VARCHAR(10),
+    @startDate DATE,
+    @endDate DATE,
+    @staffId VARCHAR(10),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+    
+    DECLARE @position NVARCHAR(100)
+    SELECT @position = nv.chucVu
+    FROM dbo.NhanVien nv
+    WHERE nv.maNhanVien = @staffId
+
+    DECLARE @keyword VARCHAR(12) = N'%' + @phoneNumber + N'%'
+
+    IF(@position = N'Chủ quán')
+    BEGIN
+        ;WITH billShow AS (
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+                kh.maKH, kh.hoTen, kh.soDienThoai
+            FROM dbo.HoaDon hd, dbo.KhachHang kh
+            WHERE hd.tinhTrangHD = 1
+                AND hd.maKH = kh.maKH
+                AND kh.soDienThoai LIKE @keyword
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            kh.maKH, kh.hoTen, kh.soDienThoai
+        )
+
+        SELECT TOP (@selectRows) *
+        FROM billShow
+        WHERE maHoaDon NOT IN (
+            SELECT TOP (@exceptRows)
+            maHoaDon
+            FROM billShow
+        )
+    END
+    ELSE
+    BEGIN
+        ;WITH billShow AS (
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+                kh.maKH, kh.hoTen, kh.soDienThoai
+            FROM dbo.HoaDon hd, dbo.KhachHang kh
+            WHERE hd.tinhTrangHD = 1
+                AND hd.maKH = kh.maKH
+                AND kh.soDienThoai LIKE @keyword
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+                AND hd.maNhanVien = @staffId
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            kh.maKH, kh.hoTen, kh.soDienThoai
+        )
+
+        SELECT TOP (@selectRows) *
+        FROM billShow
+        WHERE maHoaDon NOT IN (
+            SELECT TOP (@exceptRows)
+            maHoaDon
+            FROM billShow
+        )
+    END
+END
+GO
+
+CREATE PROC USP_getTotalLineOfBillListByDateAndCustomerPhoneNumber
     @phoneNumber VARCHAR(10),
     @startDate DATE,
     @endDate DATE,
@@ -1199,39 +1317,38 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+        SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd, dbo.KhachHang kh
         WHERE hd.tinhTrangHD = 1
             AND hd.maKH = kh.maKH
             AND kh.soDienThoai LIKE @keyword
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        hd.maNhanVien, hd.maKH, hd.maPhong
     END
     ELSE
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+        SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd, dbo.KhachHang kh
-        WHERE hd.tinhTrangHD = 1
-            AND hd.maKH = kh.maKH
-            AND kh.soDienThoai LIKE @keyword
-            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-            AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        hd.maNhanVien, hd.maKH, hd.maPhong
+            WHERE hd.tinhTrangHD = 1
+                AND hd.maKH = kh.maKH
+                AND kh.soDienThoai LIKE @keyword
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+                AND hd.maNhanVien = @staffId
     END
 END
 GO
 
-CREATE PROC USP_getBillListByDateAndCustomerName
+CREATE PROC USP_getBillListByDateAndCustomerNameAndPageNumber
     @customerName NVARCHAR(100),
     @startDate DATE,
     @endDate DATE,
-    @staffId VARCHAR(10)
+    @staffId VARCHAR(10),
+    @numberPage INT,
+    @lineNumberDisplayed INT
 AS
 BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+
     DECLARE @keyword NVARCHAR(102) = N'%' + @customerName + N'%'
     DECLARE @position NVARCHAR(100)
     SELECT @position = nv.chucVu
@@ -1240,39 +1357,99 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+        ;WITH billShow AS (
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+                kh.maKH, kh.hoTen, kh.soDienThoai
+            FROM dbo.HoaDon hd, dbo.KhachHang kh
+            WHERE hd.tinhTrangHD = 1
+                AND hd.maKH = kh.maKH
+                AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            kh.maKH, kh.hoTen, kh.soDienThoai
+        )
+
+        SELECT TOP (@selectRows) *
+        FROM billShow
+        WHERE maHoaDon NOT IN (
+            SELECT TOP (@exceptRows)
+            maHoaDon
+            FROM billShow
+        )
+    END
+    ELSE
+    BEGIN
+        ;WITH billShow AS (
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+                kh.maKH, kh.hoTen, kh.soDienThoai
+            FROM dbo.HoaDon hd, dbo.KhachHang kh
+            WHERE hd.tinhTrangHD = 1
+                AND hd.maKH = kh.maKH
+                AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+                AND hd.maNhanVien = @staffId
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            kh.maKH, kh.hoTen, kh.soDienThoai
+        )
+
+        SELECT TOP (@selectRows) *
+        FROM billShow
+        WHERE maHoaDon NOT IN (
+            SELECT TOP (@exceptRows)
+            maHoaDon
+            FROM billShow
+        )
+    END
+END
+GO
+
+CREATE PROC USP_getTotalLineOfBillListByDateAndCustomerName
+    @customerName NVARCHAR(100),
+    @startDate DATE,
+    @endDate DATE,
+    @staffId VARCHAR(10)
+AS
+BEGIN
+    DECLARE @position NVARCHAR(100)
+    SELECT @position = nv.chucVu
+    FROM dbo.NhanVien nv
+    WHERE nv.maNhanVien = @staffId
+
+    DECLARE @keyword NVARCHAR(102) = N'%' + @customerName + N'%'
+
+    IF(@position = N'Chủ quán')
+    BEGIN
+        SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd, dbo.KhachHang kh
         WHERE hd.tinhTrangHD = 1
             AND hd.maKH = kh.maKH
             AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        hd.maNhanVien, hd.maKH, hd.maPhong
     END
     ELSE
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+        SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd, dbo.KhachHang kh
         WHERE hd.tinhTrangHD = 1
             AND hd.maKH = kh.maKH
             AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        hd.maNhanVien, hd.maKH, hd.maPhong
     END
 END
 GO
 
-CREATE PROC USP_getBillListByDateAndStaffName
+CREATE PROC USP_getBillListByDateAndStaffNameAndPageNumber
     @staffName NVARCHAR(100),
     @startDate DATE,
     @endDate DATE,
-    @staffId VARCHAR(10)
+    @staffId VARCHAR(10),
+    @numberPage INT,
+    @lineNumberDisplayed INT
 AS
 BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
     DECLARE @keyword NVARCHAR(102) = N'%' + @staffName + N'%'
     DECLARE @position NVARCHAR(100)
     SELECT @position = nv.chucVu
@@ -1281,33 +1458,154 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+        ;WITH billShow AS (
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+                nv.maNhanVien, nv.hoTen, nv.soDienThoai
+            FROM dbo.HoaDon hd, dbo.NhanVien nv
+            WHERE hd.tinhTrangHD = 1
+                AND hd.maNhanVien = nv.maNhanVien
+                AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+        )
+
+        SELECT TOP (@selectRows) *
+        FROM billShow
+        WHERE maHoaDon NOT IN (
+            SELECT TOP (@exceptRows)
+            maHoaDon
+            FROM billShow
+        )
+    END
+    ELSE
+    BEGIN
+        ;WITH billShow AS (
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+                nv.maNhanVien, nv.hoTen, nv.soDienThoai
+            FROM dbo.HoaDon hd, dbo.NhanVien nv
+            WHERE hd.tinhTrangHD = 1
+                AND hd.maNhanVien = nv.maNhanVien
+                AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+                AND hd.maNhanVien = @staffId
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+        )
+
+        SELECT TOP (@selectRows) *
+        FROM billShow
+        WHERE maHoaDon NOT IN (
+            SELECT TOP (@exceptRows)
+            maHoaDon
+            FROM billShow
+        )
+    END
+END
+GO
+
+CREATE PROC USP_getTotalLineOfBillListByDateAndStaffName
+    @staffName NVARCHAR(100),
+    @startDate DATE,
+    @endDate DATE,
+    @staffId VARCHAR(10)
+AS
+BEGIN
+    DECLARE @position NVARCHAR(100)
+    SELECT @position = nv.chucVu
+    FROM dbo.NhanVien nv
+    WHERE nv.maNhanVien = @staffId
+
+    DECLARE @keyword NVARCHAR(102) = N'%' + @staffName + N'%'
+
+    IF(@position = N'Chủ quán')
+    BEGIN
+        SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd, dbo.NhanVien nv
         WHERE hd.tinhTrangHD = 1
             AND hd.maNhanVien = nv.maNhanVien
             AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-        hd.maNhanVien, hd.maKH, hd.maPhong
     END
     ELSE
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+        SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd, dbo.NhanVien nv
         WHERE hd.tinhTrangHD = 1
             AND hd.maNhanVien = nv.maNhanVien
             AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
     END
 END
 GO
 
-CREATE PROC USP_getBillListByDateAndBillId
+CREATE PROC USP_getBillListByDateAndBillIdAndPageNumber
+    @billId VARCHAR(15),
+    @startDate DATE,
+    @endDate DATE,
+    @staffId VARCHAR(10),
+    @numberPage INT,
+    @lineNumberDisplayed INT
+AS
+BEGIN
+    DECLARE @selectRows INT = @lineNumberDisplayed
+    DECLARE @exceptRows INT = (@numberPage - 1) * @lineNumberDisplayed
+    DECLARE @keyword NVARCHAR(17) = N'%' + @billId + N'%'
+    DECLARE @position NVARCHAR(100)
+    SELECT @position = nv.chucVu
+    FROM dbo.NhanVien nv
+    WHERE nv.maNhanVien = @staffId
+
+    IF(@position = N'Chủ quán')
+    BEGIN
+        ;WITH billShow AS (
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+                nv.maNhanVien, nv.hoTen, nv.soDienThoai
+            FROM dbo.HoaDon hd, dbo.NhanVien nv
+            WHERE hd.tinhTrangHD = 1
+                AND hd.maNhanVien = nv.maNhanVien
+                AND hd.maHoaDon LIKE @keyword
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+        )
+
+        SELECT TOP (@selectRows) *
+        FROM billShow
+        WHERE maHoaDon NOT IN (
+            SELECT TOP (@exceptRows)
+            maHoaDon
+            FROM billShow
+        )
+    END
+    ELSE
+    BEGIN
+        ;WITH billShow AS (
+            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+                nv.maNhanVien, nv.hoTen, nv.soDienThoai
+            FROM dbo.HoaDon hd, dbo.NhanVien nv
+            WHERE hd.tinhTrangHD = 1
+                AND hd.maNhanVien = nv.maNhanVien
+                AND hd.maHoaDon LIKE @keyword
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+                AND hd.maNhanVien = @staffId
+            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
+            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+        )
+
+        SELECT TOP (@selectRows) *
+        FROM billShow
+        WHERE maHoaDon NOT IN (
+            SELECT TOP (@exceptRows)
+            maHoaDon
+            FROM billShow
+        )
+    END
+END
+GO
+
+CREATE PROC USP_getTotalLineOfBillListByDateAndBillId
     @billId VARCHAR(15),
     @startDate DATE,
     @endDate DATE,
@@ -1316,35 +1614,28 @@ AS
 BEGIN
     DECLARE @keyword NVARCHAR(17) = N'%' + @billId + N'%'
     DECLARE @position NVARCHAR(100)
-
     SELECT @position = nv.chucVu
     FROM dbo.NhanVien nv
     WHERE nv.maNhanVien = @staffId
 
     IF(@position = N'Chủ quán')
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+        SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd, dbo.NhanVien nv
         WHERE hd.tinhTrangHD = 1
             AND hd.maNhanVien = nv.maNhanVien
             AND hd.maHoaDon LIKE @keyword
             AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
     END
     ELSE
     BEGIN
-        SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+        SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd, dbo.NhanVien nv
-        WHERE hd.tinhTrangHD = 1
-            AND hd.maNhanVien = nv.maNhanVien
-            AND hd.maHoaDon LIKE @keyword
-            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-            AND hd.maNhanVien = @staffId
-        GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+            WHERE hd.tinhTrangHD = 1
+                AND hd.maNhanVien = nv.maNhanVien
+                AND hd.maHoaDon LIKE @keyword
+                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
+                AND hd.maNhanVien = @staffId
     END
 END
 GO

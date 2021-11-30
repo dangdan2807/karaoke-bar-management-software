@@ -174,7 +174,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		tblTableBillInfo.setOpaque(false);
 		tblTableBillInfo.setShowGrid(false);
 		tblTableBillInfo.setRowHeight(25);
-		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPaneScroll(tblTableBillInfo);
+		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPane(tblTableBillInfo);
 		scrTableBillInfo.setBounds(1, 1, 777, 199);
 		pnTable.add(scrTableBillInfo);
 
