@@ -48,11 +48,12 @@ public class NhanVien implements Serializable {
 	
 	@Column(columnDefinition = "MONEY default 0", nullable = false)
 	private Double mucLuong;
+
 	@Column(columnDefinition = "NVARCHAR(100) default N'Đang làm'", nullable = false)
 	private String trangThaiNV;
 
 	@OneToOne
-	@JoinColumn(name = "taiKhoan", nullable = false)
+	@JoinColumn(name = "taiKhoan", nullable = false, unique = true, columnDefinition = "VARCHAR(100)")
 	private TaiKhoan taiKhoan;
 
 	@OneToMany(mappedBy = "nhanVien", fetch = FetchType.LAZY)

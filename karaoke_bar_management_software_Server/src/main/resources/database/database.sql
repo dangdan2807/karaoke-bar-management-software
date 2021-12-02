@@ -12,7 +12,6 @@ GO
 
 
 -- tạo bảng
--- tạo bảng
 CREATE TABLE TaiKhoan
 (
     tenDangNhap VARCHAR(100) NOT NULL PRIMARY KEY,
@@ -35,7 +34,7 @@ CREATE TABLE NhanVien
     mucLuong MONEY NOT NULL DEFAULT(0),
     trangThaiNV NVARCHAR(100) NOT NULL DEFAULT(N'Đang làm'),
 
-    taiKhoan VARCHAR(100) NOT NULL,
+    taiKhoan VARCHAR(100) NOT NULL UNIQUE,
 
     FOREIGN KEY (taiKhoan) REFERENCES dbo.TaiKhoan(tenDangNhap)
 )

@@ -23,14 +23,18 @@ public class TaiKhoan implements Serializable {
 	 */
 	private static final long serialVersionUID = 4669986007368687239L;
 	@Id
-	@Column(columnDefinition = "VARCHAR(100)")
+	@Column(columnDefinition = "VARCHAR(100)", unique = true)
 	private String tenDangNhap;
+
 	@Column(columnDefinition = "VARCHAR(100) default '123456'", nullable = false)
 	private String matKhau;
+	
 	@Column(columnDefinition = "BIT default 1", nullable = false)
 	private Boolean tinhTrangTK;
 
-	@OneToOne(mappedBy = "taiKhoan")
+	
+	@OneToOne
+	@PrimaryKeyJoinColumn
 	private NhanVien nhanVien;
 
 	/**
