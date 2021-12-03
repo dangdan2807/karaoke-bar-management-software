@@ -3,7 +3,7 @@
 	<groupId>karaoke_bar_management_software_Client</groupId>
 	<artifactId>karaoke_bar_management_software_Client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -16,6 +16,7 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>5.6.0.Final</version>
 		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/org.glassfish/jakarta.el -->
 		<dependency>
 			<groupId>org.glassfish</groupId>
@@ -23,11 +24,11 @@
 			<version>4.0.2</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
+		<!-- https://mvnrepository.com/artifact/jfree/jfreechart -->
 		<dependency>
-			<groupId>com.microsoft.sqlserver</groupId>
-			<artifactId>mssql-jdbc</artifactId>
-			<version>9.4.0.jre8</version>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.13</version>
 		</dependency>
 
 		<!-- Excel 2003 (.xls) -->
@@ -37,6 +38,7 @@
 			<artifactId>poi</artifactId>
 			<version>5.0.0</version>
 		</dependency>
+		
 		<!-- Excel 2007 (.xlsx) -->
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 		<dependency>
@@ -44,6 +46,7 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.0.0</version>
 		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
 		<dependency>
 			<groupId>com.itextpdf</groupId>

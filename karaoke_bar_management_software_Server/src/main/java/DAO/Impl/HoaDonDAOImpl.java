@@ -188,7 +188,7 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                     .setParameter(3, bill.getNhanVien().getMaNhanVien())
                     .setParameter(4, bill.getKhachHang().getMaKH())
                     .setParameter(5, bill.getPhong().getMaPhong())
-                    .setParameter(6, bill.getPhong().getLoaiPhong().getGiaTien())
+                    .setParameter(6, bill.getGiaPhong())
                     .getSingleResult();
             tr.commit();
         } catch (Exception e) {

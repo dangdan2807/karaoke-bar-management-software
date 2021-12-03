@@ -433,7 +433,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		txtCustomerName.setText(bill.getKhachHang().getHoTen());
 		txtRoomId.setText(bill.getPhong().getMaPhong());
 		txtRoomTypeName.setText(roomType.getTenLP());
-		txtRoomPrice.setText(df.format(roomType.getGiaTien()) + " đ/giờ");
+		txtRoomPrice.setText(df.format(bill.getGiaPhong()) + " đ/giờ");
 		Timestamp startTime = bill.getNgayGioDat();
 		String startTimeStr = ConvertTime.getInstance().convertTimeToString(startTime, formatTime);
 		txtStartTime.setText(startTimeStr);

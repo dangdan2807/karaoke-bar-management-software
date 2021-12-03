@@ -80,7 +80,7 @@ public class pnDatPhong extends JPanel
 	private ArrayList<DichVu> serviceList = new ArrayList<DichVu>();
 	private ArrayList<DichVu> serviceOrderList = new ArrayList<DichVu>();
 	private SecurityManager securityManager = System.getSecurityManager();
-	
+
 	private ConvertTime convertTime = ConvertTime.getInstance();
 
 	/**
@@ -595,7 +595,8 @@ public class pnDatPhong extends JPanel
 
 					Phong room = roomDAO.getRoomByRoomId(roomID);
 					String NewBillId = createNewBillId(startTime);
-					HoaDon bill = new HoaDon(NewBillId, startTime, HoaDonDAO.UNPAID, staffLogin, selectedCustomer,
+					Double roomPrice = room.getLoaiPhong().getGiaTien();
+					HoaDon bill = new HoaDon(NewBillId, startTime, HoaDonDAO.UNPAID, roomPrice, staffLogin, selectedCustomer,
 							room);
 					boolean resultBill = billDAO.insertBill(bill);
 					if (resultBill) {

@@ -460,7 +460,7 @@ public class ExportBill {
 
         // Giá phòng
         String roomTypePriceLabel = "Giá phòng:";
-        String roomTypePrice = df.format(roomType.getGiaTien()) + "đ/Giờ";
+        String roomTypePrice = df.format(bill.getGiaPhong()) + "đ/Giờ";
         createRowExcelBillInfo(rowIndex, roomTypePriceLabel, roomTypePrice, fontSize);
 
         ++rowIndex; // 12
@@ -911,7 +911,7 @@ public class ExportBill {
             doc.add(pRoomTypeName);
 
             // room type price
-            String roomTypePrice = df.format(roomType.getGiaTien()) + "đ/giờ";
+            String roomTypePrice = df.format(bill.getGiaPhong()) + "đ/giờ";
             Paragraph pRoomTypePrice = createRowBillInfoPdf("Giá phòng: ", roomTypePrice, 5);
             doc.add(pRoomTypePrice);
 

@@ -39,7 +39,7 @@ public class HoaDon implements Serializable {
 	@Column(columnDefinition = "INT default 0", nullable = false)
 	private int tinhTrangHD;
 
-	@Column(columnDefinition = "MONEY default 0 CHECK(giaPhong >= 0)")
+	@Column(columnDefinition = "MONEY default 0 CHECK(giaPhong >= 0)", nullable = false)
 	private Double giaPhong;
 
 	@ManyToOne(fetch = FetchType.LAZY)

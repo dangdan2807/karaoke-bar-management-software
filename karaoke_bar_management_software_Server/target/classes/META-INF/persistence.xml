@@ -3,8 +3,8 @@
 	<persistence-unit name="karaoke_bar_management_software_Server">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<class>entity.TaiKhoan</class>
-		<class>entity.Phong</class>
 		<class>entity.NhanVien</class>
+		<class>entity.Phong</class>
 		<class>entity.LoaiPhong</class>
 		<class>entity.LoaiDichVu</class>
 		<class>entity.KhachHang</class>
