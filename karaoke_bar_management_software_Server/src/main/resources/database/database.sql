@@ -99,6 +99,7 @@ CREATE TABLE HoaDon
     ngayGioTra DATETIME,
     -- 0. chưa thanh toán | 1. đã thanh toán
     tinhTrangHD INT NOT NULL DEFAULT(0),
+    giaPhong MONEY NOT NULL DEFAULT(0) CHECK(giaPhong >= 0),
     maNhanVien VARCHAR(10) NOT NULL,
     maKH VARCHAR(10) NOT NULL,
     maPhong VARCHAR(5) NOT NULL,
@@ -449,13 +450,13 @@ VALUES
 GO
 
 INSERT INTO dbo.HoaDon
-    (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, maNhanVien, maKH, maPhong)
+    (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, giaPhong, maNhanVien, maKH, maPhong)
 VALUES
-    ('HD2021100100001' , '2021-10-01 10:00:00', '2021-10-01 12:00:00', 1, 'NV00000001', 'KH00000001', 'P0001'),
-    ('HD2021100100002' , '2021-10-01 15:00:00', '2021-10-01 17:00:00', 1, 'NV00000003', 'KH00000003', 'P0002'),
-    ('HD2021100100003' , '2021-10-01 15:30:00', '2021-10-01 18:00:00', 1, 'NV00000004', 'KH00000004', 'P0003'),
-    ('HD2021100200001' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 'NV00000002', 'KH00000002', 'P0004'),
-    ('HD2021100200002' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 'NV00000002', 'KH00000002', 'P0005')
+    ('HD2021100100001' , '2021-10-01 10:00:00', '2021-10-01 12:00:00', 1, 80000.0, 'NV00000001', 'KH00000001', 'P0001'),
+    ('HD2021100100002' , '2021-10-01 15:00:00', '2021-10-01 17:00:00', 1, 80000.0, 'NV00000003', 'KH00000003', 'P0002'),
+    ('HD2021100100003' , '2021-10-01 15:30:00', '2021-10-01 18:00:00', 1, 80000.0, 'NV00000004', 'KH00000004', 'P0003'),
+    ('HD2021100200001' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 80000.0, 'NV00000002', 'KH00000002', 'P0004'),
+    ('HD2021100200002' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 80000.0, 'NV00000002', 'KH00000002', 'P0005')
 GO
 
 INSERT INTO dbo.CTDichVu
@@ -976,7 +977,7 @@ CREATE PROC USP_getUncheckBillByRoomId
 AS
 BEGIN
     SELECT TOP 1 hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-    hd.maNhanVien, hd.maKH, hd.maPhong
+    hd.giaPhong, hd.maNhanVien, hd.maKH, hd.maPhong
     FROM dbo.HoaDon hd, dbo.Phong p
     WHERE hd.maPhong = p.maPhong
         AND p.maPhong = @roomId
@@ -989,7 +990,7 @@ CREATE PROC USP_getBillByBillId
 AS
 BEGIN
     SELECT TOP 1 hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-    hd.maNhanVien, hd.maKH, hd.maPhong
+    hd.giaPhong, hd.maNhanVien, hd.maKH, hd.maPhong
     FROM dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
 END
@@ -1000,15 +1001,16 @@ CREATE PROC USP_insertBill
     @orderDate DATETIME,
     @staffId VARCHAR(10),
     @customerId VARCHAR(10),
-    @roomId VARCHAR(5)
+    @roomId VARCHAR(5),
+    @roomPrice MONEY
 AS
 BEGIN
     DECLARE @isExitsBillId VARCHAR(15)
     BEGIN TRANSACTION
     INSERT INTO dbo.HoaDon
-        (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, maNhanVien, maKH, maPhong)
+        (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, giaPhong, maNhanVien, maKH, maPhong)
     VALUES
-        (@billId, @orderDate, NULL, 0, @staffId, @customerId, @roomId)
+        (@billId, @orderDate, NULL, 0, @roomPrice, @staffId, @customerId, @roomId)
 
     SELECT @isExitsBillId = hd.maHoaDon
     FROM dbo.HoaDon hd
@@ -1017,6 +1019,7 @@ BEGIN
         AND hd.maNhanVien = @staffId
         AND hd.maKH = @customerId
         AND hd.maPhong = @roomId
+        AND hd.giaPhong = @roomPrice
         AND hd.tinhTrangHD = 0
         AND hd.ngayGioTra IS NULL
 
@@ -1091,11 +1094,13 @@ BEGIN
     DECLARE @startTime DATETIME
     DECLARE @endTime DATETIME
     DECLARE @roomID VARCHAR(5)
+    DECLARE @roomPrice MONEY
     DECLARE @totalPriceRoom MONEY = 0
     DECLARE @totalPriceService MONEY = 0
     DECLARE @totalPriceBill MONEY = 0
 
-    SELECT @startTime = hd.ngayGioDat, @endTime = hd.ngayGioTra, @roomID = hd.maPhong
+    SELECT @startTime = hd.ngayGioDat, @endTime = hd.ngayGioTra, @roomID = hd.maPhong,
+    @roomPrice = hd.giaPhong
     FROM dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
 
@@ -1113,10 +1118,7 @@ BEGIN
         END
 
         -- tính tổng tiền phòng
-        SELECT @totalPriceRoom = lp.giaTien * @totalHour
-        FROM dbo.Phong p, dbo.LoaiPhong lp
-        WHERE p.maPhong = @roomID
-            AND p.maLP = lp.maLP
+        SET @totalPriceRoom = @roomPrice * @totalHour
 
         IF (@totalPriceRoom IS NULL) 
             OR (@totalPriceRoom < 0) 
@@ -1164,12 +1166,12 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+            hd.giaPhong, hd.maNhanVien, hd.maKH, hd.maPhong
             FROM dbo.HoaDon hd
             WHERE hd.tinhTrangHD = 1
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+            hd.giaPhong, hd.maNhanVien, hd.maKH, hd.maPhong
         )
 
         SELECT TOP (@selectRows) *
@@ -1184,13 +1186,13 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+            hd.giaPhong, hd.maNhanVien, hd.maKH, hd.maPhong
             FROM dbo.HoaDon hd
             WHERE hd.tinhTrangHD = 1
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
                 AND hd.maNhanVien = @staffId
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
+            hd.giaPhong, hd.maNhanVien, hd.maKH, hd.maPhong
         )
 
         SELECT TOP (@selectRows) *
@@ -1256,14 +1258,14 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                kh.maKH, kh.hoTen, kh.soDienThoai
+                hd.giaPhong, kh.maKH, kh.hoTen, kh.soDienThoai
             FROM dbo.HoaDon hd, dbo.KhachHang kh
             WHERE hd.tinhTrangHD = 1
                 AND hd.maKH = kh.maKH
                 AND kh.soDienThoai LIKE @keyword
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            kh.maKH, kh.hoTen, kh.soDienThoai
+            hd.giaPhong, kh.maKH, kh.hoTen, kh.soDienThoai
         )
 
         SELECT TOP (@selectRows) *
@@ -1278,7 +1280,7 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                kh.maKH, kh.hoTen, kh.soDienThoai
+                hd.giaPhong, kh.maKH, kh.hoTen, kh.soDienThoai
             FROM dbo.HoaDon hd, dbo.KhachHang kh
             WHERE hd.tinhTrangHD = 1
                 AND hd.maKH = kh.maKH
@@ -1286,7 +1288,7 @@ BEGIN
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
                 AND hd.maNhanVien = @staffId
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            kh.maKH, kh.hoTen, kh.soDienThoai
+            hd.giaPhong, kh.maKH, kh.hoTen, kh.soDienThoai
         )
 
         SELECT TOP (@selectRows) *
@@ -1358,14 +1360,14 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                kh.maKH, kh.hoTen, kh.soDienThoai
+                hd.giaPhong, kh.maKH, kh.hoTen, kh.soDienThoai
             FROM dbo.HoaDon hd, dbo.KhachHang kh
             WHERE hd.tinhTrangHD = 1
                 AND hd.maKH = kh.maKH
                 AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            kh.maKH, kh.hoTen, kh.soDienThoai
+            hd.giaPhong, kh.maKH, kh.hoTen, kh.soDienThoai
         )
 
         SELECT TOP (@selectRows) *
@@ -1380,7 +1382,7 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                kh.maKH, kh.hoTen, kh.soDienThoai
+                hd.giaPhong, kh.maKH, kh.hoTen, kh.soDienThoai
             FROM dbo.HoaDon hd, dbo.KhachHang kh
             WHERE hd.tinhTrangHD = 1
                 AND hd.maKH = kh.maKH
@@ -1388,7 +1390,7 @@ BEGIN
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
                 AND hd.maNhanVien = @staffId
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            kh.maKH, kh.hoTen, kh.soDienThoai
+            hd.giaPhong, kh.maKH, kh.hoTen, kh.soDienThoai
         )
 
         SELECT TOP (@selectRows) *
@@ -1459,14 +1461,14 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                nv.maNhanVien, nv.hoTen, nv.soDienThoai
+                hd.giaPhong, nv.maNhanVien, nv.hoTen, nv.soDienThoai
             FROM dbo.HoaDon hd, dbo.NhanVien nv
             WHERE hd.tinhTrangHD = 1
                 AND hd.maNhanVien = nv.maNhanVien
                 AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+            hd.giaPhong, nv.maNhanVien, nv.hoTen, nv.soDienThoai
         )
 
         SELECT TOP (@selectRows) *
@@ -1481,7 +1483,7 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                nv.maNhanVien, nv.hoTen, nv.soDienThoai
+                hd.giaPhong, nv.maNhanVien, nv.hoTen, nv.soDienThoai
             FROM dbo.HoaDon hd, dbo.NhanVien nv
             WHERE hd.tinhTrangHD = 1
                 AND hd.maNhanVien = nv.maNhanVien
@@ -1489,7 +1491,7 @@ BEGIN
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
                 AND hd.maNhanVien = @staffId
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+            hd.giaPhong, nv.maNhanVien, nv.hoTen, nv.soDienThoai
         )
 
         SELECT TOP (@selectRows) *
@@ -1560,14 +1562,14 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                nv.maNhanVien, nv.hoTen, nv.soDienThoai
+                hd.giaPhong, nv.maNhanVien, nv.hoTen, nv.soDienThoai
             FROM dbo.HoaDon hd, dbo.NhanVien nv
             WHERE hd.tinhTrangHD = 1
                 AND hd.maNhanVien = nv.maNhanVien
                 AND hd.maHoaDon LIKE @keyword
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+            hd.giaPhong, nv.maNhanVien, nv.hoTen, nv.soDienThoai
         )
 
         SELECT TOP (@selectRows) *
@@ -1582,7 +1584,7 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                nv.maNhanVien, nv.hoTen, nv.soDienThoai
+                hd.giaPhong, nv.maNhanVien, nv.hoTen, nv.soDienThoai
             FROM dbo.HoaDon hd, dbo.NhanVien nv
             WHERE hd.tinhTrangHD = 1
                 AND hd.maNhanVien = nv.maNhanVien
@@ -1590,7 +1592,7 @@ BEGIN
                 AND hd.ngayGioDat BETWEEN @startDate AND @endDate
                 AND hd.maNhanVien = @staffId
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            nv.maNhanVien, nv.hoTen, nv.soDienThoai
+            hd.giaPhong, nv.maNhanVien, nv.hoTen, nv.soDienThoai
         )
 
         SELECT TOP (@selectRows) *

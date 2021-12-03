@@ -39,6 +39,9 @@ public class HoaDon implements Serializable {
 	@Column(columnDefinition = "INT default 0", nullable = false)
 	private int tinhTrangHD;
 
+	@Column(columnDefinition = "MONEY default 0 CHECK(giaPhong >= 0)")
+	private Double giaPhong;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maNhanVien", nullable = false)
 	private NhanVien nhanVien;
@@ -53,6 +56,22 @@ public class HoaDon implements Serializable {
 
 	@OneToMany(mappedBy = "hoaDon", fetch = FetchType.LAZY)
 	private List<CTDichVu> dsCTDichVu;
+
+	/**
+	 * Lấy giá của phòng đang cho thuê
+	 */
+	public Double getGiaPhong() {
+		return giaPhong;
+	}
+
+	/**
+	 * Thiết lập giá của phòng đang cho thuê
+	 * 
+	 * @param giaPhong {@code Double}: giá của phòng đang cho thuê
+	 */
+	public void setGiaPhong(Double giaPhong) {
+		this.giaPhong = giaPhong;
+	}
 
 	/**
 	 * Lấy mã hóa đơn
@@ -217,16 +236,19 @@ public class HoaDon implements Serializable {
 	 *                    <li>Nếu chưa thanh toán thì truyền vào {@code 0}</li>
 	 *                    <li>Nếu đã thanh toán thì truyền vào {@code 1}</li>
 	 *                    </ul>
+	 * @param giaPhong    {@code Double}: giá phòng
 	 * @param nhanVien    {@code NhanVien}: nhân viên tạo hóa đơn
 	 * @param khachHang   {@code KhachHang}: khách hàng đặt phòng
 	 * @param phong       {@code Phong}: phòng được chọn
 	 */
-	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD, NhanVien nhanVien,
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD, double giaPhong,
+			NhanVien nhanVien,
 			KhachHang khachHang, Phong phong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
 		this.ngayGioTra = ngayGioTra;
 		this.tinhTrangHD = tinhTrangHD;
+		this.giaPhong = giaPhong;
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
 		this.phong = phong;
@@ -245,15 +267,17 @@ public class HoaDon implements Serializable {
 	 *                    <li>Nếu chưa thanh toán thì truyền vào {@code 0}</li>
 	 *                    <li>Nếu đã thanh toán thì truyền vào {@code 1}</li>
 	 *                    </ul>
+	 * @param giaPhong    {@code Double}: giá phòng
 	 * @param nhanVien    {@code NhanVien}: nhân viên tạo hóa đơn
 	 * @param khachHang   {@code KhachHang}: khách hàng đặt phòng
 	 * @param phong       {@code Phong}: phòng được chọn
 	 */
-	public HoaDon(String maHoaDon, Timestamp ngayGioDat, int tinhTrangHD, NhanVien nhanVien, KhachHang khachHang,
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, int tinhTrangHD, double giaPhong, NhanVien nhanVien, KhachHang khachHang,
 			Phong phong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
 		this.tinhTrangHD = tinhTrangHD;
+		this.giaPhong = giaPhong;
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
 		this.phong = phong;
@@ -266,14 +290,16 @@ public class HoaDon implements Serializable {
 	 * 
 	 * @param maHoaDon   {@code String}: mã hóa đơn
 	 * @param ngayGioDat {@code Timestamp}: ngày giờ đặt
+	 * @param giaPhong   {@code Double}: giá phòng
 	 * @param nhanVien   {@code NhanVien}: nhân viên tạo hóa đơn
 	 * @param khachHang  {@code KhachHang}: khách hàng đặt phòng
 	 * @param phong      {@code Phong}: phòng được chọn
 	 */
-	public HoaDon(String maHoaDon, Timestamp ngayGioDat, NhanVien nhanVien, KhachHang khachHang, Phong phong) {
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, double giaPhong, NhanVien nhanVien, KhachHang khachHang, Phong phong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
 		this.tinhTrangHD = 0;
+		this.giaPhong = giaPhong;
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
 		this.phong = phong;
@@ -284,16 +310,18 @@ public class HoaDon implements Serializable {
 	/**
 	 * Tạo 1 {@code HoaDon} mới (tính trạng chưa thanh toán) với các tham số sau:
 	 * 
-	 * @param maHoaDon   {@code String}: mã hóa đơn
-	 * @param ngayGioDat {@code Timestamp}: ngày giờ đặt
-	 * @param ngayGioTra   {@code Timestamp}: ngày giờ tính tiền
+	 * @param maHoaDon    {@code String}: mã hóa đơn
+	 * @param ngayGioDat  {@code Timestamp}: ngày giờ đặt
+	 * @param ngayGioTra  {@code Timestamp}: ngày giờ tính tiền
 	 * @param tinhTrangHD {@code int}: tình trạng hóa đơn
+	 * @param giaPhong    {@code Double}: giá phòng
 	 */
-	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD) {
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD, double giaPhong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
 		this.ngayGioTra = ngayGioTra;
 		this.tinhTrangHD = tinhTrangHD;
+		this.giaPhong = giaPhong;
 
 		dsCTDichVu = new ArrayList<CTDichVu>();
 	}
@@ -386,7 +414,7 @@ public class HoaDon implements Serializable {
 		if (soGio < 1.0) {
 			soGio = 1.0;
 		}
-		Double tongTien = soGio * phong.getLoaiPhong().getGiaTien();
+		Double tongTien = soGio * giaPhong;
 		return tongTien;
 	}
 }
