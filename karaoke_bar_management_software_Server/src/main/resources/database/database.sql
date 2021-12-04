@@ -963,13 +963,6 @@ BEGIN
 END
 GO
 
--- SELECT * FROM dbo.HoaDon
--- where maHoaDon = 'HD2021100100001'
-
--- update dbo.HoaDon 
--- set tinhTrangHD = 0
--- where maHoaDon = 'HD2021100100001'
--- go
 
 -- hóa đơn
 CREATE PROC USP_getUncheckBillByRoomId
@@ -1054,9 +1047,21 @@ BEGIN
     DECLARE @roomId VARCHAR(5)
     DECLARE @isExitsBillId VARCHAR(15) = NULL
     BEGIN TRANSACTION
-    UPDATE dbo.HoaDon 
-        SET tinhTrangHD = 1, ngayGioTra = @paymentDate
+
+    IF (@paymentDate IS NULL)
+    BEGIN
+        UPDATE dbo.HoaDon 
+        SET tinhTrangHD = 1, 
+        ngayGioTra = GETDATE()
         WHERE maHoaDon = @billId
+    END
+    ELSE
+    BEGIN
+        UPDATE dbo.HoaDon 
+        SET tinhTrangHD = 1, 
+        ngayGioTra = @paymentDate
+        WHERE maHoaDon = @billId
+    END
 
     SELECT @isExitsBillId = hd.maHoaDon
     FROM dbo.HoaDon hd
@@ -1065,12 +1070,12 @@ BEGIN
         AND hd.ngayGioTra = @paymentDate
 
     IF (@isExitsBillId IS NULL)
-        BEGIN
+    BEGIN
         SELECT TOP 1 0
         ROLLBACK
     END
-        ELSE
-        BEGIN
+    ELSE
+    BEGIN
         SELECT @roomID = hd.maPhong
         FROM dbo.HoaDon hd
         WHERE hd.maHoaDon = @billId
@@ -1089,60 +1094,16 @@ CREATE PROC USP_getTotalPriceBill
     @billId VARCHAR(15)
 AS
 BEGIN
-    -- tính số giờ đã thuê
-    DECLARE @totalHour FLOAT = 0
-    DECLARE @startTime DATETIME
-    DECLARE @endTime DATETIME
-    DECLARE @roomID VARCHAR(5)
-    DECLARE @roomPrice MONEY
-    DECLARE @totalPriceRoom MONEY = 0
-    DECLARE @totalPriceService MONEY = 0
-    DECLARE @totalPriceBill MONEY = 0
-
-    SELECT @startTime = hd.ngayGioDat, @endTime = hd.ngayGioTra, @roomID = hd.maPhong,
-    @roomPrice = hd.giaPhong
-    FROM dbo.HoaDon hd
-    WHERE hd.maHoaDon = @billId
-
-    IF (@startTime IS NULL) OR (@endTime IS NULL)
-    BEGIN
-        SELECT TOP 1 0
-    END
-    ELSE
-    BEGIN
-        SELECT @totalHour = DATEDIFF(minute, @startTime, @endTime)
-        SELECT @totalHour = @totalHour / 15 * 0.25
-        IF (@totalHour < 1.0)
-        BEGIN
-            SELECT @totalHour = 1.0
-        END
-
-        -- tính tổng tiền phòng
-        SET @totalPriceRoom = @roomPrice * @totalHour
-
-        IF (@totalPriceRoom IS NULL) 
-            OR (@totalPriceRoom < 0) 
-            OR (@totalPriceRoom = '')
-        BEGIN
-            SELECT @totalPriceRoom = 0
-        END
-
-        -- tính tồng tiền dịch vụ
-        SELECT @totalPriceService = SUM(ctdv.donGia * ctdv.soLuongDat)
-        FROM dbo.CTDichVu ctdv
-        WHERE ctdv.maHoaDon = @billId
-
-        IF (@totalPriceService IS NULL) 
-            OR (@totalPriceService < 0) 
-            OR (@totalPriceService = '')
-        BEGIN
-            SELECT @totalPriceService = 0
-        END
-
-        -- tính tổng tiền hóa đơn
-        SET @totalPriceBill = (@totalPriceRoom + @totalPriceService) * 1.1
-        SELECT TOP 1 @totalPriceBill
-    END
+    SELECT (hd.giaPhong * 
+        IIF(DATEDIFF(minute, hd.ngayGioDat, hd.ngayGioTra) / 15 * 0.25 < 1, 
+        1, 
+        DATEDIFF(minute, hd.ngayGioDat, hd.ngayGioTra) / 15 * 0.25)
+    + SUM(ctdv.donGia * ctdv.soLuongDat)) * 1.1
+    FROM dbo.HoaDon hd, dbo.CTDichVu ctdv
+    WHERE hd.maHoaDon = ctdv.maHoaDon
+        AND hd.tinhTrangHD = 1
+        AND hd.maHoaDon = @billId
+    GROUP BY hd.giaPhong, hd.ngayGioDat, hd.ngayGioTra
 END
 GO
 
@@ -1640,6 +1601,20 @@ BEGIN
     END
 END
 GO
+
+-- SELECT  hd.maHoaDon,
+--     (hd.giaPhong * 
+--         IIF(DATEDIFF(minute, hd.ngayGioDat, hd.ngayGioTra) / 15 * 0.25 < 1, 
+--         1, 
+--         DATEDIFF(minute, hd.ngayGioDat, hd.ngayGioTra) / 15 * 0.25)
+--     + SUM(ctdv.donGia * ctdv.soLuongDat)) * 1.1
+-- FROM dbo.HoaDon hd, dbo.CTDichVu ctdv
+-- WHERE hd.maHoaDon = ctdv.maHoaDon
+--     AND hd.tinhTrangHD = 1
+--     AND hd.ngayGioDat BETWEEN '2021-10-01' AND '2021-10-03'
+-- GROUP BY hd.maHoaDon, hd.giaPhong, hd.ngayGioDat, hd.ngayGioTra
+-- GO
+
 
 
 -- chi tiết dịch vụ
