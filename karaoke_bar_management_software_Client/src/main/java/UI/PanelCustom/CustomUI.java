@@ -58,6 +58,7 @@ public class CustomUI {
 	public static final ImageIcon DOUBLE_NEXT_RIGHT_ICON = new ImageIcon(pathImg + "doubleNextRight.png");
 	public static final ImageIcon NEXT_LEFT_ICON = new ImageIcon(pathImg + "nextLeft.png");
 	public static final ImageIcon DOUBLE_NEXT_LEFT_ICON = new ImageIcon(pathImg + "doubleNextLeft.png");
+	public static final ImageIcon DOLLA_ICON = new ImageIcon(pathImg + "dollar.png");
 
 	/**
 	 * singleton {@code CustomUI}

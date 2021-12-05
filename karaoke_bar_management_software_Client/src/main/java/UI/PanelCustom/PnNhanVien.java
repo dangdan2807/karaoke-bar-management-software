@@ -273,7 +273,7 @@ public class PnNhanVien extends JPanel
 		pnlSearch.setLayout(null);
 		pnlInfo.add(pnlSearch);
 
-		lblSearch = new JLabel("Tìm theo:");
+		lblSearch = new JLabel("Lọc theo:");
 		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(0, 5, 100, 20);
 		pnlSearch.add(lblSearch);

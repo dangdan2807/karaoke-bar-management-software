@@ -227,7 +227,7 @@ public class PnKhachHang extends JPanel
 		pnlSearch.setLayout(null);
 		pnlInfo.add(pnlSearch);
 
-		lblSearch = new JLabel("Tìm theo:");
+		lblSearch = new JLabel("Lọc theo:");
 		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(25, 11, 100, 20);
 		pnlSearch.add(lblSearch);
