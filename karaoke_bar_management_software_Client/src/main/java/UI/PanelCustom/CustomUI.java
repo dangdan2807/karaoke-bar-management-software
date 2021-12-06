@@ -8,7 +8,7 @@ import javax.swing.border.*;
 /**
  * Lớp này dùng để thiết lập các thuộc tính cho các thành phần trong giao diện
  * <p>
- * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh, Đỗ Thị Tường Vi
+ * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh, Võ Minh Hiếu
  * <p>
  * Ngày tạo: 01/10/2021
  * <p>
@@ -58,7 +58,7 @@ public class CustomUI {
 	public static final ImageIcon DOUBLE_NEXT_RIGHT_ICON = new ImageIcon(pathImg + "doubleNextRight.png");
 	public static final ImageIcon NEXT_LEFT_ICON = new ImageIcon(pathImg + "nextLeft.png");
 	public static final ImageIcon DOUBLE_NEXT_LEFT_ICON = new ImageIcon(pathImg + "doubleNextLeft.png");
-	public static final ImageIcon DOLLA_ICON = new ImageIcon(pathImg + "dollar.png");
+	public static final ImageIcon DOLLAR_ICON = new ImageIcon(pathImg + "dollar.png");
 
 	/**
 	 * singleton {@code CustomUI}

@@ -18,7 +18,7 @@ import entity.*;
 /**
  * Giao diện quản lý khách hàng của phần mềm
  * <p>
- * Người tham gia thiết kế: Huỳnh Tuấn Anh, Đỗ Thị Tường Vi
+ * Người tham gia thiết kế: Huỳnh Tuấn Anh, Võ Minh Hiếu
  * <p>
  * Ngày tạo: 07/10/2021
  * <p>

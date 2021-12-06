@@ -18,7 +18,7 @@ import entity.*;
 /**
  * Giao diện quản lý dịch vụ của phần mềm
  * <p>
- * Người tham gia thiết kế: Đỗ Thị Tường Vi
+ * Người tham gia thiết kế: Võ Minh Hiếu
  * <p>
  * Ngày tạo: 26/10/2021
  * <p>

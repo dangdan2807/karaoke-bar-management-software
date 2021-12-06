@@ -644,7 +644,7 @@ public class pnDatPhong extends JPanel
 					long millis = System.currentTimeMillis();
 					Timestamp endTime = new Timestamp(millis);
 					bill.setNgayGioTra(endTime);
-					Double totalPriceBill = bill.tinhTongTienHoaDon();
+					Double totalPriceBill = bill.getTongTienHD();
 
 					DialogHoaDon winPayment = new DialogHoaDon(bill);
 					winPayment.setModal(true);

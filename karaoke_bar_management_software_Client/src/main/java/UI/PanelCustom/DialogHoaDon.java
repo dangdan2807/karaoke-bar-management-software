@@ -379,7 +379,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 			boolean isPaid = false;
 			try {
 				HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
-				isPaid = billDAO.payment(bill.getMaHoaDon(), bill.getNgayGioTra());
+				isPaid = billDAO.payment(bill.getMaHoaDon(), bill.getTongTienHD(), bill.getNgayGioTra());
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -483,7 +483,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		txtTotalPriceRoom.setText(df.format(totalPriceRoom));
 		double vat = (totalPriceService + totalPriceRoom) * 0.1;
 		txtVAT.setText(df.format(vat));
-		double totalPrice = bill.tinhTongTienHoaDon();
+		double totalPrice = bill.getTongTienHD();
 		txtTotalPriceBill.setText(df.format(totalPrice));
 	}
 

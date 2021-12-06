@@ -202,8 +202,8 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
      * Thanh toán hóa đơn
      * 
      * @param billId      {@code String}: mã hóa đơn
-     * @param paymentDate {@code Timestamp}: ngày giờ thanh toán
      * @param totalPrice  {@code Double}: tổng tiền thanh toán
+     * @param paymentDate {@code Timestamp}: ngày giờ thanh toán
      * @return {@code boolean}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu thêm thành công thì trả về {@code true}</li>
@@ -212,8 +212,8 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
      * @throws RemoteException - Bắt lỗi Remote
      */
     @Override
-    public boolean payment(String billId, Timestamp paymentDate) throws RemoteException {
-        String query = "{CALL USP_payment( ? , ? )}";
+    public boolean payment(String billId, double getTotalPriceBill, Timestamp paymentDate) throws RemoteException {
+        String query = "{CALL USP_payment( ? , ? , ? )}";
         em.clear();
         EntityTransaction tr = em.getTransaction();
         int result = 0;
@@ -221,7 +221,8 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
             tr.begin();
             result = (int) em.createNativeQuery(query)
                     .setParameter(1, billId)
-                    .setParameter(2, paymentDate)
+                    .setParameter(2, getTotalPriceBill)
+                    .setParameter(3, paymentDate)
                     .getSingleResult();
             tr.commit();
         } catch (Exception e) {
@@ -268,6 +269,52 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
 
     /**
      * Lấy danh sách hóa đơn trong khoảng ngày được chọn và tìm theo mã nhân viên
+     * 
+     * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param staffId  {@code String}: mã nhân viên
+     * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
+     * @throws RemoteException - Bắt lỗi Remote
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public ArrayList<HoaDon> getBillListByDate(Date fromDate, Date toDate, String staffId) throws RemoteException {
+        String query = "{CALL USP_getBillListByDate( ? , ? , ? )}";
+        ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
+        em.clear();
+        EntityTransaction tr = em.getTransaction();
+        List<Object[]> list = new ArrayList<>();
+        try {
+            tr.begin();
+            list = (List<Object[]>) em.createNativeQuery(query)
+                    .setParameter(1, fromDate)
+                    .setParameter(2, toDate)
+                    .setParameter(3, staffId)
+                    .getResultList();
+            tr.commit();
+            list.stream().forEach(e -> {
+                String billID = (String) e[0];
+                Timestamp startTime = (Timestamp) e[1];
+                Timestamp endTime = (Timestamp) e[2];
+                int status = (int) e[3];
+                BigDecimal total = (BigDecimal) e[4];
+                Double roomPrice = total.doubleValue();
+                NhanVien staff = new NhanVien((String) e[5]);
+                KhachHang customer = new KhachHang((String) e[6]);
+                Phong room = new Phong((String) e[7]);
+                HoaDon bill = new HoaDon(billID, startTime, endTime, status, roomPrice, staff, customer, room);
+                dataList.add(bill);
+            });
+        } catch (Exception e) {
+            tr.rollback();
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy danh sách hóa đơn trong khoảng ngày được chọn và tìm theo mã nhân viên và
+     * phân trang
      * 
      * @param fromDate            {@code java.sql.Date}: ngày bắt đầu thống kê
      * @param toDate              {@code java.sql.Date}: ngày kết thúc thống kê
@@ -682,6 +729,44 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                     .setParameter(4, staffId)
                     .getSingleResult();
             tr.commit();
+        } catch (Exception e) {
+            tr.rollback();
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Lấy danh sách Tổng tiền hóa đơn trong khoảng ngày từ {@code fromDate} đến
+     * {@code toDate}
+     * 
+     * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
+     * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
+     * @param format   {@code String}: định dạng của ngày tháng năm
+     * @return {@code ArrayList<Double>}: danh sách tổng tiền của các hóa đơn
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public ArrayList<Object[]> getTotalPriceBillListByDate(Date fromDate, Date toDate, String format)
+            throws RemoteException {
+        String query = "{CALL USP_getTotalPriceBillListByDate( ? , ? , ? )}";
+        em.clear();
+        EntityTransaction tr = em.getTransaction();
+        ArrayList<Object[]> result = new ArrayList<>();
+        try {
+            tr.begin();
+            ArrayList<Object[]> resultQuery = (ArrayList<Object[]>) em.createNativeQuery(query)
+                    .setParameter(1, fromDate)
+                    .setParameter(2, toDate)
+                    .setParameter(3, format)
+                    .getResultList();
+            tr.commit();
+            resultQuery.stream().forEach(e -> {
+                String date = (String) e[0];
+                BigDecimal rs = (BigDecimal) e[2];
+                Double totalPrice = rs.doubleValue();
+                result.add(new Object[] { date, totalPrice });
+            });
         } catch (Exception e) {
             tr.rollback();
             e.printStackTrace();

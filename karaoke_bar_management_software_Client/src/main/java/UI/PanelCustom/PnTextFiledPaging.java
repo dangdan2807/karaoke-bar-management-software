@@ -10,7 +10,7 @@ import java.awt.event.*;
 /**
  * JPanel dùng để thực hiện phân trang
  * <p>
- * Người tham gia thiết kế: Phạm Đăng Đan, Đỗ Thị Tường Vi
+ * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu
  * <p>
  * Ngày tạo: 17/11/2021
  * <p>

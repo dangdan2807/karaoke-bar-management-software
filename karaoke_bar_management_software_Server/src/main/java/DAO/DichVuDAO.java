@@ -9,7 +9,7 @@ import entity.DichVu;
 /**
  * Lớp interface cho lớp {@code DichVuDAOImpl}
  * <p>
- * Người tham gia thiết kế: Phạm Đăng Đan, Đỗ Thị Tường Vi
+ * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu
  * <p>
  * Ngày tạo: 11/10/2021
  * <p>

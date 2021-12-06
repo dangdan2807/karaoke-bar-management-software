@@ -5,11 +5,10 @@ import java.rmi.registry.LocateRegistry;
 
 import DAO.*;
 import DAO.Impl.*;
-import Util.HibernateUtil;
 
 public class App {
 	public static void main(String[] args) {
-		// HibernateUtil.getInstance().getEntityManager();
+		// Util.HibernateUtil.getInstance().getEntityManager();
 		SecurityManager securityManager = System.getSecurityManager();
 		if (securityManager == null) {
 			System.setProperty("java.security.policy", "policy/policy.policy");

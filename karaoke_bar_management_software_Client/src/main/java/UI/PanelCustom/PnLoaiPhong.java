@@ -18,7 +18,7 @@ import entity.*;
 /**
  * Giao diện quản lý loại phòng của phần mềm
  * <p>
- * Người tham gia thiết kế: Đỗ Thị Tường Vi
+ * Người tham gia thiết kế: Võ Minh Hiếu
  * <p>
  * Ngày tạo: 06/10/2021
  * <p>

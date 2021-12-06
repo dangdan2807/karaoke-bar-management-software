@@ -664,7 +664,7 @@ public class ExportBill {
         ++rowIndex;
 
         // tổng hoá đơn
-        Double totalPrice = bill.tinhTongTienHoaDon();
+        Double totalPrice = bill.getTongTienHD();
         String totalPriceBillLabel = "Tổng cộng:";
         createRow(totalPriceBillLabel, rowIndex, cellIndex, rowHeight + 50, 13, true, false, true,
                 new CellRangeAddress(rowIndex, rowIndex, 0, 1), excelAlignLeft);
@@ -1020,7 +1020,7 @@ public class ExportBill {
         Double totalPriceService = bill.tinhTongTienDichVu();
         Double totalPriceRoom = bill.tinhTienPhong();
         Double vat = (totalPriceRoom + totalPriceService) * 0.1;
-        Double totalPriceBill = bill.tinhTongTienHoaDon();
+        Double totalPriceBill = bill.getTongTienHD();
         String labels[] = { "Tổng tiền dịch vụ:", "Tổng tiền phòng:", "VAT(10%):", "Tổng cộng:" };
         String values[] = { df.format(totalPriceService), df.format(totalPriceRoom), df.format(vat),
                 df.format(totalPriceBill) };

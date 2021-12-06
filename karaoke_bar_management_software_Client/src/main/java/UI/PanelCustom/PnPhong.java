@@ -18,7 +18,7 @@ import entity.*;
 /**
  * Giao diện quản lý phòng
  * <p>
- * Người tham gia thiết kế: Đỗ Thị Tường Vi
+ * Người tham gia thiết kế: Võ Minh Hiếu
  * <p>
  * Ngày tạo: 24/10/2021
  * <p>

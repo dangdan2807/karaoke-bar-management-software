@@ -495,7 +495,7 @@ public class PnHoaDon extends JPanel
 		reSizeColumnTableBill();
 		reSizeColumnTableBillInfo();
 		Date startDate = dpFromDate.getValueSqlDate();
-		Date endDate = dpToDate.getNextDay();
+		Date endDate = dpToDate.getValueSqlDate();
 		String staffId = staffLogin.getMaNhanVien();
 		txtPaging.setCurrentPage(1);
 		ArrayList<HoaDon> billList = new ArrayList<>();
@@ -690,7 +690,7 @@ public class PnHoaDon extends JPanel
 	private void searchEventUsingBtnSearch() {
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		Date fromDate = dpFromDate.getValueSqlDate();
-		Date toDate = dpToDate.getNextDay();
+		Date toDate = dpToDate.getValueSqlDate();
 		ArrayList<HoaDon> billList = new ArrayList<>();
 		String keyword = txtKeyWord.getText().trim();
 		String staffId = staffLogin.getMaNhanVien();
@@ -713,7 +713,7 @@ public class PnHoaDon extends JPanel
 					billList = billDAO.getBillListByDateAndCustomerNameAndPageNumber(keyword, fromDate, toDate, staffId,
 							currentPage, lineNumberDisplayed);
 				} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
-					totalLine = billDAO.getTotalLineOfBillListByDateAndCustomerName(keyword, fromDate, toDate, staffId);
+					totalLine = billDAO.getTotalLineOfBillListByDateAndStaffName(keyword, fromDate, toDate, staffId);
 					billList = billDAO.getBillListByDateAndStaffNameAndPageNumber(keyword, fromDate, toDate, staffId,
 							currentPage, lineNumberDisplayed);
 				} else if (searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {

@@ -42,6 +42,9 @@ public class HoaDon implements Serializable {
 	@Column(columnDefinition = "MONEY default 0 CHECK(giaPhong >= 0)", nullable = false)
 	private Double giaPhong;
 
+	@Column(columnDefinition = "MONEY default 0 CHECK(tongTienHD >= 0)", nullable = false)
+	private Double tongTienHD;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maNhanVien", nullable = false)
 	private NhanVien nhanVien;
@@ -125,6 +128,7 @@ public class HoaDon implements Serializable {
 	 */
 	public void setNgayGioTra(Timestamp ngayGioTra) {
 		this.ngayGioTra = ngayGioTra;
+		this.tongTienHD = ((tinhTongTienDichVu() + tinhTienPhong()) * 1.1);
 	}
 
 	/**
@@ -223,6 +227,7 @@ public class HoaDon implements Serializable {
 	 */
 	public void setDsCTDichVu(List<CTDichVu> ctDSDichVu) {
 		this.dsCTDichVu = ctDSDichVu;
+		this.tongTienHD = ((tinhTongTienDichVu() + tinhTienPhong()) * 1.1);
 	}
 
 	/**
@@ -253,8 +258,8 @@ public class HoaDon implements Serializable {
 		this.khachHang = khachHang;
 		this.phong = phong;
 
-		dsCTDichVu = new ArrayList<CTDichVu>();
-
+		this.dsCTDichVu = new ArrayList<CTDichVu>();
+		this.tongTienHD = 0.0;
 	}
 
 	/**
@@ -272,7 +277,8 @@ public class HoaDon implements Serializable {
 	 * @param khachHang   {@code KhachHang}: khách hàng đặt phòng
 	 * @param phong       {@code Phong}: phòng được chọn
 	 */
-	public HoaDon(String maHoaDon, Timestamp ngayGioDat, int tinhTrangHD, double giaPhong, NhanVien nhanVien, KhachHang khachHang,
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, int tinhTrangHD, double giaPhong, NhanVien nhanVien,
+			KhachHang khachHang,
 			Phong phong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
@@ -282,7 +288,8 @@ public class HoaDon implements Serializable {
 		this.khachHang = khachHang;
 		this.phong = phong;
 
-		dsCTDichVu = new ArrayList<CTDichVu>();
+		this.dsCTDichVu = new ArrayList<CTDichVu>();
+		this.tongTienHD = 0.0;
 	}
 
 	/**
@@ -295,7 +302,8 @@ public class HoaDon implements Serializable {
 	 * @param khachHang  {@code KhachHang}: khách hàng đặt phòng
 	 * @param phong      {@code Phong}: phòng được chọn
 	 */
-	public HoaDon(String maHoaDon, Timestamp ngayGioDat, double giaPhong, NhanVien nhanVien, KhachHang khachHang, Phong phong) {
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, double giaPhong, NhanVien nhanVien, KhachHang khachHang,
+			Phong phong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
 		this.tinhTrangHD = 0;
@@ -304,7 +312,8 @@ public class HoaDon implements Serializable {
 		this.khachHang = khachHang;
 		this.phong = phong;
 
-		dsCTDichVu = new ArrayList<CTDichVu>();
+		this.dsCTDichVu = new ArrayList<CTDichVu>();
+		this.tongTienHD = 0.0;
 	}
 
 	/**
@@ -323,7 +332,8 @@ public class HoaDon implements Serializable {
 		this.tinhTrangHD = tinhTrangHD;
 		this.giaPhong = giaPhong;
 
-		dsCTDichVu = new ArrayList<CTDichVu>();
+		this.dsCTDichVu = new ArrayList<CTDichVu>();
+		this.tongTienHD = ((tinhTongTienDichVu() + tinhTienPhong()) * 1.1);
 	}
 
 	/**
@@ -360,12 +370,11 @@ public class HoaDon implements Serializable {
 	}
 
 	/**
-	 * Tính tiền hóa đơn
+	 * Lấy tổng tiền dịch vụ
 	 * 
-	 * @return {@code double}: tiền hóa đơn
+	 * @return {@code double}: tổng tiền dịch vụ
 	 */
-	public Double tinhTongTienHoaDon() {
-		Double tongTienHD = (tinhTongTienDichVu() + tinhTienPhong()) * 1.1;
+	public Double getTongTienHD() {
 		return tongTienHD;
 	}
 
@@ -386,6 +395,8 @@ public class HoaDon implements Serializable {
 		if (dsCTDichVu.contains(ctDV)) {
 			return false;
 		}
+		this.dsCTDichVu.add(ctDV);
+		this.tongTienHD = ((tinhTongTienDichVu() + tinhTienPhong()) * 1.1);
 		return true;
 	}
 
@@ -395,13 +406,13 @@ public class HoaDon implements Serializable {
 	 * @return {@code Double}: số giờ thuê phòng
 	 */
 	public Double tinhGioThue() {
-		int minutes = 0;
+		int soPhut = 0;
 		if (ngayGioTra != null && ngayGioDat != null) {
 			long difference = ngayGioTra.getTime() - ngayGioDat.getTime();
-			minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
+			soPhut = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
 		}
-		minutes = (int) minutes / 15;
-		return minutes * 1.0 / 4;
+		soPhut = (int) soPhut / 15;
+		return soPhut * 1.0 / 4;
 	}
 
 	/**
@@ -414,7 +425,6 @@ public class HoaDon implements Serializable {
 		if (soGio < 1.0) {
 			soGio = 1.0;
 		}
-		Double tongTien = soGio * giaPhong;
-		return tongTien;
+		return soGio * giaPhong;
 	}
 }

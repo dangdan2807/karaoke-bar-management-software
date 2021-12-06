@@ -9,7 +9,7 @@ import entity.LoaiPhong;
 /**
  * Lớp interface cho lớp {@code LoaiPhongDAOImpl}
  * <p>
- * Người tham gia thiết kế: Đỗ Thị Tường Vi
+ * Người tham gia thiết kế: Võ Minh Hiếu
  * <p>
  * Ngày tạo: 03/10/2021
  * <p>
