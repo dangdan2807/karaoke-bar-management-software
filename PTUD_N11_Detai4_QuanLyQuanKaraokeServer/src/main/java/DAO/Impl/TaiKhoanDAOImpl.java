@@ -105,7 +105,6 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(account);
         return account;
     }
 }

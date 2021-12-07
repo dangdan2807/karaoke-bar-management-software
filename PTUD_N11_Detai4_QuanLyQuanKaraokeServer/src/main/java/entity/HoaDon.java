@@ -259,7 +259,7 @@ public class HoaDon implements Serializable {
 		this.phong = phong;
 
 		this.dsCTDichVu = new ArrayList<CTDichVu>();
-		this.tongTienHD = 0.0;
+		this.tongTienHD = ((tinhTongTienDichVu() + tinhTienPhong()) * 1.1);
 	}
 
 	/**

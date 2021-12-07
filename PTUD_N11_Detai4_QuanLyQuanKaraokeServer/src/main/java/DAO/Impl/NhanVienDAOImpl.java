@@ -163,7 +163,6 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
             tr.rollback();
             e.printStackTrace();
         }
-        System.out.println("result: " + result);
         return result;
     }
 

@@ -589,23 +589,16 @@ public class fThongTinCaNhan extends JDialog
 
 		boolean result = false;
 		try {
-			System.out.println("1");
 			NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
 			if (chkChangePassword.isSelected()) {
-				System.out.println("2.1");
 				newStaffLogin.getTaiKhoan().setMatKhau(newPassword);
 				result = staffDAO.updateInfoStaffAndAccount(newStaffLogin);
 			} else {
-				System.out.println("2.2");
-				System.out.println(newStaffLogin);
 				result = staffDAO.updateInfoStaff(newStaffLogin);
-				System.out.println(result + "2.2.1");
 			}
-			System.out.println(result + "2.3");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(result + "3");
 		if (result) {
 			message = "Cập nhật thông tin thành công";
 			JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);

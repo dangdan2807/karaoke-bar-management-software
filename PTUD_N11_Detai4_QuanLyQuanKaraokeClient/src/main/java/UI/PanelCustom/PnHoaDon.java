@@ -6,6 +6,7 @@ import java.rmi.Naming;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -571,26 +572,29 @@ public class PnHoaDon extends JPanel
 		String startTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioDat(), format);
 		String endTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioTra(), format);
 		KhachHang customer = null;
-		Double totalPrice = 0.0;
 		NhanVien staff = null;
 		Phong room = null;
+		List<CTDichVu> serviceOrders = new ArrayList<>();
 		try {
 			KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
-			HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
 			NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
 			PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+			CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDetailDAO");
+
 			customer = customerDAO.getCustomerByBillId(billId);
-			totalPrice = billDAO.getTotalPriceBill(billId);
 			staff = staffDAO.getStaffByBillId(billId);
 			room = roomDAO.getRoomByBillId(billId);
+			serviceOrders = serviceDetailDAO.getServiceDetailListByBillId(bill.getMaHoaDon());
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 
+		bill.setDsCTDichVu(serviceOrders);
+
 		modelTableBill.addRow(new Object[] { sttStr, addSpaceToString(String.valueOf(billId)),
 				addSpaceToString(startTimeStr), addSpaceToString(endTimeStr), addSpaceToString(room.getMaPhong()),
 				addSpaceToString(customer.getHoTen()), addSpaceToString(staff.getHoTen()),
-				addSpaceToString(df.format(totalPrice)) });
+				addSpaceToString(df.format(bill.getTongTienHD())) });
 		modelTableBill.fireTableDataChanged();
 	}
 
@@ -731,7 +735,6 @@ public class PnHoaDon extends JPanel
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		System.out.println(totalLine);
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);
 		loadBillList(billList);

@@ -1057,7 +1057,7 @@ CREATE PROC USP_payment
 AS
 BEGIN
     DECLARE @roomId VARCHAR(5)
-    DECLARE @isExitsBillId VARCHAR(15) = NULL
+    DECLARE @isExitsBillId VARCHAR(15)
     BEGIN TRANSACTION
 
     IF (@paymentDate IS NULL)
@@ -1111,8 +1111,7 @@ AS
 BEGIN
     SELECT TOP 1 hd.tongTienHD
     FROM dbo.HoaDon hd, dbo.CTDichVu ctdv
-    WHERE hd.maHoaDon = ctdv.maHoaDon
-        AND hd.tinhTrangHD = 1
+    WHERE hd.tinhTrangHD = 1
         AND hd.maHoaDon = @billId
 END
 GO

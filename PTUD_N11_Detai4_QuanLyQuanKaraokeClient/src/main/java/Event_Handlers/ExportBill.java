@@ -4,6 +4,8 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.*;
@@ -606,7 +608,8 @@ public class ExportBill {
             }
             rowIndex += lastIndex + 1;
         } else {
-            // System.out.println("không tìm thấy hóa đơn");
+            JOptionPane.showMessageDialog(null, "không tìm thấy hóa đơn", "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
         return rowIndex;
     }

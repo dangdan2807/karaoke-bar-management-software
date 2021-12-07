@@ -6,6 +6,7 @@ import java.awt.*;
 import java.rmi.Naming;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.border.*;
@@ -60,17 +61,21 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		this.bill = bill;
 		NhanVien staff = null;
 		KhachHang customer = null;
+		List<CTDichVu> serviceOrders = new ArrayList<>();
 		try {
 			NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
 			KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+			CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDetailDAO");
+
 			staff = staffDAO.getStaffByBillId(bill.getMaHoaDon());
-			bill.setNhanVien(staff);
 			customer = customerDAO.getCustomerByBillId(bill.getMaHoaDon());
+			serviceOrders = serviceDetailDAO.getServiceDetailListByBillId(bill.getMaHoaDon());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		bill.setNhanVien(staff);
 		bill.setKhachHang(customer);
+		bill.setDsCTDichVu(serviceOrders);
 		setSize(800, 720);
 		setIconImage(logoApp.getImage());
 		// setDefaultCloseOperation(EXIT_ON_CLOSE);
