@@ -44,7 +44,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	private SecurityManager securityManager = System.getSecurityManager();
 
 	/**
-	 * Constructor form đăng nhập
+	 * Khởi tạo giao diện form đăng nhập
 	 */
 	public fDangNhap() {
 		if (securityManager == null) {

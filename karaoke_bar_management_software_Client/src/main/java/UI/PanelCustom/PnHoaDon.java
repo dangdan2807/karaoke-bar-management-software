@@ -65,6 +65,11 @@ public class PnHoaDon extends JPanel
 	private int lineNumberDisplayed = 6;
 	private SecurityManager securityManager = System.getSecurityManager();
 
+	/**
+	 * Khởi tạo giao diện quản lý hóa đơn
+	 * 
+	 * @param staff {@code NhanVien} nhân viên đăng nhập
+	 */
 	public PnHoaDon(NhanVien staff) {
 		if (securityManager == null) {
 			System.setProperty("java.security.policy", "policy/policy.policy");
@@ -735,7 +740,7 @@ public class PnHoaDon extends JPanel
 	/**
 	 * Lấy nút quay lại
 	 */
-	public JButton getBtnBack() {
+	public MyButton getBtnBack() {
 		return btnBack;
 	}
 

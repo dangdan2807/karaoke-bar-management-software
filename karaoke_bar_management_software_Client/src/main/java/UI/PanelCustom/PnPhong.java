@@ -64,6 +64,10 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	private NhanVien staffLogin = null;
 	private SecurityManager securityManager = System.getSecurityManager();
 
+	/**
+	 * Khởi tạo giao diện quản lý phòng
+	 * @param staff {@code NhanVien} nhân viên đăng nhập
+	 */
 	public PnPhong(NhanVien staff) {
 		if (securityManager == null) {
 			System.setProperty("java.security.policy", "policy/policy.policy");

@@ -62,7 +62,7 @@ public class PnDichVu extends JPanel
 	private SecurityManager securityManager = System.getSecurityManager();
 
 	/**
-	 * Constructor mặc định của panel Dịch vụ
+	 * khởi tạo giao diện quản lý dịch vụ
 	 * 
 	 * @param staff {@code NhanVien}: nhân viên truy cập
 	 */

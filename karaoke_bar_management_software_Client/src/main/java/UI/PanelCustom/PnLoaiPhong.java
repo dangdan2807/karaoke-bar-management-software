@@ -65,6 +65,10 @@ public class PnLoaiPhong extends JPanel
 	private int lineNumberDisplayed = 10;
 	private SecurityManager securityManager = System.getSecurityManager();
 
+	/**
+	 * Khởi tạo giao diện quản lý loại phòng
+	 * @param staff {@code NhanVien}: nhân viên đăng nhập
+	 */
 	public PnLoaiPhong(NhanVien staff) {
 		if (securityManager == null) {
 			System.setProperty("java.security.policy", "policy/policy.policy");

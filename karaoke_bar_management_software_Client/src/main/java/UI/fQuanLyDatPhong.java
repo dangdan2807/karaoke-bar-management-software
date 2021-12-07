@@ -3,9 +3,14 @@ package UI;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import DAO.KhachHangDAO;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.rmi.Naming;
+
 import UI.PanelCustom.*;
+import entity.KhachHang;
 import entity.NhanVien;
 
 /**
@@ -17,7 +22,7 @@ import entity.NhanVien;
  * <p>
  * Lần cập nhật cuối: 17/11/2021
  * <p>
- * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ * Nội dung cập nhật: bắt sự kiện chọn khách hàng khi đặt phòng
  */
 public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeListener {
     /**
@@ -25,7 +30,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeLis
 	 */
 	private static final long serialVersionUID = 2840284348303179625L;
 	private static fQuanLyDatPhong instance;
-    private JButton btnBackCustomer, btnBackBill, btnBackRentRoom;
+    private MyButton btnBackCustomer, btnBackBill, btnBackRentRoom, btnPnChooseCustomer, btnPnDatPhong;
 
     public static fQuanLyDatPhong getInstance(NhanVien staffLogin) {
         if (instance == null)
@@ -36,6 +41,10 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeLis
     private ImageIcon logoApp = CustomUI.LOGO_APP;
     private JTabbedPane tabMain;
     private NhanVien staffLogin = null;
+    
+    private pnDatPhong pnlRentRoom;
+    private PnKhachHang pnlCustomer;
+    private PnHoaDon pnlBill;
 
     /**
      * Constructor form quản trị
@@ -63,9 +72,9 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeLis
         tabMain.setBorder(null);
         tabMain.setFont(new Font("Dialog", Font.PLAIN, 15));
 
-        pnDatPhong pnlRentRoom = new pnDatPhong(staffLogin);
-        PnKhachHang pnlCustomer = new PnKhachHang(staffLogin);
-        PnHoaDon pnlBill = new PnHoaDon(staffLogin);
+        pnlRentRoom = new pnDatPhong(staffLogin);
+        pnlCustomer = new PnKhachHang(staffLogin, 1);
+        pnlBill = new PnHoaDon(staffLogin);
 
         tabMain.addTab("Quản lý đặt phòng", null, pnlRentRoom, "Quản lý Nhân viên");
         tabMain.addTab("Quản lý khách hàng", null, pnlCustomer, "Quản lý Khách hàng");
@@ -75,11 +84,15 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeLis
         btnBackRentRoom = pnlRentRoom.getBtnBack();
         btnBackCustomer = pnlCustomer.getBtnBack();
         btnBackBill = pnlBill.getBtnBack();
+        btnPnChooseCustomer = pnlCustomer.getBtnChooseCustomer();
+        btnPnDatPhong = pnlRentRoom.getBtnChooseCustomer();
 
         tabMain.addChangeListener(this);
         btnBackRentRoom.addActionListener(this);
         btnBackCustomer.addActionListener(this);
         btnBackBill.addActionListener(this);
+        btnPnChooseCustomer.addActionListener(this);
+        btnPnDatPhong.addActionListener(this);
     }
 
     @Override
@@ -87,8 +100,26 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeLis
         Object o = e.getSource();
         if (o.equals(btnBackCustomer) || o.equals(btnBackBill) || o.equals(btnBackRentRoom)) {
             EventBackTofDieuHuong();
-        } else if (o.equals(tabMain)) {
-            // EventChangeTab();
+        } else if (o.equals(btnPnDatPhong)) {
+            String roomId = pnlRentRoom.getSelectedRoomId();
+            if (!roomId.equalsIgnoreCase("") || roomId.length() > 0) {
+                tabMain.setSelectedIndex(1);
+			} else {
+				String message = "Bạn cần chọn phòng trước";
+				JOptionPane.showConfirmDialog(pnlRentRoom, message, "Thông báo chọn phòng", JOptionPane.OK_OPTION,
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+        } else if (o.equals(btnPnChooseCustomer)) {
+            String selectedCustomerId = pnlCustomer.getSelectedCustomerId();
+            KhachHang selectedCustomer = null;
+            try {
+                KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
+                selectedCustomer = customerDAO.getCustomerById(selectedCustomerId);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            pnlRentRoom.setSelectedCustomer(selectedCustomer);
+            tabMain.setSelectedIndex(0);
         }
     }
 

@@ -324,7 +324,8 @@ public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseLi
 		statistical();
 	}
 
-	public void showStatistical(Date fromDate, Date toDate, int dayOfMonth, int dayOfYear, String format, ArrayList<Object[]> totalPriceList) {
+	public void showStatistical(Date fromDate, Date toDate, int dayOfMonth, int dayOfYear, String format,
+			ArrayList<Object[]> totalPriceList) {
 		chartPanel.removeAll();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fromDate);
@@ -370,6 +371,7 @@ public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseLi
 		Double total = 0.0;
 
 		calendar.setTime(fromDate);
+		int oldMonth = calendar.get(Calendar.MONTH) + 1;
 		for (int i = 0; i <= times; i++) {
 			int day = calendar.get(Calendar.DAY_OF_MONTH);
 			int month = calendar.get(Calendar.MONTH) + 1;
@@ -391,6 +393,8 @@ public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseLi
 				calendar.add(Calendar.MONTH, 1);
 			} else if (format.equals("dd")) {
 				timeStr = day < 10 ? "0" + day : day + "";
+				if (oldMonth != month)
+					timeStr = +month < 10 ? "0" + month : month + "";
 				dataset.addValue(totalPrice, "VND", timeStr);
 				calendar.add(Calendar.DAY_OF_MONTH, 1);
 			} else {

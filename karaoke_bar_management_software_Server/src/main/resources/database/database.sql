@@ -1710,8 +1710,8 @@ GO
 -- END
 -- GO
 
--- exec USP_getTotalPriceBillListByDate '2021-10-01', '2021-10-02', 'dd/MM/yyyy'
--- go
+exec USP_getTotalPriceBillListByDate '2021-10-01', '2021-11-01', 'dd/MM/yyyy'
+go
 
 CREATE PROC USP_getTotalPriceBillListByDate
     @startDate DATE,

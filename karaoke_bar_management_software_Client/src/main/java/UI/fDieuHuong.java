@@ -41,7 +41,7 @@ public class fDieuHuong extends JFrame implements ActionListener {
             Color.decode("#FAFFD1"));
 
     /**
-     * Constructor form điều hướng
+     * Khỏi tại giao diện form điều hướng
      * 
      * @param staffLogin {@code NhanVien}: nhân viên truy cập
      */

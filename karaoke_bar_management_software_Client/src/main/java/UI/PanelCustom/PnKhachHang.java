@@ -24,7 +24,7 @@ import entity.*;
  * <p>
  * Lần cập nhật cuối: 20/11/2021
  * <p>
- * Nội dung cập nhật: thêm phân trang cho phần mềm
+ * Nội dung cập nhật: thêm nút chọn khách hàng khi khách hàng thuê phòng
  */
 public class PnKhachHang extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
@@ -40,8 +40,8 @@ public class PnKhachHang extends JPanel
 	private JTextField txtCMND, txtPhoneNumber, txtCustomerName, txtCustomerID, txtBFieldSearch;
 	private JTextField txtKeyWord, txtBFieldSearchGender;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPhone, lblCustomerID, lblCustomerName, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnNextToRight, btnNextToLast, btnNextToLeft,
-			btnNextToFirst;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnNextToRight, btnNextToLast, btnNextToLeft;
+	private MyButton btnNextToFirst, btnChooseCustomer;
 	private kDatePicker dpBirthDay;
 	private JComboBox<String> cboSearch, cboSearchGender;
 	private JRadioButton radMale, radFemale;
@@ -52,6 +52,7 @@ public class PnKhachHang extends JPanel
 	private ImageIcon addIcon = CustomUI.ADD_ICON;
 	private ImageIcon refreshIcon = CustomUI.REFRESH_ICON;
 	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
+	private ImageIcon checkIcon = CustomUI.CHECK_ICON;
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
 	private ImageIcon nextIconRight = new ImageIcon(
@@ -66,15 +67,27 @@ public class PnKhachHang extends JPanel
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
 	private int lineNumberDisplayed = 10;
+	private int isChooseCustomer = 0;
+	private String selectedCustomerId = "";
 	private SecurityManager securityManager = System.getSecurityManager();
 
-	public PnKhachHang(NhanVien staff) {
+	/**
+	 * Khởi tạo giao diện quản lý khách hàng
+	 * 
+	 * @param staff            {@code NhanVien}: nhân viên đăng nhập
+	 * @param isChooseCustomer Hiển thị nút chọn khách hàng hay không
+	 *                         <ul>
+	 *                         <li>Nếu hiển thị thì nhập {@code 1}</li>
+	 *                         <li>Nếu ẩn thì nhập {@code 0}</li>
+	 *                         </ul>
+	 */
+	public PnKhachHang(NhanVien staff, int isChooseCustomer) {
 		if (securityManager == null) {
 			System.setProperty("java.security.policy", "policy/policy.policy");
 			System.setSecurityManager(new SecurityManager());
 		}
-
 		this.staffLogin = staff;
+		this.isChooseCustomer = isChooseCustomer;
 		setSize(1270, 630);
 		this.setLayout(null);
 		// this.setResizable(false);
@@ -221,7 +234,7 @@ public class PnKhachHang extends JPanel
 		pnlInfo.add(btnRefresh);
 
 		JPanel pnlSearch = new JPanel();
-		pnlSearch.setBounds(175, 135, 867, 40);
+		pnlSearch.setBounds(130, 135, 1100, 40);
 		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
@@ -244,8 +257,18 @@ public class PnKhachHang extends JPanel
 
 		btnSearch = new MyButton(130, 35, "Tìm kiếm", gra, searchIcon.getImage(), 40, 19, 10, 5);
 		btnSearch.setToolTipText("Tìm kiếm thông tin khách hàng theo từ khóa");
-		btnSearch.setBounds(697, 3, 130, 35);
+		btnSearch.setBounds(715, 3, 130, 35);
 		pnlSearch.add(btnSearch);
+
+		btnChooseCustomer = new MyButton(130, 35, "Chọn KH", gra, checkIcon.getImage(), 40, 19, 10, 5);
+		btnChooseCustomer.setToolTipText("Chọn khách hàng theo từ khóa");
+		btnChooseCustomer.setBounds(900, 3, 130, 35);
+		if (this.isChooseCustomer == 1) {
+			btnChooseCustomer.setVisible(true);
+		} else {
+			btnChooseCustomer.setVisible(false);
+		}
+		pnlSearch.add(btnChooseCustomer);
 
 		JLabel lblKeyWord = new JLabel("Từ khóa:");
 		CustomUI.getInstance().setCustomLabel(lblKeyWord);
@@ -420,7 +443,8 @@ public class PnKhachHang extends JPanel
 			cboSearchGender.showPopup();
 		} else if (o.equals(tblTableCustomer)) {
 			int selectedRow = tblTableCustomer.getSelectedRow();
-			txtCustomerID.setText(tblTableCustomer.getValueAt(selectedRow, 1).toString().trim());
+			String customerId = tblTableCustomer.getValueAt(selectedRow, 1).toString().trim();
+			txtCustomerID.setText(customerId);
 			txtCustomerName.setText(tblTableCustomer.getValueAt(selectedRow, 2).toString().trim());
 			txtCMND.setText(tblTableCustomer.getValueAt(selectedRow, 3).toString().trim());
 			txtPhoneNumber.setText(tblTableCustomer.getValueAt(selectedRow, 4).toString().trim());
@@ -434,6 +458,7 @@ public class PnKhachHang extends JPanel
 			}
 			btnAdd.setEnabledCustom(false);
 			btnUpdate.setEnabledCustom(true);
+			selectedCustomerId = customerId;
 		}
 	}
 
@@ -879,7 +904,7 @@ public class PnKhachHang extends JPanel
 	/**
 	 * Lấy nút quay lại
 	 */
-	public JButton getBtnBack() {
+	public MyButton getBtnBack() {
 		return btnBack;
 	}
 
@@ -889,11 +914,31 @@ public class PnKhachHang extends JPanel
 	 * @param totalLine {@code int} tổng số khách hàng tìm được
 	 * @return {@code int} số trang
 	 */
-	public int getLastPage(int totalLine) {
+	private int getLastPage(int totalLine) {
 		int lastPage = totalLine / lineNumberDisplayed;
 		if (totalLine % lineNumberDisplayed != 0) {
 			lastPage++;
 		}
 		return lastPage;
+	}
+
+	/**
+	 * lấy mã Id khách hàng được chọn
+	 * 
+	 * @return {@code String} mã Id khách hàng
+	 */
+	public String getSelectedCustomerId() {
+		return selectedCustomerId;
+	}
+
+	/**
+	 * Lấy nút chọn khách hàng
+	 */
+	public MyButton getBtnChooseCustomer() {
+		if (isChooseCustomer == 1) {
+			return btnChooseCustomer;
+		} else {
+			return null;
+		}
 	}
 }

@@ -1,10 +1,11 @@
 package UI;
 
 import javax.swing.*;
-import javax.swing.event.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
+
 import UI.PanelCustom.*;
 import entity.NhanVien;
 
@@ -19,7 +20,7 @@ import entity.NhanVien;
  * <p>
  * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
  */
-public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
+public class fQuanTri extends JFrame implements ActionListener {
     /**
      * 
      */
@@ -37,9 +38,16 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
     private ImageIcon logoApp = CustomUI.LOGO_APP;
     private JTabbedPane tabMain;
     private NhanVien staffLogin = null;
+    private PnNhanVien pnlStaff;
+    private PnKhachHang pnlCustomer;
+    private PnLoaiPhong pnlRoomType;
+    private PnPhong pnlRoom;
+    private PnLoaiDichVu pnlServiceType;
+    private PnDichVu pnlService;
+    private PnHoaDon pnlBill;
 
     /**
-     * Constructor form quản trị
+     * Khởi tạo giao diện form quản trị
      * 
      * @param staff {@code NhanVien}: nhân viên truy cập
      */
@@ -64,13 +72,13 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         tabMain.setBorder(null);
         tabMain.setFont(new Font("Dialog", Font.PLAIN, 14));
 
-        PnNhanVien pnlStaff = new PnNhanVien(staffLogin);
-        PnKhachHang pnlCustomer = new PnKhachHang(staffLogin);
-        PnLoaiPhong pnlRoomType = new PnLoaiPhong(staffLogin);
-        PnPhong pnlRoom = new PnPhong(staffLogin);
-        PnLoaiDichVu pnlServiceType = new PnLoaiDichVu(staffLogin);
-        PnDichVu pnlService = new PnDichVu(staffLogin);
-        PnHoaDon pnlBill = new PnHoaDon(staffLogin);
+        pnlStaff = new PnNhanVien(staffLogin);
+        pnlCustomer = new PnKhachHang(staffLogin, 0);
+        pnlRoomType = new PnLoaiPhong(staffLogin);
+        pnlRoom = new PnPhong(staffLogin);
+        pnlServiceType = new PnLoaiDichVu(staffLogin);
+        pnlService = new PnDichVu(staffLogin);
+        pnlBill = new PnHoaDon(staffLogin);
 
         tabMain.addTab("Nhân viên", null, pnlStaff, "Quản lý Nhân viên");
         tabMain.addTab("Khách hàng", null, pnlCustomer, "Quản lý Khách hàng");
@@ -89,7 +97,6 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         btnBackService = pnlService.getBtnBack();
         btnBackBill = pnlBill.getBtnBack();
 
-        tabMain.addChangeListener(this);
         btnBackStaff.addActionListener(this);
         btnBackCustomer.addActionListener(this);
         btnBackRoomType.addActionListener(this);
@@ -99,20 +106,19 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         btnBackBill.addActionListener(this);
     }
 
+    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+		SwingUtilities.invokeLater(() -> {
+			NhanVien staff = new NhanVien("NV00000001");
+			new fQuanTri(staff).setVisible(true);
+		});
+	}
+
     @Override
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if (o.equals(btnBackStaff) || o.equals(btnBackCustomer) || o.equals(btnBackRoomType) || o.equals(btnBackRoom)
                 || o.equals(btnBackServiceType) || o.equals(btnBackService) || o.equals(btnBackBill)) {
             EventBackTofDieuHuong();
-        }
-    }
-
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        Object o = e.getSource();
-        if (o.equals(tabMain)) {
-            System.out.println(tabMain.getSelectedIndex());
         }
     }
 

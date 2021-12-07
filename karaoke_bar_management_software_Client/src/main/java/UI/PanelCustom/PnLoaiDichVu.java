@@ -65,6 +65,11 @@ public class PnLoaiDichVu extends JPanel
 	private NhanVien staffLogin = null;
 	private SecurityManager securityManager = System.getSecurityManager();
 
+	/**
+	 * Khởi tạo giao diện quản lý loại dịch vụ
+	 * 
+	 * @param staff {@code NhanVien}: nhân viên đăng nhập
+	 */
 	public PnLoaiDichVu(NhanVien staff) {
 		if (securityManager == null) {
 			System.setProperty("java.security.policy", "policy/policy.policy");

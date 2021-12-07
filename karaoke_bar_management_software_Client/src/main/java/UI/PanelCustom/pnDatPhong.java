@@ -26,7 +26,7 @@ import entity.*;
  * <p>
  * Lần cập nhật cuối: 20/11/2021
  * <p>
- * Nội dung cập nhật: thêm phân trang cho phần mềm
+ * Nội dung cập nhật: Thay đổi cách chọn khách hàng khi thuê phòng
  */
 public class pnDatPhong extends JPanel
 		implements ActionListener, MouseListener, ItemListener, ChangeListener, FocusListener, KeyListener {
@@ -42,8 +42,8 @@ public class pnDatPhong extends JPanel
 	private DefaultTableModel modelTableBill, modelTableService;
 	private JTable tblTableBill, tblTableService;
 	private JLabel lblStaffName;
-	private JButton btnSwitchRoom, btnRefreshRoom, btnBack, btnSearchService, btnPayment, btnOrderServices;
-	private JButton btnCannelServices, btnRentRoom, btnRefreshService, btnChooseCustomer;
+	private MyButton btnSwitchRoom, btnRefreshRoom, btnBack, btnSearchService, btnPayment, btnOrderServices;
+	private MyButton btnCannelServices, btnRentRoom, btnRefreshService, btnChooseCustomer;
 	private JTextField txtBillID, txtRoomID, txtTotalPriceBill, txtServiceName, txtRoomLocation;
 	private JTextField txtQuantityService, txtServicePrice, txtStartTime, txtEndTime, txtCustomerName;
 	private JTextField txtTotalPriceService, txtBFieldRoomID, txtBFieldRoomType, txtBFieldServiceType;
@@ -70,6 +70,7 @@ public class pnDatPhong extends JPanel
 			Color.decode("#FAFFD1"));
 
 	private int location = -1;
+	private String selectedRoomId = "";
 	private NhanVien staffLogin = null;
 	private boolean isDoubleClick = false;
 	private int selectedServiceIndex = -1;
@@ -84,7 +85,7 @@ public class pnDatPhong extends JPanel
 	private ConvertTime convertTime = ConvertTime.getInstance();
 
 	/**
-	 * Hàm khởi tạo form
+	 * Hàm khởi tạo giao diện đặt phòng
 	 * 
 	 * @param staff {@code NhanVien}: nhân viên đăng nhập
 	 */
@@ -550,7 +551,6 @@ public class pnDatPhong extends JPanel
 		btnCannelServices.addActionListener(this);
 		btnRentRoom.addActionListener(this);
 		btnRefreshRoom.addActionListener(this);
-		btnChooseCustomer.addActionListener(this);
 
 		tblTableService.addMouseListener(this);
 		tblTableBill.addMouseListener(this);
@@ -596,7 +596,8 @@ public class pnDatPhong extends JPanel
 					Phong room = roomDAO.getRoomByRoomId(roomID);
 					String NewBillId = createNewBillId(startTime);
 					Double roomPrice = room.getLoaiPhong().getGiaTien();
-					HoaDon bill = new HoaDon(NewBillId, startTime, HoaDonDAO.UNPAID, roomPrice, staffLogin, selectedCustomer,
+					HoaDon bill = new HoaDon(NewBillId, startTime, HoaDonDAO.UNPAID, roomPrice, staffLogin,
+							selectedCustomer,
 							room);
 					boolean resultBill = billDAO.insertBill(bill);
 					if (resultBill) {
@@ -710,22 +711,6 @@ public class pnDatPhong extends JPanel
 								JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
 					}
 				}
-			}
-		} else if (o.equals(btnChooseCustomer)) {
-			String roomId = txtRoomID.getText().trim();
-			if (!roomId.equalsIgnoreCase("") || roomId.length() > 0) {
-				DialogChonKhachHang chooseCustomer = new DialogChonKhachHang();
-				chooseCustomer.setModal(true);
-				chooseCustomer.setVisible(true);
-				selectedCustomer = chooseCustomer.getSelectedCustomer();
-				if (selectedCustomer != null) {
-					txtCustomerName.setText(selectedCustomer.getHoTen());
-					((MyButton) btnRentRoom).setEnabledCustom(true);
-				}
-			} else {
-				String message = "Bạn cần chọn phòng trước";
-				JOptionPane.showConfirmDialog(this, message, "Thông báo chọn phòng", JOptionPane.OK_OPTION,
-						JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 	}
@@ -1082,6 +1067,7 @@ public class pnDatPhong extends JPanel
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
+					selectedRoomId = roomActiveE.getMaPhong();
 					txtRoomLocation.setText(roomActiveE.getViTri());
 					txtRoomTypeName.setText(roomActiveE.getLoaiPhong().getTenLP());
 					String status = convertRoomStatus(roomActiveE.getTinhTrangP());
@@ -1644,7 +1630,34 @@ public class pnDatPhong extends JPanel
 	/**
 	 * Lấy nút quay lại
 	 */
-	public JButton getBtnBack() {
+	public MyButton getBtnBack() {
 		return btnBack;
+	}
+
+	/**
+	 * Lấy nút chọn khách hàng
+	 */
+	public MyButton getBtnChooseCustomer() {
+		return btnChooseCustomer;
+	}
+
+	/**
+	 * Lấy mã phòng được chọn
+	 * @return {@code String}: mã phòng được chọn
+	 */
+	public String getSelectedRoomId() {
+		return selectedRoomId;
+	}
+
+	/**
+	 * cập nhật khách hàng được lựa chọn
+	 * @param selectedCustomer
+	 */
+	public void setSelectedCustomer(KhachHang selectedCustomer) {
+		this.selectedCustomer = selectedCustomer;
+		if(selectedCustomer != null) {
+			txtCustomerName.setText(selectedCustomer.getHoTen()); 
+			((MyButton) btnRentRoom).setEnabledCustom(true);
+		}
 	}
 }

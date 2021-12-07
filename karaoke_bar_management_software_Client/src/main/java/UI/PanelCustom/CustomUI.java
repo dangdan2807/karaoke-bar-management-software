@@ -29,6 +29,7 @@ public class CustomUI {
 	private static String pathImg = "src/main/resources/images/";
 	public static String PATH_EXPORT_BILL = System.getProperty("user.dir") + "/src/main/resources/bill/";
 	public static final ImageIcon ADD_ICON = new ImageIcon(pathImg + "blueAdd_16.png");
+	public static final ImageIcon CHECK_ICON = new ImageIcon(pathImg + "check.png");
 	public static final ImageIcon TRASH_ICON = new ImageIcon(pathImg + "trash_16.png");
 	public static final ImageIcon REFRESH_ICON = new ImageIcon(pathImg + "refresh_16.png");
 	public static final ImageIcon BACK_ICON = new ImageIcon(pathImg + "back_16.png");

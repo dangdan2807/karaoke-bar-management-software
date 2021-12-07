@@ -55,7 +55,7 @@ public class fThongTinCaNhan extends JDialog
 	private SecurityManager securityManager = System.getSecurityManager();
 
 	/**
-	 * Constructor form thông tin cá nhân
+	 * Khởi tạo giao diện form thông tin cá nhân
 	 * 
 	 * @param staff {@code NhanVien}: nhân viên truy cập
 	 */

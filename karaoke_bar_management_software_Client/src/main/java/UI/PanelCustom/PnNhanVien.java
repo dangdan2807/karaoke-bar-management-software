@@ -73,7 +73,7 @@ public class PnNhanVien extends JPanel
 	private SecurityManager securityManager = System.getSecurityManager();
 
 	/**
-	 * Constructor form quản lý nhân viên
+	 * Khởi tạo giao diện quản lý nhân viên
 	 * 
 	 * @param staff {@code NhanVien}: nhân viên truy cập
 	 */

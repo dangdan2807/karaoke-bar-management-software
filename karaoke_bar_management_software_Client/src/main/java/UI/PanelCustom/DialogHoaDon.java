@@ -51,6 +51,11 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 	private HoaDon bill = new HoaDon();
 	private boolean paid = false;
 
+	/**
+	 * Khởi tạo giao diện thanh toán hóa đơn
+	 * 
+	 * @param bill {@code HoaDon}: hóa đơn cần thanh toán
+	 */
 	public DialogHoaDon(HoaDon bill) {
 		this.bill = bill;
 		NhanVien staff = null;
