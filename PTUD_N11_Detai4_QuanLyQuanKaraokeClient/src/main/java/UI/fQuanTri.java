@@ -4,7 +4,6 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.InvocationTargetException;
 
 import UI.PanelCustom.*;
 import entity.NhanVien;
@@ -27,7 +26,7 @@ public class fQuanTri extends JFrame implements ActionListener {
     private static final long serialVersionUID = 2840284348303179625L;
     private static fQuanTri instance;
     private JButton btnBackStaff, btnBackCustomer, btnBackRoomType, btnBackRoom, btnBackServiceType;
-    private JButton btnBackService, btnBackBill;
+    private JButton btnBackService, btnBackBill, btnBackStatistical;
 
     public static fQuanTri getInstance(NhanVien staffLogin) {
         if (instance == null)
@@ -45,6 +44,7 @@ public class fQuanTri extends JFrame implements ActionListener {
     private PnLoaiDichVu pnlServiceType;
     private PnDichVu pnlService;
     private PnHoaDon pnlBill;
+    private PnThongKeDoanhThu pnlStatistical;
 
     /**
      * Khởi tạo giao diện form quản trị
@@ -79,6 +79,7 @@ public class fQuanTri extends JFrame implements ActionListener {
         pnlServiceType = new PnLoaiDichVu(staffLogin);
         pnlService = new PnDichVu(staffLogin);
         pnlBill = new PnHoaDon(staffLogin);
+        pnlStatistical = new PnThongKeDoanhThu(staffLogin);
 
         tabMain.addTab("Nhân viên", null, pnlStaff, "Quản lý Nhân viên");
         tabMain.addTab("Khách hàng", null, pnlCustomer, "Quản lý Khách hàng");
@@ -87,6 +88,7 @@ public class fQuanTri extends JFrame implements ActionListener {
         tabMain.addTab("Loại dịch vụ", null, pnlServiceType, "Quản lý loại dịch vụ");
         tabMain.addTab("Dịch vụ", null, pnlService, "Quản lý dịch vụ");
         tabMain.addTab("Hóa đơn", null, pnlBill, "Quản lý Hóa đơn");
+        tabMain.addTab("Thống kê doanh thu", null, pnlStatistical, "Thống kê doanh thu");
         this.add(tabMain);
 
         btnBackStaff = pnlStaff.getBtnBack();
@@ -96,6 +98,7 @@ public class fQuanTri extends JFrame implements ActionListener {
         btnBackServiceType = pnlServiceType.getBtnBack();
         btnBackService = pnlService.getBtnBack();
         btnBackBill = pnlBill.getBtnBack();
+        btnBackStatistical = pnlStatistical.getBtnBack();
 
         btnBackStaff.addActionListener(this);
         btnBackCustomer.addActionListener(this);
@@ -104,20 +107,15 @@ public class fQuanTri extends JFrame implements ActionListener {
         btnBackServiceType.addActionListener(this);
         btnBackService.addActionListener(this);
         btnBackBill.addActionListener(this);
+        btnBackStatistical.addActionListener(this);
     }
-
-    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = new NhanVien("NV00000001");
-			new fQuanTri(staff).setVisible(true);
-		});
-	}
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if (o.equals(btnBackStaff) || o.equals(btnBackCustomer) || o.equals(btnBackRoomType) || o.equals(btnBackRoom)
-                || o.equals(btnBackServiceType) || o.equals(btnBackService) || o.equals(btnBackBill)) {
+                || o.equals(btnBackServiceType) || o.equals(btnBackService) || o.equals(btnBackBill)
+                || o.equals(btnBackStatistical)) {
             EventBackTofDieuHuong();
         }
     }

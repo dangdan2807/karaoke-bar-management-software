@@ -7,7 +7,7 @@ import javax.swing.SwingUtilities;
 import UI.fDangNhap;
 
 /**
- * Lớp học này là điểm bắt đầu của chương trình.
+ * Lớp học này là điểm bắt đầu của chương trình phía client.
  * <p>
  * Người tham gia thiết kế: Phạm Đăng Đan
  * <p>
@@ -16,11 +16,11 @@ import UI.fDangNhap;
  * Lần cập nhật cuối: 18/11/2021
  * <p>
  */
-public class App {
+public class Client {
     public static void main(String[] args) throws InvocationTargetException, InterruptedException {
         SwingUtilities.invokeLater(() -> {
             fDangNhap login = new fDangNhap();
             login.setVisible(true);
-		});
+        });
     }
 }

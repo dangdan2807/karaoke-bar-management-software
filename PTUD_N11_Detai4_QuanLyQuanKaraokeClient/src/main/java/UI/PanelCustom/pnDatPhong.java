@@ -1013,7 +1013,7 @@ public class pnDatPhong extends JPanel
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
-					if (roomTypeName == null) {
+					if (roomTypeName.equals("") || roomTypeName.isEmpty() || roomTypeName == null) {
 						roomTypeName = "Tất cả";
 					}
 					loadCboRoom(roomTypeName);
@@ -1134,6 +1134,7 @@ public class pnDatPhong extends JPanel
 		ArrayList<Phong> roomList = new ArrayList<Phong>();
 		try {
 			PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
+			System.out.println(roomTypeName);
 			if (roomTypeName.equalsIgnoreCase("Tất cả")) {
 				roomList = roomDAO.getListAvailableRoom();
 			} else {

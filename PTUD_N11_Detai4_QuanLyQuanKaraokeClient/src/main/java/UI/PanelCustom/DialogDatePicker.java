@@ -189,10 +189,6 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
         spnYear.addChangeListener(this);
     }
 
-    public static void main(String[] args) {
-        new DialogDatePicker().setVisible(true);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();

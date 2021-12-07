@@ -27,7 +27,7 @@ public class fDieuHuong extends JFrame implements ActionListener {
     private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
     private JLabel lblStaffName, lblStaffNameTxt;
     private NhanVien staffLogin = null;
-    
+
     private final String STAFF = "Nhân viên", MANAGER = "Chủ quán";
     private ImageIcon logoApp = CustomUI.LOGO_APP;
     private ImageIcon profileIcon = new ImageIcon(
@@ -97,15 +97,15 @@ public class fDieuHuong extends JFrame implements ActionListener {
         btnBookingManagement = new JButton("Quản lý đặt phòng");
         btnBookingManagement.setIcon(sellIcon);
         customBtn(btnBookingManagement);
-        
+
         btnInfoManagement = new JButton("Thông Tin Cá Nhân");
         btnInfoManagement.setIcon(profileIcon);
         customBtn(btnInfoManagement);
-        
+
         btnSystemManagement = new JButton("Quản Trị");
         btnSystemManagement.setIcon(managerIcon);
         customBtn(btnSystemManagement);
-        
+
         if (staffLogin.getChucVu().equals(MANAGER)) {
             btnBookingManagement.setBounds(261, 25, 240, 240);
             btnSystemManagement.setBounds(10, 25, 240, 240);
@@ -124,8 +124,13 @@ public class fDieuHuong extends JFrame implements ActionListener {
         lblStaffName.setForeground(Color.WHITE);
         lblStaffName.setBounds(20, 0, 80, 30);
         pnlMain.add(lblStaffName);
-        
-        lblStaffNameTxt = new JLabel(staffLogin.getHoTen());
+
+        String staffName = staffLogin.getHoTen();
+        if (staffName.equals("") || staffName.isEmpty() || staffName == null) {
+            staffName = "";
+        }
+
+        lblStaffNameTxt = new JLabel(staffName);
         lblStaffNameTxt.setForeground(Color.WHITE);
         lblStaffNameTxt.setFont(new Font("Dialog", Font.BOLD, 15));
         lblStaffNameTxt.setBounds(110, 0, 200, 30);

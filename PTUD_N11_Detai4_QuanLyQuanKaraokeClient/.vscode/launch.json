@@ -2,6 +2,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Client",
+            "request": "launch",
+            "mainClass": "App.Client",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
+            "name": "Launch fQuanTri",
+            "request": "launch",
+            "mainClass": "UI.fQuanTri",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
             "name": "Launch App",
             "request": "launch",
             "mainClass": "App.App",

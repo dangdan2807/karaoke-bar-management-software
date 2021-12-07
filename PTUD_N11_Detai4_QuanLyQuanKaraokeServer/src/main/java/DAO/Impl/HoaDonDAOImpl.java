@@ -70,9 +70,9 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 int status = (int) list.get(0)[3];
                 BigDecimal total = (BigDecimal) list.get(0)[4];
                 Double roomPrice = total.doubleValue();
-                NhanVien staff = new NhanVien((String) list.get(0)[5]);
-                KhachHang customer = new KhachHang((String) list.get(0)[6]);
-                Phong room = new Phong((String) list.get(0)[7]);
+                NhanVien staff = new NhanVien((String) list.get(0)[6]);
+                KhachHang customer = new KhachHang((String) list.get(0)[7]);
+                Phong room = new Phong((String) list.get(0)[8]);
                 result = new HoaDon(billID, startTime, endTime, status, roomPrice, staff, customer, room);
             } else {
                 result = null;
@@ -115,9 +115,9 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 int status = (int) list.get(0)[3];
                 BigDecimal total = (BigDecimal) list.get(0)[4];
                 Double roomPrice = total.doubleValue();
-                NhanVien staff = new NhanVien((String) list.get(0)[5]);
-                KhachHang customer = new KhachHang((String) list.get(0)[6]);
-                Phong room = new Phong((String) list.get(0)[7]);
+                NhanVien staff = new NhanVien((String) list.get(0)[6]);
+                KhachHang customer = new KhachHang((String) list.get(0)[7]);
+                Phong room = new Phong((String) list.get(0)[8]);
                 result = new HoaDon(billID, startTime, endTime, status, roomPrice, staff, customer, room);
             } else {
                 result = null;
@@ -299,9 +299,9 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 int status = (int) e[3];
                 BigDecimal total = (BigDecimal) e[4];
                 Double roomPrice = total.doubleValue();
-                NhanVien staff = new NhanVien((String) e[5]);
-                KhachHang customer = new KhachHang((String) e[6]);
-                Phong room = new Phong((String) e[7]);
+                NhanVien staff = new NhanVien((String) e[6]);
+                KhachHang customer = new KhachHang((String) e[7]);
+                Phong room = new Phong((String) e[8]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, roomPrice, staff, customer, room);
                 dataList.add(bill);
             });
@@ -350,9 +350,9 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 int status = (int) e[3];
                 BigDecimal total = (BigDecimal) e[4];
                 Double roomPrice = total.doubleValue();
-                NhanVien staff = new NhanVien((String) e[5]);
-                KhachHang customer = new KhachHang((String) e[6]);
-                Phong room = new Phong((String) e[7]);
+                NhanVien staff = new NhanVien((String) e[6]);
+                KhachHang customer = new KhachHang((String) e[7]);
+                Phong room = new Phong((String) e[8]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, roomPrice, staff, customer, room);
                 dataList.add(bill);
             });
@@ -433,9 +433,9 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 int status = (int) e[3];
                 BigDecimal total = (BigDecimal) e[4];
                 Double roomPrice = total.doubleValue();
-                NhanVien staff = new NhanVien((String) e[5]);
-                KhachHang customer = new KhachHang((String) e[6]);
-                Phong room = new Phong((String) e[7]);
+                NhanVien staff = new NhanVien((String) e[6]);
+                KhachHang customer = new KhachHang((String) e[7]);
+                Phong room = new Phong((String) e[8]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, roomPrice, staff, customer, room);
                 dataList.add(bill);
             });
@@ -520,9 +520,9 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 int status = (int) e[3];
                 BigDecimal total = (BigDecimal) e[4];
                 Double roomPrice = total.doubleValue();
-                NhanVien staff = new NhanVien((String) e[5]);
-                KhachHang customer = new KhachHang((String) e[6]);
-                Phong room = new Phong((String) e[7]);
+                NhanVien staff = new NhanVien((String) e[6]);
+                KhachHang customer = new KhachHang((String) e[7]);
+                Phong room = new Phong((String) e[8]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, roomPrice, staff, customer, room);
                 dataList.add(bill);
             });
@@ -606,9 +606,9 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 int status = (int) e[3];
                 BigDecimal total = (BigDecimal) e[4];
                 Double roomPrice = total.doubleValue();
-                NhanVien staff = new NhanVien((String) e[5]);
-                KhachHang customer = new KhachHang((String) e[6]);
-                Phong room = new Phong((String) e[7]);
+                NhanVien staff = new NhanVien((String) e[6]);
+                KhachHang customer = new KhachHang((String) e[7]);
+                Phong room = new Phong((String) e[8]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, roomPrice, staff, customer, room);
                 dataList.add(bill);
             });
@@ -691,9 +691,9 @@ public class HoaDonDAOImpl extends UnicastRemoteObject implements HoaDonDAO {
                 int status = (int) e[3];
                 BigDecimal total = (BigDecimal) e[4];
                 Double roomPrice = total.doubleValue();
-                NhanVien staff = new NhanVien((String) e[5]);
-                KhachHang customer = new KhachHang((String) e[6]);
-                Phong room = new Phong((String) e[7]);
+                NhanVien staff = new NhanVien((String) e[6]);
+                KhachHang customer = new KhachHang((String) e[7]);
+                Phong room = new Phong((String) e[8]);
                 HoaDon bill = new HoaDon(billID, startTime, endTime, status, roomPrice, staff, customer, room);
                 dataList.add(bill);
             });

@@ -97,12 +97,6 @@ public class PnTextFiledPaging extends JPanel implements KeyListener {
         txtPaging.addKeyListener(this);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new PnTextFiledPaging(100, 21).setVisible(true);
-        });
-    }
-
     @Override
     public void keyTyped(KeyEvent e) {
 

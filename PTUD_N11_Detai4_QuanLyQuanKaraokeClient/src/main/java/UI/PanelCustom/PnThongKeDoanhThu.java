@@ -1,7 +1,6 @@
 package UI.PanelCustom;
 
 import java.awt.event.*;
-import java.lang.reflect.InvocationTargetException;
 import java.rmi.Naming;
 import java.sql.Date;
 import java.text.DecimalFormat;
@@ -20,7 +19,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import DAO.HoaDonDAO;
 import entity.NhanVien;
 
-public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseListener, ItemListener {
+public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseListener, ItemListener {
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
@@ -53,10 +52,10 @@ public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseLi
 
 		this.setLayout(null);
 		setSize(1270, 630);
-		this.setLayout(new BorderLayout(0, 0));
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(null);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -215,13 +214,6 @@ public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseLi
 		cboSearch.addItemListener(this);
 
 		allLoaded();
-	}
-
-	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = new NhanVien("NV00000001");
-			new PnThongKeDoanhThu(staff).setVisible(true);
-		});
 	}
 
 	@Override
@@ -488,5 +480,12 @@ public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseLi
 			}
 			showStatistical(fromDate, toDate, dayOfMonth, dayOfYear, "yyyy", totalPriceList);
 		}
+	}
+
+	/**
+	 * Lấy nút quay lại
+	 */
+	public JButton getBtnBack() {
+		return btnBack;
 	}
 }
