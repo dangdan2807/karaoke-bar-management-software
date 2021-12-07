@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>karaoke_bar_management_software_Client</groupId>
-	<artifactId>karaoke_bar_management_software_Client</artifactId>
+	<groupId>PTUD_N11_Detai4_QuanLyQuanKaraokeClient</groupId>
+	<artifactId>PTUD_N11_Detai4_QuanLyQuanKaraokeClient</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>

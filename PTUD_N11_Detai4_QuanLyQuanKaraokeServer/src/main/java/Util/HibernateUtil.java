@@ -9,7 +9,7 @@ public class HibernateUtil {
 	private EntityManager entityManager;
 
 	private HibernateUtil() {
-		entityManager = Persistence.createEntityManagerFactory("karaoke_bar_management_software_Server").createEntityManager();
+		entityManager = Persistence.createEntityManagerFactory("PTUD_N11_Detai4_QuanLyQuanKaraokeServer").createEntityManager();
 	}
 
 	public synchronized static HibernateUtil getInstance() {
