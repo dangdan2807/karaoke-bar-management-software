@@ -1179,6 +1179,7 @@ public class pnDatPhong extends JPanel
 		for (CTDichVu item : dataList) {
 			DichVu service = item.getDichVu();
 			serviceOrderList.add(service);
+			// hiển thị lại phòng đã chọn lúc đầu
 			if (selectedServiceOrderIndex <= -1) {
 				if (selectedServiceOrderIndex == i) {
 					tblTableBill.getSelectionModel().addSelectionInterval(i - 1, i - 1);

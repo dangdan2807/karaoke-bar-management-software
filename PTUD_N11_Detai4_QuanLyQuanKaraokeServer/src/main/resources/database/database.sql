@@ -2289,7 +2289,7 @@ CREATE PROC USP_getListAvailableRoomByRoomTypeName
     @roomTypeName NVARCHAR(100)
 AS
 BEGIN
-    SELECT TOP 1 p.maPhong, p.tinhTrangP, p.viTri,
+    SELECT p.maPhong, p.tinhTrangP, p.viTri,
         lp.maLP, lp.giaTien, lp.sucChua, lp.tenLP
     FROM dbo.Phong p, dbo.LoaiPhong lp
     WHERE p.maLP = lp.maLP
