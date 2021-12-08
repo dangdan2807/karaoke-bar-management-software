@@ -264,6 +264,7 @@ public class PnNhanVien extends JPanel
 		CustomUI.getInstance().setCustomComboBox(cboPosition);
 		cboPosition.setToolTipText("Chọn chức vụ của nhân viên");
 		txtBFieldPosition = CustomUI.getInstance().setCustomCBoxField(cboPosition);
+		cboPosition.setEnabled(false);
 		cboPosition.setBounds(669, 51, 250, 20);
 		pnlInfo.add(cboPosition);
 
@@ -521,7 +522,9 @@ public class PnNhanVien extends JPanel
 		} else if (o.equals(txtBFieldSearchPosition)) {
 			cboSearchType.showPopup();
 		} else if (o.equals(txtBFieldPosition)) {
-			cboPosition.showPopup();
+			if (cboPosition.isEnabled()) {
+				cboPosition.showPopup();
+			}
 		} else if (o.equals(tblTableStaff)) {
 			int selectedRow = tblTableStaff.getSelectedRow();
 			txtStaffID.setText(tblTableStaff.getValueAt(selectedRow, 1).toString().trim());

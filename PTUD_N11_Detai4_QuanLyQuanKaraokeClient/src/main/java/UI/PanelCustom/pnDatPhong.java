@@ -1420,20 +1420,20 @@ public class pnDatPhong extends JPanel
 			int quantityInStock = Integer.parseInt(quantityInStockStr);
 			String message = "";
 
-			// số lượng đặt lớn hơn số lượng trong kho
-			if (orderQuantity > quantityInStock) {
-				orderQuantity = quantityInStock;
-				message = "Số lượng dịch vụ đặt lớn hơn số lượng hiện có";
-				JOptionPane.showMessageDialog(this, message, "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
-
-				// Số lượng trong kho bé hơn không
-			} else if (quantityInStock <= 0) {
+			// Số lượng trong kho bé hơn không
+			if (quantityInStock <= 0) {
 				message = "Dịch vụ đã hết";
 				JOptionPane.showMessageDialog(this, message, "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
 
 				// Số lượng đặt bé hơn không
 			} else if (orderQuantity <= 0) {
 				message = "Số lượng dịch vụ đặt phải lớn hơn 0";
+				JOptionPane.showMessageDialog(this, message, "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
+
+				// số lượng đặt lớn hơn số lượng trong kho
+			} else if (orderQuantity > quantityInStock) {
+				message = "Số lượng dịch vụ đặt lớn hơn số lượng hiện có";
+				orderQuantity = quantityInStock;
 				JOptionPane.showMessageDialog(this, message, "Cảnh bảo", JOptionPane.ERROR_MESSAGE);
 
 				// trường hợp khác
@@ -1643,6 +1643,7 @@ public class pnDatPhong extends JPanel
 
 	/**
 	 * Lấy mã phòng được chọn
+	 * 
 	 * @return {@code String}: mã phòng được chọn
 	 */
 	public String getSelectedRoomId() {
@@ -1651,12 +1652,13 @@ public class pnDatPhong extends JPanel
 
 	/**
 	 * cập nhật khách hàng được lựa chọn
+	 * 
 	 * @param selectedCustomer
 	 */
 	public void setSelectedCustomer(KhachHang selectedCustomer) {
 		this.selectedCustomer = selectedCustomer;
-		if(selectedCustomer != null) {
-			txtCustomerName.setText(selectedCustomer.getHoTen()); 
+		if (selectedCustomer != null) {
+			txtCustomerName.setText(selectedCustomer.getHoTen());
 			((MyButton) btnRentRoom).setEnabledCustom(true);
 		}
 	}
