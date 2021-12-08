@@ -20,7 +20,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import DAO.HoaDonDAO;
 import entity.NhanVien;
 
-public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseListener, ItemListener {
+public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseListener, ItemListener {
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
@@ -54,9 +54,9 @@ public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseLi
 		this.setLayout(null);
 		setSize(1270, 630);
 		this.setLayout(null);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -393,7 +393,8 @@ public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseLi
 			} else if (format.equals("dd")) {
 				timeStr = dayStr;
 				if (oldMonth != month)
-					timeStr += "/" + monthStr;
+					// timeStr += "/" + monthStr;
+					timeStr += "'";
 				fullDayStr = "0" + dayStr + "-" + monthStr + "-" + yearStr;
 				calendar.add(Calendar.DAY_OF_MONTH, 1);
 			} else {

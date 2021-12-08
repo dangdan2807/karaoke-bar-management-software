@@ -143,6 +143,16 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		((MyButton) btnLogin).setColorHover(Color.WHITE);
 		btnLogin.setBounds(83, 177, 285, 40);
 		pnlLogin.add(btnLogin);
+		
+		JButton btnForgetPassWord = new JButton("Quên mật khẩu?");
+		btnForgetPassWord.setBounds(102, 227, 250, 30);
+		pnlLogin.add(btnForgetPassWord);
+		btnForgetPassWord.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnForgetPassWord.setContentAreaFilled(false);
+		btnForgetPassWord.setFocusPainted(false);
+		btnForgetPassWord.setBorder(null);
+		btnForgetPassWord.setForeground(Color.decode("#5967E5"));
+		btnForgetPassWord.setFont(new Font("Dialog", Font.PLAIN, 14));
 
 		btnLogin.addActionListener(this);
 

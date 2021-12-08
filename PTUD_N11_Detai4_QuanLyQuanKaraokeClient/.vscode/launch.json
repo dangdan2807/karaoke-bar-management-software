@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch DialogLayLaiMatKhau",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.DialogLayLaiMatKhau",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
             "name": "Launch PnDichVu",
             "request": "launch",
             "mainClass": "UI.PanelCustom.PnDichVu",
