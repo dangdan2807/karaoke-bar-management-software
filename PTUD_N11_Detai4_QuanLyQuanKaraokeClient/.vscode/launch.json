@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch PnThongKeDoanhThu",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnThongKeDoanhThu",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
             "name": "Launch Client",
             "request": "launch",
             "mainClass": "App.Client",

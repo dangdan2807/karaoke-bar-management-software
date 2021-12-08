@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.*;
+import java.lang.reflect.InvocationTargetException;
 
 import org.jfree.chart.*;
 import org.jfree.chart.plot.PlotOrientation;
@@ -19,7 +20,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import DAO.HoaDonDAO;
 import entity.NhanVien;
 
-public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseListener, ItemListener {
+public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseListener, ItemListener {
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
@@ -53,9 +54,9 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		this.setLayout(null);
 		setSize(1270, 630);
 		this.setLayout(null);
-		// this.setResizable(false);
-		// this.setLocationRelativeTo(null);
-		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -204,7 +205,7 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		chart.getPlot().setBackgroundPaint(Color.WHITE);
 
 		chartPanel = new ChartPanel(chart);
-		chartPanel.setBounds(50, 70, 1138, 390);
+		chartPanel.setBounds(10, 70, 1218, 390);
 		pnlChart.add(chartPanel);
 
 		btnSearch.addActionListener(this);
@@ -214,6 +215,14 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		cboSearch.addItemListener(this);
 
 		allLoaded();
+	}
+
+	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+		SwingUtilities.invokeLater(() -> {
+			NhanVien staff = new NhanVien("NV00000001");
+			PnThongKeDoanhThu login = new PnThongKeDoanhThu(staff);
+			login.setVisible(true);
+		});
 	}
 
 	@Override
@@ -361,6 +370,7 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		int size = totalPriceList.size();
 		Double total = 0.0;
+		int totalPriceListIndex = 0;
 
 		calendar.setTime(fromDate);
 		int oldMonth = calendar.get(Calendar.MONTH) + 1;
@@ -370,30 +380,41 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 			int year = calendar.get(Calendar.YEAR);
 			Double totalPrice = 0.0;
 
-			if (size > i && size != 0) {
-				totalPrice = (Double) totalPriceList.get(i)[1];
-				if (totalPrice == null) {
-					totalPrice = 0.0;
-				}
-				total += totalPrice;
-			}
-
 			String timeStr = "";
+			// String dayStr = day < 10 ? "0" + day : day + "";
+			String dayStr = day + "";
+			String monthStr = month < 10 ? "0" + month : month + "";
+			String yearStr = year + "";
+			String fullDayStr = "";
+
 			if (format.equals("mm")) {
-				timeStr = month < 10 ? "0" + month : month + "";
-				dataset.addValue(totalPrice, "VND", timeStr);
+				timeStr = monthStr;
+				fullDayStr = monthStr + "-" + yearStr;
 				calendar.add(Calendar.MONTH, 1);
 			} else if (format.equals("dd")) {
-				timeStr = day < 10 ? "0" + day : day + "";
+				timeStr = dayStr;
 				if (oldMonth != month)
-					timeStr = +month < 10 ? "0" + month : month + "";
-				dataset.addValue(totalPrice, "VND", timeStr);
+					timeStr += "/" + monthStr;
+				fullDayStr = dayStr + "-" + monthStr + "-" + yearStr;
 				calendar.add(Calendar.DAY_OF_MONTH, 1);
 			} else {
-				timeStr = year + "";
-				dataset.addValue(totalPrice, "VND", timeStr);
+				timeStr = yearStr;
+				fullDayStr = yearStr;
 				calendar.add(Calendar.YEAR, 1);
 			}
+
+			if (size > totalPriceListIndex && size != 0) {
+				if (totalPriceList.get(totalPriceListIndex)[0].equals(fullDayStr)) {
+					totalPrice = (Double) totalPriceList.get(totalPriceListIndex)[1];
+					if (totalPrice == null) {
+						totalPrice = 0.0;
+					}
+					total += totalPrice;
+					totalPriceListIndex++;
+				}
+			}
+
+			dataset.addValue(totalPrice, "VND", timeStr);
 		}
 		txtTotalPrice.setText(df.format(total));
 
