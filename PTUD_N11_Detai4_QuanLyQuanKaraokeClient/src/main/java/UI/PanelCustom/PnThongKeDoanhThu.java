@@ -20,7 +20,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import DAO.HoaDonDAO;
 import entity.NhanVien;
 
-public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseListener, ItemListener {
+public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseListener, ItemListener {
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
@@ -54,9 +54,9 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		this.setLayout(null);
 		setSize(1270, 630);
 		this.setLayout(null);
-		// this.setResizable(false);
-		// this.setLocationRelativeTo(null);
-		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -217,13 +217,13 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		allLoaded();
 	}
 
-	// public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-	// 	SwingUtilities.invokeLater(() -> {
-	// 		NhanVien staff = new NhanVien("NV00000001");
-	// 		PnThongKeDoanhThu login = new PnThongKeDoanhThu(staff);
-	// 		login.setVisible(true);
-	// 	});
-	// }
+	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+		SwingUtilities.invokeLater(() -> {
+			NhanVien staff = new NhanVien("NV00000001");
+			PnThongKeDoanhThu login = new PnThongKeDoanhThu(staff);
+			login.setVisible(true);
+		});
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -378,7 +378,6 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 			int day = calendar.get(Calendar.DAY_OF_MONTH);
 			int month = calendar.get(Calendar.MONTH) + 1;
 			int year = calendar.get(Calendar.YEAR);
-			Double totalPrice = 0.0;
 
 			String timeStr = "";
 			// String dayStr = day < 10 ? "0" + day : day + "";
@@ -395,7 +394,7 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 				timeStr = dayStr;
 				if (oldMonth != month)
 					timeStr += "/" + monthStr;
-				fullDayStr = dayStr + "-" + monthStr + "-" + yearStr;
+				fullDayStr = "0" + dayStr + "-" + monthStr + "-" + yearStr;
 				calendar.add(Calendar.DAY_OF_MONTH, 1);
 			} else {
 				timeStr = yearStr;
@@ -403,6 +402,7 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 				calendar.add(Calendar.YEAR, 1);
 			}
 
+			Double totalPrice = 0.0;
 			if (size > totalPriceListIndex && size != 0) {
 				if (totalPriceList.get(totalPriceListIndex)[0].equals(fullDayStr)) {
 					totalPrice = (Double) totalPriceList.get(totalPriceListIndex)[1];

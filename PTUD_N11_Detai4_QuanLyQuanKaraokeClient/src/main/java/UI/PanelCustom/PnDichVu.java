@@ -2,6 +2,7 @@ package UI.PanelCustom;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.Naming;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -315,6 +316,14 @@ public class PnDichVu extends JPanel
 		allLoaded();
 	}
 
+	// public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+	// 	SwingUtilities.invokeLater(() -> {
+	// 		NhanVien staff = new NhanVien("NV00000001");
+	// 		PnDichVu login = new PnDichVu(staff);
+	// 		login.setVisible(true);
+	// 	});
+	// }
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -326,6 +335,7 @@ public class PnDichVu extends JPanel
 				if (validData()) {
 					DichVu service = getServiceDataInForm();
 					Boolean result = false;
+					System.out.println(service);
 					try {
 						DichVuDAO serviceDAO = (DichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDAO");
 						result = serviceDAO.insertService(service);
