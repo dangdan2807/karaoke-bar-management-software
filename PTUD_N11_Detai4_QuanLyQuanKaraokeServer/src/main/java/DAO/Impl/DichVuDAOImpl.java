@@ -266,7 +266,9 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, serviceName).getSingleResult();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, serviceName)
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -292,8 +294,10 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<DichVu>) em.createNativeQuery(query, DichVu.class).setParameter(1, serviceName)
-                    .setParameter(2, serviceTypeName).getResultList();
+            dataList = (ArrayList<DichVu>) em.createNativeQuery(query, DichVu.class)
+                    .setParameter(1, serviceName)
+                    .setParameter(2, serviceTypeName)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -315,7 +319,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
     @SuppressWarnings("unchecked")
     @Override
     public String getLastServiceID() throws RemoteException {
-        String query = "{CALL USP_getLastServiceId}";
+        String query = "{CALL USP_getLastServiceId()}";
         em.clear();
         EntityTransaction tr = em.getTransaction();
         String result = "";
@@ -361,7 +365,7 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
                     .setParameter(3, service.getGiaBan())
                     .setParameter(4, service.getSoLuongTon())
                     .setParameter(5, service.getLoaiDV().getMaLDV())
-                    .getFirstResult();
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();

@@ -97,7 +97,7 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
             ArrayList<TaiKhoan> accountList = (ArrayList<TaiKhoan>) em.createNativeQuery(query, TaiKhoan.class)
                     .setParameter(1, username).getResultList();
             tr.commit();
-            if(accountList.size() > 0) {
+            if (accountList.size() > 0) {
                 account = accountList.get(0);
             } else {
                 account = null;
@@ -106,5 +106,37 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
             e.printStackTrace();
         }
         return account;
+    }
+    
+    /**
+     * Đặt lại mật khẩu cho tài khoản
+     * 
+     * @param username {@code String}: tên đăng nhập
+     * @param password {@code String}: mật khẩu
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thành công thì trả về {@code true}</li>
+     *         <li>Nếu thất bại thì trả về {@code false}</li>
+     *         </ul>
+     * @throws RemoteException
+     */
+    @Override
+    public boolean resetPassword(String username, String password) throws RemoteException {
+        String query = "{CALL USP_resetPassword( ? , ? )}";
+        em.clear();
+        EntityTransaction tr = em.getTransaction();
+        int result = 0;
+        try {
+            tr.begin();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, username)
+                    .setParameter(2, password)
+                    .getSingleResult();
+            tr.commit();
+        } catch (Exception e) {
+            tr.rollback();
+            e.printStackTrace();
+        }
+        return result > 0;
     }
 }

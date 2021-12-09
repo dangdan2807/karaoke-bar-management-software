@@ -3155,3 +3155,32 @@ BEGIN
     WHERE nv.maNhanVien = @staffID
 END
 GO
+
+CREATE PROC USP_resetPassword
+    @username VARCHAR(100),
+    @password VARCHAR(100)
+AS
+BEGIN
+    DECLARE @isExitsAccount VARCHAR(100)
+    BEGIN TRANSACTION
+        UPDATE dbo.TaiKhoan
+        SET matKhau = @password
+        WHERE tenDangNhap = @username
+        
+        SELECT @isExitsAccount = tk.tenDangNhap
+        FROM dbo.TaiKhoan tk
+        WHERE tk.tenDangNhap = @username
+            AND tk.MatKhau = @password
+
+        IF @isExitsAccount IS NULL
+        BEGIN
+            SELECT TOP 1 0
+            ROLLBACK
+        END
+        ELSE
+        BEGIN
+            SELECT TOP 1 1
+            COMMIT
+        END
+END
+GO

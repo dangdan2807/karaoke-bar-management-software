@@ -44,4 +44,18 @@ public interface TaiKhoanDAO extends Remote {
      */
     public TaiKhoan getAccountByUsername(String username) throws RemoteException;
 
+    /**
+     * Đặt lại mật khẩu cho tài khoản
+     * 
+     * @param username {@code String}: tên đăng nhập
+     * @param password {@code String}: mật khẩu
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thành công thì trả về {@code true}</li>
+     *         <li>Nếu thất bại thì trả về {@code false}</li>
+     *         </ul>
+     * @throws RemoteException
+     */
+    public boolean resetPassword(String username, String password) throws RemoteException;
+
 }
