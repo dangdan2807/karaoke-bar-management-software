@@ -81,13 +81,13 @@ public class fQuanTri extends JFrame implements ActionListener {
         pnlBill = new PnHoaDon(staffLogin);
         pnlStatistical = new PnThongKeDoanhThu(staffLogin);
 
-        tabMain.addTab("Nhân viên", null, pnlStaff, "Quản lý Nhân viên");
-        tabMain.addTab("Khách hàng", null, pnlCustomer, "Quản lý Khách hàng");
-        tabMain.addTab("Loại phòng", null, pnlRoomType, "Quản lý loại phòng");
-        tabMain.addTab("Phòng", null, pnlRoom, "Quản lý Phòng");
-        tabMain.addTab("Loại dịch vụ", null, pnlServiceType, "Quản lý loại dịch vụ");
-        tabMain.addTab("Dịch vụ", null, pnlService, "Quản lý dịch vụ");
-        tabMain.addTab("Hóa đơn", null, pnlBill, "Quản lý Hóa đơn");
+        tabMain.addTab("Quản lý nhân viên", null, pnlStaff, "Quản lý Nhân viên");
+        tabMain.addTab("Quản lý khách hàng", null, pnlCustomer, "Quản lý Khách hàng");
+        tabMain.addTab("Quản lý loại phòng", null, pnlRoomType, "Quản lý loại phòng");
+        tabMain.addTab("Quản lý phòng", null, pnlRoom, "Quản lý Phòng");
+        tabMain.addTab("Quản lý loại dịch vụ", null, pnlServiceType, "Quản lý loại dịch vụ");
+        tabMain.addTab("Quản lý dịch vụ", null, pnlService, "Quản lý dịch vụ");
+        tabMain.addTab("Quản lý hóa đơn", null, pnlBill, "Quản lý hóa đơn");
         tabMain.addTab("Thống kê doanh thu", null, pnlStatistical, "Thống kê doanh thu");
         this.add(tabMain);
 

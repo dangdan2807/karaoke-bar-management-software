@@ -1117,6 +1117,7 @@ public class PnNhanVien extends JPanel
 						} else {
 							message = "Cập nhật thông tin " + name + " thất bại";
 						}
+						JOptionPane.showMessageDialog(this, message);
 					}
 				}
 			} else {
@@ -1124,8 +1125,8 @@ public class PnNhanVien extends JPanel
 					message = "Bạn không thể vô hiệu hóa tài khoản của chính bạn";
 				else if (isUpdateManager)
 					message = "Bạn không thể thay đổi chức vụ của chính bạn";
+				JOptionPane.showMessageDialog(this, message);
 			}
-			JOptionPane.showMessageDialog(this, message);
 		}
 	}
 
