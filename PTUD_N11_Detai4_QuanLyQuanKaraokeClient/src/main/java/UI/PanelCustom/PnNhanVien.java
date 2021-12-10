@@ -134,12 +134,12 @@ public class PnNhanVien extends JPanel
 		pnlTitle.add(btnBack);
 		pnlMain.add(pnlTitle);
 
-		JLabel lbTitle = new JLabel("QUẢN LÝ NHÂN VIÊN");
-		lbTitle.setFont(new Font("Dialog", Font.BOLD, 24));
-		lbTitle.setForeground(Color.WHITE);
-		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lbTitle.setBounds(0, 0, 1250, 45);
-		pnlTitle.add(lbTitle);
+		JLabel lblTitle = new JLabel("QUẢN LÝ NHÂN VIÊN");
+		lblTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lblTitle.setForeground(Color.WHITE);
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setBounds(0, 0, 1250, 45);
+		pnlTitle.add(lblTitle);
 
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);

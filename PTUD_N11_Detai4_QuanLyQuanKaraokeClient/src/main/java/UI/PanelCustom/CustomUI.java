@@ -145,6 +145,7 @@ public class CustomUI {
 			txt.setCaretColor(Color.WHITE);
 			txt.setFont(fontNormal);
 			txt.setForeground(Color.WHITE);
+			txt.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 		}
 	}
 
@@ -155,14 +156,13 @@ public class CustomUI {
 	 */
 	public void setCustomTextFieldUnFocus(JTextField txt) {
 		if (txt.isEditable()) {
-			txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
 			txt.setBackground(new Color(246, 210, 255, 50));
 			txt.setCaretColor(Color.WHITE);
 			txt.setFont(fontNormal);
 			txt.setForeground(Color.WHITE);
-		} else {
-			txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
 		}
+		txt.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		txt.setBorder(BORDER_BOTTOM_UN_FOCUS);
 	}
 
 	/**

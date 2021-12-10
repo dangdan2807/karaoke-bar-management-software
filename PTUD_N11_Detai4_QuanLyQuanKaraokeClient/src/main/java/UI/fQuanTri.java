@@ -1,6 +1,8 @@
 package UI;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -19,7 +21,7 @@ import entity.NhanVien;
  * <p>
  * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
  */
-public class fQuanTri extends JFrame implements ActionListener {
+public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
     /**
      * 
      */
@@ -81,14 +83,14 @@ public class fQuanTri extends JFrame implements ActionListener {
         pnlBill = new PnHoaDon(staffLogin);
         pnlStatistical = new PnThongKeDoanhThu(staffLogin);
 
-        tabMain.addTab("Quản lý nhân viên", null, pnlStaff, "Quản lý Nhân viên");
-        tabMain.addTab("Quản lý khách hàng", null, pnlCustomer, "Quản lý Khách hàng");
-        tabMain.addTab("Quản lý loại phòng", null, pnlRoomType, "Quản lý loại phòng");
-        tabMain.addTab("Quản lý phòng", null, pnlRoom, "Quản lý Phòng");
-        tabMain.addTab("Quản lý loại dịch vụ", null, pnlServiceType, "Quản lý loại dịch vụ");
-        tabMain.addTab("Quản lý dịch vụ", null, pnlService, "Quản lý dịch vụ");
-        tabMain.addTab("Quản lý hóa đơn", null, pnlBill, "Quản lý hóa đơn");
-        tabMain.addTab("Thống kê doanh thu", null, pnlStatistical, "Thống kê doanh thu");
+        tabMain.addTab("Nhân viên", null, pnlStaff, "Quản lý Nhân viên");
+        tabMain.addTab("Khách hàng", null, null, "Quản lý Khách hàng");
+        tabMain.addTab("Loại phòng", null, null, "Quản lý loại phòng");
+        tabMain.addTab("Phòng", null, null, "Quản lý Phòng");
+        tabMain.addTab("Loại dịch vụ", null, null, "Quản lý loại dịch vụ");
+        tabMain.addTab("Dịch vụ", null, null, "Quản lý dịch vụ");
+        tabMain.addTab("Hóa đơn", null, null, "Quản lý hóa đơn");
+        tabMain.addTab("Thống kê doanh thu", null, null, "Thống kê doanh thu");
         this.add(tabMain);
 
         btnBackStaff = pnlStaff.getBtnBack();
@@ -108,6 +110,8 @@ public class fQuanTri extends JFrame implements ActionListener {
         btnBackService.addActionListener(this);
         btnBackBill.addActionListener(this);
         btnBackStatistical.addActionListener(this);
+
+        tabMain.addChangeListener(this);
     }
 
     @Override
@@ -144,5 +148,60 @@ public class fQuanTri extends JFrame implements ActionListener {
         fDieuHuong f = new fDieuHuong(staffLogin);
         setVisible(false);
         f.setVisible(true);
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        int tabSelectedIndex = tabMain.getSelectedIndex();
+        switch (tabSelectedIndex) {
+            case 0:
+                pnlStaff = new PnNhanVien(staffLogin);
+                tabMain.setComponentAt(0, pnlStaff);
+                btnBackStaff = pnlStaff.getBtnBack();
+                btnBackStaff.addActionListener(this);
+                break;
+            case 1:
+                pnlCustomer = new PnKhachHang(staffLogin, 1);
+                tabMain.setComponentAt(1, pnlCustomer);
+                btnBackCustomer = pnlCustomer.getBtnBack();
+                btnBackCustomer.addActionListener(this);
+                break;
+            case 2:
+                pnlRoomType = new PnLoaiPhong(staffLogin);
+                tabMain.setComponentAt(2, pnlRoomType);
+                btnBackRoomType = pnlRoomType.getBtnBack();
+                btnBackRoomType.addActionListener(this);
+                break;
+            case 3:
+                pnlRoom = new PnPhong(staffLogin);
+                tabMain.setComponentAt(3, pnlRoom);
+                btnBackRoom = pnlRoom.getBtnBack();
+                btnBackRoom.addActionListener(this);
+                break;
+            case 4:
+                pnlServiceType = new PnLoaiDichVu(staffLogin);
+                tabMain.setComponentAt(4, pnlServiceType);
+                btnBackServiceType = pnlServiceType.getBtnBack();
+                btnBackServiceType.addActionListener(this);
+                break;
+            case 5:
+                pnlService = new PnDichVu(staffLogin);
+                tabMain.setComponentAt(5, pnlService);
+                btnBackService = pnlService.getBtnBack();
+                btnBackService.addActionListener(this);
+                break;
+            case 6:
+                pnlBill = new PnHoaDon(staffLogin);
+                tabMain.setComponentAt(6, pnlBill);
+                btnBackBill = pnlBill.getBtnBack();
+                btnBackBill.addActionListener(this);
+                break;
+            case 7:
+                pnlStatistical = new PnThongKeDoanhThu(staffLogin);
+                tabMain.setComponentAt(7, pnlStatistical);
+                btnBackStatistical = pnlStatistical.getBtnBack();
+                btnBackStatistical.addActionListener(this);
+                break;
+        }
     }
 }

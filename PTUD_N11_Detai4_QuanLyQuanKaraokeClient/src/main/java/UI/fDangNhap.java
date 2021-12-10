@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.rmi.*;
 
 import UI.PanelCustom.CustomUI;
+import UI.PanelCustom.DialogLayLaiMatKhau;
 import UI.PanelCustom.MyButton;
 import entity.NhanVien;
 
@@ -29,7 +30,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	 */
 	private static final long serialVersionUID = 4368075097887104646L;
 	private JTextField txtUsername, txtPassword;
-	private JButton btnLogin;
+	private JButton btnLogin, btnForgetPassWord;
 
 	private ImageIcon logo = new ImageIcon(
 			CustomUI.LOGO_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
@@ -143,8 +144,8 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		((MyButton) btnLogin).setColorHover(Color.WHITE);
 		btnLogin.setBounds(83, 177, 285, 40);
 		pnlLogin.add(btnLogin);
-		
-		JButton btnForgetPassWord = new JButton("Quên mật khẩu?");
+
+		btnForgetPassWord = new JButton("Quên mật khẩu?");
 		btnForgetPassWord.setBounds(102, 227, 250, 30);
 		pnlLogin.add(btnForgetPassWord);
 		btnForgetPassWord.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -155,6 +156,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		btnForgetPassWord.setFont(new Font("Dialog", Font.PLAIN, 14));
 
 		btnLogin.addActionListener(this);
+		btnForgetPassWord.addActionListener(this);
 
 		btnLogin.addMouseListener(this);
 		txtPassword.addKeyListener(this);
@@ -196,6 +198,11 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 			} else {
 				showMessage("Sai tài khoản hoặc mật khẩu");
 			}
+		} else if (o.equals(btnForgetPassWord)) {
+			String username = txtUsername.getText().trim();
+			DialogLayLaiMatKhau winForgetPassWord = new DialogLayLaiMatKhau(username);
+			winForgetPassWord.setModal(true);
+			winForgetPassWord.setVisible(true);
 		}
 	}
 

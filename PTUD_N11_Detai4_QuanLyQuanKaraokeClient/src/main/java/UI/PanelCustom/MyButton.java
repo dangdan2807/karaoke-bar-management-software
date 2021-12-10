@@ -323,4 +323,23 @@ public class MyButton extends JButton implements MouseListener {
 		this.enabled = enabled;
 		setEnabled(enabled);
 	}
+
+	/**
+	 * Thay đổi nội dung hiển thị của nút
+	 * 
+	 * @param text {@code String}: nội dung hiển thị cần thay đổi
+	 */
+	public void setTextCustom(String text) {
+		this.Label = text;
+	}
+
+	/**
+	 * Thay đổi vĩ trí chữ trên nút
+	 * @param x {@code int} vị trí x của chữ trên nút
+	 * @param y {@code int} vị trí y của chữ trên nút
+	 */
+	public void setLocationName(int x, int y) {
+		this.xLabel = x;
+		this.yLabel = y;
+	}
 }

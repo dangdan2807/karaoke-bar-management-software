@@ -120,7 +120,8 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		pnlMain.add(pnlTitle);
 
 		JLabel lblTitle = new JLabel("QUẢN LÝ PHÒNG");
-		CustomUI.getInstance().setCustomLabel(lblTitle);
+		lblTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lblTitle.setForeground(Color.WHITE);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setBounds(0, 0, 1250, 45);
 		pnlTitle.add(lblTitle);

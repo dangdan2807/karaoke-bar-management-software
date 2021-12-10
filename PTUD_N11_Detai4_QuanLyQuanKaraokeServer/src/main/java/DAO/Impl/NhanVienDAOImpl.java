@@ -559,4 +559,36 @@ public class NhanVienDAOImpl extends UnicastRemoteObject implements NhanVienDAO 
         }
         return staff;
     }
+
+    /**
+     * Kiểm tra số điện thoại có thuộc về tài khoản hay không
+     * 
+     * @param username    {@code String}: tên đăng nhập
+     * @param phoneNumber {@code String}: số điện thoại
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thành công thì trả về {@code true}</li>
+     *         <li>Nếu thất bại thì trả về {@code false}</li>
+     *         </ul>
+     * @throws RemoteException
+     */
+    @Override
+    public boolean checkPhoneNumberStaff(String username, String phoneNumber) throws RemoteException {
+        String query = "{CALL USP_checkPhoneNumberStaff( ? , ? )}";
+        em.clear();
+        EntityTransaction tr = em.getTransaction();
+        int result = 0;
+        try {
+            tr.begin();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, username)
+                    .setParameter(2, phoneNumber)
+                    .getSingleResult();
+            tr.commit();
+        } catch (Exception e) {
+            tr.rollback();
+            e.printStackTrace();
+        }
+        return result > 0;
+    }
 }

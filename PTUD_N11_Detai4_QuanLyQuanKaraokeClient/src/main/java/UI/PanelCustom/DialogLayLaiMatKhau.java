@@ -3,17 +3,16 @@ package UI.PanelCustom;
 import java.awt.*;
 import java.awt.event.*;
 import java.rmi.Naming;
-import java.util.Random;
 
 import javax.swing.*;
 
 import Event_Handlers.*;
-import entity.NhanVien;
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.*;
 import com.twilio.type.PhoneNumber;
 
+import DAO.NhanVienDAO;
 import DAO.TaiKhoanDAO;
 
 /**
@@ -26,24 +25,25 @@ import DAO.TaiKhoanDAO;
  * Lần cập nhật cuối: 08/12/2021
  * <p>
  */
-public class DialogLayLaiMatKhau extends JFrame
+public class DialogLayLaiMatKhau extends JDialog
 		implements ActionListener, KeyListener, FocusListener, MouseListener, ItemListener {
 	private ImageIcon logoApp = CustomUI.LOGO_APP;
 	private ImageIcon checkIcon = CustomUI.CHECK_ICON;
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
 	private JLabel lblPhoneNumber, lblConfirmationCode, lblNewPassword, lblReEnterPassword;
-	private JTextField txtPhoneNumber, txtConfirmationCode;
+	private JTextField txtPhoneNumber, txtConfirmationCode, txtUserName;
 	private JPasswordField txtNewPassword, txtReEnterPassword;
 	private JCheckBox chkShowPassword;
 	private MyButton btnBack, btnComplete, btnGetCode, btnConfirmCode;
-	private String code = "";
+	private int code = 0;
+	private JLabel lblUserName;
 
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
 	private String username = "";
-	public static final String ACCOUNT_SID = "ACdb3d3e69764436434bfdc11e5ea3e3ea";
-	public static final String AUTH_TOKEN = "e9c53c2a7d0baed29465e15c9f50d0e2";
+	public static final String ACCOUNT_SID = "";
+	public static final String AUTH_TOKEN = "";
 	public static final String PHONE_NUMBER_SEND_CODE = "";
 
 	/**
@@ -56,7 +56,7 @@ public class DialogLayLaiMatKhau extends JFrame
 		setIconImage(logoApp.getImage());
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			@Override
@@ -74,77 +74,87 @@ public class DialogLayLaiMatKhau extends JFrame
 		pnlMain.setBounds(0, 0, 460, 600);
 		this.add(pnlMain);
 
+		lblUserName = new JLabel("Tên đăng nhập:");
+		lblUserName.setBounds(48, 30, 300, 25);
+		lblUserName.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblUserName.setForeground(Color.decode("#fffffff"));
+		pnlMain.add(lblUserName);
+
+		txtUserName = new JTextField(this.username);
+		txtUserName.setBounds(48, 55, 350, 30);
+		CustomUI.getInstance().setCustomTextFieldOn(txtUserName);
+		pnlMain.add(txtUserName);
+
 		lblPhoneNumber = new JLabel("Số điện thoại:");
-		lblPhoneNumber.setBounds(49, 65, 250, 25);
+		lblPhoneNumber.setBounds(48, 113, 250, 25);
 		lblPhoneNumber.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblPhoneNumber.setForeground(Color.decode("#fffffff"));
 		pnlMain.add(lblPhoneNumber);
 
 		txtPhoneNumber = new JTextField("0389324159");
-		txtPhoneNumber.setBounds(49, 90, 240, 30);
+		txtPhoneNumber.setBounds(48, 138, 240, 30);
 		CustomUI.getInstance().setCustomTextFieldOn(txtPhoneNumber);
 		pnlMain.add(txtPhoneNumber);
 
 		lblConfirmationCode = new JLabel("Nhập mã xác nhận:");
-		lblConfirmationCode.setBounds(49, 155, 250, 25);
+		lblConfirmationCode.setBounds(48, 203, 250, 25);
 		lblConfirmationCode.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblConfirmationCode.setForeground(Color.decode("#fffffff"));
 		pnlMain.add(lblConfirmationCode);
 
 		txtConfirmationCode = new JTextField("");
-		txtConfirmationCode.setBounds(49, 180, 240, 30);
+		txtConfirmationCode.setBounds(48, 228, 240, 30);
 		CustomUI.getInstance().setCustomTextFieldOn(txtConfirmationCode);
 		pnlMain.add(txtConfirmationCode);
 
 		lblNewPassword = new JLabel("Nhập mật khẩu mới:");
-		lblNewPassword.setBounds(49, 245, 300, 25);
+		lblNewPassword.setBounds(48, 293, 300, 25);
 		lblNewPassword.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblNewPassword.setForeground(Color.decode("#fffffff"));
 		pnlMain.add(lblNewPassword);
 
 		txtNewPassword = new JPasswordField("");
-		txtNewPassword.setBounds(49, 270, 350, 30);
+		txtNewPassword.setBounds(48, 318, 350, 30);
 		CustomUI.getInstance().setCustomTextFieldOn(txtNewPassword);
 		pnlMain.add(txtNewPassword);
 
 		lblReEnterPassword = new JLabel("Nhập mật khẩu mới:");
-		lblReEnterPassword.setBounds(49, 335, 300, 25);
+		lblReEnterPassword.setBounds(48, 383, 300, 25);
 		lblReEnterPassword.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblReEnterPassword.setForeground(Color.decode("#fffffff"));
 		pnlMain.add(lblReEnterPassword);
 
 		txtReEnterPassword = new JPasswordField("");
-		txtReEnterPassword.setBounds(49, 360, 350, 30);
+		txtReEnterPassword.setBounds(48, 408, 350, 30);
 		CustomUI.getInstance().setCustomTextFieldOn(txtReEnterPassword);
 		pnlMain.add(txtReEnterPassword);
 
 		chkShowPassword = new JCheckBox("Hiện mật khẩu");
-		chkShowPassword.setBounds(300, 410, 120, 25);
+		chkShowPassword.setBounds(299, 458, 120, 25);
 		pnlMain.add(chkShowPassword);
 		chkShowPassword.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		chkShowPassword.setContentAreaFilled(false);
 		chkShowPassword.setFocusPainted(false);
-		chkShowPassword.setBorder(null);
 		chkShowPassword.setForeground(Color.decode("#ffffff"));
 		chkShowPassword.setFont(new Font("Dialog", Font.PLAIN, 15));
 
 		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19);
-		btnBack.setBounds(320, 480, 100, 35);
+		btnBack.setBounds(319, 500, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
 		pnlMain.add(btnBack);
 
 		btnComplete = new MyButton(100, 35, "Xác nhận", gra, checkIcon.getImage(), 25, 19, 5, 5);
-		btnComplete.setBounds(180, 480, 100, 35);
+		btnComplete.setBounds(179, 500, 100, 35);
 		btnComplete.setToolTipText("Kích hoạt lấy lại mật khẩu");
 		btnComplete.setEnabledCustom(false);
 		pnlMain.add(btnComplete);
 
 		btnGetCode = new MyButton(100, 35, "Lấy mã", gra, null, 25, 19, 5, 5);
-		btnGetCode.setBounds(299, 90, 100, 35);
+		btnGetCode.setBounds(298, 138, 100, 35);
 		pnlMain.add(btnGetCode);
 
 		btnConfirmCode = new MyButton(100, 35, "Xác nhận", gra, null, 18, 19, 5, 5);
-		btnConfirmCode.setBounds(299, 175, 100, 35);
+		btnConfirmCode.setBounds(298, 223, 100, 35);
 		btnConfirmCode.setEnabledCustom(false);
 		pnlMain.add(btnConfirmCode);
 
@@ -152,8 +162,10 @@ public class DialogLayLaiMatKhau extends JFrame
 		txtPhoneNumber.addFocusListener(this);
 		txtReEnterPassword.addFocusListener(this);
 		txtConfirmationCode.addFocusListener(this);
+		txtUserName.addFocusListener(this);
 
 		txtPhoneNumber.addKeyListener(this);
+		txtConfirmationCode.addKeyListener(this);
 
 		btnBack.addActionListener(this);
 		btnGetCode.addActionListener(this);
@@ -175,23 +187,61 @@ public class DialogLayLaiMatKhau extends JFrame
 		} else if (o.equals(btnGetCode)) {
 			boolean valid = ValidationData.getInstance().ValidPhoneNumber(this, txtPhoneNumber);
 			if (valid) {
-				Random rd = new Random();
-				code = rd.nextInt(999999) + "";
-				String phoneNumber = txtPhoneNumber.getText().toString().trim();
-				Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-				phoneNumber = "+84" + phoneNumber.substring(1);
-				Message.creator(new PhoneNumber(phoneNumber), // to
-						new PhoneNumber(PHONE_NUMBER_SEND_CODE), // from
-						code)
-						.create();
-				btnConfirmCode.setEnabledCustom(true);
+				boolean result = false;
+				String phoneNumber = txtPhoneNumber.getText().trim();
+				try {
+					NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+					result = staffDAO.checkPhoneNumberStaff(this.username, phoneNumber);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				if (result) {
+					code = (int) (Math.random() * ((999999 - 100000) + 1) + 100000);
+					Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+					phoneNumber = "+84" + phoneNumber.substring(1);
+					String sms = "DASH Karaoke - Mã xác nhận là: " + code
+							+ ". Vui lòng không tiết lộ mã này với bất kỳ ai.";
+					Message.creator(new PhoneNumber(phoneNumber), // to
+							new PhoneNumber(PHONE_NUMBER_SEND_CODE), // from
+							sms)
+							.create();
+					System.out.println(code);
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							int second = 60;
+							while (second > 0) {
+								try {
+									String secondStr = second < 10 ? "0" + second : "" + second;
+									btnGetCode.setTextCustom(secondStr);
+									btnGetCode.setEnabledCustom(false);
+									btnGetCode.setLocationName(42, 19);
+									second--;
+									Thread.sleep(1000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								btnGetCode.setEnabledCustom(true);
+							}
+							btnGetCode.setTextCustom("Lấy mã");
+							btnGetCode.setLocationName(25, 19);
+						}
+					}).start();
+					btnGetCode.setTextCustom("Lấy mã");
+					btnGetCode.setLocationName(25, 19);
+					btnConfirmCode.setEnabledCustom(true);
+				} else {
+					String message = "Số điện thoại không thuộc về tài khoản này";
+					showMessage(txtPhoneNumber, 1, message, "Thông báo", JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		} else if (o.equals(btnComplete)) {
-			String username = txtPhoneNumber.getText().toString().trim();
+			String username = txtPhoneNumber.getText().trim();
 			if (validData()) {
+				String message = "";
 				boolean result = false;
-				username = "";
-				String password = txtNewPassword.getText().toString().trim();
+				username = txtUserName.getText().trim();
+				String password = new String(txtNewPassword.getPassword()).trim();
 				try {
 					TaiKhoanDAO accountDAO = (TaiKhoanDAO) Naming.lookup("rmi://localhost:1099/accountDAO");
 					result = accountDAO.resetPassword(username, password);
@@ -199,18 +249,19 @@ public class DialogLayLaiMatKhau extends JFrame
 					e1.printStackTrace();
 				}
 				if (result) {
-					JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công", "Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					this.dispose();
+					message = "Đổi mật khẩu thành công";
 				} else {
-					JOptionPane.showMessageDialog(this, "Đổi mật khẩu thất bại", "Thông báo",
-							JOptionPane.ERROR_MESSAGE);
+					message = "Đổi mật khẩu thất bại";
 				}
+				JOptionPane.showMessageDialog(this, message, "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		} else if (o.equals(btnConfirmCode)) {
-			String codeConfirm = txtConfirmationCode.getText().toString().trim();
-			if (codeConfirm.equals(code)) {
+			String codeConfirm = txtConfirmationCode.getText().trim();
+			if (codeConfirm.equals(code + "")) {
 				btnComplete.setEnabledCustom(true);
+				txtUserName.setEditable(false);
+				txtPhoneNumber.setEditable(false);
 			} else {
 				String message = "Mã xác nhận không đúng";
 				showMessage(txtConfirmationCode, 1, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -261,13 +312,15 @@ public class DialogLayLaiMatKhau extends JFrame
 	public void focusGained(FocusEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtConfirmationCode)) {
-			txtConfirmationCode.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+			CustomUI.getInstance().setCustomTextFieldFocus(txtConfirmationCode);
 		} else if (o.equals(txtNewPassword)) {
-			txtNewPassword.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+			CustomUI.getInstance().setCustomTextFieldFocus(txtNewPassword);
 		} else if (o.equals(txtPhoneNumber)) {
-			txtPhoneNumber.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+			CustomUI.getInstance().setCustomTextFieldFocus(txtPhoneNumber);
 		} else if (o.equals(txtReEnterPassword)) {
-			txtReEnterPassword.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+			CustomUI.getInstance().setCustomTextFieldFocus(txtReEnterPassword);
+		} else if (o.equals(txtUserName)) {
+			CustomUI.getInstance().setCustomTextFieldFocus(txtUserName);
 		}
 
 	}
@@ -276,15 +329,16 @@ public class DialogLayLaiMatKhau extends JFrame
 	public void focusLost(FocusEvent e) {
 		Object o = e.getSource();
 		if (o.equals(txtConfirmationCode)) {
-			txtConfirmationCode.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+			CustomUI.getInstance().setCustomTextFieldUnFocus(txtConfirmationCode);
 		} else if (o.equals(txtNewPassword)) {
-			txtNewPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+			CustomUI.getInstance().setCustomTextFieldUnFocus(txtNewPassword);
 		} else if (o.equals(txtPhoneNumber)) {
-			txtPhoneNumber.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+			CustomUI.getInstance().setCustomTextFieldUnFocus(txtPhoneNumber);
 		} else if (o.equals(txtReEnterPassword)) {
-			txtReEnterPassword.setBorder(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+			CustomUI.getInstance().setCustomTextFieldUnFocus(txtReEnterPassword);
+		} else if (o.equals(txtUserName)) {
+			CustomUI.getInstance().setCustomTextFieldUnFocus(txtUserName);
 		}
-
 	}
 
 	@Override
@@ -304,6 +358,8 @@ public class DialogLayLaiMatKhau extends JFrame
 		InputEventHandler handler = new InputEventHandler();
 		if (o.equals(txtPhoneNumber)) {
 			handler.enterOnlyNumbersAndLimitInput(key, txtPhoneNumber, 10);
+		} else if (o.equals(txtConfirmationCode)) {
+			handler.enterOnlyNumbersAndLimitInput(key, txtConfirmationCode, 6);
 		}
 	}
 
@@ -318,7 +374,6 @@ public class DialogLayLaiMatKhau extends JFrame
 	 */
 	private void showMessage(JTextField txt, int type, String message, String title, int option) {
 		if (type == 1) {
-			txt.setBorder(CustomUI.BORDER_BOTTOM_ERROR);
 		}
 		txt.requestFocus();
 		JOptionPane.showMessageDialog(this, message, title, option);
@@ -354,12 +409,13 @@ public class DialogLayLaiMatKhau extends JFrame
 	 */
 	private boolean validData() {
 		String message = "";
-		boolean valid = ValidationData.getInstance().ValidName(this, null, "tên đăng nhập", 100, 0);
+		boolean valid = ValidationData.getInstance().ValidName(this, txtUserName, "tên đăng nhập", 100, 0);
 		if (!valid) {
 			return false;
 		}
 
-		String newPassword = txtNewPassword.getText().trim();
+		String newPassword = new String(txtNewPassword.getPassword()).trim();
+		;
 		// Trường hợp: mật khẩu rỗng
 		if (newPassword.equalsIgnoreCase("") || newPassword.length() <= 0) {
 			message = "Mật khẩu không được rỗng";
@@ -374,7 +430,7 @@ public class DialogLayLaiMatKhau extends JFrame
 		}
 
 		// Nếu đối mật khẩu
-		String rePassword = txtReEnterPassword.getText().trim();
+		String rePassword = new String(txtReEnterPassword.getPassword()).trim();
 
 		if (!(rePassword.equals(newPassword))) {
 			message = "Mật khẩu nhập lại không khớp mật khẩu mới";
@@ -398,7 +454,6 @@ public class DialogLayLaiMatKhau extends JFrame
 		} else if (!(newPassword.length() >= 6 && newPassword.matches("^[a-zA-Z0-9_@!#]{6,}$"))) {
 			checkPassword(newPassword, "Mật khẩu mới");
 			return false;
-
 		}
 		return true;
 	}

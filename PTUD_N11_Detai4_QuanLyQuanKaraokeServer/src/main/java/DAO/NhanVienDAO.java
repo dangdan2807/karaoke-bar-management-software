@@ -191,4 +191,18 @@ public interface NhanVienDAO extends Remote {
      * @throws RemoteException Bắt lỗi remote
      */
     public NhanVien getStaffByBillId(String billId) throws RemoteException;
+
+    /**
+     * Kiểm tra số điện thoại có thuộc về tài khoản hay không
+     * 
+     * @param username    {@code String}: tên đăng nhập
+     * @param phoneNumber {@code String}: số điện thoại
+     * @return {@code boolean}: kết quả trả về của câu truy vấn
+     *         <ul>
+     *         <li>Nếu thành công thì trả về {@code true}</li>
+     *         <li>Nếu thất bại thì trả về {@code false}</li>
+     *         </ul>
+     * @throws RemoteException
+     */
+    public boolean checkPhoneNumberStaff(String username, String phoneNumber) throws RemoteException;
 }

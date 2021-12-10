@@ -541,6 +541,35 @@ BEGIN
 END
 GO
 
+CREATE PROC USP_resetPassword
+    @username VARCHAR(100),
+    @password VARCHAR(100)
+AS
+BEGIN
+    DECLARE @isExitsAccount VARCHAR(100)
+    BEGIN TRANSACTION
+        UPDATE dbo.TaiKhoan
+        SET matKhau = @password
+        WHERE tenDangNhap = @username
+        
+        SELECT @isExitsAccount = tk.tenDangNhap
+        FROM dbo.TaiKhoan tk
+        WHERE tk.tenDangNhap = @username
+            AND tk.MatKhau = @password
+
+        IF @isExitsAccount IS NULL
+        BEGIN
+            SELECT TOP 1 0
+            ROLLBACK
+        END
+        ELSE
+        BEGIN
+            SELECT TOP 1 1
+            COMMIT
+        END
+END
+GO
+
 
 -- loại dịch vụ
 CREATE PROC USP_getServiceTypeList
@@ -3156,21 +3185,19 @@ BEGIN
 END
 GO
 
-CREATE PROC USP_resetPassword
+-- select * from dbo.NhanVien 0312345678
+
+CREATE PROC USP_checkPhoneNumberStaff
     @username VARCHAR(100),
-    @password VARCHAR(100)
+    @phoneNumber VARCHAR(10)
 AS
 BEGIN
     DECLARE @isExitsAccount VARCHAR(100)
     BEGIN TRANSACTION
-        UPDATE dbo.TaiKhoan
-        SET matKhau = @password
-        WHERE tenDangNhap = @username
-        
-        SELECT @isExitsAccount = tk.tenDangNhap
-        FROM dbo.TaiKhoan tk
-        WHERE tk.tenDangNhap = @username
-            AND tk.MatKhau = @password
+        SELECT @isExitsAccount = nv.taikhoan
+        FROM dbo.NhanVien nv
+        WHERE nv.taiKhoan = @username
+            AND nv.soDienThoai = @phoneNumber
 
         IF @isExitsAccount IS NULL
         BEGIN

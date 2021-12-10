@@ -57,5 +57,4 @@ public interface TaiKhoanDAO extends Remote {
      * @throws RemoteException
      */
     public boolean resetPassword(String username, String password) throws RemoteException;
-
 }
