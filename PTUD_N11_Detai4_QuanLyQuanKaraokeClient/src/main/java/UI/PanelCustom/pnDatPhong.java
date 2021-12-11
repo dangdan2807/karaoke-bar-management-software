@@ -265,7 +265,7 @@ public class pnDatPhong extends JPanel
 
 		pnlBill.add(pnlBiffInfo, BorderLayout.NORTH);
 
-		JLabel lblBillID = new JLabel("Mã hóa đơn: ");
+		JLabel lblBillID = new JLabel("Mã HD: ");
 		CustomUI.getInstance().setCustomLabel(lblBillID);
 		lblBillID.setBounds(12, 20, 85, 20);
 		pnlBiffInfo.add(lblBillID);

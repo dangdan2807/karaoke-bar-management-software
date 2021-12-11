@@ -3185,8 +3185,6 @@ BEGIN
 END
 GO
 
--- select * from dbo.NhanVien 0312345678
-
 CREATE PROC USP_checkPhoneNumberStaff
     @username VARCHAR(100),
     @phoneNumber VARCHAR(10)

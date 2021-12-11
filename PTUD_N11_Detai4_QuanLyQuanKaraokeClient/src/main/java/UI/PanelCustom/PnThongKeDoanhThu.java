@@ -20,7 +20,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import DAO.HoaDonDAO;
 import entity.NhanVien;
 
-public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseListener, ItemListener {
+public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseListener, ItemListener {
 	private ImageIcon bg = new ImageIcon(
 			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon backIcon = CustomUI.BACK_ICON;
@@ -54,9 +54,9 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		this.setLayout(null);
 		setSize(1270, 630);
 		this.setLayout(null);
-		// this.setResizable(false);
-		// this.setLocationRelativeTo(null);
-		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -242,7 +242,7 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 				case "7 ngày gần nhất":
 					dpFromDate.setActive(false);
 					dpToDate.setActive(false);
-					dpFromDate.setDatesFromToday(Calendar.WEEK_OF_MONTH, -1);
+					dpFromDate.setDatesFromToday(Calendar.DAY_OF_MONTH, -6);
 					dpToDate.setValueToDay();
 					statistical();
 					break;
@@ -320,11 +320,21 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 	 * Chạy tất cả các hàm khi bắt đầu chạy form
 	 */
 	private void allLoaded() {
-		dpFromDate.setDatesFromToday(Calendar.WEEK_OF_MONTH, -1);
+		dpFromDate.setDatesFromToday(Calendar.DAY_OF_MONTH, -6);
 		dpToDate.setValueToDay();
 		statistical();
 	}
 
+	/**
+	 * Hiển thị biểu đồ
+	 * 
+	 * @param fromDate {@code Date} ngày bắt đầu
+	 * @param toDate {@code Date} ngày kết thúc
+	 * @param dayOfMonth {@code int} số ngày trong tháng
+	 * @param dayOfYear {@code int} số ngày trong năm
+	 * @param format {@code String} định dạng ngày 
+	 * @param totalPriceList {@code List<Object[]>} danh sách tổng tiền và ngày
+	 */
 	public void showStatistical(Date fromDate, Date toDate, int dayOfMonth, int dayOfYear, String format,
 			ArrayList<Object[]> totalPriceList) {
 		chartPanel.removeAll();
@@ -380,8 +390,7 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 			int year = calendar.get(Calendar.YEAR);
 
 			String timeStr = "";
-			// String dayStr = day < 10 ? "0" + day : day + "";
-			String dayStr = day + "";
+			String dayStr = day < 10 ? "0" + day : day + "";
 			String monthStr = month < 10 ? "0" + month : month + "";
 			String yearStr = year + "";
 			String fullDayStr = "";
@@ -395,7 +404,7 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 				if (oldMonth != month)
 					// timeStr += "/" + monthStr;
 					timeStr += "'";
-				fullDayStr = "0" + dayStr + "-" + monthStr + "-" + yearStr;
+				fullDayStr = dayStr + "-" + monthStr + "-" + yearStr;
 				calendar.add(Calendar.DAY_OF_MONTH, 1);
 			} else {
 				timeStr = yearStr;
