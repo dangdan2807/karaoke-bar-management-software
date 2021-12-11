@@ -417,9 +417,9 @@ public class pnDatPhong extends JPanel
 		CustomUI.getInstance().setCustomTextFieldOn(txtServiceName);
 		pnlControlService.add(txtServiceName);
 
-		btnSearchService = new MyButton(90, 30, "Tìm", gra, searchIcon.getImage(),34,17,3,3);
+		btnSearchService = new MyButton(120, 30, "Tìm", gra, searchIcon.getImage(),49,17,8,3);
 		((MyButton) btnSearchService).setFontCustom(new Font("Dialog", Font.BOLD, 14));
-		btnSearchService.setBounds(310, 6, 90, 30);
+		btnSearchService.setBounds(300, 6, 120, 30);
 		pnlControlService.add(btnSearchService);
 
 		JLabel lblOrderQuantity = new JLabel("SL đặt: ");
@@ -438,17 +438,17 @@ public class pnDatPhong extends JPanel
 		txtOrderQuantity.setEditable(true);
 		pnlControlService.add(spnOrderQuantity);
 
-		btnOrderServices = new MyButton(90, 30, "Thêm", gra, addIcon.getImage(),
-				29,17,3,3);
+		btnOrderServices = new MyButton(120, 30, "Thêm", gra, addIcon.getImage(),
+				44,17,8,3);
 		((MyButton) btnOrderServices).setFontCustom(new Font("Dialog", Font.BOLD, 14));
-		btnOrderServices.setBounds(310, 42, 90, 30);
+		btnOrderServices.setBounds(300, 42, 120, 30);
 		((MyButton) btnOrderServices).setEnabledCustom(false);
 		pnlControlService.add(btnOrderServices);
 
-		btnCannelServices = new MyButton(90, 30, "Hủy", gra, trashIcon.getImage(),35,17,3,3);
+		btnCannelServices = new MyButton(120, 30, "Hủy", gra, trashIcon.getImage(),50,17,8,3);
 		((MyButton) btnCannelServices).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		((MyButton) btnCannelServices).setEnabledCustom(false);
-		btnCannelServices.setBounds(310, 78, 90, 30);
+		btnCannelServices.setBounds(300, 78, 120, 30);
 		pnlControlService.add(btnCannelServices);
 
 		JLabel lblQuantityService = new JLabel("SL còn: ");
@@ -477,10 +477,10 @@ public class pnDatPhong extends JPanel
 		CustomUI.getInstance().setCustomTextFieldOff(txtServicePrice);
 		pnlControlService.add(txtServicePrice);
 
-		btnRefreshService = new MyButton(90, 30, "Làm mới",gra, refreshIcon.getImage(),
-				25,17,3,3);
+		btnRefreshService = new MyButton(120, 30, "Làm mới",gra, refreshIcon.getImage(),
+				38,17,8,3);
 		((MyButton) btnRefreshService).setFontCustom(new Font("Dialog", Font.BOLD, 14));
-		btnRefreshService.setBounds(310, 114, 90, 30);
+		btnRefreshService.setBounds(300, 114, 120, 30);
 		pnlControlService.add(btnRefreshService);
 
 		JLabel lblTotalPriceService = new JLabel("Tổng tiền: ");
