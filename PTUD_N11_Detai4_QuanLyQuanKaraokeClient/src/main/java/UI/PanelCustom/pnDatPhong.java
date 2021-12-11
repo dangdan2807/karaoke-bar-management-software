@@ -309,20 +309,20 @@ public class pnDatPhong extends JPanel
 		((MyButton) btnRentRoom).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		((MyButton) btnRentRoom).setEnabledCustom(false);
 		pnlBiffInfo.add(btnRentRoom);
-		btnRentRoom.setBounds(177, 150, 120, 35);
+		btnRentRoom.setBounds(191, 150, 120, 35);
 
 		btnPayment = new MyButton(120, 35, "Thanh toán", new Dimension(75, 20), paymentIcon.getImage(),
 				new Dimension(16, 19), gra);
 		((MyButton) btnPayment).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		pnlBiffInfo.add(btnPayment);
-		btnPayment.setBounds(327, 150, 120, 35);
+		btnPayment.setBounds(339, 150, 120, 35);
 
 		btnChooseCustomer = new MyButton(135, 35, "Chọn K.Hàng", new Dimension(87, 20), userIcon.getImage(),
 				new Dimension(16, 19), gra);
 		((MyButton) btnChooseCustomer).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		((MyButton) btnChooseCustomer).setEnabledCustom(false);
 		pnlBiffInfo.add(btnChooseCustomer);
-		btnChooseCustomer.setBounds(27, 150, 135, 35);
+		btnChooseCustomer.setBounds(28, 150, 135, 35);
 
 		JLabel lblTotalPriceBill = new JLabel("Tổng tiền: ");
 		CustomUI.getInstance().setCustomLabel(lblTotalPriceBill);
