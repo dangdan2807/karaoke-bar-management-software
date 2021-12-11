@@ -79,7 +79,8 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             tr.begin();
             dataList = (ArrayList<DichVu>) em.createNativeQuery(query, DichVu.class)
                     .setParameter(1, currentPage)
-                    .setParameter(2, lineNumberDisplayed).getResultList();
+                    .setParameter(2, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -159,7 +160,8 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
             dataList = (ArrayList<DichVu>) em.createNativeQuery(query, DichVu.class)
                     .setParameter(1, serviceTypeName)
                     .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed).getResultList();
+                    .setParameter(3, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -183,7 +185,8 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
         try {
             tr.begin();
             result = (int) em.createNativeQuery(query)
-                    .setParameter(1, serviceTypeName).getSingleResult();
+                    .setParameter(1, serviceTypeName)
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -395,7 +398,8 @@ public class DichVuDAOImpl extends UnicastRemoteObject implements DichVuDAO {
         try {
             tr.begin();
             ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query)
-                    .setParameter(1, serviceId).getResultList();
+                    .setParameter(1, serviceId)
+                    .getResultList();
             tr.commit();
             if(resultQuery.size() > 0) {
                 result = resultQuery.get(0);

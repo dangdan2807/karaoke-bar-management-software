@@ -2137,7 +2137,7 @@ BEGIN
     INSERT INTO dbo.KhachHang
         (maKH, cmnd, hoTen, gioiTinh, soDienThoai, ngaySinh)
     VALUES
-        ( @customerId , @cmnd , @customerName , @gender , @phoneNumber , @birthDay )
+        ( @customerId, @cmnd, @customerName, @gender, @phoneNumber, @birthDay )
 
     DECLARE @isExitsId VARCHAR(10)
     SELECT @isExitsId = kh.maKH

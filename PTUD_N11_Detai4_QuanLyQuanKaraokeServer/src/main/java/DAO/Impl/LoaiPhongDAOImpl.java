@@ -79,7 +79,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             tr.begin();
             dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
                     .setParameter(1, currentPage)
-                    .setParameter(2, lineNumberDisplayed).getResultList();
+                    .setParameter(2, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -132,7 +133,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         try {
             tr.begin();
             ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query)
-                    .setParameter(1, roomId).getResultList();
+                    .setParameter(1, roomId)
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 roomTypeName = resultQuery.get(0);
@@ -168,7 +170,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
                     .setParameter(1, roomTypeName)
                     .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed).getResultList();
+                    .setParameter(3, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -221,7 +224,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         String roomTypeId = "";
         try {
             tr.begin();
-            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query).getResultList();
+            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query)
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 roomTypeId = resultQuery.get(0);
@@ -256,7 +260,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         try {
             tr.begin();
             ArrayList<LoaiPhong> resultQuery = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
-                    .setParameter(1, roomTypeId).getResultList();
+                    .setParameter(1, roomTypeId)
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 result = resultQuery.get(0);
@@ -358,7 +363,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
             dataList = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
                     .setParameter(1, price)
                     .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed).getResultList();
+                    .setParameter(3, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -383,7 +389,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         try {
             tr.begin();
             result = (int) em.createNativeQuery(query)
-                    .setParameter(1, price).getSingleResult();
+                    .setParameter(1, price)
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -413,7 +420,8 @@ public class LoaiPhongDAOImpl extends UnicastRemoteObject implements LoaiPhongDA
         try {
             tr.begin();
             ArrayList<LoaiPhong> resultQuery = (ArrayList<LoaiPhong>) em.createNativeQuery(query, LoaiPhong.class)
-                    .setParameter(1, roomTypeName).getResultList();
+                    .setParameter(1, roomTypeName)
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 result = resultQuery.get(0);

@@ -49,7 +49,8 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<LoaiDichVu>) em.createNativeQuery(query, LoaiDichVu.class).getResultList();
+            dataList = (ArrayList<LoaiDichVu>) em.createNativeQuery(query, LoaiDichVu.class)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -77,7 +78,8 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
             tr.begin();
             dataList = (ArrayList<LoaiDichVu>) em.createNativeQuery(query, LoaiDichVu.class)
                     .setParameter(1, currentPage)
-                    .setParameter(2, lineNumberDisplayed).getResultList();
+                    .setParameter(2, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -127,8 +129,11 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            dataList = (ArrayList<LoaiDichVu>) em.createNativeQuery(query, LoaiDichVu.class).setParameter(1, serviceTypeName).setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed).getResultList();
+            dataList = (ArrayList<LoaiDichVu>) em.createNativeQuery(query, LoaiDichVu.class)
+                    .setParameter(1, serviceTypeName)
+                    .setParameter(2, currentPage)
+                    .setParameter(3, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -152,7 +157,9 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
         int result = 0;
         try {
             tr.begin();
-            result = (int) em.createNativeQuery(query).setParameter(1, serviceTypeName).getSingleResult();
+            result = (int) em.createNativeQuery(query)
+                    .setParameter(1, serviceTypeName)
+                    .getSingleResult();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -182,7 +189,8 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
         try {
             tr.begin();
             ArrayList<LoaiDichVu> resultQuery = (ArrayList<LoaiDichVu>) em.createNativeQuery(query, LoaiDichVu.class)
-                    .setParameter(1, serviceTypeName).getResultList();
+                    .setParameter(1, serviceTypeName)
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 result = resultQuery.get(0);
@@ -251,7 +259,8 @@ public class LoaiDichVuDAOImpl extends UnicastRemoteObject implements LoaiDichVu
         try {
             tr.begin();
             ArrayList<LoaiDichVu> resultQuery = (ArrayList<LoaiDichVu>) em.createNativeQuery(query, LoaiDichVu.class)
-                    .setParameter(1, serviceTypeID).getResultList();
+                    .setParameter(1, serviceTypeID)
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 result = resultQuery.get(0);

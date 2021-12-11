@@ -60,7 +60,8 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
             tr.begin();
             ArrayList<TaiKhoan> accountList = (ArrayList<TaiKhoan>) em.createNativeQuery(queryStr, TaiKhoan.class)
                     .setParameter(1, username)
-                    .setParameter(2, password).getResultList();
+                    .setParameter(2, password)
+                    .getResultList();
             tr.commit();
             if (accountList.size() > 0) {
                 count = 1;
@@ -95,7 +96,8 @@ public class TaiKhoanDAOImpl extends UnicastRemoteObject implements TaiKhoanDAO 
         try {
             tr.begin();
             ArrayList<TaiKhoan> accountList = (ArrayList<TaiKhoan>) em.createNativeQuery(query, TaiKhoan.class)
-                    .setParameter(1, username).getResultList();
+                    .setParameter(1, username)
+                    .getResultList();
             tr.commit();
             if (accountList.size() > 0) {
                 account = accountList.get(0);

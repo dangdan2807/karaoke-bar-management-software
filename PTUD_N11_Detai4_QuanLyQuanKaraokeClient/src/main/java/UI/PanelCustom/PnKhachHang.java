@@ -368,6 +368,14 @@ public class PnKhachHang extends JPanel
 		allLoaded();
 	}
 
+	// public static void main(String[] args) throws java.lang.reflect.InvocationTargetException, InterruptedException {
+	// 	SwingUtilities.invokeLater(() -> {
+	// 		NhanVien staff = new NhanVien("NV00000001");
+	// 		PnKhachHang login = new PnKhachHang(staff, 0);
+	// 		login.setVisible(true);
+	// 	});
+	// }
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -667,6 +675,7 @@ public class PnKhachHang extends JPanel
 		if (validData()) {
 			KhachHang customer = getCustomerDataInForm();
 			Boolean result = false;
+			System.out.println(customer);
 			try {
 				KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
 				result = customerDAO.insertCustomer(customer);

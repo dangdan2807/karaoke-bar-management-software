@@ -54,7 +54,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
             tr.begin();
             dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
                     .setParameter(1, currentPage)
-                    .setParameter(2, lineNumberDisplayed).getResultList();
+                    .setParameter(2, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -109,7 +110,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
             dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
                     .setParameter(1, customerName)
                     .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed).getResultList();
+                    .setParameter(3, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -166,7 +168,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
             dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
                     .setParameter(1, phoneNumber)
                     .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed).getResultList();
+                    .setParameter(3, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -242,7 +245,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
         try {
             tr.begin();
             dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
-                    .setParameter(1, customerName).getResultList();
+                    .setParameter(1, customerName)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -268,7 +272,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
         try {
             tr.begin();
             dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
-                    .setParameter(1, cmnd).getResultList();
+                    .setParameter(1, cmnd)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -294,7 +299,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
         try {
             tr.begin();
             dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
-                    .setParameter(1, phoneNumber).getResultList();
+                    .setParameter(1, phoneNumber)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -324,7 +330,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
         try {
             tr.begin();
             ArrayList<KhachHang> resultQuery = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
-                    .setParameter(1, customerId).getResultList();
+                    .setParameter(1, customerId)
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 result = resultQuery.get(0);
@@ -393,7 +400,7 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
         try {
             tr.begin();
             ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query)
-                    .getSingleResult();
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 result = resultQuery.get(0);
@@ -468,7 +475,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
             dataList = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
                     .setParameter(1, gender)
                     .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed).getResultList();
+                    .setParameter(3, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -526,7 +534,8 @@ public class KhachHangDAOImpl extends UnicastRemoteObject implements KhachHangDA
         try {
             tr.begin();
             ArrayList<KhachHang> resultQuery = (ArrayList<KhachHang>) em.createNativeQuery(query, KhachHang.class)
-                    .setParameter(1, billId).getResultList();
+                    .setParameter(1, billId)
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 result = resultQuery.get(0);

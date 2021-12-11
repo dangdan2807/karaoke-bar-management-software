@@ -111,7 +111,8 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
         try {
             tr.begin();
             dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
-                    .setParameter(1, roomTypeName).getResultList();
+                    .setParameter(1, roomTypeName)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -142,7 +143,8 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
             dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
                     .setParameter(1, roomTypeName)
                     .setParameter(2, currentPage)
-                    .setParameter(3, lineNumberDisplayed).getResultList();
+                    .setParameter(3, lineNumberDisplayed)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -218,7 +220,8 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
         try {
             tr.begin();
             dataList = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
-                    .setParameter(1, roomTypeName).getResultList();
+                    .setParameter(1, roomTypeName)
+                    .getResultList();
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -506,7 +509,8 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
         String result = "";
         try {
             tr.begin();
-            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query).getResultList();
+            ArrayList<String> resultQuery = (ArrayList<String>) em.createNativeQuery(query)
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 result = resultQuery.get(0);
@@ -541,7 +545,8 @@ public class PhongDAOImpl extends UnicastRemoteObject implements PhongDAO {
         try {
             tr.begin();
             ArrayList<Phong> resultQuery = (ArrayList<Phong>) em.createNativeQuery(query, Phong.class)
-                    .setParameter(1, billId).getResultList();
+                    .setParameter(1, billId)
+                    .getResultList();
             tr.commit();
             if (resultQuery.size() > 0) {
                 result = resultQuery.get(0);
