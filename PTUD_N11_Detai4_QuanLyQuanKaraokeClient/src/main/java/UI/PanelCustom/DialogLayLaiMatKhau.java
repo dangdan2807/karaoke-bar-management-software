@@ -118,7 +118,7 @@ public class DialogLayLaiMatKhau extends JDialog
 		CustomUI.getInstance().setCustomTextFieldOn(txtNewPassword);
 		pnlMain.add(txtNewPassword);
 
-		lblReEnterPassword = new JLabel("Nhập mật khẩu mới:");
+		lblReEnterPassword = new JLabel("Nhập lại mật khẩu mới:");
 		lblReEnterPassword.setBounds(48, 383, 300, 25);
 		lblReEnterPassword.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblReEnterPassword.setForeground(Color.decode("#fffffff"));

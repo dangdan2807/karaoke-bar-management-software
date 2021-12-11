@@ -417,8 +417,7 @@ public class pnDatPhong extends JPanel
 		CustomUI.getInstance().setCustomTextFieldOn(txtServiceName);
 		pnlControlService.add(txtServiceName);
 
-		btnSearchService = new MyButton(90, 30, "Tìm", new Dimension(25, 16), searchIcon.getImage(),
-				new Dimension(16, 18), gra);
+		btnSearchService = new MyButton(90, 30, "Tìm", gra, searchIcon.getImage(),34,17,3,3);
 		((MyButton) btnSearchService).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		btnSearchService.setBounds(310, 6, 90, 30);
 		pnlControlService.add(btnSearchService);
@@ -439,15 +438,14 @@ public class pnDatPhong extends JPanel
 		txtOrderQuantity.setEditable(true);
 		pnlControlService.add(spnOrderQuantity);
 
-		btnOrderServices = new MyButton(90, 30, "Thêm", new Dimension(33, 16), addIcon.getImage(),
-				new Dimension(16, 18), gra);
+		btnOrderServices = new MyButton(90, 30, "Thêm", gra, addIcon.getImage(),
+				29,17,3,3);
 		((MyButton) btnOrderServices).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		btnOrderServices.setBounds(310, 42, 90, 30);
 		((MyButton) btnOrderServices).setEnabledCustom(false);
 		pnlControlService.add(btnOrderServices);
 
-		btnCannelServices = new MyButton(90, 30, "Hủy", new Dimension(25, 16), trashIcon.getImage(),
-				new Dimension(16, 18), gra);
+		btnCannelServices = new MyButton(90, 30, "Hủy", gra, trashIcon.getImage(),35,17,3,3);
 		((MyButton) btnCannelServices).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		((MyButton) btnCannelServices).setEnabledCustom(false);
 		btnCannelServices.setBounds(310, 78, 90, 30);
@@ -479,8 +477,8 @@ public class pnDatPhong extends JPanel
 		CustomUI.getInstance().setCustomTextFieldOff(txtServicePrice);
 		pnlControlService.add(txtServicePrice);
 
-		btnRefreshService = new MyButton(90, 30, "Làm mới", new Dimension(50, 17), refreshIcon.getImage(),
-				new Dimension(14, 18), gra);
+		btnRefreshService = new MyButton(90, 30, "Làm mới",gra, refreshIcon.getImage(),
+				25,17,3,3);
 		((MyButton) btnRefreshService).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		btnRefreshService.setBounds(310, 114, 90, 30);
 		pnlControlService.add(btnRefreshService);

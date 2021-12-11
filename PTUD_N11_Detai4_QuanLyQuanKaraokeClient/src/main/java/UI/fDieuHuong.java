@@ -94,15 +94,15 @@ public class fDieuHuong extends JFrame implements ActionListener {
         btnLogOut.setToolTipText("Đăng xuất tài khoản");
         pnlBottom.add(btnLogOut);
 
-        btnBookingManagement = new JButton("Quản lý đặt phòng");
+        btnBookingManagement = new JButton("QUẢN LÝ ĐẶT PHÒNG");
         btnBookingManagement.setIcon(sellIcon);
         customBtn(btnBookingManagement);
 
-        btnInfoManagement = new JButton("Thông Tin Cá Nhân");
+        btnInfoManagement = new JButton("THÔNG TIN CÁ NHÂN");
         btnInfoManagement.setIcon(profileIcon);
         customBtn(btnInfoManagement);
 
-        btnSystemManagement = new JButton("Quản Trị");
+        btnSystemManagement = new JButton("QUẢN TRỊ");
         btnSystemManagement.setIcon(managerIcon);
         customBtn(btnSystemManagement);
 
