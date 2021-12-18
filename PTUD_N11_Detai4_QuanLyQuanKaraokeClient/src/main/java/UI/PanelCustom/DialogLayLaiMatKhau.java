@@ -260,11 +260,18 @@ public class DialogLayLaiMatKhau extends JDialog
 			String codeConfirm = txtConfirmationCode.getText().trim();
 			if (codeConfirm.equals(code + "")) {
 				btnComplete.setEnabledCustom(true);
+				btnConfirmCode.setEnabledCustom(false);
 				txtUserName.setEditable(false);
+				CustomUI.getInstance().setCustomTextFieldUnFocus(txtUserName);
 				txtPhoneNumber.setEditable(false);
+				CustomUI.getInstance().setCustomTextFieldUnFocus(txtPhoneNumber);
 			} else {
 				String message = "Mã xác nhận không đúng";
 				showMessage(txtConfirmationCode, 1, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+				txtUserName.setEditable(true);
+				CustomUI.getInstance().setCustomTextFieldFocus(txtUserName);
+				txtPhoneNumber.setEditable(true);
+				CustomUI.getInstance().setCustomTextFieldFocus(txtPhoneNumber);
 			}
 		}
 	}
