@@ -20,12 +20,12 @@ import DAO.HoaDonDAO;
 import entity.NhanVien;
 
 public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseListener, ItemListener {
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-	private ImageIcon backIcon = CustomUI.BACK_ICON;
-	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
-	private ImageIcon dollarIcon = new ImageIcon(
-			CustomUI.DOLLAR_ICON.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+	private ImageIcon backIcon = new ImageIcon(PnThongKeDoanhThu.class.getResource(CustomUI.BACK_ICON));
+	private ImageIcon searchIcon = new ImageIcon(PnThongKeDoanhThu.class.getResource(CustomUI.SEARCH_ICON));
+	private ImageIcon bg = new ImageIcon(new ImageIcon(PnThongKeDoanhThu.class.getResource(
+			CustomUI.BACKGROUND)).getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon dollarIcon = new ImageIcon(new ImageIcon(PnThongKeDoanhThu.class.getResource(
+			CustomUI.DOLLAR_ICON)).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
@@ -216,12 +216,13 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		allLoaded();
 	}
 
-	// public static void main(String[] args) throws java.lang.reflect.InvocationTargetException, InterruptedException {
-	// 	SwingUtilities.invokeLater(() -> {
-	// 		NhanVien staff = new NhanVien("NV00000001");
-	// 		PnThongKeDoanhThu login = new PnThongKeDoanhThu(staff);
-	// 		login.setVisible(true);
-	// 	});
+	// public static void main(String[] args) throws
+	// java.lang.reflect.InvocationTargetException, InterruptedException {
+	// SwingUtilities.invokeLater(() -> {
+	// NhanVien staff = new NhanVien("NV00000001");
+	// PnThongKeDoanhThu login = new PnThongKeDoanhThu(staff);
+	// login.setVisible(true);
+	// });
 	// }
 
 	@Override
@@ -327,11 +328,11 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 	/**
 	 * Hiển thị biểu đồ
 	 * 
-	 * @param fromDate {@code Date} ngày bắt đầu
-	 * @param toDate {@code Date} ngày kết thúc
-	 * @param dayOfMonth {@code int} số ngày trong tháng
-	 * @param dayOfYear {@code int} số ngày trong năm
-	 * @param format {@code String} định dạng ngày 
+	 * @param fromDate       {@code Date} ngày bắt đầu
+	 * @param toDate         {@code Date} ngày kết thúc
+	 * @param dayOfMonth     {@code int} số ngày trong tháng
+	 * @param dayOfYear      {@code int} số ngày trong năm
+	 * @param format         {@code String} định dạng ngày
 	 * @param totalPriceList {@code List<Object[]>} danh sách tổng tiền và ngày
 	 */
 	public void showStatistical(Date fromDate, Date toDate, int dayOfMonth, int dayOfYear, String format,

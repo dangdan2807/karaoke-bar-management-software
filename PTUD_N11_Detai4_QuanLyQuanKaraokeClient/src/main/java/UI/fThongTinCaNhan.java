@@ -42,10 +42,12 @@ public class fThongTinCaNhan extends JDialog
 	private JCheckBox chkChangePassword;
 	private JRadioButton radMale, radFemale;
 
-	private ImageIcon logoApp = CustomUI.LOGO_APP;
-	private ImageIcon background = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(965, 512, Image.SCALE_SMOOTH));
-	private ImageIcon updateInfoIcon = CustomUI.UPDATE_PROFILE_ICON;
+	private ImageIcon logoApp = new ImageIcon(fThongTinCaNhan.class.getResource(CustomUI.LOGO_APP));
+	private ImageIcon background = new ImageIcon(new ImageIcon(fThongTinCaNhan.class.getResource(
+			CustomUI.BACKGROUND)).getImage().getScaledInstance(965, 512, Image.SCALE_SMOOTH));
+	private ImageIcon updateInfoIcon = new ImageIcon(fThongTinCaNhan.class.getResource(CustomUI.UPDATE_PROFILE_ICON));
+	private ImageIcon backIcon = new ImageIcon(PnThongKeDoanhThu.class.getResource(CustomUI.BACK_ICON));
+
 	private int withPn = 965, heightPn = 500;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
@@ -95,7 +97,7 @@ public class fThongTinCaNhan extends JDialog
 		pnlMain.setLayout(null);
 		getContentPane().add(pnlMain);
 
-		btnBack = new MyButton(100, 35, "Quay lại", gra, CustomUI.BACK_ICON.getImage(), 30, 19, 9, 5);
+		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19, 9, 5);
 		btnBack.setBounds(840, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
 		pnlMain.add(btnBack);

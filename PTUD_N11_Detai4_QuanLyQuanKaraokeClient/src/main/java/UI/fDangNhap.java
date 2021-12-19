@@ -32,13 +32,13 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 	private JTextField txtUsername, txtPassword;
 	private JButton btnLogin, btnForgetPassWord;
 
-	private ImageIcon logo = new ImageIcon(
-			CustomUI.LOGO_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
-	private ImageIcon logoApp = CustomUI.LOGO_APP;
-	private ImageIcon backgroundTop = new ImageIcon(
-			CustomUI.BACKGROUND_LOGIN.getImage().getScaledInstance(700, 300, Image.SCALE_SMOOTH));
-	private ImageIcon loginIcon = new ImageIcon(
-			CustomUI.LOGIN_ICON.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+	private ImageIcon logoApp = new ImageIcon(fDangNhap.class.getResource(CustomUI.LOGO_APP));
+	private ImageIcon logo = new ImageIcon(new ImageIcon(fDangNhap.class.getResource(
+			CustomUI.LOGO_ICON)).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+	private ImageIcon backgroundTop = new ImageIcon(new ImageIcon(fDangNhap.class.getResource(
+			CustomUI.BACKGROUND_LOGIN)).getImage().getScaledInstance(700, 300, Image.SCALE_SMOOTH));
+	private ImageIcon loginIcon = new ImageIcon(new ImageIcon(fDangNhap.class.getResource(
+			CustomUI.LOGIN_ICON)).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
 
 	private GradientPaint gra = new GradientPaint(0, 0, Color.decode("#900a9c"), 250, 0, Color.decode("#00cccb"));
 
@@ -172,31 +172,35 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		if (o.equals(btnLogin)) {
 			String username = txtUsername.getText().trim();
 			String password = txtPassword.getText().trim();
-			boolean loginResult = login(username, password);
-			// nếu tài khoản, mật khẩu hợp lệ và không bị vô hiệu hóa thì đăng nhập thành
-			// công
-			if (loginResult) {
-				NhanVien staff = null;
-				try {
-					NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
-					staff = staffDAO.getStaffByUsername(username);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				if (staff != null)
-					// kiểm tra tài khoản có bị vô hiệu hóa hay không
-					if (staff.getTaiKhoan().getTinhTrangTK() == true) {
-						fDieuHuong winDieuHuong = new fDieuHuong(staff);
-						this.setVisible(false);
-						winDieuHuong.setVisible(true);
-					} else {
-						showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
-					}
-				else {
-					showMessage("Tài khoản không tồn tại");
-				}
+			if (username.equals("") || password.equals("")) {
+				JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin", "Thông báo",
+						JOptionPane.WARNING_MESSAGE);
+				return;
 			} else {
-				showMessage("Sai tài khoản hoặc mật khẩu");
+				boolean loginResult = login(username, password);
+				// nếu tài khoản, mật khẩu hợp lệ và không bị vô hiệu hóa thì đăng nhập thành
+				// công
+				if (loginResult) {
+					NhanVien staff = null;
+					try {
+						NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
+						staff = staffDAO.getStaffByUsername(username);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+
+					if (staff != null)
+						// kiểm tra tài khoản có bị vô hiệu hóa hay không
+						if (staff.getTaiKhoan().getTinhTrangTK() == true) {
+							fDieuHuong winDieuHuong = new fDieuHuong(staff);
+							this.setVisible(false);
+							winDieuHuong.setVisible(true);
+						} else {
+							showMessage("Tài khoản của bạn đã bị chủ quán vô hiện hóa");
+						}
+				} else {
+					showMessage("Sai tài khoản hoặc mật khẩu");
+				}
 			}
 		} else if (o.equals(btnForgetPassWord)) {
 			String username = txtUsername.getText().trim();

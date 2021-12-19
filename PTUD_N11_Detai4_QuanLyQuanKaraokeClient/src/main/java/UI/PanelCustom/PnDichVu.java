@@ -34,16 +34,21 @@ public class PnDichVu extends JPanel
 	private static final long serialVersionUID = -356436856151590278L;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-	private ImageIcon nextIconRight = new ImageIcon(
-			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextRightIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon nextLeftIcon = new ImageIcon(
-			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextLeftIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon bg = new ImageIcon(new ImageIcon(PnDichVu.class.getResource(
+			CustomUI.BACKGROUND)).getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon nextIconRight = new ImageIcon(new ImageIcon(PnDichVu.class.getResource(
+			CustomUI.NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(new ImageIcon(PnDichVu.class.getResource(
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(new ImageIcon(PnDichVu.class.getResource(
+			CustomUI.NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(new ImageIcon(PnDichVu.class.getResource(
+			CustomUI.DOUBLE_NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon backIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.BACK_ICON));
+	private ImageIcon addIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.ADD_ICON));
+	private ImageIcon updateIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.UPDATE_ICON));
+	private ImageIcon refreshIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.REFRESH_ICON));
+	private ImageIcon searchIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.SEARCH_ICON));
 
 	private JTable tblTableService;
 	private DefaultTableModel modelTableService;
@@ -108,7 +113,7 @@ public class PnDichVu extends JPanel
 		pnlTitle.setOpaque(false);
 		pnlTitle.setLayout(null);
 
-		btnBack = new MyButton(100, 35, "Quay lại", gra, CustomUI.BACK_ICON.getImage(), 30, 19);
+		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19);
 		btnBack.setBounds(1150, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
 		pnlTitle.add(btnBack);
@@ -178,18 +183,18 @@ public class PnDichVu extends JPanel
 		lblPrice.setBounds(89, 56, 120, 20);
 		pnlInfo.add(lblPrice);
 
-		btnAdd = new MyButton(130, 35, "Thêm", gra, CustomUI.ADD_ICON.getImage(), 50, 19, 10, 6);
+		btnAdd = new MyButton(130, 35, "Thêm", gra, addIcon.getImage(), 50, 19, 10, 6);
 		btnAdd.setToolTipText("Thêm loại dịch vụ mới sau khi đã điền đủ thông tin");
 		btnAdd.setBounds(1023, 10, 130, 35);
 		pnlInfo.add(btnAdd);
 
-		btnUpdate = new MyButton(130, 35, "Sửa", gra, CustomUI.UPDATE_ICON.getImage(), 55, 19, 10, 6);
+		btnUpdate = new MyButton(130, 35, "Sửa", gra, updateIcon.getImage(), 55, 19, 10, 6);
 		btnUpdate.setToolTipText("Sửa thông tin loại dịch vụ");
 		btnUpdate.setBounds(1023, 50, 130, 35);
 		btnUpdate.setEnabledCustom(false);
 		pnlInfo.add(btnUpdate);
 
-		btnRefresh = new MyButton(130, 35, "Làm mới", gra, CustomUI.REFRESH_ICON.getImage(), 40, 19, 10, 5);
+		btnRefresh = new MyButton(130, 35, "Làm mới", gra, refreshIcon.getImage(), 40, 19, 10, 5);
 		btnRefresh.setToolTipText("Làm mới form");
 		btnRefresh.setBounds(1023, 90, 130, 35);
 		pnlInfo.add(btnRefresh);
@@ -215,7 +220,7 @@ public class PnDichVu extends JPanel
 		cboSearch.setBounds(140, 18, 160, 20);
 		pnlSearch.add(cboSearch);
 
-		btnSearch = new MyButton(130, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(), 40, 19, 10, 5);
+		btnSearch = new MyButton(130, 35, "Tìm kiếm", gra, searchIcon.getImage(), 40, 19, 10, 5);
 		btnSearch.setToolTipText("Tìm kiếm thông tin dịch vụ theo từ khóa");
 		btnSearch.setBounds(702, 10, 130, 35);
 		pnlSearch.add(btnSearch);
@@ -315,12 +320,13 @@ public class PnDichVu extends JPanel
 		allLoaded();
 	}
 
-	// public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-	// 	SwingUtilities.invokeLater(() -> {
-	// 		NhanVien staff = new NhanVien("NV00000001");
-	// 		PnDichVu login = new PnDichVu(staff);
-	// 		login.setVisible(true);
-	// 	});
+	// public static void main(String[] args) throws InvocationTargetException,
+	// InterruptedException {
+	// SwingUtilities.invokeLater(() -> {
+	// NhanVien staff = new NhanVien("NV00000001");
+	// PnDichVu login = new PnDichVu(staff);
+	// login.setVisible(true);
+	// });
 	// }
 
 	@Override
@@ -349,8 +355,10 @@ public class PnDichVu extends JPanel
 						// int stt = tblTableService.getRowCount();
 						// addRow(stt, service);
 						// int lastIndex = tblTableService.getRowCount() - 1;
-						// tblTableService.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-						// tblTableService.scrollRectToVisible(tblTableService.getCellRect(lastIndex, lastIndex, true));
+						// tblTableService.getSelectionModel().setSelectionInterval(lastIndex,
+						// lastIndex);
+						// tblTableService.scrollRectToVisible(tblTableService.getCellRect(lastIndex,
+						// lastIndex, true));
 						btnAdd.setEnabledCustom(false);
 						btnUpdate.setEnabledCustom(true);
 					} else {

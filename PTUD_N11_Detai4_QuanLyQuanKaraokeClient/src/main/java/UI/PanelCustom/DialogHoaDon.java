@@ -37,13 +37,14 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 			Color.decode("#FAFFD1"));
 	private MyButton btnPayment, btnBack, btnExportPdf, btnExportExcel;
 
-	private ImageIcon logoApp = CustomUI.LOGO_APP;
-	private ImageIcon backIcon = CustomUI.BACK_ICON;
-	private ImageIcon paymentIcon = CustomUI.PAYMENT_ICON;
-	private ImageIcon pdfIcon = CustomUI.PDF_ICON;
-	private ImageIcon excelIcon = CustomUI.EXCEL_ICON;
+	private ImageIcon logoApp = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.LOGO_APP));
+	private ImageIcon backIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.BACK_ICON));
+	private ImageIcon paymentIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.PAYMENT_ICON));
+	private ImageIcon pdfIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.PDF_ICON));
+	private ImageIcon excelIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.EXCEL_ICON));
 	private ImageIcon logoIcon = new ImageIcon(
-			CustomUI.LOGO_ICON.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH));
+			new ImageIcon(DialogHoaDon.class.getResource(CustomUI.LOGO_ICON)).getImage().getScaledInstance(70, 70,
+					Image.SCALE_SMOOTH));
 
 	private String formatTime = "HH:mm:ss dd/MM/yyyy";
 	private DecimalFormat df = new DecimalFormat("#,###.##");

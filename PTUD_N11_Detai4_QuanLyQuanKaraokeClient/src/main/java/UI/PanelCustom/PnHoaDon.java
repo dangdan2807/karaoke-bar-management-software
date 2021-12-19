@@ -48,18 +48,19 @@ public class PnHoaDon extends JPanel
 	private MyButton btnNextToRight, btnNextToLast, btnNextToLeft, btnNextToFirst;
 	private PnTextFiledPaging txtPaging;
 
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-	private ImageIcon nextIconRight = new ImageIcon(
-			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextRightIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon nextLeftIcon = new ImageIcon(
-			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextLeftIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon backIcon = CustomUI.BACK_ICON;
-	private ImageIcon billIcon = CustomUI.BILL_ICON;
+	private ImageIcon bg = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
+			CustomUI.BACKGROUND)).getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon nextIconRight = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
+			CustomUI.NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
+			CustomUI.NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
+			CustomUI.DOUBLE_NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon backIcon = new ImageIcon(PnHoaDon.class.getResource(CustomUI.BACK_ICON));
+	private ImageIcon billIcon = new ImageIcon(PnHoaDon.class.getResource(CustomUI.BILL_ICON));
+	private ImageIcon searchIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.SEARCH_ICON));
 
 	private NhanVien staffLogin = null;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
@@ -167,7 +168,7 @@ public class PnHoaDon extends JPanel
 		btnExportBill.setBounds(1065, 60, 150, 35);
 		pnlInfo.add(btnExportBill);
 
-		btnSearch = new MyButton(150, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(), 50, 19, 5, 5);
+		btnSearch = new MyButton(150, 35, "Tìm kiếm", gra, searchIcon.getImage(), 50, 19, 5, 5);
 		btnSearch.setBounds(1065, 20, 150, 35);
 		btnSearch.setToolTipText("Tìm kiếm thông tin nhân viên theo từ khóa");
 		pnlInfo.add(btnSearch);

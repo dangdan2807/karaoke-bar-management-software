@@ -53,18 +53,18 @@ public class pnDatPhong extends JPanel
 	private JSpinner spnOrderQuantity;
 	private SpinnerNumberModel spnModel;
 
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1280, 650, Image.SCALE_SMOOTH));
-	private ImageIcon transferIcon = CustomUI.TRANSFER_ICON;
-	private ImageIcon refreshIcon = CustomUI.REFRESH_ICON;
-	private ImageIcon paymentIcon = CustomUI.PAYMENT_ICON;
-	private ImageIcon rentIcon = CustomUI.RENT_ROOM_ICON;
-	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
-	private ImageIcon trashIcon = CustomUI.TRASH_ICON;
-	private ImageIcon backIcon = CustomUI.BACK_ICON;
-	private ImageIcon roomIcon = CustomUI.ROOM_ICON;
-	private ImageIcon userIcon = CustomUI.USER_ICON;
-	private ImageIcon addIcon = CustomUI.ADD_ICON;
+	private ImageIcon bg = new ImageIcon(new ImageIcon(pnDatPhong.class.getResource(CustomUI.BACKGROUND))
+			.getImage().getScaledInstance(1280, 650, Image.SCALE_SMOOTH));
+	private ImageIcon transferIcon = new ImageIcon(pnDatPhong.class.getResource(CustomUI.TRANSFER_ICON));
+	private ImageIcon refreshIcon = new ImageIcon(pnDatPhong.class.getResource(CustomUI.REFRESH_ICON));
+	private ImageIcon paymentIcon = new ImageIcon(pnDatPhong.class.getResource(CustomUI.PAYMENT_ICON));
+	private ImageIcon rentIcon = new ImageIcon(pnDatPhong.class.getResource(CustomUI.RENT_ROOM_ICON));
+	private ImageIcon searchIcon = new ImageIcon(pnDatPhong.class.getResource(CustomUI.SEARCH_ICON));
+	private ImageIcon trashIcon = new ImageIcon(pnDatPhong.class.getResource(CustomUI.TRASH_ICON));
+	private ImageIcon backIcon = new ImageIcon(pnDatPhong.class.getResource(CustomUI.BACK_ICON));
+	private ImageIcon roomIcon = new ImageIcon(pnDatPhong.class.getResource(CustomUI.ROOM_ICON));
+	private ImageIcon userIcon = new ImageIcon(pnDatPhong.class.getResource(CustomUI.USER_ICON));
+	private ImageIcon addIcon = new ImageIcon(pnDatPhong.class.getResource(CustomUI.ADD_ICON));
 
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
@@ -417,7 +417,7 @@ public class pnDatPhong extends JPanel
 		CustomUI.getInstance().setCustomTextFieldOn(txtServiceName);
 		pnlControlService.add(txtServiceName);
 
-		btnSearchService = new MyButton(120, 30, "Tìm", gra, searchIcon.getImage(),49,17,8,3);
+		btnSearchService = new MyButton(120, 30, "Tìm", gra, searchIcon.getImage(), 49, 17, 8, 3);
 		((MyButton) btnSearchService).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		btnSearchService.setBounds(300, 6, 120, 30);
 		pnlControlService.add(btnSearchService);
@@ -439,13 +439,13 @@ public class pnDatPhong extends JPanel
 		pnlControlService.add(spnOrderQuantity);
 
 		btnOrderServices = new MyButton(120, 30, "Thêm", gra, addIcon.getImage(),
-				44,17,8,3);
+				44, 17, 8, 3);
 		((MyButton) btnOrderServices).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		btnOrderServices.setBounds(300, 42, 120, 30);
 		((MyButton) btnOrderServices).setEnabledCustom(false);
 		pnlControlService.add(btnOrderServices);
 
-		btnCannelServices = new MyButton(120, 30, "Hủy", gra, trashIcon.getImage(),50,17,8,3);
+		btnCannelServices = new MyButton(120, 30, "Hủy", gra, trashIcon.getImage(), 50, 17, 8, 3);
 		((MyButton) btnCannelServices).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		((MyButton) btnCannelServices).setEnabledCustom(false);
 		btnCannelServices.setBounds(300, 78, 120, 30);
@@ -477,8 +477,8 @@ public class pnDatPhong extends JPanel
 		CustomUI.getInstance().setCustomTextFieldOff(txtServicePrice);
 		pnlControlService.add(txtServicePrice);
 
-		btnRefreshService = new MyButton(120, 30, "Làm mới",gra, refreshIcon.getImage(),
-				38,17,8,3);
+		btnRefreshService = new MyButton(120, 30, "Làm mới", gra, refreshIcon.getImage(),
+				38, 17, 8, 3);
 		((MyButton) btnRefreshService).setFontCustom(new Font("Dialog", Font.BOLD, 14));
 		btnRefreshService.setBounds(300, 114, 120, 30);
 		pnlControlService.add(btnRefreshService);

@@ -29,14 +29,14 @@ public class fDieuHuong extends JFrame implements ActionListener {
     private NhanVien staffLogin = null;
 
     private final String STAFF = "Nhân viên", MANAGER = "Chủ quán";
-    private ImageIcon logoApp = CustomUI.LOGO_APP;
-    private ImageIcon profileIcon = new ImageIcon(
-            CustomUI.PROFILE_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
-    private ImageIcon sellIcon = new ImageIcon(
-            CustomUI.SELL_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
-    private ImageIcon managerIcon = new ImageIcon(
-            CustomUI.MANAGER_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
-    private ImageIcon logoutIcon = CustomUI.LOGOUT_ICON;
+    private ImageIcon logoApp = new ImageIcon(fDieuHuong.class.getResource(CustomUI.LOGO_APP));
+    private ImageIcon logoutIcon = new ImageIcon(fDieuHuong.class.getResource(CustomUI.LOGOUT_ICON));
+    private ImageIcon profileIcon = new ImageIcon(new ImageIcon(fDieuHuong.class.getResource(
+            CustomUI.PROFILE_ICON)).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+    private ImageIcon sellIcon = new ImageIcon(new ImageIcon(fDieuHuong.class.getResource(
+            CustomUI.SELL_ICON)).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+    private ImageIcon managerIcon = new ImageIcon(new ImageIcon(fDieuHuong.class.getResource(
+            CustomUI.MANAGER_ICON)).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
     private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
             Color.decode("#FAFFD1"));
 

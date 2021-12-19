@@ -33,21 +33,21 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 	private static final long serialVersionUID = -8410052847174456849L;
 	private JTable tblTableRoom;
 	private DefaultTableModel modelTableRoom;
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-	private ImageIcon addIcon = CustomUI.ADD_ICON;
-	private ImageIcon refreshIcon = CustomUI.REFRESH_ICON;
-	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
-	private ImageIcon backIcon = CustomUI.BACK_ICON;
-	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
-	private ImageIcon nextIconRight = new ImageIcon(
-			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextRightIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon nextLeftIcon = new ImageIcon(
-			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextLeftIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon addIcon = new ImageIcon(PnPhong.class.getResource(CustomUI.ADD_ICON));
+	private ImageIcon refreshIcon = new ImageIcon(PnPhong.class.getResource(CustomUI.REFRESH_ICON));
+	private ImageIcon searchIcon = new ImageIcon(PnPhong.class.getResource(CustomUI.SEARCH_ICON));
+	private ImageIcon backIcon = new ImageIcon(PnPhong.class.getResource(CustomUI.BACK_ICON));
+	private ImageIcon updateIcon = new ImageIcon(PnPhong.class.getResource(CustomUI.UPDATE_ICON));
+	private ImageIcon bg = new ImageIcon(new ImageIcon(PnPhong.class.getResource(
+			CustomUI.BACKGROUND)).getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon nextIconRight = new ImageIcon(new ImageIcon(PnPhong.class.getResource(
+			CustomUI.NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(new ImageIcon(PnPhong.class.getResource(
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(new ImageIcon(PnPhong.class.getResource(
+			CustomUI.NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(new ImageIcon(PnPhong.class.getResource(
+			CustomUI.DOUBLE_NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
@@ -66,6 +66,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 
 	/**
 	 * Khởi tạo giao diện quản lý phòng
+	 * 
 	 * @param staff {@code NhanVien} nhân viên đăng nhập
 	 */
 	public PnPhong(NhanVien staff) {

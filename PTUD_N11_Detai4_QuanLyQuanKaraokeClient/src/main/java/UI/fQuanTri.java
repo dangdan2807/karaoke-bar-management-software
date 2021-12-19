@@ -36,7 +36,7 @@ public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
         return instance;
     }
 
-    private ImageIcon logoApp = CustomUI.LOGO_APP;
+    private ImageIcon logoApp = new ImageIcon(fQuanTri.class.getResource(CustomUI.LOGO_APP));
     private JTabbedPane tabMain;
     private NhanVien staffLogin = null;
     private PnNhanVien pnlStaff;

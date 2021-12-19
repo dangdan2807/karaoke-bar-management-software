@@ -27,9 +27,9 @@ import DAO.TaiKhoanDAO;
  */
 public class DialogLayLaiMatKhau extends JDialog
 		implements ActionListener, KeyListener, FocusListener, MouseListener, ItemListener {
-	private ImageIcon logoApp = CustomUI.LOGO_APP;
-	private ImageIcon checkIcon = CustomUI.CHECK_ICON;
-	private ImageIcon backIcon = CustomUI.BACK_ICON;
+	private ImageIcon logoApp = new ImageIcon(DialogLayLaiMatKhau.class.getResource(CustomUI.LOGO_APP));
+	private ImageIcon checkIcon = new ImageIcon(DialogLayLaiMatKhau.class.getResource(CustomUI.CHECK_ICON));
+	private ImageIcon backIcon = new ImageIcon(DialogLayLaiMatKhau.class.getResource(CustomUI.BACK_ICON));
 	private JLabel lblPhoneNumber, lblConfirmationCode, lblNewPassword, lblReEnterPassword;
 	private JTextField txtPhoneNumber, txtConfirmationCode, txtUserName;
 	private JPasswordField txtNewPassword, txtReEnterPassword;

@@ -17,10 +17,10 @@ import UI.fDangNhap;
  * <p>
  */
 public class Client {
-    public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-        SwingUtilities.invokeLater(() -> {
-            fDangNhap login = new fDangNhap();
-            login.setVisible(true);
-        });
-    }
+	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+		SwingUtilities.invokeLater(() -> {
+			fDangNhap login = new fDangNhap();
+			login.setVisible(true);
+		});
+	}
 }

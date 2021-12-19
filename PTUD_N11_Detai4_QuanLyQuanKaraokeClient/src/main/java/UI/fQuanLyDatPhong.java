@@ -38,7 +38,7 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeLis
         return instance;
     }
 
-    private ImageIcon logoApp = CustomUI.LOGO_APP;
+    private ImageIcon logoApp = new ImageIcon(fQuanLyDatPhong.class.getResource(CustomUI.LOGO_APP));
     private JTabbedPane tabMain;
     private NhanVien staffLogin = null;
     
