@@ -1,0 +1,206 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch PnKhachHang",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnKhachHang",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
+            "name": "Launch DialogLayLaiMatKhau",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.DialogLayLaiMatKhau",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnDichVu",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnDichVu",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnThongKeDoanhThu",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnThongKeDoanhThu",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
+            "name": "Launch Client",
+            "request": "launch",
+            "mainClass": "App.Client",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
+            "name": "Launch fQuanTri",
+            "request": "launch",
+            "mainClass": "UI.fQuanTri",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
+            "name": "Launch App",
+            "request": "launch",
+            "mainClass": "App.App",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
+            "name": "Launch App",
+            "request": "launch",
+            "mainClass": "App.App",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnThongKeDoanhThu",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnThongKeDoanhThu",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch ThongKeHoaDonPnGUI",
+            "request": "launch",
+            "mainClass": "UI.ThongKeHoaDonPnGUI",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch testChart",
+            "request": "launch",
+            "mainClass": "UI.testChart",
+            "projectName": "karaoke_bar_management_software_Client (2)"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnHoaDon",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnHoaDon",
+            "projectName": "karaoke_bar_management_software_Client (2)"
+        },
+        {
+            "type": "java",
+            "name": "Launch fDieuHuong",
+            "request": "launch",
+            "mainClass": "UI.fDieuHuong",
+            "projectName": "karaoke_bar_management_software_Client (2)"
+        },
+        {
+            "type": "java",
+            "name": "Launch App",
+            "request": "launch",
+            "mainClass": "App.App",
+            "projectName": "karaoke_bar_management_software_Client (2)"
+        },
+        {
+            "type": "java",
+            "name": "Launch fDangNhap",
+            "request": "launch",
+            "mainClass": "UI.fDangNhap",
+            "projectName": "karaoke_bar_management_software_Client (2)"
+        },
+        {
+            "type": "java",
+            "name": "Launch pnDatPhong",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.pnDatPhong",
+            "projectName": "karaoke_bar_management_software_Client (2)"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnHoaDon",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnHoaDon",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnDichVu",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnDichVu",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnLoaiDichVu",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnLoaiDichVu",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch DialogHoaDon",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.DialogHoaDon",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnPhong",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnPhong",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnLoaiPhong",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnLoaiPhong",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnKhachHang",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnKhachHang",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch fQuanTri",
+            "request": "launch",
+            "mainClass": "UI.fQuanTri",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch PnNhanVien",
+            "request": "launch",
+            "mainClass": "UI.PanelCustom.PnNhanVien",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch fDieuHuong",
+            "request": "launch",
+            "mainClass": "UI.fDieuHuong",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch fThongTinCaNhan",
+            "request": "launch",
+            "mainClass": "UI.fThongTinCaNhan",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch fDangNhap",
+            "request": "launch",
+            "mainClass": "UI.fDangNhap",
+            "projectName": "karaoke_bar_management_software_Client"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ]
+}
