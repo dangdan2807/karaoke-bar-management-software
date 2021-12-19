@@ -235,11 +235,7 @@ public class PnLoaiDichVu extends JPanel
 		tblTableServiceType = new JTable(modelTable);
 		CustomUI.getInstance().setCustomTable(tblTableServiceType);
 		tblTableServiceType.setRowHeight(21);
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnLoaiDichVu.java
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableServiceType);
-=======
 		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableServiceType);
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnLoaiDichVu.java
 		scrTable.setBounds(10, 20, 1200, 235);
 
 		pnlTable.add(scrTable);

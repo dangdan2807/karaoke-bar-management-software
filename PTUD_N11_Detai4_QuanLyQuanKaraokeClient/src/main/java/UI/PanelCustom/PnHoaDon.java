@@ -48,29 +48,6 @@ public class PnHoaDon extends JPanel
 	private MyButton btnNextToRight, btnNextToLast, btnNextToLeft, btnNextToFirst;
 	private PnTextFiledPaging txtPaging;
 
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnHoaDon.java
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-	private ImageIcon nextIconRight = new ImageIcon(
-			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextRightIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon nextLeftIcon = new ImageIcon(
-			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextLeftIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon backIcon = CustomUI.BACK_ICON;
-	private ImageIcon billIcon = CustomUI.BILL_ICON;
-
-	private NhanVien staffLogin = null;
-	private DecimalFormat df = new DecimalFormat("#,###.##");
-	private PhongDAO roomDAO = PhongDAO.getInstance();
-	private HoaDonDAO billDAO = HoaDonDAO.getInstance();
-	private NhanVienDAO staffDAO = NhanVienDAO.getInstance();
-	private KhachHangDAO customerDAO = KhachHangDAO.getInstance();
-	private CTDichVuDAO serviceDetailDAO = CTDichVuDAO.getInstance();
-	private int lineNumberDisplayed = 6;
-=======
 	private ImageIcon bg = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
 			CustomUI.BACKGROUND)).getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
 	private ImageIcon nextIconRight = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
@@ -89,7 +66,6 @@ public class PnHoaDon extends JPanel
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private int lineNumberDisplayed = 6;
 	private SecurityManager securityManager = System.getSecurityManager();
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnHoaDon.java
 
 	/**
 	 * Khởi tạo giao diện quản lý hóa đơn
@@ -192,11 +168,7 @@ public class PnHoaDon extends JPanel
 		btnExportBill.setBounds(1065, 60, 150, 35);
 		pnlInfo.add(btnExportBill);
 
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnHoaDon.java
-		btnSearch = new MyButton(150, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(), 50, 19, 5, 5);
-=======
 		btnSearch = new MyButton(150, 35, "Tìm kiếm", gra, searchIcon.getImage(), 50, 19, 5, 5);
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnHoaDon.java
 		btnSearch.setBounds(1065, 20, 150, 35);
 		btnSearch.setToolTipText("Tìm kiếm thông tin nhân viên theo từ khóa");
 		pnlInfo.add(btnSearch);
@@ -263,11 +235,7 @@ public class PnHoaDon extends JPanel
 		tblTableBill.setLocation(620, 0);
 		tblTableBill.setRowHeight(21);
 		CustomUI.getInstance().setCustomTable(tblTableBill);
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnHoaDon.java
-		JScrollPane scrTableBill = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableBill);
-=======
 		JScrollPane scrTableBill = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableBill);
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnHoaDon.java
 		scrTableBill.setBounds(10, 20, 1200, 152);
 		pnlTableBill.add(scrTableBill);
 
@@ -333,16 +301,6 @@ public class PnHoaDon extends JPanel
 		allLoaded();
 	}
 
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnHoaDon.java
-	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new fQuanTri(staff).setVisible(true);
-		});
-	}
-
-=======
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnHoaDon.java
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -354,9 +312,6 @@ public class PnHoaDon extends JPanel
 			int selectedRow = tblTableBill.getSelectedRow();
 			if (selectedRow != -1) {
 				String billId = tblTableBill.getValueAt(selectedRow, 1).toString().trim();
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnHoaDon.java
-				HoaDon bill = billDAO.getBillByBillId(billId);
-=======
 				HoaDon bill = null;
 				try {
 					HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
@@ -364,7 +319,6 @@ public class PnHoaDon extends JPanel
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnHoaDon.java
 				if (bill != null) {
 					String message = "Bạn có muốn xuất hóa đơn dạng nào ?";
 					String title = "Xác nhận đăng xuất tài khoản";
@@ -372,12 +326,6 @@ public class PnHoaDon extends JPanel
 					int selected = JOptionPane.showOptionDialog(this, message, title, JOptionPane.DEFAULT_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 					if (selected != 2) {
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnHoaDon.java
-						NhanVien staff = staffDAO.getStaffByBillId(billId);
-						KhachHang customer = customerDAO.getCustomerByBillId(billId);
-						Phong room = roomDAO.getRoomByBillId(billId);
-						ArrayList<CTDichVu> serviceDetail = serviceDetailDAO.getServiceDetailListByBillId(billId);
-=======
 						NhanVien staff = null;
 						KhachHang customer = null;
 						Phong room = null;
@@ -395,7 +343,6 @@ public class PnHoaDon extends JPanel
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnHoaDon.java
 						bill.setPhong(room);
 						bill.setNhanVien(staff);
 						bill.setKhachHang(customer);
@@ -458,9 +405,6 @@ public class PnHoaDon extends JPanel
 		} else if (o.equals(tblTableBill)) {
 			int rowSelected = tblTableBill.getSelectedRow();
 			String billId = tblTableBill.getValueAt(rowSelected, 1).toString().trim();
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnHoaDon.java
-			ArrayList<CTDichVu> serviceDetailList = serviceDetailDAO.getServiceDetailListByBillId(billId);
-=======
 			ArrayList<CTDichVu> serviceDetailList = new ArrayList<>();
 			try {
 				CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming.lookup("rmi://localhost:1099/serviceDetailDAO");
@@ -468,7 +412,6 @@ public class PnHoaDon extends JPanel
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnHoaDon.java
 			loadServiceDetailList(serviceDetailList);
 		}
 	}
@@ -561,13 +504,6 @@ public class PnHoaDon extends JPanel
 		Date startDate = dpFromDate.getValueSqlDate();
 		Date endDate = dpToDate.getValueSqlDate();
 		String staffId = staffLogin.getMaNhanVien();
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnHoaDon.java
-		int totalLine = billDAO.getTotalLineOfBillList(startDate, endDate, staffId);
-		txtPaging.setCurrentPage(1);
-		txtPaging.setTotalPage(getLastPage(totalLine));
-		ArrayList<HoaDon> billList = billDAO.getBillListByDateAndPageNumber(startDate, endDate, staffId, 1,
-				lineNumberDisplayed);
-=======
 		txtPaging.setCurrentPage(1);
 		ArrayList<HoaDon> billList = new ArrayList<>();
 		int totalLine = 1;
@@ -580,7 +516,6 @@ public class PnHoaDon extends JPanel
 			e1.printStackTrace();
 		}
 		txtPaging.setTotalPage(getLastPage(totalLine));
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnHoaDon.java
 		loadBillList(billList);
 	}
 
@@ -655,14 +590,7 @@ public class PnHoaDon extends JPanel
 			e1.printStackTrace();
 		}
 
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnHoaDon.java
-		KhachHang customer = customerDAO.getCustomerByBillId(billId);
-		Double totalPrice = billDAO.getTotalPriceBill(billId);
-		NhanVien staff = staffDAO.getStaffByBillId(billId);
-		Phong room = PhongDAO.getInstance().getRoomByBillId(billId);
-=======
 		bill.setDsCTDichVu(serviceOrders);
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnHoaDon.java
 
 		modelTableBill.addRow(new Object[] { sttStr, addSpaceToString(String.valueOf(billId)),
 				addSpaceToString(startTimeStr), addSpaceToString(endTimeStr), addSpaceToString(room.getMaPhong()),
@@ -778,34 +706,6 @@ public class PnHoaDon extends JPanel
 		String staffId = staffLogin.getMaNhanVien();
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnHoaDon.java
-		if (validData()) {
-			if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-				totalLine = billDAO.getTotalLineOfBillList(fromDate, toDate, staffId);
-				billList = billDAO.getBillListByDateAndPageNumber(fromDate, toDate, staffId, currentPage,
-						lineNumberDisplayed);
-			} else if (searchTypeName.equalsIgnoreCase("SĐT khách hàng")) {
-				totalLine = billDAO.getTotalLineOfBillListByDateAndCustomerPhoneNumber(keyword, fromDate, toDate, keyword);
-				billList = billDAO.
-				getBillListByDateAndCustomerPhoneNumberAndPageNumber(keyword, fromDate, toDate,
-						staffId, currentPage, lineNumberDisplayed);
-			} else if (searchTypeName.equalsIgnoreCase("Tên khách hàng")) {
-				totalLine = billDAO.getTotalLineOfBillListByDateAndCustomerName(keyword, fromDate, toDate, staffId);
-				billList = billDAO.getBillListByDateAndCustomerNameAndPageNumber(keyword, fromDate, toDate, staffId,
-						currentPage, lineNumberDisplayed);
-			} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
-				totalLine = billDAO.getTotalLineOfBillListByDateAndCustomerName(keyword, fromDate, toDate, staffId);
-				billList = billDAO.getBillListByDateAndStaffNameAndPageNumber(keyword, fromDate, toDate, staffId,
-						currentPage, lineNumberDisplayed);
-			} else if (searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {
-				totalLine = billDAO.getTotalLineOfBillListByDateAndBillId(keyword, fromDate, toDate, staffId);
-				billList = billDAO.getBillListByDateAndBillIdAndPageNumber(keyword, fromDate, toDate, staffId, currentPage,
-						lineNumberDisplayed);
-			}
-			int lastPage = getLastPage(totalLine);
-			txtPaging.setTotalPage(lastPage);
-			loadBillList(billList);
-=======
 		try {
 			HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
 			if (validData()) {
@@ -835,7 +735,6 @@ public class PnHoaDon extends JPanel
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnHoaDon.java
 		}
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);

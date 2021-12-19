@@ -254,11 +254,7 @@ public class PnLoaiPhong extends JPanel
 		tblTableTypeRoom = new JTable(modelTableTypeRoom);
 		CustomUI.getInstance().setCustomTable(tblTableTypeRoom);
 		tblTableTypeRoom.setRowHeight(21);
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnLoaiPhong.java
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableTypeRoom);
-=======
 		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableTypeRoom);
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnLoaiPhong.java
 		scrTable.setBounds(10, 20, 1200, 230);
 
 		pnlTable.add(scrTable);

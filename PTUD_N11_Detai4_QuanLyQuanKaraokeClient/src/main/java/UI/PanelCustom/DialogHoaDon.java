@@ -183,7 +183,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		tblTableBillInfo.setOpaque(false);
 		tblTableBillInfo.setShowGrid(false);
 		tblTableBillInfo.setRowHeight(25);
-		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableBillInfo);
+		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableBillInfo);
 		scrTableBillInfo.setBounds(1, 1, 777, 199);
 		pnTable.add(scrTableBillInfo);
 
@@ -387,9 +387,6 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 				JOptionPane.showMessageDialog(null, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (o.equals(btnPayment)) {
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/DialogHoaDon.java
-			boolean isPaid = HoaDonDAO.getInstance().payment(bill.getMaHoaDon(), bill.getNgayGioTra());
-=======
 			boolean isPaid = false;
 			try {
 				HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
@@ -397,7 +394,6 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/DialogHoaDon.java
 			if (isPaid) {
 				paid = isPaid;
 				btnExportExcel.setEnabledCustom(true);

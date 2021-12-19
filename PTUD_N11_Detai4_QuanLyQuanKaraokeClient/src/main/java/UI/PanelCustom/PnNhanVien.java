@@ -4,13 +4,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.*;
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnNhanVien.java
-import Event_Handlers.ConvertTime;
-import Event_Handlers.InputEventHandler;
-import Event_Handlers.ValidationData;
-=======
 import Event_Handlers.*;
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnNhanVien.java
 import UI.*;
 import entity.*;
 
@@ -378,11 +372,7 @@ public class PnNhanVien extends JPanel
 		tblTableStaff = new JTable(modelTableStaff);
 		CustomUI.getInstance().setCustomTable(tblTableStaff);
 		tblTableStaff.setRowHeight(21);
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnNhanVien.java
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableStaff);
-=======
 		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableStaff);
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnNhanVien.java
 		scrTable.setBounds(10, 20, 1200, 235);
 
 		pnlTable.add(scrTable);
@@ -1037,9 +1027,6 @@ public class PnNhanVien extends JPanel
 		if (validData()) {
 			NhanVien staff = getStaffDataInForm();
 			if (staff.getChucVu().equalsIgnoreCase("Nhân viên")) {
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnNhanVien.java
-				Boolean result = staffDAO.insertStaff(staff);
-=======
 				Boolean result = false;
 				try {
 					NhanVienDAO staffDAO = (NhanVienDAO) Naming.lookup("rmi://localhost:1099/staffDAO");
@@ -1047,7 +1034,6 @@ public class PnNhanVien extends JPanel
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnNhanVien.java
 				String name = "nhân viên";
 				if (result) {
 					txtPaging.toTheLastPage();

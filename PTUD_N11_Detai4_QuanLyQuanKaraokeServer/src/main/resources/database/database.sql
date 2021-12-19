@@ -99,11 +99,8 @@ CREATE TABLE HoaDon
     ngayGioTra DATETIME,
     -- 0. chưa thanh toán | 1. đã thanh toán
     tinhTrangHD INT NOT NULL DEFAULT(0),
-<<<<<<< HEAD:src/main/resources/database/database.sql
-=======
     giaPhong MONEY NOT NULL DEFAULT(0) CHECK(giaPhong >= 0),
     tongTienHD MONEY NOT NULL DEFAULT(0) CHECK(tongTienHD >= 0),
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
     maNhanVien VARCHAR(10) NOT NULL,
     maKH VARCHAR(10) NOT NULL,
     maPhong VARCHAR(5) NOT NULL,
@@ -454,15 +451,6 @@ VALUES
 GO
 
 INSERT INTO dbo.HoaDon
-<<<<<<< HEAD:src/main/resources/database/database.sql
-    (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, maNhanVien, maKH, maPhong)
-VALUES
-    ('HD2021100100001' , '2021-10-01 10:00:00', '2021-10-01 12:00:00', 1, 'NV00000001', 'KH00000001', 'P0001'),
-    ('HD2021100100002' , '2021-10-01 15:00:00', '2021-10-01 17:00:00', 1, 'NV00000003', 'KH00000003', 'P0002'),
-    ('HD2021100100003' , '2021-10-01 15:30:00', '2021-10-01 18:00:00', 1, 'NV00000004', 'KH00000004', 'P0003'),
-    ('HD2021100200001' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 'NV00000002', 'KH00000002', 'P0004'),
-    ('HD2021100200002' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 'NV00000002', 'KH00000002', 'P0005')
-=======
     (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, giaPhong, tongTienHD, maNhanVien, maKH, maPhong)
 VALUES
     ('HD2021100100001' , '2021-10-01 10:00:00', '2021-10-01 12:00:00', 1, 80000.0, 379500.0, 'NV00000001', 'KH00000001', 'P0001'),
@@ -470,7 +458,6 @@ VALUES
     ('HD2021100100003' , '2021-10-01 15:30:00', '2021-10-01 18:00:00', 1, 80000.0, 453200.0, 'NV00000004', 'KH00000004', 'P0003'),
     ('HD2021100200001' , '2021-10-02 12:00:00', '2021-10-02 13:00:00', 1, 80000.0, 330000.0, 'NV00000002', 'KH00000002', 'P0004'),
     ('HD2021100200002' , '2021-10-02 12:00:00', '2021-10-02 13:03:00', 1, 80000.0, 330000.0, 'NV00000002', 'KH00000002', 'P0005')
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
 GO
 
 INSERT INTO dbo.CTDichVu
@@ -1012,12 +999,8 @@ CREATE PROC USP_getUncheckBillByRoomId
     @roomId VARCHAR(5)
 AS
 BEGIN
-<<<<<<< HEAD:src/main/resources/database/database.sql
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD
-=======
     SELECT TOP 1 hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
     hd.giaPhong, hd.tongTienHD, hd.maNhanVien, hd.maKH, hd.maPhong
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
     FROM dbo.HoaDon hd, dbo.Phong p
     WHERE hd.maPhong = p.maPhong
         AND p.maPhong = @roomId
@@ -1029,12 +1012,8 @@ CREATE PROC USP_getBillByBillId
     @billId VARCHAR(15)
 AS
 BEGIN
-<<<<<<< HEAD:src/main/resources/database/database.sql
-    SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD
-=======
     SELECT TOP 1 hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
     hd.giaPhong, hd.tongTienHD, hd.maNhanVien, hd.maKH, hd.maPhong
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
     FROM dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
 END
@@ -1051,12 +1030,6 @@ AS
 BEGIN
     DECLARE @isExitsBillId VARCHAR(15)
     BEGIN TRANSACTION
-<<<<<<< HEAD:src/main/resources/database/database.sql
-    INSERT INTO dbo.HoaDon
-        (maHoaDon, ngayGioDat, ngayGioTra, tinhTrangHD, maNhanVien, maKH, maPhong)
-    VALUES
-        (@billId, @orderDate, NULL, 0, @staffId, @customerId, @roomId)
-=======
     IF(@orderDate IS NULL)
     BEGIN
         INSERT INTO dbo.HoaDon
@@ -1071,7 +1044,6 @@ BEGIN
     VALUES
         (@billId, @orderDate, NULL, 0, @roomPrice, 0.0, @staffId, @customerId, @roomId)
     END
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
 
     SELECT @isExitsBillId = hd.maHoaDon
     FROM dbo.HoaDon hd
@@ -1109,20 +1081,13 @@ GO
 
 CREATE PROC USP_payment
     @billId VARCHAR(15),
-<<<<<<< HEAD:src/main/resources/database/database.sql
-=======
     @totalPriceBill MONEY,
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
     @paymentDate DATETIME
 AS
 BEGIN
     DECLARE @roomId VARCHAR(5)
     DECLARE @isExitsBillId VARCHAR(15)
     BEGIN TRANSACTION
-<<<<<<< HEAD:src/main/resources/database/database.sql
-    UPDATE dbo.HoaDon 
-        SET tinhTrangHD = 1, ngayGioTra = @paymentDate
-=======
 
     IF (@paymentDate IS NULL)
     BEGIN
@@ -1138,17 +1103,13 @@ BEGIN
         SET tinhTrangHD = 1, 
         tongTienHD = @totalPriceBill,
         ngayGioTra = @paymentDate
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
         WHERE maHoaDon = @billId
     END
 
     SELECT @isExitsBillId = hd.maHoaDon
     FROM dbo.HoaDon hd
     WHERE hd.maHoaDon = @billId
-<<<<<<< HEAD:src/main/resources/database/database.sql
-=======
         AND hd.tongTienHD = @totalPriceBill
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
         AND hd.tinhTrangHD = 1
         AND hd.ngayGioTra = @paymentDate
 
@@ -1177,68 +1138,10 @@ CREATE PROC USP_getTotalPriceBill
     @billId VARCHAR(15)
 AS
 BEGIN
-<<<<<<< HEAD:src/main/resources/database/database.sql
-    -- tính số giờ đã thuê
-    DECLARE @totalHour FLOAT = 0
-    DECLARE @startTime DATETIME
-    DECLARE @endTime DATETIME
-    DECLARE @roomID VARCHAR(5)
-    DECLARE @totalPriceRoom MONEY = 0
-    DECLARE @totalPriceService MONEY = 0
-    DECLARE @totalPriceBill MONEY = 0
-
-    SELECT @startTime = hd.ngayGioDat, @endTime = hd.ngayGioTra, @roomID = hd.maPhong
-    FROM dbo.HoaDon hd
-    WHERE hd.maHoaDon = @billId
-
-    IF (@startTime IS NULL) OR (@endTime IS NULL)
-    BEGIN
-        SELECT TOP 1 0
-    END
-    ELSE
-    BEGIN
-        SELECT @totalHour = DATEDIFF(minute, @startTime, @endTime)
-        SELECT @totalHour = @totalHour / 15 * 0.25
-        IF (@totalHour < 1.0)
-        BEGIN
-            SELECT @totalHour = 1.0
-        END
-
-        -- tính tổng tiền phòng
-        SELECT @totalPriceRoom = lp.giaTien * @totalHour
-        FROM dbo.Phong p, dbo.LoaiPhong lp
-        WHERE p.maPhong = @roomID
-            AND p.maLP = lp.maLP
-
-        IF (@totalPriceRoom IS NULL) 
-            OR (@totalPriceRoom < 0) 
-            OR (@totalPriceRoom = '')
-        BEGIN
-            SELECT @totalPriceRoom = 0
-        END
-
-        -- tính tồng tiền dịch vụ
-        SELECT @totalPriceService = SUM(ctdv.donGia * ctdv.soLuongDat)
-        FROM dbo.CTDichVu ctdv
-        WHERE ctdv.maHoaDon = @billId
-
-        IF (@totalPriceService IS NULL) 
-            OR (@totalPriceService < 0) 
-            OR (@totalPriceService = '')
-        BEGIN
-            SELECT @totalPriceService = 0
-        END
-
-        -- tính tổng tiền hóa đơn
-        SET @totalPriceBill = (@totalPriceRoom + @totalPriceService) * 1.1
-        SELECT TOP 1 @totalPriceBill
-    END
-=======
     SELECT TOP 1 hd.tongTienHD
     FROM dbo.HoaDon hd, dbo.CTDichVu ctdv
     WHERE hd.tinhTrangHD = 1
         AND hd.maHoaDon = @billId
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
 END
 GO
 
@@ -1262,14 +1165,6 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-<<<<<<< HEAD:src/main/resources/database/database.sql
-            hd.maNhanVien, hd.maKH, hd.maPhong
-            FROM dbo.HoaDon hd
-            WHERE hd.tinhTrangHD = 1
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
-=======
             hd.giaPhong, hd.tongTienHD, hd.maNhanVien, hd.maKH, hd.maPhong
             FROM dbo.HoaDon hd
             WHERE hd.tinhTrangHD = 1
@@ -1277,7 +1172,6 @@ BEGIN
                 AND hd.ngayGioDat <= DATEADD(DAY, 1, @endDate)
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             hd.giaPhong, hd.tongTienHD, hd.maNhanVien, hd.maKH, hd.maPhong
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
         )
 
         SELECT TOP (@selectRows) *
@@ -1292,15 +1186,6 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-<<<<<<< HEAD:src/main/resources/database/database.sql
-            hd.maNhanVien, hd.maKH, hd.maPhong
-            FROM dbo.HoaDon hd
-            WHERE hd.tinhTrangHD = 1
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-                AND hd.maNhanVien = @staffId
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            hd.maNhanVien, hd.maKH, hd.maPhong
-=======
             hd.giaPhong, hd.tongTienHD, hd.maNhanVien, hd.maKH, hd.maPhong
             FROM dbo.HoaDon hd
             WHERE hd.tinhTrangHD = 1
@@ -1309,7 +1194,6 @@ BEGIN
                 AND hd.maNhanVien = @staffId
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             hd.giaPhong, hd.tongTienHD, hd.maNhanVien, hd.maKH, hd.maPhong
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
         )
 
         SELECT TOP (@selectRows) *
@@ -1336,12 +1220,6 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-<<<<<<< HEAD:src/main/resources/database/database.sql
-        SELECT COUNT(*) AS totalLine
-        FROM dbo.HoaDon hd
-        WHERE hd.tinhTrangHD = 1
-            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-=======
         SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
         hd.giaPhong, hd.tongTienHD, hd.maNhanVien, hd.maKH, hd.maPhong
         FROM dbo.HoaDon hd
@@ -1384,7 +1262,6 @@ BEGIN
         WHERE hd.tinhTrangHD = 1
             AND hd.ngayGioDat >= @startDate 
             AND hd.ngayGioDat <= DATEADD(DAY, 1, @endDate)
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
     END
     ELSE
     BEGIN
@@ -1399,8 +1276,6 @@ END
 GO
 
 CREATE PROC USP_getBillListByDateAndCustomerPhoneNumberAndPageNumber
-<<<<<<< HEAD:src/main/resources/database/database.sql
-=======
     @phoneNumber VARCHAR(10),
     @startDate DATE,
     @endDate DATE,
@@ -1470,7 +1345,6 @@ END
 GO
 
 CREATE PROC USP_getTotalLineOfBillListByDateAndCustomerPhoneNumber
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
     @phoneNumber VARCHAR(10),
     @startDate DATE,
     @endDate DATE,
@@ -1491,85 +1365,6 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-<<<<<<< HEAD:src/main/resources/database/database.sql
-        ;WITH billShow AS (
-            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                kh.maKH, kh.hoTen, kh.soDienThoai
-            FROM dbo.HoaDon hd, dbo.KhachHang kh
-            WHERE hd.tinhTrangHD = 1
-                AND hd.maKH = kh.maKH
-                AND kh.soDienThoai LIKE @keyword
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            kh.maKH, kh.hoTen, kh.soDienThoai
-        )
-
-        SELECT TOP (@selectRows) *
-        FROM billShow
-        WHERE maHoaDon NOT IN (
-            SELECT TOP (@exceptRows)
-            maHoaDon
-            FROM billShow
-        )
-    END
-    ELSE
-    BEGIN
-        ;WITH billShow AS (
-            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                kh.maKH, kh.hoTen, kh.soDienThoai
-            FROM dbo.HoaDon hd, dbo.KhachHang kh
-            WHERE hd.tinhTrangHD = 1
-                AND hd.maKH = kh.maKH
-                AND kh.soDienThoai LIKE @keyword
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-                AND hd.maNhanVien = @staffId
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            kh.maKH, kh.hoTen, kh.soDienThoai
-        )
-
-        SELECT TOP (@selectRows) *
-        FROM billShow
-        WHERE maHoaDon NOT IN (
-            SELECT TOP (@exceptRows)
-            maHoaDon
-            FROM billShow
-        )
-    END
-END
-GO
-
-CREATE PROC USP_getTotalLineOfBillListByDateAndCustomerPhoneNumber
-    @phoneNumber VARCHAR(10),
-    @startDate DATE,
-    @endDate DATE,
-    @staffId VARCHAR(10)
-AS
-BEGIN
-    DECLARE @position NVARCHAR(100)
-    SELECT @position = nv.chucVu
-    FROM dbo.NhanVien nv
-    WHERE nv.maNhanVien = @staffId
-
-    DECLARE @keyword VARCHAR(12) = N'%' + @phoneNumber + N'%'
-
-    IF(@position = N'Chủ quán')
-    BEGIN
-        SELECT COUNT(*) AS totalLine
-        FROM dbo.HoaDon hd, dbo.KhachHang kh
-        WHERE hd.tinhTrangHD = 1
-            AND hd.maKH = kh.maKH
-            AND kh.soDienThoai LIKE @keyword
-            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-    END
-    ELSE
-    BEGIN
-        SELECT COUNT(*) AS totalLine
-        FROM dbo.HoaDon hd, dbo.KhachHang kh
-            WHERE hd.tinhTrangHD = 1
-                AND hd.maKH = kh.maKH
-                AND kh.soDienThoai LIKE @keyword
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-=======
         SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd, dbo.KhachHang kh
         WHERE hd.tinhTrangHD = 1
@@ -1587,7 +1382,6 @@ BEGIN
                 AND kh.soDienThoai LIKE @keyword
                 AND hd.ngayGioDat >= @startDate 
                 AND hd.ngayGioDat <= DATEADD(DAY, 1, @endDate)
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
                 AND hd.maNhanVien = @staffId
     END
 END
@@ -1615,25 +1409,15 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-<<<<<<< HEAD:src/main/resources/database/database.sql
-                kh.maKH, kh.hoTen, kh.soDienThoai
-=======
                 hd.giaPhong, hd.tongTienHD, kh.maKH, kh.hoTen, kh.soDienThoai
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
             FROM dbo.HoaDon hd, dbo.KhachHang kh
             WHERE hd.tinhTrangHD = 1
                 AND hd.maKH = kh.maKH
                 AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
-<<<<<<< HEAD:src/main/resources/database/database.sql
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            kh.maKH, kh.hoTen, kh.soDienThoai
-=======
                 AND hd.ngayGioDat >= @startDate 
                 AND hd.ngayGioDat <= DATEADD(DAY, 1, @endDate)
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             hd.giaPhong, hd.tongTienHD, kh.maKH, kh.hoTen, kh.soDienThoai
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
         )
 
         SELECT TOP (@selectRows) *
@@ -1648,27 +1432,16 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-<<<<<<< HEAD:src/main/resources/database/database.sql
-                kh.maKH, kh.hoTen, kh.soDienThoai
-=======
                 hd.giaPhong, hd.tongTienHD, kh.maKH, kh.hoTen, kh.soDienThoai
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
             FROM dbo.HoaDon hd, dbo.KhachHang kh
             WHERE hd.tinhTrangHD = 1
                 AND hd.maKH = kh.maKH
                 AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
-<<<<<<< HEAD:src/main/resources/database/database.sql
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-                AND hd.maNhanVien = @staffId
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            kh.maKH, kh.hoTen, kh.soDienThoai
-=======
                 AND hd.ngayGioDat >= @startDate 
                 AND hd.ngayGioDat <= DATEADD(DAY, 1, @endDate)
                 AND hd.maNhanVien = @staffId
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             hd.giaPhong, hd.tongTienHD, kh.maKH, kh.hoTen, kh.soDienThoai
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
         )
 
         SELECT TOP (@selectRows) *
@@ -1703,12 +1476,8 @@ BEGIN
         WHERE hd.tinhTrangHD = 1
             AND hd.maKH = kh.maKH
             AND dbo.fuConvertToUnsign(kh.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
-<<<<<<< HEAD:src/main/resources/database/database.sql
-            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-=======
             AND hd.ngayGioDat >= @startDate 
             AND hd.ngayGioDat <= DATEADD(DAY, 1, @endDate)
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
     END
     ELSE
     BEGIN
@@ -1745,25 +1514,15 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-<<<<<<< HEAD:src/main/resources/database/database.sql
-                nv.maNhanVien, nv.hoTen, nv.soDienThoai
-=======
                 hd.giaPhong, hd.tongTienHD, nv.maNhanVien, nv.hoTen, nv.soDienThoai
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
             FROM dbo.HoaDon hd, dbo.NhanVien nv
             WHERE hd.tinhTrangHD = 1
                 AND hd.maNhanVien = nv.maNhanVien
                 AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
-<<<<<<< HEAD:src/main/resources/database/database.sql
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            nv.maNhanVien, nv.hoTen, nv.soDienThoai
-=======
                 AND hd.ngayGioDat >= @startDate 
                 AND hd.ngayGioDat <= DATEADD(DAY, 1, @endDate)
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             hd.giaPhong, hd.tongTienHD, nv.maNhanVien, nv.hoTen, nv.soDienThoai
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
         )
 
         SELECT TOP (@selectRows) *
@@ -1778,27 +1537,16 @@ BEGIN
     BEGIN
         ;WITH billShow AS (
             SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-<<<<<<< HEAD:src/main/resources/database/database.sql
-                nv.maNhanVien, nv.hoTen, nv.soDienThoai
-=======
                 hd.giaPhong, hd.tongTienHD, nv.maNhanVien, nv.hoTen, nv.soDienThoai
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
             FROM dbo.HoaDon hd, dbo.NhanVien nv
             WHERE hd.tinhTrangHD = 1
                 AND hd.maNhanVien = nv.maNhanVien
                 AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
-<<<<<<< HEAD:src/main/resources/database/database.sql
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-                AND hd.maNhanVien = @staffId
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            nv.maNhanVien, nv.hoTen, nv.soDienThoai
-=======
                 AND hd.ngayGioDat >= @startDate 
                 AND hd.ngayGioDat <= DATEADD(DAY, 1, @endDate)
                 AND hd.maNhanVien = @staffId
             GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
             hd.giaPhong, hd.tongTienHD, nv.maNhanVien, nv.hoTen, nv.soDienThoai
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
         )
 
         SELECT TOP (@selectRows) *
@@ -1833,12 +1581,8 @@ BEGIN
         WHERE hd.tinhTrangHD = 1
             AND hd.maNhanVien = nv.maNhanVien
             AND dbo.fuConvertToUnsign(nv.hoTen) LIKE dbo.fuConvertToUnsign(@keyword)
-<<<<<<< HEAD:src/main/resources/database/database.sql
-            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-=======
             AND hd.ngayGioDat >= @startDate 
             AND hd.ngayGioDat <= DATEADD(DAY, 1, @endDate)
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
     END
     ELSE
     BEGIN
@@ -1855,8 +1599,6 @@ END
 GO
 
 CREATE PROC USP_getBillListByDateAndBillIdAndPageNumber
-<<<<<<< HEAD:src/main/resources/database/database.sql
-=======
     @billId VARCHAR(15),
     @startDate DATE,
     @endDate DATE,
@@ -1924,7 +1666,6 @@ END
 GO
 
 CREATE PROC USP_getTotalLineOfBillListByDateAndBillId
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
     @billId VARCHAR(15),
     @startDate DATE,
     @endDate DATE,
@@ -1943,84 +1684,6 @@ BEGIN
 
     IF(@position = N'Chủ quán')
     BEGIN
-<<<<<<< HEAD:src/main/resources/database/database.sql
-        ;WITH billShow AS (
-            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                nv.maNhanVien, nv.hoTen, nv.soDienThoai
-            FROM dbo.HoaDon hd, dbo.NhanVien nv
-            WHERE hd.tinhTrangHD = 1
-                AND hd.maNhanVien = nv.maNhanVien
-                AND hd.maHoaDon LIKE @keyword
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            nv.maNhanVien, nv.hoTen, nv.soDienThoai
-        )
-
-        SELECT TOP (@selectRows) *
-        FROM billShow
-        WHERE maHoaDon NOT IN (
-            SELECT TOP (@exceptRows)
-            maHoaDon
-            FROM billShow
-        )
-    END
-    ELSE
-    BEGIN
-        ;WITH billShow AS (
-            SELECT hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-                nv.maNhanVien, nv.hoTen, nv.soDienThoai
-            FROM dbo.HoaDon hd, dbo.NhanVien nv
-            WHERE hd.tinhTrangHD = 1
-                AND hd.maNhanVien = nv.maNhanVien
-                AND hd.maHoaDon LIKE @keyword
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-                AND hd.maNhanVien = @staffId
-            GROUP BY hd.maHoaDon, hd.ngayGioDat, hd.ngayGioTra, hd.tinhTrangHD,
-            nv.maNhanVien, nv.hoTen, nv.soDienThoai
-        )
-
-        SELECT TOP (@selectRows) *
-        FROM billShow
-        WHERE maHoaDon NOT IN (
-            SELECT TOP (@exceptRows)
-            maHoaDon
-            FROM billShow
-        )
-    END
-END
-GO
-
-CREATE PROC USP_getTotalLineOfBillListByDateAndBillId
-    @billId VARCHAR(15),
-    @startDate DATE,
-    @endDate DATE,
-    @staffId VARCHAR(10)
-AS
-BEGIN
-    DECLARE @keyword NVARCHAR(17) = N'%' + @billId + N'%'
-    DECLARE @position NVARCHAR(100)
-    SELECT @position = nv.chucVu
-    FROM dbo.NhanVien nv
-    WHERE nv.maNhanVien = @staffId
-
-    IF(@position = N'Chủ quán')
-    BEGIN
-        SELECT COUNT(*) AS totalLine
-        FROM dbo.HoaDon hd, dbo.NhanVien nv
-        WHERE hd.tinhTrangHD = 1
-            AND hd.maNhanVien = nv.maNhanVien
-            AND hd.maHoaDon LIKE @keyword
-            AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-    END
-    ELSE
-    BEGIN
-        SELECT COUNT(*) AS totalLine
-        FROM dbo.HoaDon hd, dbo.NhanVien nv
-            WHERE hd.tinhTrangHD = 1
-                AND hd.maNhanVien = nv.maNhanVien
-                AND hd.maHoaDon LIKE @keyword
-                AND hd.ngayGioDat BETWEEN @startDate AND @endDate
-=======
         SELECT COUNT(*) AS totalLine
         FROM dbo.HoaDon hd, dbo.NhanVien nv
         WHERE hd.tinhTrangHD = 1
@@ -2038,7 +1701,6 @@ BEGIN
                 AND hd.maHoaDon LIKE @keyword
                 AND hd.ngayGioDat >= @startDate 
                 AND hd.ngayGioDat <= DATEADD(DAY, 1, @endDate)
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
                 AND hd.maNhanVien = @staffId
     END
 END
@@ -2193,13 +1855,6 @@ BEGIN
         -- hóa đơn tồn tại -> cập nhật
         IF(@isExitsCTDichVu IS NOT NULL)
         BEGIN
-<<<<<<< HEAD:src/main/resources/database/database.sql
-            UPDATE dbo.CTDichVu
-                SET soLuongDat = @newQuantity,
-                    donGia = @price
-                WHERE maHoaDon = @billId
-                AND maDichVu = @serviceId
-=======
             DECLARE @newQuantity INT = @quantityOrder + @oldQuantity
             IF(@newQuantity > 0)
             BEGIN
@@ -2218,7 +1873,6 @@ BEGIN
                 UPDATE dbo.DichVu
                     SET soLuongTon = @quantityInStock - @quantityOrder
                     WHERE maDichVu = @serviceId
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
         END
         -- hóa đơn không tồn tại -> tạo mới
         ELSE
@@ -2235,20 +1889,8 @@ BEGIN
         SELECT TOP 1 1
     END
     ELSE
-<<<<<<< HEAD:src/main/resources/database/database.sql
-        BEGIN
-        INSERT INTO dbo.CTDichVu
-            (maHoaDon, maDichVu, soLuongDat, donGia)
-        VALUES
-            (@billId, @serviceId, @quantityOrder, @price)
-
-        UPDATE dbo.DichVu
-            SET soLuongTon = @quantityInStock - @quantityOrder
-            WHERE maDichVu = @serviceId
-=======
     BEGIN
         SELECT TOP 1 0
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeServer/src/main/resources/database/database.sql
     END
 END
 GO

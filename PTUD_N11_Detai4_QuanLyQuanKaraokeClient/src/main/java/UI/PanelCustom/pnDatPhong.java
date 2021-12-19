@@ -259,11 +259,7 @@ public class pnDatPhong extends JPanel
 		tblTableBill = new JTable(modelTableBill);
 		CustomUI.getInstance().setCustomTable(tblTableBill);
 
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/pnDatPhong.java
-		JScrollPane scrTableBill = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableBill);
-=======
 		JScrollPane scrTableBill = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableBill);
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/pnDatPhong.java
 		pnlOrderList.add(scrTableBill, BorderLayout.CENTER);
 		pnlBill.setLayout(new BorderLayout(0, 0));
 
@@ -542,11 +538,7 @@ public class pnDatPhong extends JPanel
 		tblTableService.setRowHeight(21);
 		CustomUI.getInstance().setCustomTable(tblTableService);
 
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/pnDatPhong.java
-		JScrollPane scrProductList = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableService);
-=======
 		JScrollPane scrProductList = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableService);
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/pnDatPhong.java
 		pnlServiceList.add(scrProductList);
 
 		btnSwitchRoom.addActionListener(this);
@@ -635,36 +627,6 @@ public class pnDatPhong extends JPanel
 				searchService(1);
 		} else if (o.equals(btnPayment)) {
 			String billID = txtBillID.getText().trim();
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/pnDatPhong.java
-			HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billID);
-			if (bill != null) {
-				Phong room = PhongDAO.getInstance().getRoomByBillId(billID);
-				bill.setPhong(room);
-				ArrayList<CTDichVu> billInfoList = CTDichVuDAO.getInstance().getServiceDetailListByBillId(billID);
-				bill.setDsCTDichVu(billInfoList);
-				long millis = System.currentTimeMillis();
-				Timestamp endTime = new Timestamp(millis);
-				bill.setNgayGioTra(endTime);
-				Double totalPriceBill = bill.tinhTongTienHoaDon();
-
-				DialogHoaDon winPayment = new DialogHoaDon(bill);
-				winPayment.setModal(true);
-				winPayment.setVisible(true);
-				Boolean isPaid = winPayment.getPaid();
-				if (isPaid) {
-					LoadRoomList(PhongDAO.getInstance().getRoomList());
-					String endTimeStr = ConvertTime.getInstance().convertTimeToString(endTime, formatTime);
-					String startTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioDat(),
-							formatTime);
-					txtEndTime.setText(endTimeStr);
-					txtTotalPriceBill.setText(df.format(totalPriceBill));
-					txtBillID.setText(String.valueOf(bill.getMaHoaDon()));
-					String customerName = KhachHangDAO.getInstance().getCustomerByBillId(bill.getMaHoaDon()).getHoTen();
-					txtCustomerName.setText(customerName);
-					txtStartTime.setText(startTimeStr);
-				} else {
-					bill.setNgayGioTra(null);
-=======
 			try {
 				PhongDAO roomDAO = (PhongDAO) Naming.lookup("rmi://localhost:1099/roomDAO");
 				HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
@@ -702,7 +664,6 @@ public class pnDatPhong extends JPanel
 					} else {
 						bill.setNgayGioTra(null);
 					}
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/pnDatPhong.java
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -1514,11 +1475,6 @@ public class pnDatPhong extends JPanel
 					if (serviceDetail == null) {
 						isUpdate = false;
 						double servicePrice = service.getGiaBan();
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/pnDatPhong.java
-						serviceInfo = new CTDichVu(orderQuantity, servicePrice, service);
-						result = CTDichVuDAO.getInstance().updateServiceDetail(serviceInfo, orderQuantity,
-								bill.getMaHoaDon());
-=======
 						serviceDetail = new CTDichVu(orderQuantity, servicePrice, service);
 						try {
 							CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
@@ -1529,7 +1485,6 @@ public class pnDatPhong extends JPanel
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/pnDatPhong.java
 						// cập nhật
 
 					} else {
@@ -1537,11 +1492,6 @@ public class pnDatPhong extends JPanel
 						newOrderQuantity = serviceDetail.getSoLuongDat() + orderQuantity;
 						if (serviceDetail.getSoLuongDat() > 0 && newQuantity >= 0) {
 							isUpdate = true;
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/pnDatPhong.java
-							serviceInfo.setSoLuongDat(newOrderQuantity);
-							result = CTDichVuDAO.getInstance().updateServiceDetail(serviceInfo, orderQuantity,
-									bill.getMaHoaDon());
-=======
 							serviceDetail.setSoLuongDat(newOrderQuantity);
 							result = false;
 							try {
@@ -1552,7 +1502,6 @@ public class pnDatPhong extends JPanel
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/pnDatPhong.java
 						} else {
 							message = "Số lượng đặt phải nhỏ hơn số lượng hiện có. Vui lòng nhập lại";
 						}
@@ -1641,10 +1590,6 @@ public class pnDatPhong extends JPanel
 						serviceDetail.setSoLuongDat(newOrderQuantity);
 						quantityInStock = service.getSoLuongTon();
 						service.setSoLuongTon(quantityInStock + cancelQuantity);
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/pnDatPhong.java
-						result = CTDichVuDAO.getInstance().updateServiceDetail(serviceDetail, (-1) * cancelQuantity,
-								bill.getMaHoaDon());
-=======
 						result = false;
 						try {
 							CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
@@ -1654,7 +1599,6 @@ public class pnDatPhong extends JPanel
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/pnDatPhong.java
 					} else {
 						message = "Dịch vụ này chưa được đặt";
 					}
@@ -1692,11 +1636,6 @@ public class pnDatPhong extends JPanel
 	/**
 	 * Lấy nút chọn khách hàng
 	 */
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/pnDatPhong.java
-	public JButton getBtnChooseCustomer() {
-		return btnChooseCustomer;
-	}
-=======
 	public MyButton getBtnChooseCustomer() {
 		return btnChooseCustomer;
 	}
@@ -1722,5 +1661,4 @@ public class pnDatPhong extends JPanel
 			((MyButton) btnRentRoom).setEnabledCustom(true);
 		}
 	}
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/pnDatPhong.java
 }

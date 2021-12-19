@@ -10,22 +10,10 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.*;
 
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnKhachHang.java
-import DAO.KhachHangDAO;
-import DAO.NhanVienDAO;
-import Event_Handlers.ConvertTime;
-import Event_Handlers.InputEventHandler;
-import Event_Handlers.ValidationData;
-import UI.fDieuHuong;
-import UI.fQuanTri;
-import entity.KhachHang;
-import entity.NhanVien;
-=======
 import DAO.*;
 import Event_Handlers.*;
 import UI.*;
 import entity.*;
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnKhachHang.java
 
 /**
  * Giao diện quản lý khách hàng của phần mềm
@@ -321,11 +309,7 @@ public class PnKhachHang extends JPanel
 		tblTableCustomer = new JTable(modelTable);
 		CustomUI.getInstance().setCustomTable(tblTableCustomer);
 		tblTableCustomer.setRowHeight(21);
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnKhachHang.java
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableCustomer);
-=======
 		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableCustomer);
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnKhachHang.java
 		scrTable.setBounds(10, 20, 1200, 235);
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);

@@ -26,41 +26,6 @@ public class CustomUI {
 	private Font fontBold = new Font("Dialog", Font.BOLD, 14);
 	private Font fontNormal = new Font("Dialog", Font.PLAIN, 14);
 
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/CustomUI.java
-	private static String pathImg = "src/main/resources/images/";
-	public static String PATH_EXPORT_BILL = System.getProperty("user.dir") + "/src/main/resources/bill/";
-	public static final ImageIcon ADD_ICON = new ImageIcon(pathImg + "blueAdd_16.png");
-	public static final ImageIcon TRASH_ICON = new ImageIcon(pathImg + "trash_16.png");
-	public static final ImageIcon REFRESH_ICON = new ImageIcon(pathImg + "refresh_16.png");
-	public static final ImageIcon BACK_ICON = new ImageIcon(pathImg + "back_16.png");
-	public static final ImageIcon SEARCH_ICON = new ImageIcon(pathImg + "search_16.png");
-	public static final ImageIcon LOGOUT_ICON = new ImageIcon(pathImg + "logout_16.png");
-	public static final ImageIcon LOGIN_ICON = new ImageIcon(pathImg + "login_16.png");
-	public static final ImageIcon UPDATE_ICON = new ImageIcon(pathImg + "update_16.png");
-	public static final ImageIcon TRANSFER_ICON = new ImageIcon(pathImg + "transfer_16.png");
-	public static final ImageIcon PAYMENT_ICON = new ImageIcon(pathImg + "payment_16.png");
-	public static final ImageIcon USER_ICON = new ImageIcon(pathImg + "user_16.png");
-	public static final ImageIcon MAN_ICON = new ImageIcon(pathImg + "man_512.png");
-	public static final ImageIcon WOMAN_ICON = new ImageIcon(pathImg + "woman_512.png");
-	public static final ImageIcon BACKGROUND = new ImageIcon(pathImg + "bgBlue.jpg");
-	public static final ImageIcon BACKGROUND_LOGIN = new ImageIcon(pathImg + "anhChen_400.png");
-	public static final ImageIcon ROOM_ICON = new ImageIcon(pathImg + "micro_32.png");
-	public static final ImageIcon PROFILE_ICON = new ImageIcon(pathImg + "profile_512.png");
-	public static final ImageIcon SELL_ICON = new ImageIcon(pathImg + "money_512.png");
-	public static final ImageIcon MANAGER_ICON = new ImageIcon(pathImg + "administration_512.png");
-	public static final ImageIcon UPDATE_PROFILE_ICON = new ImageIcon(pathImg + "update_profile_16.png");
-	public static final ImageIcon RENT_ROOM_ICON = new ImageIcon(pathImg + "rent_room_16.png");
-	public static final ImageIcon PDF_ICON = new ImageIcon(pathImg + "pdf_16.png");
-	public static final ImageIcon EXCEL_ICON = new ImageIcon(pathImg + "excel_16.png");
-	public static final ImageIcon BILL_ICON = new ImageIcon(pathImg + "bill_16.png");
-	public static final ImageIcon LOGO_ICON = new ImageIcon(pathImg + "Logo.png");
-	public static final ImageIcon LOGO_APP = new ImageIcon(pathImg + "login_logo_512.png");
-	public static final ImageIcon NEXT_RIGHT_ICON = new ImageIcon(pathImg + "nextRight.png");
-	public static final ImageIcon DOUBLE_NEXT_RIGHT_ICON = new ImageIcon(pathImg + "doubleNextRight.png");
-	public static final ImageIcon NEXT_LEFT_ICON = new ImageIcon(pathImg + "nextLeft.png");
-	public static final ImageIcon DOUBLE_NEXT_LEFT_ICON = new ImageIcon(pathImg + "doubleNextLeft.png");
-	public static final ImageIcon CHOOSE_CUSTOMER_ICON = new ImageIcon(pathImg + "check.png");
-=======
 	private static String pathImg = "/resources/images/";
 	// private static String pathfont = "/resources/fonts/";
 	public static String PATH_EXPORT_BILL = System.getProperty("user.dir") + "/src/main/resources/bill/";
@@ -96,7 +61,6 @@ public class CustomUI {
 	public static final String NEXT_LEFT_ICON = pathImg + "nextLeft.png";
 	public static final String DOUBLE_NEXT_LEFT_ICON = pathImg + "doubleNextLeft.png";
 	public static final String DOLLAR_ICON = pathImg + "dollar.png";
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/CustomUI.java
 
 	/**
 	 * singleton {@code CustomUI}
@@ -321,19 +285,11 @@ public class CustomUI {
 	}
 
 	/**
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/CustomUI.java
-	 * tùy chỉnh nhanh {@code JScrollPane} không thể scroll
-	 * 
-	 * @param tbl {@code JTable}: table nhận JScrollPane tùy chỉnh
-	 */
-	public JScrollPane setCustomScrollPaneNoScroll(JTable tbl) {
-=======
 	 * tùy chỉnh nhanh {@code JScrollPane} không hỗ trợ cuộn
 	 * 
 	 * @param tbl {@code JTable}: table nhận JScrollPane tùy chỉnh
 	 */
 	public JScrollPane setCustomScrollPaneNotScroll(JTable tbl) {
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/CustomUI.java
 		JScrollPane src = new JScrollPane(tbl, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		src.setOpaque(false);
@@ -343,11 +299,7 @@ public class CustomUI {
 	}
 
 	/**
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/CustomUI.java
-	 * tùy chỉnh nhanh {@code JScrollPane} có thể scroll
-=======
 	 * tùy chỉnh nhanh {@code JScrollPane} có hỗ trợ cuộn
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/CustomUI.java
 	 * 
 	 * @param tbl {@code JTable}: table nhận JScrollPane tùy chỉnh
 	 */

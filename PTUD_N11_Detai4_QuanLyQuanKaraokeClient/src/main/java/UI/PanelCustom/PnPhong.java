@@ -263,11 +263,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		};
 		CustomUI.getInstance().setCustomTable(tblTableRoom);
 		tblTableRoom.setRowHeight(21);
-<<<<<<< HEAD:src/main/java/UI/PanelCustom/PnPhong.java
-		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNoScroll(tblTableRoom);
-=======
 		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableRoom);
->>>>>>> RMI:PTUD_N11_Detai4_QuanLyQuanKaraokeClient/src/main/java/UI/PanelCustom/PnPhong.java
 		scrTable.setBounds(10, 20, 1200, 235);
 
 		pnlTable.add(scrTable);
