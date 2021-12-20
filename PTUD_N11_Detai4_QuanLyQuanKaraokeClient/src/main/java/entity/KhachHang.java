@@ -1,6 +1,7 @@
 package entity;
 
 import java.sql.*;
+import java.util.Calendar;
 
 /**
  * Lớp khách hàng
@@ -173,6 +174,14 @@ public class KhachHang {
 	 * Tạo 1 {@code KhachHang} không tham số
 	 */
 	public KhachHang() {
+		this.cmnd = "";
+		this.gioiTinh = true;
+		this.hoTen = "";
+		this.maKH = "";
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(1900, 0, 1);
+		this.ngaySinh = new Date((calendar.getTimeInMillis()));
+		this.soDienThoai = "";
 	}
 
 	/**
@@ -182,8 +191,8 @@ public class KhachHang {
 	 * @throws SQLException
 	 */
 	public KhachHang(ResultSet rs) throws SQLException {
-		this(rs.getString("maKH"), rs.getString("cmndKH"), rs.getString("hoTenKH"), rs.getString("sdtKH"),
-				rs.getDate("ngaySinhKH"), rs.getBoolean("gioiTinhKH"));
+		this(rs.getString("maKH"), rs.getString("cmnd"), rs.getString("hoTen"), rs.getString("soDienThoai"),
+				rs.getDate("ngaySinh"), rs.getBoolean("gioiTinh"));
 	}
 
 	@Override

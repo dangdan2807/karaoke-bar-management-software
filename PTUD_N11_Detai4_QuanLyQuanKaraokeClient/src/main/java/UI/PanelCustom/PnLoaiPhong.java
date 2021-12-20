@@ -367,6 +367,8 @@ public class PnLoaiPhong extends JPanel
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+				if (oldRoomType == null)
+					oldRoomType = new LoaiPhong();
 				String message = "";
 				int selectedRow = tblTableTypeRoom.getSelectedRow();
 				String name = "loại phòng";

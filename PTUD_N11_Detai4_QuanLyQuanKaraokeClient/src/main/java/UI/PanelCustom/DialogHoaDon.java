@@ -74,6 +74,8 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		if(staff == null) 
+			staff = new NhanVien();
 		bill.setNhanVien(staff);
 		bill.setKhachHang(customer);
 		bill.setDsCTDichVu(serviceOrders);

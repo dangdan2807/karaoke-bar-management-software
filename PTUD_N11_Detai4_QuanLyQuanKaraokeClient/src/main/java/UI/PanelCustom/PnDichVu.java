@@ -620,6 +620,8 @@ public class PnDichVu extends JPanel
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		if (serviceType == null)
+			serviceType = new LoaiDichVu(serviceTypeName);
 		return new DichVu(serviceId, staffName, price, quantity, serviceType);
 	}
 

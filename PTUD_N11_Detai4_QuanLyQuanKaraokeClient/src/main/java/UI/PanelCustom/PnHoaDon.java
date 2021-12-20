@@ -343,6 +343,10 @@ public class PnHoaDon extends JPanel
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
+						if (staff == null)
+							staff = new NhanVien();
+						if (room == null)
+							room = new Phong();
 						bill.setPhong(room);
 						bill.setNhanVien(staff);
 						bill.setKhachHang(customer);
@@ -589,6 +593,10 @@ public class PnHoaDon extends JPanel
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		if (staff == null)
+			staff = new NhanVien();
+		if (room == null)
+			room = new Phong();
 
 		bill.setDsCTDichVu(serviceOrders);
 

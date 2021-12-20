@@ -831,6 +831,8 @@ public class PnNhanVien extends JPanel
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			if (staff == null)
+				staff = new NhanVien();
 			String password = staff.getTaiKhoan().getMatKhau();
 			account.setMatKhau(password);
 		}

@@ -111,13 +111,15 @@ public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeLis
 			}
         } else if (o.equals(btnPnChooseCustomer)) {
             String selectedCustomerId = pnlCustomer.getSelectedCustomerId();
-            KhachHang selectedCustomer = null;
+            KhachHang selectedCustomer = new KhachHang();
             try {
                 KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
                 selectedCustomer = customerDAO.getCustomerById(selectedCustomerId);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
+            if (selectedCustomer == null)
+                selectedCustomer = new KhachHang();
             pnlRentRoom.setSelectedCustomer(selectedCustomer);
             tabMain.setSelectedIndex(0);
         }

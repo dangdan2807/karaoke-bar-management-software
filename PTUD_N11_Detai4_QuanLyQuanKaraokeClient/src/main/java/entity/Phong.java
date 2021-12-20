@@ -119,6 +119,10 @@ public class Phong {
 	 * Tạo 1 {@code Phong} không tham số
 	 */
 	public Phong() {
+		this.maPhong = "";
+		this.tinhTrangP = 0;
+		this.viTri = "";
+		this.loaiPhong = new LoaiPhong();
 	}
 
 	/**

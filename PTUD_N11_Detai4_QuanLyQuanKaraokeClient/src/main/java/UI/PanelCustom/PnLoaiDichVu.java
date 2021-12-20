@@ -349,6 +349,9 @@ public class PnLoaiDichVu extends JPanel
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+				if(serviceTypeOld == null) {
+					serviceTypeOld = new LoaiDichVu();
+				}
 				String message = "";
 				String name = "loại dịch vụ";
 				int selectedRow = tblTableServiceType.getSelectedRow();

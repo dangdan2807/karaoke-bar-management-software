@@ -102,6 +102,9 @@ public class TaiKhoan {
 	 * Tạo 1 {@code TaiKhoan} không tham số
 	 */
 	public TaiKhoan() {
+		this.matKhau = "";
+		this.tenDangNhap = "";
+		this.tinhTrangTK = false;
 	}
 
 	/**

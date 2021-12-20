@@ -712,13 +712,16 @@ public class PnKhachHang extends JPanel
 	private void updateStaffInfo() {
 		if (validData()) {
 			KhachHang customer = getCustomerDataInForm();
-			String staffName = "";
+			KhachHang oldCustomer = null;
 			try {
 				KhachHangDAO customerDAO = (KhachHangDAO) Naming.lookup("rmi://localhost:1099/customerDAO");
-				staffName = customerDAO.getCustomerById(customer.getMaKH()).getHoTen();
+				oldCustomer = customerDAO.getCustomerById(customer.getMaKH());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			if (oldCustomer == null)
+				oldCustomer = new KhachHang();
+			String staffName = oldCustomer.getHoTen();
 			String message = "";
 			int selectedRow = tblTableCustomer.getSelectedRow();
 			String name = "khách hàng";

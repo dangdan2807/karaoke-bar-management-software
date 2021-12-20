@@ -592,6 +592,9 @@ public class pnDatPhong extends JPanel
 					HoaDonDAO billDAO = (HoaDonDAO) Naming.lookup("rmi://localhost:1099/billDAO");
 
 					Phong room = roomDAO.getRoomByRoomId(roomID);
+					if (room == null) {
+						room = new Phong();
+					}
 					String NewBillId = createNewBillId(startTime);
 					Double roomPrice = room.getLoaiPhong().getGiaTien();
 					HoaDon bill = new HoaDon(NewBillId, startTime, HoaDonDAO.UNPAID, roomPrice, staffLogin,
@@ -636,6 +639,8 @@ public class pnDatPhong extends JPanel
 				HoaDon bill = billDAO.getBillByBillId(billID);
 				if (bill != null) {
 					Phong room = roomDAO.getRoomByBillId(billID);
+					if(room == null)
+						room = new Phong();
 					bill.setPhong(room);
 					String billId = txtBillID.getText().trim();
 					ArrayList<CTDichVu> billInfoList = serviceDetailDAO.getServiceDetailListByBillId(billId);
@@ -929,6 +934,8 @@ public class pnDatPhong extends JPanel
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		if (room == null)
+			room = new Phong();
 		String statusP = convertRoomStatus(room.getTinhTrangP());
 		String roomID = room.getMaPhong();
 		String btnName = "<html><p style='text-align: center;'> " + roomID
@@ -1065,6 +1072,8 @@ public class pnDatPhong extends JPanel
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
+					if (roomActiveE == null)
+						roomActiveE = new Phong();
 					selectedRoomId = roomActiveE.getMaPhong();
 					txtRoomLocation.setText(roomActiveE.getViTri());
 					txtRoomTypeName.setText(roomActiveE.getLoaiPhong().getTenLP());
@@ -1103,6 +1112,8 @@ public class pnDatPhong extends JPanel
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
+					if (roomActiveE == null)
+						roomActiveE = new Phong();
 					String status = convertRoomStatus(roomActiveE.getTinhTrangP());
 					switch (status) {
 						case "Trống":
@@ -1475,7 +1486,7 @@ public class pnDatPhong extends JPanel
 					if (serviceDetail == null) {
 						isUpdate = false;
 						double servicePrice = service.getGiaBan();
-						serviceDetail = new CTDichVu(orderQuantity, servicePrice, service);
+						serviceDetail = new CTDichVu(orderQuantity, servicePrice, service, bill);
 						try {
 							CTDichVuDAO serviceDetailDAO = (CTDichVuDAO) Naming
 									.lookup("rmi://localhost:1099/serviceDetailDAO");

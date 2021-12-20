@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch test",
+            "request": "launch",
+            "mainClass": "DAO.test",
+            "projectName": "PTUD_N11_Detai4_QuanLyQuanKaraokeClient"
+        },
+        {
+            "type": "java",
             "name": "Launch PnKhachHang",
             "request": "launch",
             "mainClass": "UI.PanelCustom.PnKhachHang",

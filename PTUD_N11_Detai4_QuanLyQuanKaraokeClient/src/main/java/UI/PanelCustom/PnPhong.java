@@ -371,6 +371,8 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+				if (oldRoomType == null)
+					oldRoomType = new Phong();
 				String message = "";
 				int selectedRow = tblTableRoom.getSelectedRow();
 				String name = "phòng";
@@ -662,6 +664,9 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 			roomType = roomTypeDAO.getRoomTypeByName(roomTypeName);
 		} catch (Exception e1) {
 			e1.printStackTrace();
+		}
+		if (roomType == null) {
+			roomType = new LoaiPhong();
 		}
 		if (roomId.equals("") || roomId.length() <= 0) {
 			roomId = createNewRoomID();

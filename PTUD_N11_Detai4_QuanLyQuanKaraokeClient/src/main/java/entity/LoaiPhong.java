@@ -119,6 +119,10 @@ public class LoaiPhong {
 	 * Tạo 1 loại phòng không tham số
 	 */
 	public LoaiPhong() {
+		this.maLP = "";
+		this.tenLP = "";
+		this.sucChua = 0;
+		this.giaTien = 0.0;
 	}
 
 	/**

@@ -372,7 +372,7 @@ public class HoaDon {
 	 *         </ul>
 	 */
 	public boolean themCTDichVu(DichVu dichVu, int soLuongDat, double donGia) {
-		CTDichVu ctDV = new CTDichVu(soLuongDat, donGia, dichVu);
+		CTDichVu ctDV = new CTDichVu(soLuongDat, donGia, dichVu, this);
 		if (dsCTDichVu.contains(ctDV)) {
 			return false;
 		}

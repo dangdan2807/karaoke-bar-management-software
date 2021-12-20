@@ -77,6 +77,8 @@ public class LoaiDichVu {
 	 * Tạo 1 {@code LoaiDichVu} không tham số
 	 */
 	public LoaiDichVu() {
+		this.maLDV = "";
+		this.tenLDV = "";
 	}
 
 	/**
