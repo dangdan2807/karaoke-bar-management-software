@@ -155,29 +155,6 @@ public class HoaDonDAO {
     }
 
     /**
-     * Lấy danh sách hóa đơn trong khoảng ngày được chọn và tìm theo mã nhân viên
-     * 
-     * @param fromDate {@code java.sql.Date}: ngày bắt đầu thống kê
-     * @param toDate   {@code java.sql.Date}: ngày kết thúc thống kê
-     * @param staffId  {@code String}: mã nhân viên
-     * @return {@code ArrayList<HoaDon>}: danh sách hóa đơn
-     */
-    public ArrayList<HoaDon> getBillListByDate(Date fromDate, Date toDate, String staffId) {
-        String query = "{CALL USP_getBillListByDate( ? , ? , ? )}";
-        ArrayList<HoaDon> dataList = new ArrayList<HoaDon>();
-        Object[] params = { fromDate, toDate, staffId };
-        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
-        try {
-            while (rs.next()) {
-                dataList.add(new HoaDon(rs));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dataList;
-    }
-
-    /**
      * Lấy danh sách hóa đơn trong khoảng ngày được chọn và tìm theo mã nhân viên và
      * phân trang
      * 
@@ -396,10 +373,10 @@ public class HoaDonDAO {
      * @param staffId  {@code String}: mã nhân viên
      * @return {@code int}: số lượng hóa đơn
      */
-    public int getTotalLineOfBillListByDateAndBillId(String BillId, Date fromDate, Date toDate,
+    public int getTotalLineOfBillListByDateAndBillId(String billId, Date fromDate, Date toDate,
             String staffId) {
         String query = "{CALL USP_getTotalLineOfBillListByDateAndBillId( ? , ? , ? , ? )}";
-        Object[] params = { BillId, fromDate, toDate, staffId };
+        Object[] params = { billId, fromDate, toDate, staffId };
         Object obj = DataProvider.getInstance().executeScalar(query, params);
         int result = obj != null ? (int) obj : 0;
         return result;

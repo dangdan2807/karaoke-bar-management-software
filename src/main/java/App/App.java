@@ -16,7 +16,7 @@ import UI.fDangNhap;
  * Lần cập nhật cuối: 18/11/2021
  * <p>
  */
-public class Client {
+public class App {
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeLater(() -> {
 			fDangNhap login = new fDangNhap();

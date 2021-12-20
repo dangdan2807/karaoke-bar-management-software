@@ -191,7 +191,7 @@ public class PhongDAO {
      */
     public boolean updateRoomStatus(String roomId, int status) {
         String query = "{CALL USP_updateRoomStatus( ? , ? )}";
-        Object[] params = new Object[] { roomId, status };
+        Object[] params = new Object[] { status, roomId };
         Object obj = DataProvider.getInstance().executeNonQuery(query, params);
         int result = obj != null ? (int) obj : 0;
         return result > 0;
@@ -380,5 +380,43 @@ public class PhongDAO {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * Lấy số lượng phòng theo mã phòng
+     * 
+     * @param roomID {@code String}: mã phòng
+     * @return {@code int}: số lượng phòng
+     */
+    public int getTotalLineOfRoomListByRoomID(String roomID) {
+        String query = "{CALL USP_getTotalLineOfRoomListByRoomID( ? )}";
+        Object[] params = new Object[] { roomID };
+        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
+
+    /**
+     * Lấy danh sách phòng theo mã phòng
+     * 
+     * @param roomId            {@code String}: mã phòng
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<Phong>}: danh sách phòng
+     */
+    public ArrayList<Phong> getRoomListByRoomIDAndPageNumber(String roomId, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getRoomListByRoomIDAndPageNumber( ? , ? , ? )}";
+        Object[] params = new Object[] { roomId, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
+        ArrayList<Phong> dataList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                dataList.add(new Phong(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataList;
     }
 }

@@ -167,6 +167,7 @@ public class PnLoaiPhong extends JPanel
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên loại phòng");
 		cboSearch.addItem("Giá cho thuê");
+		cboSearch.addItem("Mã loại phòng");
 		cboSearch.setToolTipText("Loại tìm kiếm");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
@@ -685,19 +686,29 @@ public class PnLoaiPhong extends JPanel
 		String keyword = "";
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
-		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			totalLine = roomTypeDAO.getTotalLineOfRoomTypeList();
-			roomTypeList = roomTypeDAO.getRoomTypeListAndPageNumber(currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Tên loại phòng")) {
-			keyword = txtKeyWord.getText().trim();
-			totalLine = roomTypeDAO.getTotalLineOfRoomTypeListByName(keyword);
-			roomTypeList = roomTypeDAO.getRoomTypeListByNameAndPageNumber(keyword, currentPage,
-					lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Giá cho thuê")) {
-			String priceStr = spnSearchPrice.getValue().toString().replaceAll("\\.[0]+$", "");
-			totalLine = roomTypeDAO.getTotalLineOfRoomTypeListByPrice(priceStr);
-			roomTypeList = roomTypeDAO.getRoomTypeListByPriceAndPageNumber(priceStr, currentPage,
-					lineNumberDisplayed);
+		switch (searchTypeName) {
+			case "Tất cả":
+				totalLine = roomTypeDAO.getTotalLineOfRoomTypeList();
+				roomTypeList = roomTypeDAO.getRoomTypeListAndPageNumber(currentPage, lineNumberDisplayed);
+				break;
+			case "Tên loại phòng":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = roomTypeDAO.getTotalLineOfRoomTypeListByName(keyword);
+				roomTypeList = roomTypeDAO.getRoomTypeListByNameAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
+				break;
+			case "Giá cho thuê":
+				String priceStr = spnSearchPrice.getValue().toString().replaceAll("\\.[0]+$", "");
+				totalLine = roomTypeDAO.getTotalLineOfRoomTypeListByPrice(priceStr);
+				roomTypeList = roomTypeDAO.getRoomTypeListByPriceAndPageNumber(priceStr, currentPage,
+						lineNumberDisplayed);
+				break;
+			case "Mã loại phòng":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = roomTypeDAO.getTotalLineOfRoomTypeListById(keyword);
+				roomTypeList = roomTypeDAO.getRoomTypeListByIdAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
+				break;
 		}
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);

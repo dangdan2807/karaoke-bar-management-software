@@ -392,6 +392,9 @@ public class HoaDon {
 			long difference = ngayGioTra.getTime() - ngayGioDat.getTime();
 			soPhut = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
 		}
+		if(soPhut <= 60) {
+			soPhut = 60;
+		}
 		soPhut = (int) soPhut / 15;
 		return soPhut * 1.0 / 4;
 	}

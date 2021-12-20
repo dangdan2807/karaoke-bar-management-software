@@ -245,6 +245,7 @@ public class PnKhachHang extends JPanel
 		cboSearch.addItem("Tên khách hàng");
 		cboSearch.addItem("Số điện thoại");
 		cboSearch.addItem("Giới tính");
+		cboSearch.addItem("Mã khách hàng");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(91, 11, 200, 20);
@@ -797,30 +798,41 @@ public class PnKhachHang extends JPanel
 		String keyword = "";
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
-		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			totalLine = customerDAO.getTotalLineOfCustomerList();
-			customerList = customerDAO.getCustomerListAndPageNumber(currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Tên khách hàng")) {
-			keyword = txtKeyWord.getText().trim();
-			totalLine = customerDAO.getTotalLineOfCustomerListByName(keyword);
-			customerList = customerDAO.getCustomerListByNameAndPageNumber(keyword, currentPage,
-					lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-			keyword = txtKeyWord.getText().trim().replace("-", "");
-			if (keyword.matches("^[\\d]{0,10}$")) {
-				totalLine = customerDAO.getTotalLineOfCustomerListByPhoneNumber(keyword);
-				customerList = customerDAO.getCustomerListByPhoneNumberAndPageNumber(keyword, currentPage,
+		switch (searchTypeName) {
+			case "Tất cả":
+				totalLine = customerDAO.getTotalLineOfCustomerList();
+				customerList = customerDAO.getCustomerListAndPageNumber(currentPage, lineNumberDisplayed);
+				break;
+			case "Tên khách hàng":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = customerDAO.getTotalLineOfCustomerListByName(keyword);
+				customerList = customerDAO.getCustomerListByNameAndPageNumber(keyword, currentPage,
 						lineNumberDisplayed);
-			} else {
-				String message = "Sổ điện phải phải là số, không được quá 10 số";
-				showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
-			}
-		} else if (searchTypeName.equalsIgnoreCase("Giới tính")) {
-			String genderStr = cboSearchGender.getSelectedItem().toString().trim();
-			boolean gender = genderStr.equalsIgnoreCase("Nữ") ? true : false;
-			totalLine = customerDAO.getTotalLineOfCustomerListByGender(gender);
-			customerList = customerDAO.getCustomerListByGenderAndPageNumber(gender, currentPage,
-					lineNumberDisplayed);
+				break;
+			case "Số điện thoại":
+				keyword = txtKeyWord.getText().trim().replace("-", "");
+				if (keyword.matches("^[\\d]{0,10}$")) {
+					totalLine = customerDAO.getTotalLineOfCustomerListByPhoneNumber(keyword);
+					customerList = customerDAO.getCustomerListByPhoneNumberAndPageNumber(keyword, currentPage,
+							lineNumberDisplayed);
+				} else {
+					String message = "Sổ điện phải phải là số, không được quá 10 số";
+					showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+				}
+				break;
+			case "Giới tính":
+				String genderStr = cboSearchGender.getSelectedItem().toString().trim();
+				boolean gender = genderStr.equalsIgnoreCase("Nữ") ? true : false;
+				totalLine = customerDAO.getTotalLineOfCustomerListByGender(gender);
+				customerList = customerDAO.getCustomerListByGenderAndPageNumber(gender, currentPage,
+						lineNumberDisplayed);
+				break;
+			case "Mã khách hàng":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = customerDAO.getTotalLineOfCustomerListById(keyword);
+				customerList = customerDAO.getCustomerListByIdAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
+				break;
 		}
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);

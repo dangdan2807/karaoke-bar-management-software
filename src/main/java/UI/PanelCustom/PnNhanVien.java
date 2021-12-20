@@ -277,6 +277,7 @@ public class PnNhanVien extends JPanel
 		cboSearch.addItem("Tên nhân viên");
 		cboSearch.addItem("Số điện thoại");
 		cboSearch.addItem("Chức vụ");
+		cboSearch.addItem("Mã nhân viên");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		cboSearch.setToolTipText("Chọn loại thông tin cần lọc");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
@@ -568,7 +569,9 @@ public class PnNhanVien extends JPanel
 		} else if (o.equals(txtBFieldSearchPosition)) {
 			cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldPosition)) {
-			cboPosition.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+			if (cboPosition.isEnabled()) {
+				cboPosition.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+			}
 		}
 	}
 
@@ -612,7 +615,8 @@ public class PnNhanVien extends JPanel
 			}
 			if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
 				handler.enterOnlyNumbersAndLimitInput(key, txtKeyWord, 10);
-			} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
+			} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên") ||
+					searchTypeName.equalsIgnoreCase("Mã nhân viên")) {
 				handler.characterInputLimit(key, txtKeyWord, 100);
 			}
 		} else if (o.equals(txtPhoneNumber)) {
@@ -923,35 +927,45 @@ public class PnNhanVien extends JPanel
 		String keyword = "";
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
-		if (searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
-			keyword = "Đang làm";
-			if (cboSearchType.getSelectedItem() != null) {
-				keyword = cboSearchType.getSelectedItem().toString().trim();
-			}
-			totalLine = staffDAO.getTotalLineOfStaffListByWorkingStatus(keyword);
-			staffList = staffDAO.getStaffListByWorkingStatusAndPageNumber(keyword, currentPage,
-					lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
-			keyword = txtKeyWord.getText().trim();
-			totalLine = staffDAO.getTotalLineByStaffName(keyword);
-			staffList = staffDAO.getStaffListByStaffNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-			keyword = txtKeyWord.getText().trim();
-			if (keyword.matches("^[\\d]{0,10}$")) {
-				totalLine = staffDAO.getTotalLineByPhoneNumber(keyword);
-				staffList = staffDAO.getStaffListByPhoneNumberAndPageNumber(keyword, currentPage,
+		switch (searchTypeName) {
+			case "Trạng thái làm việc":
+				keyword = "Đang làm";
+				if (cboSearchType.getSelectedItem() != null) {
+					keyword = cboSearchType.getSelectedItem().toString().trim();
+				}
+				totalLine = staffDAO.getTotalLineOfStaffListByWorkingStatus(keyword);
+				staffList = staffDAO.getStaffListByWorkingStatusAndPageNumber(keyword, currentPage,
 						lineNumberDisplayed);
-			} else {
-				String message = "Sổ điện phải phải là số, không được quá 10 số";
-				showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
-			}
-		} else if (searchTypeName.equalsIgnoreCase("Chức vụ")) {
-			keyword = "Nhân viên";
-			if (cboSearchType.getSelectedItem() != null) {
-				keyword = cboSearchType.getSelectedItem().toString().trim();
-			}
-			totalLine = staffDAO.getTotalLineByPosition(keyword);
-			staffList = staffDAO.getStaffListByPositionAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
+			case "Tên nhân viên":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = staffDAO.getTotalLineByStaffName(keyword);
+				staffList = staffDAO.getStaffListByStaffNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
+			case "Số điện thoại":
+				keyword = txtKeyWord.getText().trim();
+				if (keyword.matches("^[\\d]{0,10}$")) {
+					totalLine = staffDAO.getTotalLineByPhoneNumber(keyword);
+					staffList = staffDAO.getStaffListByPhoneNumberAndPageNumber(keyword, currentPage,
+							lineNumberDisplayed);
+				} else {
+					String message = "Sổ điện phải phải là số, không được quá 10 số";
+					showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+				}
+				break;
+			case "Chức vụ":
+				keyword = "Nhân viên";
+				if (cboSearchType.getSelectedItem() != null) {
+					keyword = cboSearchType.getSelectedItem().toString().trim();
+				}
+				totalLine = staffDAO.getTotalLineByPosition(keyword);
+				staffList = staffDAO.getStaffListByPositionAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
+			case "Mã nhân viên":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = staffDAO.getTotalLineByStaffId(keyword);
+				staffList = staffDAO.getStaffListByStaffIdAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
 		}
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);

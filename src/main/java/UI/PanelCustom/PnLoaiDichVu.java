@@ -158,6 +158,7 @@ public class PnLoaiDichVu extends JPanel
 		cboSearch = new JComboBox<String>();
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên loại dịch vụ");
+		cboSearch.addItem("Mã loại dịch vụ");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(88, 11, 200, 20);
@@ -383,7 +384,7 @@ public class PnLoaiDichVu extends JPanel
 			txtKeyWord.setText("");
 			if (searchType.equalsIgnoreCase("Tất cả")) {
 				CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
-			} else if (searchType.equalsIgnoreCase("Tên loại dịch vụ")) {
+			} else {
 				CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
 			}
 			removeSelectionInterval();
@@ -621,12 +622,27 @@ public class PnLoaiDichVu extends JPanel
 	 */
 	private void searchEventUsingBtnSearch() {
 		ArrayList<LoaiDichVu> serviceTypeList = null;
+		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		String keyword = txtKeyWord.getText().trim();
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
-		totalLine = serviceTypeDAO.getTotalLineOfServiceTypeListByName(keyword);
-		serviceTypeList = serviceTypeDAO.getServiceTypeListByNameAndPageNumber(keyword, currentPage,
-				lineNumberDisplayed);
+		switch (searchTypeName) {
+			case "Tất cả":
+				totalLine = serviceTypeDAO.getTotalLineOfServiceTypeList();
+				serviceTypeList = serviceTypeDAO.getServiceTypeListAndPageNumber(currentPage,
+						lineNumberDisplayed);
+				break;
+			case "Tên loại dịch vụ":
+				totalLine = serviceTypeDAO.getTotalLineOfServiceTypeListByName(keyword);
+				serviceTypeList = serviceTypeDAO.getServiceTypeListByNameAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
+				break;
+			case "Mã loại dịch vụ":
+				totalLine = serviceTypeDAO.getTotalLineOfServiceTypeListById(keyword);
+				serviceTypeList = serviceTypeDAO.getServiceTypeListByIdAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
+				break;
+		}
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);
 		loadServiceTypeList(serviceTypeList, currentPage);

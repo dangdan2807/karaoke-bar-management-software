@@ -209,6 +209,7 @@ public class PnDichVu extends JPanel
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên dịch vụ");
 		cboSearch.addItem("Tên loại dịch vụ");
+		cboSearch.addItem("Mã dịch vụ");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		cboSearch.setToolTipText("Loại tìm kiếm");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
@@ -488,7 +489,7 @@ public class PnDichVu extends JPanel
 				cboSearchServiceType.setVisible(false);
 				if (searchType.equalsIgnoreCase("Tất cả")) {
 					CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
-				} else if (searchType.equalsIgnoreCase("Tên dịch vụ")) {
+				} else if (searchType.equalsIgnoreCase("Tên dịch vụ") || searchType.equalsIgnoreCase("Mã dịch vụ")) {
 					CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
 				}
 			}
@@ -739,18 +740,27 @@ public class PnDichVu extends JPanel
 		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
 		ArrayList<DichVu> serviceList = new ArrayList<DichVu>();
-		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			totalLine = serviceDAO.getTotalLineOfServiceList();
-			serviceList = serviceDAO.getServiceListAndPageNumber(currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Tên dịch vụ")) {
-			keyword = txtKeyWord.getText().trim();
-			totalLine = serviceDAO.getTotalLineOfServiceListByName(keyword);
-			serviceList = serviceDAO.getServiceListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
-		} else if (searchTypeName.equalsIgnoreCase("Tên loại dịch vụ")) {
-			keyword = cboSearchServiceType.getSelectedItem().toString().trim();
-			totalLine = serviceDAO.getTotalLineOfServiceListByServiceTypeName(keyword);
-			serviceList = serviceDAO.getServiceListByServiceTypeNameAndPageNumber(keyword, currentPage,
-					lineNumberDisplayed);
+		switch (searchTypeName) {
+			case "Tất cả":
+				totalLine = serviceDAO.getTotalLineOfServiceList();
+				serviceList = serviceDAO.getServiceListAndPageNumber(currentPage, lineNumberDisplayed);
+				break;
+			case "Tên dịch vụ":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = serviceDAO.getTotalLineOfServiceListByName(keyword);
+				serviceList = serviceDAO.getServiceListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
+			case "Mã dịch vụ":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = serviceDAO.getTotalLineOfServiceListById(keyword);
+				serviceList = serviceDAO.getServiceListByIdAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
+			case "Tên loại dịch vụ":
+				keyword = cboSearchServiceType.getSelectedItem().toString().trim();
+				totalLine = serviceDAO.getTotalLineOfServiceListByServiceTypeName(keyword);
+				serviceList = serviceDAO.getServiceListByServiceTypeNameAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
+				break;
 		}
 		int lastPage = getLastPage(totalLine);
 		txtPaging.setTotalPage(lastPage);

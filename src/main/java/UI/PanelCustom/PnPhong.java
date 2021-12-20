@@ -170,6 +170,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 		cboSearch.addItem("Tình trạng phòng");
 		cboSearch.addItem("Loại phòng");
 		cboSearch.addItem("Vị trí");
+		cboSearch.addItem("Mã phòng");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		cboSearch.setToolTipText("Loại tìm kiếm");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
@@ -408,13 +409,10 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 			txtPaging.toTheFirstPage();
 			String searchType = cboSearch.getSelectedItem().toString();
 			txtKeyWord.setText("");
-			if (searchType.equalsIgnoreCase("Vị trí") || searchType.equalsIgnoreCase("Tất cả")) {
+			if (searchType.equalsIgnoreCase("Vị trí") || searchType.equalsIgnoreCase("Mã phòng")) {
 				cboSearchType.setVisible(false);
 				txtKeyWord.setVisible(true);
-				if (searchType.equalsIgnoreCase("Vị trí"))
-					CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
-				else
-					CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
+				CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
 			} else {
 				cboSearchType.setVisible(true);
 				txtKeyWord.setVisible(false);
@@ -748,6 +746,12 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 				keywordStr = keyword.toString();
 				totalLine = roomDAO.getTotalLineOfRoomListByLocation(keywordStr);
 				roomList = roomDAO.getRoomListByLocationAndPageNumber(keywordStr, currentPage, lineNumberDisplayed);
+				break;
+			case "Mã phòng":
+				keyword = txtKeyWord.getText().trim();
+				keywordStr = keyword.toString();
+				totalLine = roomDAO.getTotalLineOfRoomListByRoomID(keywordStr);
+				roomList = roomDAO.getRoomListByRoomIDAndPageNumber(keywordStr, currentPage, lineNumberDisplayed);
 				break;
 		}
 		int lastPage = getLastPage(totalLine);

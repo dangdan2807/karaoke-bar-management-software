@@ -345,4 +345,42 @@ public class NhanVienDAO {
         int result = obj != null ? (int) obj : 0;
         return result > 0;
     }
+
+    /**
+     * Lấy số lượng nhân viên tìm được dựa theo mã nhân viên
+     * 
+     * @param staffId {@code String}: mã nhân viên cần tìm
+     * @return {@code int}: số lượng nhân viên
+     */
+    public int getTotalLineByStaffId(String staffId) {
+        String query = "{CALL USP_getTotalLineOfStaffListByStaffId( ? )}";
+        Object[] params = new Object[] { staffId };
+        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
+
+    /**
+     * Lấy danh sách nhân viên dựa theo mã nhân viên
+     * 
+     * @param staffId           {@code String}: mã nhân viên cần tìm
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<NhanVien>}: danh sách nhân viên
+     */
+    public ArrayList<NhanVien> getStaffListByStaffIdAndPageNumber(String staffId, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getStaffListByStaffIdAndPageNumber( ? , ? , ? )}";
+        Object[] params = new Object[] { staffId, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
+        ArrayList<NhanVien> dataList = new ArrayList<NhanVien>();
+        try {
+            while (rs.next()) {
+                dataList.add(new NhanVien(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
 }

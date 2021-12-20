@@ -289,4 +289,42 @@ public class DichVuDAO {
         int result = obj != null ? (int) obj : 0;
         return result > 0;
     }
+
+    /**
+     * Lấy danh sách dịch vụ theo mã dịch vụ và số trang
+     * 
+     * @param serviceId         {@code String}: mã dịch vụ
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<DichVu>}: danh sách dịch vụ
+     */
+    public ArrayList<DichVu> getServiceListByIdAndPageNumber(String serviceId, int currentPage,
+            int lineNumberDisplayed) {
+        ArrayList<DichVu> dataList = new ArrayList<DichVu>();
+        String query = "{CALL USP_getServiceListByIdAndPageNumber( ? , ? , ? )}";
+        Object[] params = { serviceId, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
+        try {
+            while (rs.next()) {
+                dataList.add(new DichVu(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy số lượng dịch vụ theo mã dịch vụ
+     * 
+     * @param serviceId {@code String}: mã dịch vụ
+     * @return {@code int}: số lượng dịch vụ
+     */
+    public int getTotalLineOfServiceListById(String serviceId) {
+        String query = "{CALL USP_getTotalLineOfServiceListById( ? )}";
+        Object[] params = { serviceId };
+        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
 }

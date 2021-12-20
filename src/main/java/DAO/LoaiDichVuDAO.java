@@ -219,4 +219,42 @@ public class LoaiDichVuDAO {
         int result = obj != null ? (int) obj : 0;
         return result > 0;
     }
+
+    /**
+     * Lấy danh sách loại dịch vụ theo mã và số trang
+     * 
+     * @param serviceTypeId     {@code String}: từ khóa trong mã loại dịch vụ
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<LoaiDichVu>}: danh sách loại dịch vụ
+     */
+    public ArrayList<LoaiDichVu> getServiceTypeListByIdAndPageNumber(String serviceTypeId, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getServiceTypeListByIdAndPageNumber( ? , ? , ? )}";
+        ArrayList<LoaiDichVu> dataList = new ArrayList<>();
+        Object[] params = { serviceTypeId, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
+        try {
+            while (rs.next()) {
+                dataList.add(new LoaiDichVu(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy số lượng loại dịch vụ theo mã
+     * 
+     * @param serviceTypeId {@code String}: từ khóa trong mã loại dịch vụ
+     * @return {@code int}: số lượng loại dịch vụ
+     */
+    public int getTotalLineOfServiceTypeListById(String serviceTypeId) {
+        String query = "{CALL USP_getTotalLineOfServiceTypeListById( ? )}";
+        Object[] params = { serviceTypeId };
+        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
 }

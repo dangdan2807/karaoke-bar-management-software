@@ -373,4 +373,43 @@ public class KhachHangDAO {
         }
         return result;
     }
+
+    /**
+     * Lấy danh sách tất cả khách hàng dựa theo mã khách hàng và số trang được chỉ
+     * định
+     * 
+     * @param customerId        {@code String}: mã khách hàng
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<KhachHang>}: danh sách khách hàng
+     */
+    public ArrayList<KhachHang> getCustomerListByIdAndPageNumber(String customerId, int currentPage,
+            int lineNumberDisplayed) {
+        ArrayList<KhachHang> dataList = new ArrayList<KhachHang>();
+        String query = "{CALL USP_getCustomerListByIdAndPageNumber( ? , ? , ? )}";
+        Object[] params = new Object[] { customerId, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
+        try {
+            while (rs.next()) {
+                dataList.add(new KhachHang(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy số lượng khách hàng dựa theo mã khách hàng
+     * 
+     * @param customerId {@code String}: mã khách hàng
+     * @return {@code int}: số lượng khách hàng
+     */
+    public int getTotalLineOfCustomerListById(String customerId) {
+        String query = "{CALL USP_getTotalLineOfCustomerListById( ? )}";
+        Object[] params = new Object[] { customerId };
+        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        int result = obj != null ? (int) obj : 0;
+        return result;
+    }
 }
