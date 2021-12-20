@@ -195,7 +195,8 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 
 		JFreeChart chart = ChartFactory.createBarChart("BIỂU ĐỒ DOANH THU", "Ngày", "VND", null,
 				PlotOrientation.VERTICAL, false, false, false);
-		chart.getPlot().setBackgroundPaint(Color.WHITE);
+//		chart.getPlot().setBackgroundPaint(Color.WHITE);
+		chart.setBackgroundPaint(Color.WHITE);
 
 		chartPanel = new ChartPanel(chart);
 		chartPanel.setBounds(10, 70, 1218, 390);
