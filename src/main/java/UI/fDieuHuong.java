@@ -24,7 +24,7 @@ import java.awt.event.*;
 public class fDieuHuong extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 8033841194327699528L;
-    private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
+    private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement, btnHelp;
     private JLabel lblStaffName, lblStaffNameTxt;
     private NhanVien staffLogin = null;
 
@@ -96,15 +96,15 @@ public class fDieuHuong extends JFrame implements ActionListener {
 
         btnBookingManagement = new JButton("QUẢN LÝ ĐẶT PHÒNG");
         btnBookingManagement.setIcon(sellIcon);
-        customBtn(btnBookingManagement);
+        customBtnSize(btnBookingManagement, 20, 180, 150);
 
         btnInfoManagement = new JButton("THÔNG TIN CÁ NHÂN");
         btnInfoManagement.setIcon(profileIcon);
-        customBtn(btnInfoManagement);
+        customBtnSize(btnInfoManagement, 20, 180, 150);
 
         btnSystemManagement = new JButton("QUẢN TRỊ");
         btnSystemManagement.setIcon(managerIcon);
-        customBtn(btnSystemManagement);
+        customBtnSize(btnSystemManagement, 20, 180, 150);
 
         if (staffLogin.getChucVu().equals(MANAGER)) {
             btnBookingManagement.setBounds(261, 25, 240, 240);
@@ -136,31 +136,36 @@ public class fDieuHuong extends JFrame implements ActionListener {
         lblStaffNameTxt.setBounds(110, 0, 200, 30);
         pnlMain.add(lblStaffNameTxt);
 
+        btnHelp = new JButton("<html><u>Help?</u></html>");
+        customBtnSize(btnHelp, 15, 80, 30);
+        btnHelp.setBounds(680, 0, 80, 30);
+        pnlMain.add(btnHelp);
+
         pnlMain.add(btnSystemManagement);
         pnlMain.add(btnBookingManagement);
         pnlMain.add(btnInfoManagement);
-
-        btnBookingManagement.addActionListener(this);
-        btnInfoManagement.addActionListener(this);
-        btnLogOut.addActionListener(this);
-        btnSystemManagement.addActionListener(this);
 
         lblStaffName = new JLabel("Nhân viên:");
         lblStaffName.setFont(new Font("Dialog", Font.BOLD, 15));
         lblStaffName.setForeground(Color.WHITE);
         lblStaffName.setBounds(20, 0, 80, 30);
         pnlMain.add(lblStaffName);
-        
+
         lblStaffNameTxt = new JLabel(staffLogin.getHoTen());
         lblStaffNameTxt.setForeground(Color.WHITE);
         lblStaffNameTxt.setFont(new Font("Dialog", Font.BOLD, 15));
         lblStaffNameTxt.setBounds(110, 0, 200, 30);
         pnlMain.add(lblStaffNameTxt);
-        
+
+        btnLogOut.addActionListener(this);
+        btnHelp.addActionListener(this);
+        btnInfoManagement.addActionListener(this);
+        btnSystemManagement.addActionListener(this);
+        btnBookingManagement.addActionListener(this);
+
         checkPermission(type);
         CheckPassword t = new CheckPassword(staffLogin.getTaiKhoan().getMatKhau(), btnBookingManagement,
                 btnSystemManagement, this);
-        
         t.start();
     }
 
@@ -189,6 +194,8 @@ public class fDieuHuong extends JFrame implements ActionListener {
                     checkPermission(staffLogin.getChucVu());
                 }
             }
+        } else if (o.equals(btnHelp)) {
+            System.out.println("Help");
         }
     }
 
@@ -238,14 +245,29 @@ public class fDieuHuong extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Thiết lập các thông số cho các btn theo font size chữ, chiều dài và rộng của
+     * nút
+     * 
+     * @param btn
+     */
+    private void customBtnSize(JButton btn, int fontSize, int width, int height) {
+        btn.setFont(new Font("Dialog", Font.BOLD, fontSize));
+        btn.setPreferredSize(new Dimension(width, height));
+        customBtn(btn);
+    }
+
+    /**
+     * Thiết lập các thông số cho các btn
+     * 
+     * @param btn
+     */
     private void customBtn(JButton btn) {
         btn.setOpaque(false);
         btn.setContentAreaFilled(false);
         btn.setFocusPainted(false);
         btn.setBorder(null);
         btn.setForeground(Color.white);
-        btn.setFont(new Font("Dialog", Font.BOLD, 20));
-        btn.setPreferredSize(new Dimension(180, 150));
         btn.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn.setHorizontalTextPosition(SwingConstants.CENTER);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));

@@ -376,21 +376,27 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		if (o.equals(btnExportExcel)) {
 			Boolean result = ExportBill.getInstance().exportBillToExcel(bill, path);
 			String message = "";
+			int type = JOptionPane.INFORMATION_MESSAGE;
 			if (result) {
 				message = "Xuất file pdf thành công";
+				type = JOptionPane.INFORMATION_MESSAGE;
 			} else {
 				message = "Xuất file pdf thất bại";
+				type = JOptionPane.ERROR_MESSAGE;
 			}
-			JOptionPane.showMessageDialog(null, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, message, "Thông báo", type);
 		} else if (o.equals(btnExportPdf)) {
 			Boolean result = ExportBill.getInstance().exportBillToPdf(bill, path);
 			String message = "";
+			int type = JOptionPane.INFORMATION_MESSAGE;
 			if (result) {
 				message = "Xuất file pdf thành công";
+				type = JOptionPane.INFORMATION_MESSAGE;
 			} else {
 				message = "Xuất file pdf thất bại";
+				type = JOptionPane.ERROR_MESSAGE;
 			}
-			JOptionPane.showMessageDialog(null, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, message, "Thông báo", type);
 		} else if (o.equals(btnPayment)) {
 			boolean isPaid = billDAO.payment(bill.getMaHoaDon(), bill.getTongTienHD(), bill.getNgayGioTra());
 			if (isPaid) {

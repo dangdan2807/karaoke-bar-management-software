@@ -778,9 +778,9 @@ public class PnDatPhong extends JPanel
 			String roomTypeName = cboRoomType.getSelectedItem().toString();
 			loadRoomListByRoomTypeName(roomTypeName);
 		} else if (o.equals(cboServiceType)) {
+			txtServiceName.setText("");
 			String serviceTypeName = cboServiceType.getSelectedItem().toString();
-			ArrayList<DichVu> serviceList = new ArrayList<>();
-			serviceList = serviceDAO.getServiceListByServiceTypeName(serviceTypeName);
+			ArrayList<DichVu> serviceList = serviceDAO.getServiceListByServiceTypeName(serviceTypeName);
 			loadServiceList(serviceList);
 		} else if (o.equals(chkSearchService)) {
 			if (chkSearchService.isSelected()) {
@@ -1065,13 +1065,13 @@ public class PnDatPhong extends JPanel
 	 * @param roomTypeName {@code String}: loại tên phòng
 	 */
 	private void loadCboRoom(String roomTypeName) {
+		cboRoomID.removeAllItems();
 		ArrayList<Phong> roomList = new ArrayList<Phong>();
 		if (roomTypeName.equalsIgnoreCase("Tất cả")) {
 			roomList = roomDAO.getListAvailableRoom();
 		} else {
 			roomList = roomDAO.getListAvailableRoomByRoomTypeName(roomTypeName);
 		}
-		cboRoomID.removeAllItems();
 		for (Phong room : roomList) {
 			cboRoomID.addItem(room.getMaPhong());
 		}
