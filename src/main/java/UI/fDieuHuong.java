@@ -195,7 +195,9 @@ public class fDieuHuong extends JFrame implements ActionListener {
                 }
             }
         } else if (o.equals(btnHelp)) {
-            System.out.println("Help");
+            fHelp winHelp = new fHelp(staffLogin);
+            winHelp.setModal(true);
+            winHelp.setVisible(true);
         }
     }
 

@@ -1,4 +1,4 @@
-package UI.PanelCustom;
+package UI;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -7,31 +7,33 @@ import java.net.URL;
 import javax.swing.*;
 import javax.swing.tree.*;
 
-import DAO.NhanVienDAO;
+import UI.PanelCustom.CustomUI;
 import entity.NhanVien;
 
-public class DialogHelp extends JFrame implements MouseListener {
+public class fHelp extends JDialog implements MouseListener {
 
 	private JTree tree;
 	private JScrollPane sc;
 	private JPanel pnTree;
 	private JTextPane txtArea;
-	private DefaultMutableTreeNode nodeQLSP, nodeQLHD, nodeQLKH, nodeQLNV, nodeThemNhanVien, nodeCapNhatNhanVien;
+	private DefaultMutableTreeNode nodeThemNhanVien, nodeCapNhatNhanVien, nodeThanhToan, rootHDSD, nodeXuatHoaDon;
 	private DefaultMutableTreeNode nodeTimKiemNhanVien, nodeTimKiemHoaDon, nodeThongKeDoanhThu;
 	private DefaultMutableTreeNode nodeSuaThongTinCaNhan, nodeDatPhong, nodeDatDichVu, nodeHuyDatDichVu;
-	private DefaultMutableTreeNode nodeThanhToan, rootHDSD, nodeXuatHoaDon;
 	private final String MANAGER = "Chủ quán";
 	private NhanVien staffLogin;
+	private ImageIcon logoApp = new ImageIcon(fHelp.class.getResource(CustomUI.LOGO_APP));
 	private String iconPath = "/icon/";
 	private String imagesPath = "/images/";
 
-	public DialogHelp(NhanVien staff) {
+	public fHelp(NhanVien staff) {
 		this.staffLogin = staff;
-		setSize(1500, 800);
 		setTitle("Hướng Dẫn sử dụng tài liệu");
+		setSize(1500, 800);
+		setIconImage(logoApp.getImage());
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		getContentPane().setLayout(new BorderLayout());
+		setResizable(false);
+		// setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(new BorderLayout());
 
 		JPanel pnNorth = new JPanel();
 		pnNorth.setBackground(Color.decode("#69FFDD"));
@@ -49,8 +51,8 @@ public class DialogHelp extends JFrame implements MouseListener {
 		pnTree.setLayout(new BorderLayout());
 		// TaoHinh
 		ImageIcon leafIcon = new ImageIcon();
-		ImageIcon openIcon = ResizeImageIcon(DialogHelp.class.getResource(iconPath + "open-book.png"));
-		ImageIcon closedIcon = ResizeImageIcon(DialogHelp.class.getResource(iconPath + "book.png"));
+		ImageIcon openIcon = ResizeImageIcon(fHelp.class.getResource(iconPath + "open-book.png"));
+		ImageIcon closedIcon = ResizeImageIcon(fHelp.class.getResource(iconPath + "book.png"));
 
 		if (leafIcon != null) {
 			DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
@@ -103,14 +105,9 @@ public class DialogHelp extends JFrame implements MouseListener {
 		pnTree.add(sc1, BorderLayout.CENTER);
 		tree.addMouseListener(this);
 
-		getContentPane().add(pnNorth, BorderLayout.NORTH);
-		getContentPane().add(pnTree);
+		this.add(pnNorth, BorderLayout.NORTH);
+		this.add(pnTree);
 
-	}
-
-	public static void main(String[] args) {
-		NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-		new DialogHelp(staff).setVisible(true);
 	}
 
 	public ImageIcon ResizeImageIcon(URL url) {
@@ -339,7 +336,7 @@ public class DialogHelp extends JFrame implements MouseListener {
 	}
 
 	public String getImageHTML(String fileImage) {
-		return "<div style='text-align:center;'>" + "<img width='1000' height='550' style='text-align:center;' src='"
+		return "<div style='text-align:center;'>" + "<img width='1000' style='text-align:center;' src='"
 				+ getClass().getResource(imagesPath + fileImage).toString() + "'/>" + "</div>";
 	}
 
