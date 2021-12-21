@@ -14,6 +14,7 @@ import com.itextpdf.text.pdf.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 
+import UI.PanelCustom.CustomUI;
 import entity.*;
 
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -43,8 +44,7 @@ public class ExportBill {
     private BorderStyle borderStyleThin = BorderStyle.THIN;
     private BorderStyle borderStyleThick = BorderStyle.THICK;
 
-    // private URL fontPath = ExportBill.class.getResource("/resources/fonts/");
-    private URL fontPath = ExportBill.class.getResource("/fonts/");
+    private URL fontPath = ExportBill.class.getResource(CustomUI.pathFont);
     private String pdfFontLight = fontPath + "Roboto-300.ttf";
     private String pdfFontLightItalic = fontPath + "Roboto-300_Italic.ttf";
     private String pdfFontMedium = fontPath + "Roboto-500.ttf";

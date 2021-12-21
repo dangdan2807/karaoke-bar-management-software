@@ -14,7 +14,7 @@ import javax.swing.border.*;
  * <p>
  * Lần cập nhật cuối: 20/11/2021
  * <p>
- * Nội dung cập nhật: thêm giải thích lớp javadoc
+ * Nội dung cập nhật: cập nhật cái đường dẫn hình ảnh
  */
 public class CustomUI {
 	private static CustomUI instance = new CustomUI();
@@ -28,10 +28,12 @@ public class CustomUI {
 
 	public static String pathIcon = "/icon/";
 	public static String pathImages = "/images/";
+	public static String pathFont = "/fonts/";
 	public static String PATH_EXPORT_BILL = System.getProperty("user.dir") + "/../bill/";
 
-	// public static String pathImages = "/resources/images/";
 	// public static String pathIcon = "/resources/icon/";
+	// public static String pathImages = "/resources/images/";
+	// public static String pathFont = "/resources/fonts/";
 	// public static String PATH_EXPORT_BILL = System.getProperty("user.dir") + "/bill/";
 
 	public static final String ADD_ICON = pathIcon + "blueAdd_16.png";
