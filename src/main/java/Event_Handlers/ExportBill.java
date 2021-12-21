@@ -43,6 +43,7 @@ public class ExportBill {
     private BorderStyle borderStyleThin = BorderStyle.THIN;
     private BorderStyle borderStyleThick = BorderStyle.THICK;
 
+    // private URL fontPath = ExportBill.class.getResource("/resources/fonts/");
     private URL fontPath = ExportBill.class.getResource("/fonts/");
     private String pdfFontLight = fontPath + "Roboto-300.ttf";
     private String pdfFontLightItalic = fontPath + "Roboto-300_Italic.ttf";

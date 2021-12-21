@@ -26,8 +26,8 @@ public class fHelp extends JDialog implements MouseListener {
 	private final String MANAGER = "Chủ quán";
 	private NhanVien staffLogin;
 	private ImageIcon logoApp = new ImageIcon(fHelp.class.getResource(CustomUI.LOGO_APP));
-	private String iconPath = "/icon/";
-	private String imagesPath = "/images/";
+	private String pathIcon = CustomUI.pathIcon;
+	private String pathImages = CustomUI.pathImages;
 
 	public fHelp(NhanVien staff) {
 		this.staffLogin = staff;
@@ -55,8 +55,8 @@ public class fHelp extends JDialog implements MouseListener {
 		pnTree.setLayout(new BorderLayout());
 		// TaoHinh
 		ImageIcon leafIcon = new ImageIcon();
-		ImageIcon openIcon = ResizeImageIcon(fHelp.class.getResource(iconPath + "open-book.png"));
-		ImageIcon closedIcon = ResizeImageIcon(fHelp.class.getResource(iconPath + "book.png"));
+		ImageIcon openIcon = ResizeImageIcon(fHelp.class.getResource(pathIcon + "open-book.png"));
+		ImageIcon closedIcon = ResizeImageIcon(fHelp.class.getResource(pathIcon + "book.png"));
 
 		if (leafIcon != null) {
 			DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
@@ -341,7 +341,7 @@ public class fHelp extends JDialog implements MouseListener {
 
 	public String getImageHTML(String fileImage) {
 		return "<div style='text-align:center;'>" + "<img width='1000' style='text-align:center;' src='"
-				+ getClass().getResource(imagesPath + fileImage).toString() + "'/>" + "</div>";
+				+ getClass().getResource(pathImages + fileImage).toString() + "'/>" + "</div>";
 	}
 
 	@Override

@@ -138,7 +138,7 @@ public class fDieuHuong extends JFrame implements ActionListener {
 
         btnHelp = new JButton("<html><u>Hỗ trợ?</u></html>");
         customBtnSize(btnHelp, 15, 80, 30);
-        btnHelp.setBounds(680, 0, 80, 30);
+        btnHelp.setBounds(670, 0, 80, 30);
         pnlMain.add(btnHelp);
 
         pnlMain.add(btnSystemManagement);
