@@ -22,6 +22,8 @@ public class DialogHelp extends JFrame implements MouseListener {
 	private DefaultMutableTreeNode nodeThanhToan, rootHDSD, nodeXuatHoaDon;
 	private final String MANAGER = "Chủ quán";
 	private NhanVien staffLogin;
+	private String iconPath = "/icon/";
+	private String imagesPath = "/images/";
 
 	public DialogHelp(NhanVien staff) {
 		this.staffLogin = staff;
@@ -46,9 +48,9 @@ public class DialogHelp extends JFrame implements MouseListener {
 		pnTree = new JPanel();
 		pnTree.setLayout(new BorderLayout());
 		// TaoHinh
-		ImageIcon leafIcon = new ImageIcon(DialogHelp.class.getResource("/images/documents.png"));
-		ImageIcon openIcon = ResizeImageIcon(DialogHelp.class.getResource("/images/open-book.png"));
-		ImageIcon closedIcon = ResizeImageIcon(DialogHelp.class.getResource("/images/book.png"));
+		ImageIcon leafIcon = new ImageIcon();
+		ImageIcon openIcon = ResizeImageIcon(DialogHelp.class.getResource(iconPath + "open-book.png"));
+		ImageIcon closedIcon = ResizeImageIcon(DialogHelp.class.getResource(iconPath + "book.png"));
 
 		if (leafIcon != null) {
 			DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
@@ -57,13 +59,11 @@ public class DialogHelp extends JFrame implements MouseListener {
 			renderer.setLeafIcon(leafIcon);
 			tree.setCellRenderer(renderer);
 		}
-		
-		if (staffLogin.getChucVu().equalsIgnoreCase(MANAGER)) {
-			nodeThemNhanVien = new DefaultMutableTreeNode("Thêm Nhân Viên");
-			nodeCapNhatNhanVien = new DefaultMutableTreeNode("Cập Nhật Nhân Viên");
-			nodeTimKiemNhanVien = new DefaultMutableTreeNode("Tìm Kiếm Nhân Viên");
-			nodeThongKeDoanhThu = new DefaultMutableTreeNode("Thống Kê Doanh Thu");
-		}
+
+		nodeThemNhanVien = new DefaultMutableTreeNode("Thêm Nhân Viên");
+		nodeCapNhatNhanVien = new DefaultMutableTreeNode("Cập Nhật Nhân Viên");
+		nodeTimKiemNhanVien = new DefaultMutableTreeNode("Tìm Kiếm Nhân Viên");
+		nodeThongKeDoanhThu = new DefaultMutableTreeNode("Thống Kê Doanh Thu");
 		nodeTimKiemHoaDon = new DefaultMutableTreeNode("Tìm Kiếm Hóa Đơn");
 		nodeSuaThongTinCaNhan = new DefaultMutableTreeNode("Sửa Thông Tin Cá Nhân");
 		nodeDatPhong = new DefaultMutableTreeNode("Quản Lý Đặt Phòng");
@@ -72,11 +72,14 @@ public class DialogHelp extends JFrame implements MouseListener {
 		nodeThanhToan = new DefaultMutableTreeNode("Thanh Toán Hóa Đơn");
 		nodeXuatHoaDon = new DefaultMutableTreeNode("Xuất Hóa Đơn");
 
-		rootHDSD.add(nodeThemNhanVien);
-		rootHDSD.add(nodeCapNhatNhanVien);
-		rootHDSD.add(nodeTimKiemNhanVien);
+		if (staffLogin.getChucVu().equalsIgnoreCase(MANAGER)) {
+			rootHDSD.add(nodeThemNhanVien);
+			rootHDSD.add(nodeCapNhatNhanVien);
+			rootHDSD.add(nodeTimKiemNhanVien);
+			rootHDSD.add(nodeThongKeDoanhThu);
+		}
+
 		rootHDSD.add(nodeTimKiemHoaDon);
-		rootHDSD.add(nodeThongKeDoanhThu);
 		rootHDSD.add(nodeSuaThongTinCaNhan);
 		rootHDSD.add(nodeDatPhong);
 		rootHDSD.add(nodeDatDichVu);
@@ -337,7 +340,7 @@ public class DialogHelp extends JFrame implements MouseListener {
 
 	public String getImageHTML(String fileImage) {
 		return "<div style='text-align:center;'>" + "<img width='1000' height='550' style='text-align:center;' src='"
-				+ getClass().getResource("/image/" + fileImage).toString() + "'/>" + "</div>";
+				+ getClass().getResource(imagesPath + fileImage).toString() + "'/>" + "</div>";
 	}
 
 	@Override
