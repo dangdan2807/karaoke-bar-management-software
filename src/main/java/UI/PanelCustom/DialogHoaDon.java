@@ -375,16 +375,22 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		Object o = e.getSource();
 		if (o.equals(btnExportExcel)) {
 			Boolean result = ExportBill.getInstance().exportBillToExcel(bill, path);
-			String message = "Lỗi khi xuất file excel";
-			if (!result) {
-				JOptionPane.showMessageDialog(null, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
+			String message = "";
+			if (result) {
+				message = "Xuất file pdf thành công";
+			} else {
+				message = "Xuất file pdf thất bại";
 			}
+			JOptionPane.showMessageDialog(null, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
 		} else if (o.equals(btnExportPdf)) {
 			Boolean result = ExportBill.getInstance().exportBillToPdf(bill, path);
-			String message = "Lỗi khi xuất file pdf";
-			if (!result) {
-				JOptionPane.showMessageDialog(null, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
+			String message = "";
+			if (result) {
+				message = "Xuất file pdf thành công";
+			} else {
+				message = "Xuất file pdf thất bại";
 			}
+			JOptionPane.showMessageDialog(null, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
 		} else if (o.equals(btnPayment)) {
 			boolean isPaid = billDAO.payment(bill.getMaHoaDon(), bill.getTongTienHD(), bill.getNgayGioTra());
 			if (isPaid) {
@@ -392,8 +398,10 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 				btnExportExcel.setEnabledCustom(true);
 				btnExportPdf.setEnabledCustom(true);
 				btnPayment.setEnabledCustom(false);
+				JOptionPane.showMessageDialog(null, "Thanh toán hóa đơn thành công", "Thông báo",
+						JOptionPane.ERROR_MESSAGE);
 			} else {
-				JOptionPane.showMessageDialog(null, "Lỗi khi thanh toán vui lòng thử lại!!!", "Lỗi",
+				JOptionPane.showMessageDialog(null, "Lỗi khi thanh toán vui lòng thử lại!!!", "Thông báo",
 						JOptionPane.ERROR_MESSAGE);
 			}
 			// this.dispose();

@@ -259,6 +259,7 @@ public class PnKhachHang extends JPanel
 		btnChooseCustomer = new MyButton(130, 35, "Chọn KH", gra, checkIcon.getImage(), 40, 19, 10, 5);
 		btnChooseCustomer.setToolTipText("Chọn khách hàng theo từ khóa");
 		btnChooseCustomer.setBounds(900, 3, 130, 35);
+		btnChooseCustomer.setEnabledCustom(false);
 		if (this.isChooseCustomer == 1) {
 			btnChooseCustomer.setVisible(true);
 		} else {
@@ -341,8 +342,9 @@ public class PnKhachHang extends JPanel
 		btnNextToFirst.addActionListener(this);
 
 		btnSearch.addMouseListener(this);
-		tblTableCustomer.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
+		tblTableCustomer.addMouseListener(this);
+		btnChooseCustomer.addMouseListener(this);
 		txtBFieldSearchGender.addMouseListener(this);
 
 		txtCMND.addFocusListener(this);
@@ -463,6 +465,7 @@ public class PnKhachHang extends JPanel
 			}
 			btnAdd.setEnabledCustom(false);
 			btnUpdate.setEnabledCustom(true);
+			btnChooseCustomer.setEnabledCustom(true);
 			selectedCustomerId = customerId;
 		}
 	}
