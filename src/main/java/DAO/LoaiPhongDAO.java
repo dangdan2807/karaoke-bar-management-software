@@ -190,7 +190,7 @@ public class LoaiPhongDAO {
         String query = "{CALL USP_insertRoomType( ? , ? , ? , ? )}";
         Object[] params = new Object[] { roomType.getMaLP(), roomType.getTenLP(),
                 roomType.getSucChua(), roomType.getGiaTien() };
-        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        Object obj = DataProvider.getInstance().executeNonQuery(query, params);
         int result = obj != null ? (int) obj : 0;
         return result > 0;
     }
@@ -209,7 +209,7 @@ public class LoaiPhongDAO {
         String query = "{CALL USP_updateInfoRoomType( ? , ? , ? , ? )}";
         Object[] params = new Object[] { roomType.getMaLP(), roomType.getTenLP(),
                 roomType.getSucChua(), roomType.getGiaTien() };
-        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        Object obj = DataProvider.getInstance().executeNonQuery(query, params);
         int result = obj != null ? (int) obj : 0;
         return result > 0;
     }

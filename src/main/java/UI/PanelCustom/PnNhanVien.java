@@ -21,9 +21,9 @@ import java.util.ArrayList;
  * <p>
  * Ngày tạo: 04/10/2021
  * <p>
- * Lần cập nhật cuối: 19/11/2021
+ * Lần cập nhật cuối: 18/12/2021
  * <p>
- * Nội dung cập nhật: thêm phân trang cho phần mềm
+ * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh, 
  * <p>
  */
 public class PnNhanVien extends JPanel

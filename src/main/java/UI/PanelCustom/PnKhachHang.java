@@ -21,9 +21,9 @@ import entity.*;
  * <p>
  * Ngày tạo: 07/10/2021
  * <p>
- * Lần cập nhật cuối: 20/11/2021
+ * Lần cập nhật cuối: 18/12/2021
  * <p>
- * Nội dung cập nhật: thêm nút chọn khách hàng khi khách hàng thuê phòng
+ * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh, 
  */
 public class PnKhachHang extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {

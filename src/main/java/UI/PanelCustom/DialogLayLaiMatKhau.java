@@ -21,8 +21,9 @@ import DAO.TaiKhoanDAO;
  * <p>
  * Ngày tạo: 04/12/2021
  * <p>
- * Lần cập nhật cuối: 08/12/2021
+ * Lần cập nhật cuối: 18/12/2021
  * <p>
+ * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh
  */
 public class DialogLayLaiMatKhau extends JDialog
 		implements ActionListener, KeyListener, FocusListener, MouseListener, ItemListener {

@@ -22,9 +22,9 @@ import javax.swing.border.TitledBorder;
  * <p>
  * Ngày tạo: 13/10/2021
  * <p>
- * Lần cập nhật cuối: 19/11/2021
+ * Lần cập nhật cuối: 19/12/2021
  * <p>
- * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh, icon
  */
 public class fThongTinCaNhan extends JDialog
 		implements ActionListener, KeyListener, MouseListener, FocusListener, ItemListener {
@@ -55,7 +55,6 @@ public class fThongTinCaNhan extends JDialog
 	private NhanVien staffLogin = null;
 
 	private NhanVienDAO staffDAO = NhanVienDAO.getInstance();
-
 
 	/**
 	 * Khởi tạo giao diện form thông tin cá nhân
@@ -591,7 +590,7 @@ public class fThongTinCaNhan extends JDialog
 		} else {
 			result = staffDAO.updateInfoStaff(newStaffLogin);
 		}
-		
+
 		if (result) {
 			message = "Cập nhật thông tin thành công";
 			JOptionPane.showMessageDialog(this, message, "Thông báo", JOptionPane.INFORMATION_MESSAGE);

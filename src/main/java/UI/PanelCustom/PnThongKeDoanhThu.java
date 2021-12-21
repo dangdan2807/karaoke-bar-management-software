@@ -18,6 +18,9 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import DAO.HoaDonDAO;
 import entity.NhanVien;
 
+/**
+ * 
+ */
 public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseListener, ItemListener {
 	private ImageIcon backIcon = new ImageIcon(PnThongKeDoanhThu.class.getResource(CustomUI.BACK_ICON));
 	private ImageIcon searchIcon = new ImageIcon(PnThongKeDoanhThu.class.getResource(CustomUI.SEARCH_ICON));

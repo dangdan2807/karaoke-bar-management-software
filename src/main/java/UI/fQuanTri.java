@@ -17,9 +17,9 @@ import entity.NhanVien;
  * <p>
  * Ngày tạo: 10/10/2021
  * <p>
- * Lần cập nhật cuối: 14/11/2021
+ * Lần cập nhật cuối: 15/12/2021
  * <p>
- * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ * Nội dung cập nhật: thay đổi cách load dữ liệu các giao diện từ load tất cả sang load theo tab
  */
 public class fQuanTri extends JFrame implements ActionListener, ChangeListener {
     /**

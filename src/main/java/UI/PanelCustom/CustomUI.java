@@ -27,8 +27,7 @@ public class CustomUI {
 	private Font fontNormal = new Font("Dialog", Font.PLAIN, 14);
 
 	private static String pathImg = "/icon/";
-	// private static String pathfont = "/resources/fonts/";
-	public static String PATH_EXPORT_BILL = System.getProperty("user.dir") + "/bill/";
+	public static String PATH_EXPORT_BILL = System.getProperty("user.dir") + "/../bill/";
 	public static final String ADD_ICON = pathImg + "blueAdd_16.png";
 	public static final String CHECK_ICON = pathImg + "check.png";
 	public static final String TRASH_ICON = pathImg + "trash_16.png";

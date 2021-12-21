@@ -351,7 +351,7 @@ public class PhongDAO {
      */
     public String getLastRoomID() {
         String query = "{CALL USP_getLastRoomId()}";
-        Object obj = DataProvider.getInstance().executeNonQuery(query, null);
+        Object obj = DataProvider.getInstance().executeScalar(query, null);
         String result = obj != null ? obj.toString() : "";
         return result;
     }

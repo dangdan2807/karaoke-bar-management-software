@@ -20,9 +20,9 @@ import java.sql.Date;
  * <p>
  * Ngày tạo: 23/04/2021
  * <p>
- * Lần cập nhật cuối: 06/12/2021
+ * Lần cập nhật cuối: 21/12/2021
  * <p>
- * Nội dung cập nhật: thêm hàm cập nhật trạng thái kích hoạt và không kích hoạt
+ * Nội dung cập nhật: chỉnh sửa đường dẫn ảnh để xuất file jar không mất ảnh
  */
 public class kDatePicker extends JPanel implements ActionListener, MouseListener {
     private JTextField txt;
@@ -30,8 +30,8 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     private int widthDefault = 150;
     private int heightDefault = 20;
     private DialogDatePicker f = new DialogDatePicker();
-    private String pathImg = "src/main/resources/images/";
-    private ImageIcon calenderIcon = new ImageIcon(pathImg + "calender_16.png");
+    private String pathImg = "/icon/";
+    private ImageIcon calenderIcon = new ImageIcon(kDatePicker.class.getResource(pathImg + "calender_16.png"));
     private Color backgroundColor = Color.decode("#f9f9f9");
     private Border borderBottomFocus = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#FCA120"));
     private Border borderBottomUnFocus = BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 161, 32, 100));

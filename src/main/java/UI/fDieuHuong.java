@@ -17,9 +17,9 @@ import java.awt.event.*;
  * <p>
  * Ngày tạo: 13/10/2021
  * <p>
- * Lần cập nhật cuối: 19/11/2021
+ * Lần cập nhật cuối: 21/12/2021
  * <p>
- * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ * Nội dung cập nhật: đổi tên btn Help thành hỗ trợ
  */
 public class fDieuHuong extends JFrame implements ActionListener {
 
@@ -136,7 +136,7 @@ public class fDieuHuong extends JFrame implements ActionListener {
         lblStaffNameTxt.setBounds(110, 0, 200, 30);
         pnlMain.add(lblStaffNameTxt);
 
-        btnHelp = new JButton("<html><u>Help?</u></html>");
+        btnHelp = new JButton("<html><u>Hỗ trợ?</u></html>");
         customBtnSize(btnHelp, 15, 80, 30);
         btnHelp.setBounds(680, 0, 80, 30);
         pnlMain.add(btnHelp);

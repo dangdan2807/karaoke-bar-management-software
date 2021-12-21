@@ -1,6 +1,7 @@
 package Event_Handlers;
 
 import java.io.*;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class ExportBill {
     private BorderStyle borderStyleThin = BorderStyle.THIN;
     private BorderStyle borderStyleThick = BorderStyle.THICK;
 
-    private String fontPath = "src/main/resources/fonts/";
+    private URL fontPath = ExportBill.class.getResource("/fonts/");
     private String pdfFontLight = fontPath + "Roboto-300.ttf";
     private String pdfFontLightItalic = fontPath + "Roboto-300_Italic.ttf";
     private String pdfFontMedium = fontPath + "Roboto-500.ttf";
@@ -752,6 +753,9 @@ public class ExportBill {
      * @param path   {@code String}: đường dẫn đến thư mục nơi lưu file excel
      */
     public boolean exportBillToExcel(HoaDon bill, String path) {
+    	File folder = new File(path);
+		if (!folder.exists())
+			folder.mkdir();
         String fileName = bill.getMaHoaDon() + ".xlsx";
         if (!path.matches("^.+[\\\\/]$")) {
             path += "/";
@@ -1087,6 +1091,9 @@ public class ExportBill {
      * @param path   {@code String}: đường dẫn đến file pdf
      */
     public boolean exportBillToPdf(HoaDon bill, String path) {
+    	File folder = new File(path);
+		if (!folder.exists())
+			folder.mkdir();
         String fileName = bill.getMaHoaDon() + ".pdf";
         if (!path.matches("^.+[\\\\/]$")) {
             path += "/";

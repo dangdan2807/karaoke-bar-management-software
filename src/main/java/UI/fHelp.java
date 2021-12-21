@@ -10,6 +10,10 @@ import javax.swing.tree.*;
 import UI.PanelCustom.CustomUI;
 import entity.NhanVien;
 
+/**
+ * Giao diện hỗ trợ
+ * 
+ */
 public class fHelp extends JDialog implements MouseListener {
 
 	private JTree tree;

@@ -36,7 +36,7 @@ public class ConnectDB {
      */
     public void connect() throws SQLException {
         String severName = "localhost";
-        String databaseName = "QuanLyQuanKaraokeRMI";
+        String databaseName = "QuanLyQuanKaraoke";
         String username = "sa";
         String password = "123456";
         String url = "jdbc:sqlserver://" + severName + ":1433;databaseName=" + databaseName;

@@ -41,9 +41,8 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 	private ImageIcon paymentIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.PAYMENT_ICON));
 	private ImageIcon pdfIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.PDF_ICON));
 	private ImageIcon excelIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.EXCEL_ICON));
-	private ImageIcon logoIcon = new ImageIcon(
-			new ImageIcon(DialogHoaDon.class.getResource(CustomUI.LOGO_ICON)).getImage().getScaledInstance(70, 70,
-					Image.SCALE_SMOOTH));
+	private ImageIcon logoIcon = new ImageIcon(new ImageIcon(DialogHoaDon.class.getResource(CustomUI.LOGO_ICON))
+			.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH));
 
 	private String formatTime = "HH:mm:ss dd/MM/yyyy";
 	private DecimalFormat df = new DecimalFormat("#,###.##");
@@ -71,7 +70,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		serviceOrders = serviceDetailDAO.getServiceDetailListByBillId(bill.getMaHoaDon());
 		if (staff == null)
 			staff = new NhanVien();
-		if(customer == null)
+		if (customer == null)
 			customer = new KhachHang();
 		bill.setNhanVien(staff);
 		bill.setKhachHang(customer);
@@ -405,7 +404,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 				btnExportPdf.setEnabledCustom(true);
 				btnPayment.setEnabledCustom(false);
 				JOptionPane.showMessageDialog(null, "Thanh toán hóa đơn thành công", "Thông báo",
-						JOptionPane.ERROR_MESSAGE);
+						JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				JOptionPane.showMessageDialog(null, "Lỗi khi thanh toán vui lòng thử lại!!!", "Thông báo",
 						JOptionPane.ERROR_MESSAGE);

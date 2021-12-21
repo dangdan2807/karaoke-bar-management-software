@@ -21,9 +21,9 @@ import entity.*;
  * <p>
  * Ngày tạo: 26/10/2021
  * <p>
- * Lần cập nhật cuối: 20/11/2021
+ * Lần cập nhật cuối: 18/12/2021
  * <p>
- * Nội dung cập nhật: thêm phân trang cho phần mềm
+ * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh, 
  */
 public class PnDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {

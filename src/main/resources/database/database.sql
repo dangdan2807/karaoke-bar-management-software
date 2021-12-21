@@ -1,13 +1,13 @@
 USE master
 GO
 
--- Drop DATABASE QuanLyQuanKaraokeRMI
+-- Drop DATABASE QuanLyQuanKaraoke
 -- GO
 
-CREATE DATABASE QuanLyQuanKaraokeRMI
+CREATE DATABASE QuanLyQuanKaraoke
 GO
 
-USE QuanLyQuanKaraokeRMI
+USE QuanLyQuanKaraoke
 GO
 
 

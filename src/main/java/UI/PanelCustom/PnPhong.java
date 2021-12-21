@@ -23,7 +23,7 @@ import entity.*;
  * <p>
  * Lần cập nhật cuối: 20/11/2021
  * <p>
- * Nội dung cập nhật: thêm mô tả lớp và hàm (java doc)
+ * Nội dung cập nhật: sửa lỗi lấy mã phòng mới nhất
  */
 public class PnPhong extends JPanel implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**
@@ -337,6 +337,7 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 				Boolean insertResult = roomDAO.insertRoom(room);
 				String name = "phòng";
 				if (insertResult) {
+					txtPaging.toTheLastPage();
 					message = "Thêm " + name + " mới thành công";
 					txtRoomID.setText(room.getMaPhong());
 					int stt = tblTableRoom.getRowCount();

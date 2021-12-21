@@ -19,9 +19,9 @@ import entity.NhanVien;
  * <p>
  * Ngày tạo: 11/10/2021
  * <p>
- * Lần cập nhật cuối: 17/11/2021
+ * Lần cập nhật cuối: 18/12/2021
  * <p>
- * Nội dung cập nhật: bắt sự kiện chọn khách hàng khi đặt phòng
+ * Nội dung cập nhật: Sửa lỗi thêm dịch vụ
  */
 public class fQuanLyDatPhong extends JFrame implements ActionListener, ChangeListener {
     /**
