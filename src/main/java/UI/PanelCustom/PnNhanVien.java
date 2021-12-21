@@ -1012,6 +1012,11 @@ public class PnNhanVien extends JPanel
 				Boolean result = staffDAO.insertStaff(staff);
 				String name = "nhân viên";
 				if (result) {
+					int lastPage = txtPaging.getTotalPage();
+					int stt = tblTableStaff.getRowCount();
+					if (lastPage == 1 && stt >= 10) {
+						txtPaging.setTotalPage(lastPage + 1);
+					}
 					txtPaging.toTheLastPage();
 					searchEventUsingBtnSearch();
 					message = "Thêm " + name + " mới thành công";

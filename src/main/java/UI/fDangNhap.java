@@ -139,7 +139,7 @@ public class fDangNhap extends JFrame implements ActionListener, KeyListener, Fo
 		btnLogin.setBounds(83, 177, 285, 40);
 		pnlLogin.add(btnLogin);
 
-		btnForgetPassWord = new JButton("Quên mật khẩu?");
+		btnForgetPassWord = new JButton("<html><u>Quên mật khẩu?</u></html>");
 		btnForgetPassWord.setBounds(102, 227, 250, 30);
 		pnlLogin.add(btnForgetPassWord);
 		btnForgetPassWord.setCursor(new Cursor(Cursor.HAND_CURSOR));

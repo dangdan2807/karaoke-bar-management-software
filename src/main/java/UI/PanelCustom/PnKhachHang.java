@@ -23,7 +23,7 @@ import entity.*;
  * <p>
  * Lần cập nhật cuối: 18/12/2021
  * <p>
- * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh, 
+ * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh,
  */
 public class PnKhachHang extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
@@ -666,6 +666,11 @@ public class PnKhachHang extends JPanel
 			Boolean result = customerDAO.insertCustomer(customer);
 			String name = "khách hàng";
 			if (result) {
+				int lastPage = txtPaging.getTotalPage();
+				int stt = tblTableCustomer.getRowCount();
+				if (lastPage == 1 && stt >= 10) {
+					txtPaging.setTotalPage(lastPage + 1);
+				}
 				txtPaging.toTheLastPage();
 				searchEventUsingBtnSearch();
 				message = "Thêm " + name + " mới thành công";

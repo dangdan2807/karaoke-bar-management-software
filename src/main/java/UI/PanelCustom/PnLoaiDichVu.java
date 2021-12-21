@@ -23,7 +23,7 @@ import entity.*;
  * <p>
  * Lần cập nhật cuối: 18/12/2021
  * <p>
- * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh, 
+ * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh,
  */
 public class PnLoaiDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
@@ -297,6 +297,11 @@ public class PnLoaiDichVu extends JPanel
 					Boolean result = serviceTypeDAO.insertService(serviceType);
 					String name = "loại dịch vụ";
 					if (result) {
+						int lastPage = txtPaging.getTotalPage();
+						int stt = tblTableServiceType.getRowCount();
+						if (lastPage == 1 && stt >= 10) {
+							txtPaging.setTotalPage(lastPage + 1);
+						}
 						txtPaging.toTheLastPage();
 						searchEventUsingBtnSearch();
 						message = "Thêm " + name + " mới thành công";

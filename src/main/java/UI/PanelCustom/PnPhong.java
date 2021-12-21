@@ -337,14 +337,21 @@ public class PnPhong extends JPanel implements ActionListener, MouseListener, It
 				Boolean insertResult = roomDAO.insertRoom(room);
 				String name = "phòng";
 				if (insertResult) {
+					int lastPage = txtPaging.getTotalPage();
+					int stt = tblTableRoom.getRowCount();
+					if (lastPage == 1 && stt >= 10) {
+						txtPaging.setTotalPage(lastPage + 1);
+					}
 					txtPaging.toTheLastPage();
+					searchEventUsingBtnSearch();
 					message = "Thêm " + name + " mới thành công";
 					txtRoomID.setText(room.getMaPhong());
-					int stt = tblTableRoom.getRowCount();
-					addRow(stt, room);
-					int lastIndex = tblTableRoom.getRowCount() - 1;
-					tblTableRoom.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-					tblTableRoom.scrollRectToVisible(tblTableRoom.getCellRect(lastIndex, lastIndex, true));
+					// int stt = tblTableRoom.getRowCount();
+					// addRow(stt, room);
+					// int lastIndex = tblTableRoom.getRowCount() - 1;
+					// tblTableRoom.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+					// tblTableRoom.scrollRectToVisible(tblTableRoom.getCellRect(lastIndex,
+					// lastIndex, true));
 					btnAdd.setEnabledCustom(false);
 					btnUpdate.setEnabledCustom(true);
 				} else {

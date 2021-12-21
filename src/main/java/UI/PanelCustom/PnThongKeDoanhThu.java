@@ -19,9 +19,18 @@ import DAO.HoaDonDAO;
 import entity.NhanVien;
 
 /**
- * 
+ * JPanel dùng để thực hiện phân trang
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu, Huỳnh Tuần Anh
+ * <p>
+ * Ngày tạo: 29/11/2021
+ * <p>
+ * Lần cập nhật cuối: 21/12/2021
+ * <p>
+ * Nội dung cập nhật: sửa lỗi thống kê theo năm
+ * <p>
  */
-public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseListener, ItemListener {
+public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseListener, ItemListener {
 	private ImageIcon backIcon = new ImageIcon(PnThongKeDoanhThu.class.getResource(CustomUI.BACK_ICON));
 	private ImageIcon searchIcon = new ImageIcon(PnThongKeDoanhThu.class.getResource(CustomUI.SEARCH_ICON));
 	private ImageIcon bg = new ImageIcon(new ImageIcon(PnThongKeDoanhThu.class.getResource(
@@ -50,9 +59,9 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		this.setLayout(null);
 		setSize(1270, 630);
 		this.setLayout(null);
-		// this.setResizable(false);
-		// this.setLocationRelativeTo(null);
-		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setResizable(false);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -198,7 +207,7 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 
 		JFreeChart chart = ChartFactory.createBarChart("BIỂU ĐỒ DOANH THU", "Ngày", "VND", null,
 				PlotOrientation.VERTICAL, false, false, false);
-//		chart.getPlot().setBackgroundPaint(Color.WHITE);
+		// chart.getPlot().setBackgroundPaint(Color.WHITE);
 		chart.setBackgroundPaint(Color.WHITE);
 
 		chartPanel = new ChartPanel(chart);
@@ -214,14 +223,13 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		allLoaded();
 	}
 
-	// public static void main(String[] args) throws
-	// java.lang.reflect.InvocationTargetException, InterruptedException {
-	// SwingUtilities.invokeLater(() -> {
-	// NhanVien staff = new NhanVien("NV00000001");
-	// PnThongKeDoanhThu login = new PnThongKeDoanhThu(staff);
-	// login.setVisible(true);
-	// });
-	// }
+	public static void main(String[] args) throws java.lang.reflect.InvocationTargetException, InterruptedException {
+		SwingUtilities.invokeLater(() -> {
+			NhanVien staff = new NhanVien("NV00000001");
+			PnThongKeDoanhThu login = new PnThongKeDoanhThu(staff);
+			login.setVisible(true);
+		});
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -345,7 +353,7 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		long difference = toDate.getTime() - fromDate.getTime();
 		int times = (int) TimeUnit.MILLISECONDS.toDays(difference);
 
-		if (times > dayOfMonth) {
+		if (times > dayOfMonth && times <= dayOfYear) {
 			calendar.setTime(fromDate);
 			day1 = calendar.get(Calendar.MONTH) + 1;
 			calendar.setTime(toDate);
@@ -360,9 +368,8 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 		}
 
 		SimpleDateFormat sdfFullDate = new SimpleDateFormat("dd/MM/yyyy");
-
 		String title = "";
-		if (times == 1) {
+		if (times == 1 && !format.equals("yyyy")) {
 			title = "NGÀY " + sdfFullDate.format(fromDate);
 		} else {
 			title = "TỪ NGÀY " + sdfFullDate.format(fromDate) + " ĐẾN NGÀY " + sdfFullDate.format(toDate);
@@ -400,7 +407,6 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 			} else if (format.equals("dd")) {
 				timeStr = dayStr;
 				if (oldMonth != month)
-					// timeStr += "/" + monthStr;
 					timeStr += "'";
 				fullDayStr = dayStr + "-" + monthStr + "-" + yearStr;
 				calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -422,6 +428,9 @@ public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseLi
 				}
 			}
 
+			if (totalPrice < 0.0 || totalPrice == null) {
+				totalPrice = 0.0;
+			}
 			dataset.addValue(totalPrice, "VND", timeStr);
 		}
 		txtTotalPrice.setText(df.format(total));

@@ -250,7 +250,7 @@ public class PnLoaiPhong extends JPanel
 		CustomUI.getInstance().setCustomTable(tblTableTypeRoom);
 		tblTableTypeRoom.setRowHeight(21);
 		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableTypeRoom);
-		scrTable.setBounds(10, 20, 1200, 230);
+		scrTable.setBounds(10, 20, 1200, 235);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
@@ -316,11 +316,15 @@ public class PnLoaiPhong extends JPanel
 				Boolean insertResult = roomTypeDAO.insertRoomType(roomType);
 				String name = "loại phòng";
 				if (insertResult) {
+					int lastPage = txtPaging.getTotalPage();
+					int stt = tblTableTypeRoom.getRowCount();
+					if (lastPage == 1 && stt >= 10) {
+						txtPaging.setTotalPage(lastPage + 1);
+					}
 					txtPaging.toTheLastPage();
 					searchEventUsingBtnSearch();
 					message = "Thêm " + name + " mới thành công";
 					txtRoomTypeId.setText(roomType.getMaLP());
-					// int stt = tblTableTypeRoom.getRowCount();
 					// addRow(stt, roomType);
 					// int lastIndex = tblTableTypeRoom.getRowCount() - 1;
 					// tblTableTypeRoom.getSelectionModel().setSelectionInterval(lastIndex,
