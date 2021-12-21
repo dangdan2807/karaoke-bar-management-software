@@ -103,7 +103,7 @@ public class fHelp extends JDialog implements MouseListener {
 		txtArea.setEditable(false);
 		txtArea.setBackground(Color.decode("#D7FFF6"));
 		String html = "<html>" + "<div style='text-align:left;'>" + "<div style='text-align:center;'>"
-				+ "<img width='350' height='150' style='text-align:center;' src='"
+				+ "<img style='text-align:center;' src='"
 				+ getClass().getResource(pathImages + "Logo_IUH.png").toString() + "'/>" + "</div>" + "<hr>"
 				+ "<h1 style='text-align:center; font-size:22px '>PHẦN MỀM QUẢN LÝ QUÁN KARAOKE DASH - NHÓM 11</h1>"
 				+ "<hr>" + "<p style='text-align:center; font-size:18px;'>TÀI LIỆU HƯỚNG DẪN SỬ DỤNG</p>"
@@ -153,7 +153,7 @@ public class fHelp extends JDialog implements MouseListener {
 			txtArea.setEditable(false); 
 			txtArea.setBackground(Color.decode("#D7FFF6"));
 			String html = "<html>" + "<div style='text-align:left;'>" + "<div style='text-align:center;'>"
-					+ "<img width='350' height='150' style='text-align:center;' src='"
+					+ "<img style='text-align:center;' src='"
 					+ getClass().getResource(pathImages + "Logo_IUH.png").toString() + "'/>" + "</div>" + "<hr>"
 					+ "<h1 style='text-align:center; font-size:22px '>PHẦN MỀM QUẢN LÝ QUÁN KARAOKE DASH - NHÓM 11</h1>"
 					+ "<hr>" + "<p style='text-align:center; font-size:18px;'>TÀI LIỆU HƯỚNG DẪN SỬ DỤNG</p>"
@@ -363,7 +363,7 @@ public class fHelp extends JDialog implements MouseListener {
 	}
 
 	public String getImageHTML(String fileImage) {
-		return "<div style='text-align:center;'>" + "<img width='1000' style='text-align:center;' src='"
+		return "<div style='text-align:center;'>" + "<img  style='text-align:center;' src='"
 				+ getClass().getResource(pathImages + fileImage).toString() + "'/>" + "</div>";
 	}
 
