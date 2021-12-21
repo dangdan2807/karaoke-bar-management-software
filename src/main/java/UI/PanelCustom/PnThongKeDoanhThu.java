@@ -30,7 +30,7 @@ import entity.NhanVien;
  * Nội dung cập nhật: sửa lỗi thống kê theo năm
  * <p>
  */
-public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseListener, ItemListener {
+public class PnThongKeDoanhThu extends JPanel implements ActionListener, MouseListener, ItemListener {
 	private ImageIcon backIcon = new ImageIcon(PnThongKeDoanhThu.class.getResource(CustomUI.BACK_ICON));
 	private ImageIcon searchIcon = new ImageIcon(PnThongKeDoanhThu.class.getResource(CustomUI.SEARCH_ICON));
 	private ImageIcon bg = new ImageIcon(new ImageIcon(PnThongKeDoanhThu.class.getResource(
@@ -59,9 +59,9 @@ public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseLi
 		this.setLayout(null);
 		setSize(1270, 630);
 		this.setLayout(null);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		// this.setResizable(false);
+		// this.setLocationRelativeTo(null);
+		// this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JPanel pnlMain = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -223,13 +223,13 @@ public class PnThongKeDoanhThu extends JFrame implements ActionListener, MouseLi
 		allLoaded();
 	}
 
-	public static void main(String[] args) throws java.lang.reflect.InvocationTargetException, InterruptedException {
-		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = new NhanVien("NV00000001");
-			PnThongKeDoanhThu login = new PnThongKeDoanhThu(staff);
-			login.setVisible(true);
-		});
-	}
+	// public static void main(String[] args) throws java.lang.reflect.InvocationTargetException, InterruptedException {
+	// 	SwingUtilities.invokeLater(() -> {
+	// 		NhanVien staff = new NhanVien("NV00000001");
+	// 		PnThongKeDoanhThu login = new PnThongKeDoanhThu(staff);
+	// 		login.setVisible(true);
+	// 	});
+	// }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

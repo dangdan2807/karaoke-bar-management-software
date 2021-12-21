@@ -29,13 +29,14 @@ public class CustomUI {
 	public static String pathIcon = "/icon/";
 	public static String pathImages = "/images/";
 	public static String pathFont = "/fonts/";
-	public static String PATH_EXPORT_BILL = System.getProperty("user.dir") + "/../bill/";
+	public static String PATH_EXPORT_BILL = System.getProperty("user.dir") +
+			"/../bill/";
 
-//	 public static String pathIcon = "/resources/icon/";
-//	 public static String pathImages = "/resources/images/";
-//	 public static String pathFont = "/resources/fonts/";
-//	 public static String PATH_EXPORT_BILL = System.getProperty("user.dir") +
-//	 "/bill/";
+	// public static String pathIcon = "/resources/icon/";
+	// public static String pathImages = "/resources/images/";
+	// public static String pathFont = "/resources/fonts/";
+	// public static String PATH_EXPORT_BILL = System.getProperty("user.dir") +
+	// "/bill/";
 
 	public static final String ADD_ICON = pathIcon + "blueAdd_16.png";
 	public static final String CHECK_ICON = pathIcon + "check.png";
