@@ -48,7 +48,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 	private String formatTime = "HH:mm:ss dd/MM/yyyy";
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private final String WORKING_DIR = System.getProperty("user.dir");
-	private String path = WORKING_DIR + "/src/main/resources/bill/";
+	private String path = WORKING_DIR + "/bill/";
 	private HoaDon bill = new HoaDon();
 	private boolean paid = false;
 	private HoaDonDAO billDAO = HoaDonDAO.getInstance();
