@@ -38,13 +38,13 @@
 	<classpathentry kind="lib" path="lib/poi-5.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/poi-ooxml-5.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/sqljdbc42.jar"/>
-	<classpathentry kind="lib" path="lib/twilio-8.23.0.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart-1.5.3.jar"/>
+	<classpathentry kind="lib" path="lib/twilio-8.23.0.jar"/>
 	<classpathentry kind="src" path="target/generated-sources/annotations">
 		<attributes>
+			<attribute name="ignore_optional_problems" value="true"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="ignore_optional_problems" value="true"/>
 			<attribute name="m2e-apt" value="true"/>
 		</attributes>
 	</classpathentry>

@@ -29,9 +29,6 @@ import entity.*;
  */
 public class PnDatPhong extends JPanel
 		implements ActionListener, MouseListener, ItemListener, ChangeListener, FocusListener, KeyListener {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7935621774047432226L;
 	private JButton[] btnRoomList;
 	private int pnShowTableWidth = 310;
@@ -780,7 +777,7 @@ public class PnDatPhong extends JPanel
 		} else if (o.equals(cboServiceType)) {
 			txtServiceName.setText("");
 			String serviceTypeName = cboServiceType.getSelectedItem().toString();
-			ArrayList<DichVu> serviceList = serviceDAO.getServiceListByServiceTypeName(serviceTypeName);
+			serviceList = serviceDAO.getServiceListByServiceTypeName(serviceTypeName);
 			loadServiceList(serviceList);
 		} else if (o.equals(chkSearchService)) {
 			if (chkSearchService.isSelected()) {
