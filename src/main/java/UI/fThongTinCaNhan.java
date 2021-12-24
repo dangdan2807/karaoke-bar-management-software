@@ -15,6 +15,8 @@ import java.text.DecimalFormat;
 
 import javax.swing.border.TitledBorder;
 
+import com.toedter.calendar.JDateChooser;
+
 /**
  * Giao diện cập nhật thông tin cá nhân của người dùng đăng nhập vào hệ thống
  * <p>
@@ -37,9 +39,9 @@ public class fThongTinCaNhan extends JDialog
 	private JTextField txtUsername, txtFullName, txtPassword, txtNewPassword, txtReNewPassword;
 	private JTextField txtCMND, txtPhoneNumber, txtPosition, txtSalary, txtEmpID;
 	private MyButton btnUpdate, btnBack;
-	private kDatePicker dpBirthday;
 	private JCheckBox chkChangePassword;
 	private JRadioButton radMale, radFemale;
+	private JDateChooser dpBirthday;
 
 	private ImageIcon logoApp = new ImageIcon(fThongTinCaNhan.class.getResource(CustomUI.LOGO_APP));
 	private ImageIcon background = new ImageIcon(new ImageIcon(fThongTinCaNhan.class.getResource(
@@ -53,7 +55,6 @@ public class fThongTinCaNhan extends JDialog
 
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
-
 	private NhanVienDAO staffDAO = NhanVienDAO.getInstance();
 
 	/**
@@ -136,8 +137,8 @@ public class fThongTinCaNhan extends JDialog
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtCMND);
 		pnlPersonalInfo.add(txtCMND);
 
-		dpBirthday = new kDatePicker(250, 25);
-		CustomUI.getInstance().setCustomKDatePicker(dpBirthday);
+		dpBirthday = new JDateChooser();
+		CustomUI.getInstance().setCustomJDateChooser(dpBirthday);
 		dpBirthday.setBounds(160, 135, 250, 25);
 		pnlPersonalInfo.add(dpBirthday);
 
@@ -422,7 +423,7 @@ public class fThongTinCaNhan extends JDialog
 		txtEmpID.setText(staff.getMaNhanVien());
 		txtFullName.setText(staff.getHoTen());
 		txtCMND.setText(staff.getCmnd());
-		dpBirthday.setValue(staff.getNgaySinh());
+		dpBirthday.setDate(new java.util.Date(staff.getNgaySinh().getTime()));
 		txtPhoneNumber.setText(staff.getSoDienThoai());
 		txtPosition.setText(staff.getChucVu());
 		boolean gender = staff.getGioiTinh();
@@ -445,7 +446,7 @@ public class fThongTinCaNhan extends JDialog
 		String staffId = txtEmpID.getText().trim();
 		String staffName = txtFullName.getText().trim();
 		String cmnd = txtCMND.getText().trim();
-		Date birthday = dpBirthday.getValueSqlDate();
+		Date birthday = new Date(dpBirthday.getDate().getTime());
 		String phoneNumber = txtPhoneNumber.getText().trim();
 		String position = txtPosition.getText().trim();
 		boolean gender = false;

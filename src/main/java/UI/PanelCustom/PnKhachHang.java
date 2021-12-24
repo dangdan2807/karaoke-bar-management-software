@@ -4,10 +4,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.*;
 import javax.swing.table.*;
+
+import com.toedter.calendar.JDateChooser;
 
 import DAO.*;
 import Event_Handlers.*;
@@ -41,7 +46,7 @@ public class PnKhachHang extends JPanel
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPhone, lblCustomerID, lblCustomerName, lblSearch;
 	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnNextToRight, btnNextToLast, btnNextToLeft;
 	private MyButton btnNextToFirst, btnChooseCustomer;
-	private kDatePicker dpBirthDay;
+	private JDateChooser dpBirthday;
 	private JComboBox<String> cboSearch, cboSearchGender;
 	private JRadioButton radMale, radFemale;
 	private PnTextFiledPaging txtPaging;
@@ -137,11 +142,10 @@ public class PnKhachHang extends JPanel
 		pnlInfo.setBounds(10, 70, 1238, 180);
 		pnlMain.add(pnlInfo);
 
-		dpBirthDay = new kDatePicker(250, 20);
-		CustomUI.getInstance().setCustomKDatePicker(dpBirthDay);
-		dpBirthDay.setTextFont(new Font("Dialog", Font.PLAIN, 14));
-		dpBirthDay.setBounds(165, 85, 250, 20);
-		pnlInfo.add(dpBirthDay);
+		dpBirthday = new JDateChooser();
+		CustomUI.getInstance().setCustomJDateChooser(dpBirthday);
+		dpBirthday.setBounds(165, 85, 250, 20);
+		pnlInfo.add(dpBirthday);
 
 		txtCMND = new JTextField();
 		txtCMND.setBounds(165, 50, 250, 20);
@@ -366,15 +370,6 @@ public class PnKhachHang extends JPanel
 		allLoaded();
 	}
 
-	// public static void main(String[] args) throws
-	// java.lang.reflect.InvocationTargetException, InterruptedException {
-	// SwingUtilities.invokeLater(() -> {
-	// NhanVien staff = new NhanVien("NV00000001");
-	// PnKhachHang login = new PnKhachHang(staff, 0);
-	// login.setVisible(true);
-	// });
-	// }
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -389,7 +384,7 @@ public class PnKhachHang extends JPanel
 			txtCustomerName.setText("");
 			txtCMND.setText("");
 			txtPhoneNumber.setText("");
-			dpBirthDay.setValueToDay();
+			dpBirthday.setDate(Calendar.getInstance().getTime());
 			radMale.setSelected(true);
 			btnUpdate.setEnabledCustom(false);
 			btnAdd.setEnabledCustom(true);
@@ -455,8 +450,15 @@ public class PnKhachHang extends JPanel
 			txtCustomerName.setText(tblTableCustomer.getValueAt(selectedRow, 2).toString().trim());
 			txtCMND.setText(tblTableCustomer.getValueAt(selectedRow, 3).toString().trim());
 			txtPhoneNumber.setText(tblTableCustomer.getValueAt(selectedRow, 4).toString().trim());
-			String birthDayStr = tblTableCustomer.getValueAt(selectedRow, 5).toString().trim();
-			dpBirthDay.setValue(birthDayStr);
+			String birthdayStr = tblTableCustomer.getValueAt(selectedRow, 5).toString().trim();
+			java.util.Date birthday = Calendar.getInstance().getTime();
+			try {
+				birthday = new SimpleDateFormat("dd-MM-yyyy").parse(birthdayStr);
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+				birthday = Calendar.getInstance().getTime();
+			}
+			dpBirthday.setDate(birthday);
 			String genderStr = tblTableCustomer.getValueAt(selectedRow, 6).toString().trim();
 			if (genderStr.equalsIgnoreCase("Nam")) {
 				radMale.setSelected(true);
@@ -606,7 +608,7 @@ public class PnKhachHang extends JPanel
 			return valid;
 		}
 
-		valid = ValidationData.getInstance().ValidBirthDay(this, dpBirthDay, "khách hàng", 16);
+		valid = ValidationData.getInstance().ValidBirthDay(this, dpBirthday, "khách hàng", 16);
 		if (!valid) {
 			return valid;
 		}
@@ -649,7 +651,7 @@ public class PnKhachHang extends JPanel
 		String customerName = txtCustomerName.getText().trim();
 		String phoneNumber = txtPhoneNumber.getText().trim();
 		String cmnd = txtCMND.getText().trim();
-		Date birthDay = dpBirthDay.getValueSqlDate();
+		Date birthDay = new Date(dpBirthday.getDate().getTime());
 		boolean gender = radMale.isSelected() ? false : true;
 		if (customerId.equals("") || customerId.length() <= 0)
 			customerId = createNewStaffID();

@@ -2,7 +2,12 @@ package UI.PanelCustom;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Calendar;
+
 import javax.swing.plaf.basic.BasicComboBoxUI;
+
+import com.toedter.calendar.JDateChooser;
+
 import javax.swing.border.*;
 
 /**
@@ -322,15 +327,19 @@ public class CustomUI {
 	}
 
 	/**
-	 * tùy chỉnh nhanh {@code kDatePicker}
+	 * tùy chỉnh nhanh {@code JDateChooser}
 	 * 
-	 * @param dp: {@code kDatePicker} cần tùy chỉnh
+	 * @param dp: {@code JDateChooser} cần tùy chỉnh
 	 */
-	public void setCustomKDatePicker(kDatePicker dp) {
-		dp.setBackgroundColor(new Color(255, 255, 255, 50));
-		dp.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		dp.setTextColor(Color.white);
-		dp.setOpaqueCustom(false);
-		dp.setTextFont(fontNormal);
+	public void setCustomJDateChooser(JDateChooser dp) {
+		// dp.setBackgroundColor(new Color(255, 255, 255, 50));
+		// dp.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
+		// dp.setTextColor(Color.white);
+		// dp.setOpaqueCustom(false);
+		// dp.setTextFont(fontNormal);
+		dp.setDateFormatString("dd/MM/yyyy");
+		dp.setFont(new Font("Dialog", Font.PLAIN, 14));
+		dp.setDate(Calendar.getInstance().getTime());
+		dp.setBackground(new Color(255, 255, 255, 50));
 	}
 }

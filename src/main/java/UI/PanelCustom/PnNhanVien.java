@@ -3,6 +3,8 @@ package UI.PanelCustom;
 import javax.swing.*;
 import javax.swing.table.*;
 
+import com.toedter.calendar.JDateChooser;
+
 import DAO.*;
 import Event_Handlers.*;
 import UI.*;
@@ -12,7 +14,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Giao diện quản lý nhân viên của phần mềm
@@ -40,7 +45,7 @@ public class PnNhanVien extends JPanel
 	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnResetPassword, btnNextToRight;
 	private MyButton btnNextToLast, btnNextToLeft, btnNextToFirst;
 	private JRadioButton radWorking, radRetired, radMale, radFemale;
-	private kDatePicker dpBirthDay;
+	private JDateChooser dpBirthday;
 	private JSpinner spnSalary;
 	private PnTextFiledPaging txtPaging;
 
@@ -140,11 +145,10 @@ public class PnNhanVien extends JPanel
 		pnlInfo.setBounds(10, 50, 1238, 210);
 		pnlMain.add(pnlInfo);
 
-		dpBirthDay = new kDatePicker(250, 20);
-		CustomUI.getInstance().setCustomKDatePicker(dpBirthDay);
-		dpBirthDay.setToolTipTextCustom("Ngày sinh của nhân viên");
-		pnlInfo.add(dpBirthDay);
-		dpBirthDay.setBounds(669, 76, 250, 20);
+		dpBirthday = new JDateChooser();
+		CustomUI.getInstance().setCustomJDateChooser(dpBirthday);
+		dpBirthday.setBounds(669, 76, 250, 20);
+		pnlInfo.add(dpBirthday);
 
 		txtCMND = new JTextField();
 		txtCMND.setBounds(165, 51, 250, 20);
@@ -419,7 +423,7 @@ public class PnNhanVien extends JPanel
 
 		txtCMND.addFocusListener(this);
 		cboSearch.addFocusListener(this);
-		dpBirthDay.addFocusListener(this);
+		dpBirthday.addFocusListener(this);
 		txtKeyWord.addFocusListener(this);
 		cboPosition.addFocusListener(this);
 		txtUsername.addFocusListener(this);
@@ -530,9 +534,20 @@ public class PnNhanVien extends JPanel
 				cboPosition.setSelectedIndex(1);
 			}
 			txtPhoneNumber.setText(tblTableStaff.getValueAt(selectedRow, 5).toString().trim());
-			dpBirthDay.setValue(tblTableStaff.getValueAt(selectedRow, 6).toString().trim());
+
+			String birthdayStr = tblTableStaff.getValueAt(selectedRow, 6).toString().trim();
+			java.util.Date birthday = Calendar.getInstance().getTime();
+			try {
+				birthday = new SimpleDateFormat("dd-MM-yyyy").parse(birthdayStr);
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+				birthday = Calendar.getInstance().getTime();
+			}
+			dpBirthday.setDate(birthday);
+			
 			String salaryStr = tblTableStaff.getValueAt(selectedRow, 7).toString().trim().replace(",", "");
 			spnSalary.setValue(Double.parseDouble(salaryStr));
+			
 			String genderStr = tblTableStaff.getValueAt(selectedRow, 8).toString().trim();
 			radMale.setSelected(true);
 			if (genderStr.equalsIgnoreCase("Nữ")) {
@@ -727,7 +742,7 @@ public class PnNhanVien extends JPanel
 			return valid;
 		}
 
-		valid = ValidationData.getInstance().ValidBirthDay(this, dpBirthDay, "nhân viên", 16);
+		valid = ValidationData.getInstance().ValidBirthDay(this, dpBirthday, "nhân viên", 16);
 		if (!valid) {
 			return valid;
 		}
@@ -797,7 +812,7 @@ public class PnNhanVien extends JPanel
 		Double salary = Double.parseDouble(spnSalary.getValue().toString());
 		String phoneNumber = txtPhoneNumber.getText().trim();
 		String cmnd = txtCMND.getText().trim();
-		Date birthDay = dpBirthDay.getValueSqlDate();
+		Date birthDay = new Date(dpBirthday.getDate().getTime());
 		boolean gender = radMale.isSelected() ? false : true;
 		String username = txtUsername.getText().trim();
 		TaiKhoan account = new TaiKhoan(username);
@@ -991,7 +1006,7 @@ public class PnNhanVien extends JPanel
 		spnSalary.setValue((double) 0);
 		radMale.setSelected(true);
 		cboPosition.setSelectedIndex(0);
-		dpBirthDay.setValueToDay();
+		dpBirthday.setDate(Calendar.getInstance().getTime());
 		radWorking.setSelected(true);
 		txtUsername.setText("");
 		txtUsername.setEditable(true);

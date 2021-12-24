@@ -2,6 +2,7 @@ package Event_Handlers;
 
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import java.awt.Component;
@@ -10,8 +11,9 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import com.toedter.calendar.JDateChooser;
+
 import UI.PanelCustom.CustomUI;
-import UI.PanelCustom.kDatePicker;
 
 /**
  * lớp này dùng để xác thực dữ liệu và thông báo lỗi
@@ -203,7 +205,7 @@ public class ValidationData {
      * 
      * @param component  {@code Component} component hiển thị popup thông báo:
      *                   ({@code JPane}, {@code JDialog}, {@code JFrame}, ...)
-     * @param datePicker {@code DatePicker}: DatePicker chọn ngày sinh
+     * @param dpBirthday {@code DatePicker}: DatePicker chọn ngày sinh
      * @param name       {@code String}: tên được hiển thị trên thông báo
      * @param ageLimit   {@code int}: tuổi tối thiểu
      *                   <ul>
@@ -216,10 +218,10 @@ public class ValidationData {
      *         <li>Nếu sai thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean ValidBirthDay(Component component, kDatePicker datePicker, String name, int ageLimit) {
+    public boolean ValidBirthDay(Component component, JDateChooser dpBirthday, String name, int ageLimit) {
         String message = "";
-        Date birthDay = datePicker.getValueSqlDate();
-        Date today = datePicker.getValueToDay();
+        Date birthDay = new Date(dpBirthday.getDate().getTime());
+        Date today = new Date(Calendar.getInstance().getTime().getTime());
         long difference = today.getTime() - birthDay.getTime();
         int currentAge = ((int) TimeUnit.MILLISECONDS.toDays(difference)) / 365;
         if (birthDay.after(today)) {
