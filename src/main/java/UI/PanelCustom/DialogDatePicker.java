@@ -1,6 +1,3 @@
-// Author : Pham Dang Dan - KayJuno
-// Date created   : April 23, 2021
-// Last update date: Oct 7, 2021
 package UI.PanelCustom;
 
 import javax.swing.*;
@@ -12,14 +9,22 @@ import java.util.Calendar;
 import java.sql.*;
 
 /**
- * Dialog dùng để chọn ngày giờ
+ * popup dialog chọn ngày tháng năm
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 23/04/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm giải thích lớp javadoc
  */
 public class DialogDatePicker extends JDialog implements ActionListener, ChangeListener {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 6679826367296394635L;
-	private int width = 450, heightPn = 210, widthPn = width - 20;
+     * 
+     */
+    private static final long serialVersionUID = 6679826367296394635L;
+    private int width = 450, heightPn = 220, widthPn = width - 20;
     private JButton[] button = new JButton[49];
     private String day = "";
     private int month = Calendar.getInstance().get(Calendar.MONTH);
@@ -37,7 +42,7 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
      */
     public DialogDatePicker() {
         setTitle("Chọn ngày");
-        setSize(447, 240);
+        setSize(447, 250);
         setResizable(false);
         setLocationRelativeTo(null);
 
@@ -182,10 +187,6 @@ public class DialogDatePicker extends JDialog implements ActionListener, ChangeL
         btnSubmit.addActionListener(this);
         btnCancel.addActionListener(this);
         spnYear.addChangeListener(this);
-    }
-
-    public static void main(String[] args) {
-        new DialogDatePicker().setVisible(true);
     }
 
     @Override

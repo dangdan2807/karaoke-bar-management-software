@@ -2,7 +2,6 @@ package UI;
 
 import javax.swing.*;
 
-import DAO.NhanVienDAO;
 import Event_Handlers.CheckPassword;
 import UI.PanelCustom.CustomUI;
 import UI.PanelCustom.MyButton;
@@ -11,25 +10,38 @@ import entity.NhanVien;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code CTDichVu}
+ * <p>
+ * Người tham gia thiết kế: Huỳnh Tuấn Anh
+ * <p>
+ * Ngày tạo: 13/10/2021
+ * <p>
+ * Lần cập nhật cuối: 21/12/2021
+ * <p>
+ * Nội dung cập nhật: đổi tên btn Help thành hỗ trợ
+ */
 public class fDieuHuong extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = 8033841194327699528L;
-    private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement;
+    private JButton btnLogOut, btnBookingManagement, btnSystemManagement, btnInfoManagement, btnHelp;
+    private JLabel lblStaffName, lblStaffNameTxt;
     private NhanVien staffLogin = null;
+
     private final String STAFF = "Nhân viên", MANAGER = "Chủ quán";
-    private ImageIcon logoApp = CustomUI.LOGO_APP;
-    private ImageIcon profileIcon = new ImageIcon(
-            CustomUI.PROFILE_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
-    private ImageIcon sellIcon = new ImageIcon(
-            CustomUI.SELL_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
-    private ImageIcon managerIcon = new ImageIcon(
-            CustomUI.MANAGER_ICON.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
-    private ImageIcon logoutIcon = CustomUI.LOGOUT_ICON;
+    private ImageIcon logoApp = new ImageIcon(fDieuHuong.class.getResource(CustomUI.LOGO_APP));
+    private ImageIcon logoutIcon = new ImageIcon(fDieuHuong.class.getResource(CustomUI.LOGOUT_ICON));
+    private ImageIcon profileIcon = new ImageIcon(new ImageIcon(fDieuHuong.class.getResource(
+            CustomUI.PROFILE_ICON)).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+    private ImageIcon sellIcon = new ImageIcon(new ImageIcon(fDieuHuong.class.getResource(
+            CustomUI.SELL_ICON)).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
+    private ImageIcon managerIcon = new ImageIcon(new ImageIcon(fDieuHuong.class.getResource(
+            CustomUI.MANAGER_ICON)).getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH));
     private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
-            Color.decode("#FAFFD1"));;
+            Color.decode("#FAFFD1"));
 
     /**
-     * Constructor form điều hướng
+     * Khỏi tại giao diện form điều hướng
      * 
      * @param staffLogin {@code NhanVien}: nhân viên truy cập
      */
@@ -82,18 +94,18 @@ public class fDieuHuong extends JFrame implements ActionListener {
         btnLogOut.setToolTipText("Đăng xuất tài khoản");
         pnlBottom.add(btnLogOut);
 
-        btnBookingManagement = new JButton("Quản lý đặt phòng");
+        btnBookingManagement = new JButton("QUẢN LÝ ĐẶT PHÒNG");
         btnBookingManagement.setIcon(sellIcon);
-        customBtn(btnBookingManagement);
-        
-        btnInfoManagement = new JButton("Thông Tin Cá Nhân");
+        customBtnSize(btnBookingManagement, 20, 180, 150);
+
+        btnInfoManagement = new JButton("THÔNG TIN CÁ NHÂN");
         btnInfoManagement.setIcon(profileIcon);
-        customBtn(btnInfoManagement);
-        
-        btnSystemManagement = new JButton("Quản Trị");
+        customBtnSize(btnInfoManagement, 20, 180, 150);
+
+        btnSystemManagement = new JButton("QUẢN TRỊ");
         btnSystemManagement.setIcon(managerIcon);
-        customBtn(btnSystemManagement);
-        
+        customBtnSize(btnSystemManagement, 20, 180, 150);
+
         if (staffLogin.getChucVu().equals(MANAGER)) {
             btnBookingManagement.setBounds(261, 25, 240, 240);
             btnSystemManagement.setBounds(10, 25, 240, 240);
@@ -107,25 +119,54 @@ public class fDieuHuong extends JFrame implements ActionListener {
             btnSystemManagement.setEnabled(false);
         }
 
+        lblStaffName = new JLabel("Nhân viên:");
+        lblStaffName.setFont(new Font("Dialog", Font.BOLD, 15));
+        lblStaffName.setForeground(Color.WHITE);
+        lblStaffName.setBounds(20, 0, 80, 30);
+        pnlMain.add(lblStaffName);
+
+        String staffName = staffLogin.getHoTen();
+        if (staffName.equals("") || staffName.isEmpty() || staffName == null) {
+            staffName = "";
+        }
+
+        lblStaffNameTxt = new JLabel(staffName);
+        lblStaffNameTxt.setForeground(Color.WHITE);
+        lblStaffNameTxt.setFont(new Font("Dialog", Font.BOLD, 15));
+        lblStaffNameTxt.setBounds(110, 0, 200, 30);
+        pnlMain.add(lblStaffNameTxt);
+
+        btnHelp = new JButton("<html><u>Hỗ trợ?</u></html>");
+        customBtnSize(btnHelp, 15, 80, 30);
+        btnHelp.setBounds(670, 0, 80, 30);
+        pnlMain.add(btnHelp);
+
         pnlMain.add(btnSystemManagement);
         pnlMain.add(btnBookingManagement);
         pnlMain.add(btnInfoManagement);
 
-        btnBookingManagement.addActionListener(this);
-        btnInfoManagement.addActionListener(this);
+        lblStaffName = new JLabel("Nhân viên:");
+        lblStaffName.setFont(new Font("Dialog", Font.BOLD, 15));
+        lblStaffName.setForeground(Color.WHITE);
+        lblStaffName.setBounds(20, 0, 80, 30);
+        pnlMain.add(lblStaffName);
+
+        lblStaffNameTxt = new JLabel(staffLogin.getHoTen());
+        lblStaffNameTxt.setForeground(Color.WHITE);
+        lblStaffNameTxt.setFont(new Font("Dialog", Font.BOLD, 15));
+        lblStaffNameTxt.setBounds(110, 0, 200, 30);
+        pnlMain.add(lblStaffNameTxt);
+
         btnLogOut.addActionListener(this);
+        btnHelp.addActionListener(this);
+        btnInfoManagement.addActionListener(this);
         btnSystemManagement.addActionListener(this);
+        btnBookingManagement.addActionListener(this);
 
         checkPermission(type);
         CheckPassword t = new CheckPassword(staffLogin.getTaiKhoan().getMatKhau(), btnBookingManagement,
                 btnSystemManagement, this);
         t.start();
-    }
-
-    public static void main(String[] args) {
-        // NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("nhanvien1");
-        NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-        new fDieuHuong(staff).setVisible(true);
     }
 
     @Override
@@ -153,6 +194,10 @@ public class fDieuHuong extends JFrame implements ActionListener {
                     checkPermission(staffLogin.getChucVu());
                 }
             }
+        } else if (o.equals(btnHelp)) {
+            fHelp winHelp = new fHelp(staffLogin);
+            winHelp.setModal(true);
+            winHelp.setVisible(true);
         }
     }
 
@@ -202,14 +247,29 @@ public class fDieuHuong extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Thiết lập các thông số cho các btn theo font size chữ, chiều dài và rộng của
+     * nút
+     * 
+     * @param btn
+     */
+    private void customBtnSize(JButton btn, int fontSize, int width, int height) {
+        btn.setFont(new Font("Dialog", Font.BOLD, fontSize));
+        btn.setPreferredSize(new Dimension(width, height));
+        customBtn(btn);
+    }
+
+    /**
+     * Thiết lập các thông số cho các btn
+     * 
+     * @param btn
+     */
     private void customBtn(JButton btn) {
         btn.setOpaque(false);
         btn.setContentAreaFilled(false);
         btn.setFocusPainted(false);
         btn.setBorder(null);
         btn.setForeground(Color.white);
-        btn.setFont(new Font("Dialog", Font.BOLD, 20));
-        btn.setPreferredSize(new Dimension(180, 150));
         btn.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn.setHorizontalTextPosition(SwingConstants.CENTER);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));

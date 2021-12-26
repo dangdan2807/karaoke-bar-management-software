@@ -9,7 +9,7 @@ import connectDB.ConnectDB;
  * <p>
  * Người tham gia thiết kế: Phạm Đăng Đan
  * <p>
- * Ngày tạo: 15/06/2021
+ * Ngày tạo: 13/05/2021
  * <p>
  * Lần cập nhật cuối: 19/11/2021
  * <p>
@@ -39,7 +39,7 @@ public class DataProvider {
      * @return {@code ResultSet} trả về 1 {@code ResultSet} chứa thông tin của câu
      *         truy vấn truyền vào
      */
-    public ResultSet ExecuteQuery(String query, Object[] parameter) {
+    public ResultSet executeQuery(String query, Object[] parameter) {
         PreparedStatement stmt = null;
         ResultSet dataList = null;
         Connection con = null;
@@ -77,7 +77,7 @@ public class DataProvider {
      *         <li>{@code false} truy vấn thất bại</li>
      *         </ul>
      */
-    public int ExecuteNonQuery(String query, Object[] parameter) {
+    public int executeNonQuery(String query, Object[] parameter) {
         int data = 0;
         PreparedStatement stmt = null;
         Connection con = null;
@@ -117,7 +117,7 @@ public class DataProvider {
      *                  tại các dấu {@code ?}
      * @return {@code Object}: trả về 1 Object chứa giá trị cần lấy ra
      */
-    public Object ExecuteScalar(String query, Object[] parameter) {
+    public Object executeScalar(String query, Object[] parameter) {
         Object data = null;
         ResultSet rs = null;
         PreparedStatement stmt = null;

@@ -1,8 +1,18 @@
 package entity;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
+/**
+ * Lớp loại phòng
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 01/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm javadoc
+ */
 public class LoaiPhong {
 	private String maLP;
 	private String tenLP;
@@ -109,6 +119,10 @@ public class LoaiPhong {
 	 * Tạo 1 loại phòng không tham số
 	 */
 	public LoaiPhong() {
+		this.maLP = "";
+		this.tenLP = "";
+		this.sucChua = 0;
+		this.giaTien = 0.0;
 	}
 
 	/**

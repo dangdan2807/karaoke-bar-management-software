@@ -1,8 +1,18 @@
 package entity;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
+/**
+ * Lớp loại dịch vụ
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 01/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm javadoc
+ */
 public class LoaiDichVu {
 	private String maLDV;
 	private String tenLDV;
@@ -67,6 +77,8 @@ public class LoaiDichVu {
 	 * Tạo 1 {@code LoaiDichVu} không tham số
 	 */
 	public LoaiDichVu() {
+		this.maLDV = "";
+		this.tenLDV = "";
 	}
 
 	/**

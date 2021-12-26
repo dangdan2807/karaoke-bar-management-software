@@ -2,20 +2,32 @@ package UI.PanelCustom;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.ConvertTime;
+import Event_Handlers.ExportBill;
 import Event_Handlers.InputEventHandler;
 import UI.fDieuHuong;
-import UI.fQuanTri;
 import entity.*;
 
+/**
+ * Giao diện quản lý hóa đơn của phần mềm
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 01/11/2021
+ * <p>
+ * Lần cập nhật cuối: 18/12/2021
+ * <p>
+ * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh, 
+ */
 public class PnHoaDon extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**
@@ -27,19 +39,42 @@ public class PnHoaDon extends JPanel
 			Color.decode("#FAFFD1"));
 	private JTable tblTableBill, tblTableBillInfo;
 	private DefaultTableModel modelTableBill, modelTableBillInfo;
-	private MyButton btnSearch, btnRefresh, btnBack;
+	private MyButton btnSearch, btnExportBill, btnBack;
 	private JLabel lblToDate, lblSearch, lblFromDate;
 	private kDatePicker dpToDate, dpFromDate;
 	private JComboBox<String> cboSearch, cboSearchType;
 	private JTextField txtBFieldSearch, txtKeyWord, txtBFieldSearchType;
+	private MyButton btnNextToRight, btnNextToLast, btnNextToLeft, btnNextToFirst;
+	private PnTextFiledPaging txtPaging;
 
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-	private ImageIcon backIcon = CustomUI.BACK_ICON;
+	private ImageIcon bg = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
+			CustomUI.BACKGROUND)).getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon nextIconRight = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
+			CustomUI.NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
+			CustomUI.NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(new ImageIcon(PnHoaDon.class.getResource(
+			CustomUI.DOUBLE_NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon backIcon = new ImageIcon(PnHoaDon.class.getResource(CustomUI.BACK_ICON));
+	private ImageIcon billIcon = new ImageIcon(PnHoaDon.class.getResource(CustomUI.BILL_ICON));
+	private ImageIcon searchIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.SEARCH_ICON));
 
 	private NhanVien staffLogin = null;
 	private DecimalFormat df = new DecimalFormat("#,###.##");
+	private int lineNumberDisplayed = 6;
+	private HoaDonDAO billDAO = HoaDonDAO.getInstance();
+	private NhanVienDAO staffDAO = NhanVienDAO.getInstance();
+	private KhachHangDAO customerDAO = KhachHangDAO.getInstance();
+	private PhongDAO roomDAO = PhongDAO.getInstance();
+	private CTDichVuDAO serviceDetailDAO = CTDichVuDAO.getInstance();
 
+	/**
+	 * Khởi tạo giao diện quản lý hóa đơn
+	 * 
+	 * @param staff {@code NhanVien} nhân viên đăng nhập
+	 */
 	public PnHoaDon(NhanVien staff) {
 		this.staffLogin = staff;
 		setSize(1270, 630);
@@ -93,14 +128,14 @@ public class PnHoaDon extends JPanel
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
 		pnlInfo.setOpaque(false);
-		pnlInfo.setBounds(10, 41, 1238, 110);
+		pnlInfo.setBounds(10, 41, 1238, 100);
 		pnlMain.add(pnlInfo);
 
 		dpToDate = new kDatePicker(250, 20);
 		dpToDate.setBackgroundColor(new Color(255, 255, 255, 50));
 		dpToDate.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		dpToDate.setForegroundCustom(Color.white);
-		dpToDate.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
+		dpToDate.setTextColor(Color.white);
+		dpToDate.setTextFont(new Font("Dialog", Font.PLAIN, 14));
 		dpToDate.setOpaqueCustom(false);
 		dpToDate.setToolTipTextCustom("Ngày kết thúc thống kê");
 		dpToDate.setBounds(747, 26, 250, 20);
@@ -114,8 +149,8 @@ public class PnHoaDon extends JPanel
 		dpFromDate = new kDatePicker(250, 20);
 		dpFromDate.setBackgroundColor(new Color(255, 255, 255, 50));
 		dpFromDate.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		dpFromDate.setForegroundCustom(Color.white);
-		dpFromDate.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
+		dpFromDate.setTextColor(Color.white);
+		dpFromDate.setTextFont(new Font("Dialog", Font.PLAIN, 14));
 		dpFromDate.setOpaqueCustom(false);
 		dpFromDate.setBounds(292, 26, 250, 20);
 		dpFromDate.setToolTipTextCustom("Ngày bắt đầu thống kê");
@@ -126,19 +161,19 @@ public class PnHoaDon extends JPanel
 		lblFromDate.setBounds(187, 26, 105, 20);
 		pnlInfo.add(lblFromDate);
 
-		btnRefresh = new MyButton(100, 35, "Làm mới", gra, CustomUI.REFRESH_ICON.getImage(), 27, 19, 6, 5);
-		btnRefresh.setToolTipText("Làm mới form");
-		btnRefresh.setBounds(1116, 70, 100, 35);
-		pnlInfo.add(btnRefresh);
+		btnExportBill = new MyButton(150, 35, "Xuất hóa đơn", gra, billIcon.getImage(), 40, 19, 6, 5);
+		btnExportBill.setToolTipText("Xuất hóa đơn");
+		btnExportBill.setBounds(1065, 60, 150, 35);
+		pnlInfo.add(btnExportBill);
 
-		btnSearch = new MyButton(100, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(), 26, 19, 5, 5);
-		btnSearch.setBounds(1116, 20, 100, 35);
+		btnSearch = new MyButton(150, 35, "Tìm kiếm", gra, searchIcon.getImage(), 50, 19, 5, 5);
+		btnSearch.setBounds(1065, 20, 150, 35);
 		btnSearch.setToolTipText("Tìm kiếm thông tin nhân viên theo từ khóa");
 		pnlInfo.add(btnSearch);
 
 		lblSearch = new JLabel("Lọc theo:");
 		CustomUI.getInstance().setCustomLabel(lblSearch);
-		lblSearch.setBounds(187, 70, 105, 20);
+		lblSearch.setBounds(187, 60, 105, 20);
 		pnlInfo.add(lblSearch);
 
 		cboSearch = new JComboBox<String>();
@@ -149,16 +184,16 @@ public class PnHoaDon extends JPanel
 		cboSearch.addItem("Mã hóa đơn");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
-		cboSearch.setBounds(290, 70, 250, 20);
+		cboSearch.setBounds(290, 60, 250, 20);
 		pnlInfo.add(cboSearch);
 
 		JLabel lpKeyWord = new JLabel("Từ khóa:");
 		CustomUI.getInstance().setCustomLabel(lpKeyWord);
-		lpKeyWord.setBounds(642, 70, 105, 20);
+		lpKeyWord.setBounds(642, 60, 105, 20);
 		pnlInfo.add(lpKeyWord);
 
 		txtKeyWord = new JTextField();
-		txtKeyWord.setBounds(747, 70, 250, 20);
+		txtKeyWord.setBounds(747, 60, 250, 20);
 		txtKeyWord.setForeground(Color.WHITE);
 		txtKeyWord.setFont(new Font("Dialog", Font.PLAIN, 14));
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
@@ -175,8 +210,15 @@ public class PnHoaDon extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		pnlTable.setBounds(8, 151, 1240, 434);
+		pnlTable.setBounds(8, 130, 1240, 440);
 		pnlTable.setOpaque(false);
+
+		JPanel pnlTableBill = new JPanel(null);
+		pnlTableBill.setLayout(null);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTableBill, "Danh sách hóa đơn");
+		pnlTableBill.setOpaque(false);
+		pnlTableBill.setBounds(10, 0, 1220, 182);
+		pnlTable.add(pnlTableBill);
 
 		String[] colsTableBill = { "STT", "Mã hóa đơn", "Ngày đặt ", "Ngày trả", "Mã phòng", "Tên khách hàng",
 				"Tên Nhân viên", "Tổng tiền" };
@@ -188,11 +230,40 @@ public class PnHoaDon extends JPanel
 		};
 
 		tblTableBill = new JTable(modelTableBill);
+		tblTableBill.setLocation(620, 0);
 		tblTableBill.setRowHeight(21);
 		CustomUI.getInstance().setCustomTable(tblTableBill);
-		JScrollPane scrTableBill = CustomUI.getInstance().setCustomScrollPane(tblTableBill);
-		scrTableBill.setBounds(10, 35, 1220, 182);
-		pnlTable.add(scrTableBill);
+		JScrollPane scrTableBill = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableBill);
+		scrTableBill.setBounds(10, 20, 1200, 152);
+		pnlTableBill.add(scrTableBill);
+
+		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextToRight.setBounds(690, 185, 70, 35);
+		pnlTable.add(btnNextToRight);
+
+		btnNextToLast = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLast.setBounds(770, 185, 70, 35);
+		pnlTable.add(btnNextToLast);
+
+		btnNextToLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLeft.setBounds(510, 185, 70, 35);
+		pnlTable.add(btnNextToLeft);
+
+		btnNextToFirst = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToFirst.setBounds(430, 185, 70, 35);
+		pnlTable.add(btnNextToFirst);
+
+		txtPaging = new PnTextFiledPaging(90, 35);
+		txtPaging.setBounds(590, 185, 91, 36);
+		txtPaging.setTextColor(Color.WHITE);
+		pnlTable.add(txtPaging);
+
+		JPanel pnlTableBillInfo = new JPanel(null);
+		pnlTableBillInfo.setLayout(null);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTableBillInfo, "Chi tiết hóa đơn");
+		pnlTableBillInfo.setOpaque(false);
+		pnlTableBillInfo.setBounds(10, 220, 1220, 223);
+		pnlTable.add(pnlTableBillInfo);
 
 		String[] colsBillInfo = { "STT", "Tên dịch vụ ", "Số lượng đặt", "Giá tiền", "Thành tiền" };
 		modelTableBillInfo = new DefaultTableModel(colsBillInfo, 0) {
@@ -202,15 +273,20 @@ public class PnHoaDon extends JPanel
 			}
 		};
 		tblTableBillInfo = new JTable(modelTableBillInfo);
+		tblTableBillInfo.setLocation(620, 0);
 		tblTableBillInfo.setRowHeight(21);
 		CustomUI.getInstance().setCustomTable(tblTableBillInfo);
 		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPane(tblTableBillInfo);
-		scrTableBillInfo.setBounds(10, 252, 1220, 175);
-		pnlTable.add(scrTableBillInfo);
+		scrTableBillInfo.setBounds(10, 20, 1200, 193);
+		pnlTableBillInfo.add(scrTableBillInfo);
 		pnlMain.add(pnlTable);
 
-		btnRefresh.addActionListener(this);
+		btnExportBill.addActionListener(this);
 		btnSearch.addActionListener(this);
+		btnNextToLast.addActionListener(this);
+		btnNextToLeft.addActionListener(this);
+		btnNextToRight.addActionListener(this);
+		btnNextToFirst.addActionListener(this);
 
 		txtBFieldSearch.addMouseListener(this);
 		txtBFieldSearchType.addMouseListener(this);
@@ -223,13 +299,6 @@ public class PnHoaDon extends JPanel
 		allLoaded();
 	}
 
-	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("huynhtuananh");
-			new fQuanTri(staff).setVisible(true);
-		});
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -237,13 +306,62 @@ public class PnHoaDon extends JPanel
 			fDieuHuong winNavigation = new fDieuHuong(staffLogin);
 			this.setVisible(false);
 			winNavigation.setVisible(true);
-		} else if (o.equals(btnRefresh)) {
-			txtKeyWord.setText("");
-			dpFromDate.setValueToDay();
-			dpToDate.setValueToDay();
-			cboSearch.setSelectedIndex(0);
-			removeSelectionInterval();
+		} else if (o.equals(btnExportBill)) {
+			int selectedRow = tblTableBill.getSelectedRow();
+			if (selectedRow != -1) {
+				String billId = tblTableBill.getValueAt(selectedRow, 1).toString().trim();
+				HoaDon bill = billDAO.getBillByBillId(billId);
+				if (bill != null) {
+					String message = "Bạn có muốn xuất hóa đơn dạng nào ?";
+					String title = "Xác nhận đăng xuất tài khoản";
+					Object[] options = { "PDF", "Excel", "Hủy" };
+					int selected = JOptionPane.showOptionDialog(this, message, title, JOptionPane.DEFAULT_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+					if (selected != 2) {
+						NhanVien staff = staffDAO.getStaffByBillId(billId);
+						KhachHang customer = customerDAO.getCustomerByBillId(billId);
+						Phong room = roomDAO.getRoomByBillId(billId);
+						ArrayList<CTDichVu> serviceDetailList = new ArrayList<>();
+						serviceDetailList = serviceDetailDAO.getServiceDetailListByBillId(billId);
+						if (staff == null)
+							staff = new NhanVien();
+						if (room == null)
+							room = new Phong();
+						if (customer == null)
+							customer = new KhachHang();
+						bill.setPhong(room);
+						bill.setNhanVien(staff);
+						bill.setKhachHang(customer);
+						bill.setDsCTDichVu(serviceDetailList);
+						String pathExportBill = CustomUI.PATH_EXPORT_BILL;
+						boolean isSuccess = false;
+						if (selected == 1)
+							isSuccess = ExportBill.getInstance().exportBillToExcel(bill, pathExportBill);
+						else if (selected == 0)
+							isSuccess = ExportBill.getInstance().exportBillToPdf(bill, pathExportBill);
+						if (isSuccess)
+							JOptionPane.showMessageDialog(this, "Xuất hóa đơn thành công");
+						else
+							JOptionPane.showMessageDialog(this, "Xuất hóa đơn thất bại");
+					}
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Bạn chưa chọn hóa đơn để xuất", "Thông báo",
+						JOptionPane.WARNING_MESSAGE);
+			}
 		} else if (o.equals(btnSearch)) {
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToLeft)) {
+			txtPaging.subtractOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToRight)) {
+			txtPaging.plusOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToFirst)) {
+			txtPaging.toTheFirstPage();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToLast)) {
+			txtPaging.toTheLastPage();
 			searchEventUsingBtnSearch();
 		}
 	}
@@ -252,6 +370,7 @@ public class PnHoaDon extends JPanel
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
 		if (o.equals(cboSearch)) {
+			txtPaging.toTheFirstPage();
 			String searchTypeName = cboSearch.getSelectedItem().toString();
 			txtKeyWord.setText("");
 			if (searchTypeName.equalsIgnoreCase("Tất cả")) {
@@ -272,7 +391,7 @@ public class PnHoaDon extends JPanel
 		} else if (o.equals(tblTableBill)) {
 			int rowSelected = tblTableBill.getSelectedRow();
 			String billId = tblTableBill.getValueAt(rowSelected, 1).toString().trim();
-			ArrayList<CTDichVu> serviceDetailList = CTDichVuDAO.getInstance().getServiceDetailListByBillId(billId);
+			ArrayList<CTDichVu> serviceDetailList = serviceDetailDAO.getServiceDetailListByBillId(billId);
 			loadServiceDetailList(serviceDetailList);
 		}
 	}
@@ -310,7 +429,7 @@ public class PnHoaDon extends JPanel
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 	}
 
 	@Override
@@ -324,8 +443,8 @@ public class PnHoaDon extends JPanel
 				searchEventUsingBtnSearch();
 			}
 			if (searchTypeName.equalsIgnoreCase("SĐT khách hàng")) {
-				handler.enterOnlyNumbers(key, txtKeyWord, 10);
-			} else if(searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {
+				handler.enterOnlyNumbersAndLimitInput(key, txtKeyWord, 10);
+			} else if (searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {
 				handler.characterInputLimit(key, txtKeyWord, 15);
 			} else {
 				handler.characterInputLimit(key, txtKeyWord, 100);
@@ -363,9 +482,16 @@ public class PnHoaDon extends JPanel
 		reSizeColumnTableBill();
 		reSizeColumnTableBillInfo();
 		Date startDate = dpFromDate.getValueSqlDate();
-		Date endDate = dpToDate.getNextDay();
+		Date endDate = dpToDate.getValueSqlDate();
 		String staffId = staffLogin.getMaNhanVien();
-		loadBillList(HoaDonDAO.getInstance().getBillListByDate(startDate, endDate, staffId));
+		txtPaging.setCurrentPage(1);
+		int totalLine = 1;
+		ArrayList<HoaDon> billList = new ArrayList<>();
+		billList = billDAO.getBillListByDateAndPageNumber(startDate, endDate, staffId, 1,
+				lineNumberDisplayed);
+		totalLine = billDAO.getTotalLineOfBillList(startDate, endDate, staffId);
+		txtPaging.setTotalPage(getLastPage(totalLine));
+		loadBillList(billList);
 	}
 
 	/**
@@ -421,16 +547,24 @@ public class PnHoaDon extends JPanel
 		String format = "dd-MM-yyyy HH:mm:ss";
 		String startTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioDat(), format);
 		String endTimeStr = ConvertTime.getInstance().convertTimeToString(bill.getNgayGioTra(), format);
+		KhachHang customer = customerDAO.getCustomerByBillId(billId);
+		NhanVien staff = staffDAO.getStaffByBillId(billId);
+		Phong room = roomDAO.getRoomByBillId(billId);
+		List<CTDichVu> serviceOrders = new ArrayList<>();
+		serviceOrders = serviceDetailDAO.getServiceDetailListByBillId(bill.getMaHoaDon());
+		if (staff == null)
+			staff = new NhanVien();
+		if (room == null)
+			room = new Phong();
+		if (customer == null)
+			customer = new KhachHang();
 
-		KhachHang customer = KhachHangDAO.getInstance().getCustomerByBillId(billId);
-		Double totalPrice = HoaDonDAO.getInstance().getTotalPriceBill(billId);
-		NhanVien staff = NhanVienDAO.getInstance().getStaffByBillId(billId);
-		Phong room = PhongDAO.getInstance().getRoomByBillId(billId);
+		bill.setDsCTDichVu(serviceOrders);
 
 		modelTableBill.addRow(new Object[] { sttStr, addSpaceToString(String.valueOf(billId)),
 				addSpaceToString(startTimeStr), addSpaceToString(endTimeStr), addSpaceToString(room.getMaPhong()),
 				addSpaceToString(customer.getHoTen()), addSpaceToString(staff.getHoTen()),
-				addSpaceToString(df.format(totalPrice)) });
+				addSpaceToString(df.format(bill.getTongTienHD())) });
 		modelTableBill.fireTableDataChanged();
 	}
 
@@ -530,45 +664,65 @@ public class PnHoaDon extends JPanel
 	}
 
 	/**
-	 * Xóa bỏ dòng đang chọn
-	 */
-	private void removeSelectionInterval() {
-		int selectedRow = tblTableBill.getSelectedRow();
-		tblTableBill.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
-		selectedRow = tblTableBillInfo.getSelectedRow();
-		tblTableBillInfo.getSelectionModel().removeSelectionInterval(selectedRow, selectedRow);
-	}
-
-	/**
 	 * tìm kiếm loại phòng dựa trên điều kiện khi kích hoạt event trên btnSearch
 	 */
 	private void searchEventUsingBtnSearch() {
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		Date fromDate = dpFromDate.getValueSqlDate();
-		Date toDate = dpToDate.getNextDay();
+		Date toDate = dpToDate.getValueSqlDate();
 		ArrayList<HoaDon> billList = new ArrayList<>();
 		String keyword = txtKeyWord.getText().trim();
 		String staffId = staffLogin.getMaNhanVien();
+		int currentPage = txtPaging.getCurrentPage();
+		int totalLine = 1;
 		if (validData()) {
 			if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-				billList = HoaDonDAO.getInstance().getBillListByDate(fromDate, toDate, staffId);
+				totalLine = billDAO.getTotalLineOfBillList(fromDate, toDate, staffId);
+				billList = billDAO.getBillListByDateAndPageNumber(fromDate, toDate, staffId, currentPage,
+						lineNumberDisplayed);
 			} else if (searchTypeName.equalsIgnoreCase("SĐT khách hàng")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerPhoneNumber(keyword, fromDate, toDate, staffId);
+				totalLine = billDAO.getTotalLineOfBillListByDateAndCustomerPhoneNumber(keyword, fromDate, toDate,
+						keyword);
+				billList = billDAO.getBillListByDateAndCustomerPhoneNumberAndPageNumber(keyword, fromDate, toDate,
+						staffId, currentPage, lineNumberDisplayed);
 			} else if (searchTypeName.equalsIgnoreCase("Tên khách hàng")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndCustomerName(keyword, fromDate, toDate, staffId);
+				totalLine = billDAO.getTotalLineOfBillListByDateAndCustomerName(keyword, fromDate, toDate, staffId);
+				billList = billDAO.getBillListByDateAndCustomerNameAndPageNumber(keyword, fromDate, toDate, staffId,
+						currentPage, lineNumberDisplayed);
 			} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndStaffName(keyword, fromDate, toDate, staffId);
+				totalLine = billDAO.getTotalLineOfBillListByDateAndStaffName(keyword, fromDate, toDate, staffId);
+				billList = billDAO.getBillListByDateAndStaffNameAndPageNumber(keyword, fromDate, toDate, staffId,
+						currentPage, lineNumberDisplayed);
 			} else if (searchTypeName.equalsIgnoreCase("Mã hóa đơn")) {
-				billList = HoaDonDAO.getInstance().getBillListByDateAndBillId(keyword, fromDate, toDate, staffId);
+				totalLine = billDAO.getTotalLineOfBillListByDateAndBillId(keyword, fromDate, toDate, staffId);
+				billList = billDAO.getBillListByDateAndBillIdAndPageNumber(keyword, fromDate, toDate, staffId,
+						currentPage,
+						lineNumberDisplayed);
 			}
-			loadBillList(billList);
 		}
+		int lastPage = getLastPage(totalLine);
+		txtPaging.setTotalPage(lastPage);
+		loadBillList(billList);
 	}
 
 	/**
 	 * Lấy nút quay lại
 	 */
-	public JButton getBtnBack() {
+	public MyButton getBtnBack() {
 		return btnBack;
+	}
+
+	/**
+	 * tính số trang của bảng dựa trên tổng số khách hàng tìm được
+	 * 
+	 * @param totalLine {@code int} tổng số khách hàng tìm được
+	 * @return {@code int} số trang
+	 */
+	public int getLastPage(int totalLine) {
+		int lastPage = totalLine / lineNumberDisplayed;
+		if (totalLine % lineNumberDisplayed != 0) {
+			lastPage++;
+		}
+		return lastPage;
 	}
 }

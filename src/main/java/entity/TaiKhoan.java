@@ -1,8 +1,18 @@
 package entity;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
+/**
+ * Lớp tài khoản nhân viên
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 01/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm javadoc
+ */
 public class TaiKhoan {
 	private String tenDangNhap;
 	private String matKhau;
@@ -92,6 +102,9 @@ public class TaiKhoan {
 	 * Tạo 1 {@code TaiKhoan} không tham số
 	 */
 	public TaiKhoan() {
+		this.matKhau = "";
+		this.tenDangNhap = "";
+		this.tinhTrangTK = false;
 	}
 
 	/**

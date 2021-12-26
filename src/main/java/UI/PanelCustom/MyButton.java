@@ -7,6 +7,14 @@ import java.awt.event.*;
 
 /**
  * Tạo 1 {@code JButton} tự tùy chỉnh theo ý muốn
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan, Võ Minh Hiếu
+ * <p>
+ * Ngày tạo: 03/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm phần giới thiệu lớn 
  */
 public class MyButton extends JButton implements MouseListener {
 	/**
@@ -314,5 +322,24 @@ public class MyButton extends JButton implements MouseListener {
 	public void setEnabledCustom(boolean enabled) {
 		this.enabled = enabled;
 		setEnabled(enabled);
+	}
+
+	/**
+	 * Thay đổi nội dung hiển thị của nút
+	 * 
+	 * @param text {@code String}: nội dung hiển thị cần thay đổi
+	 */
+	public void setTextCustom(String text) {
+		this.Label = text;
+	}
+
+	/**
+	 * Thay đổi vĩ trí chữ trên nút
+	 * @param x {@code int} vị trí x của chữ trên nút
+	 * @param y {@code int} vị trí y của chữ trên nút
+	 */
+	public void setLocationName(int x, int y) {
+		this.xLabel = x;
+		this.yLabel = y;
 	}
 }

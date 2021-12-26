@@ -1,13 +1,24 @@
 package entity;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
+/**
+ * Lớp chi tiết dịch vụ
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 01/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm javadoc
+ */
 public class CTDichVu {
+	private HoaDon hoaDon;
+	private DichVu dichVu;
+
 	private int soLuongDat;
 	private double donGia;
-
-	private DichVu dichVu;
 
 	/**
 	 * Lây đơn giá bán ở thời điểm tạo hóa đơn
@@ -16,6 +27,14 @@ public class CTDichVu {
 	 */
 	public double getDonGia() {
 		return donGia;
+	}
+
+	public HoaDon getHoaDon() {
+		return hoaDon;
+	}
+
+	public void setHoaDon(HoaDon hoaDon) {
+		this.hoaDon = hoaDon;
 	}
 
 	/**
@@ -70,7 +89,7 @@ public class CTDichVu {
 	 * @param donGia     {@code double}: Giá dịch vụ tại thời điểm bán
 	 * @param dichVu     {@code DichVu}: Dịch vụ đã đặt
 	 */
-	public CTDichVu(int soLuongDat, double donGia, DichVu dichVu) {
+	public CTDichVu(int soLuongDat, double donGia, DichVu dichVu, HoaDon hoaDon) {
 		this.soLuongDat = soLuongDat;
 		this.donGia = donGia;
 		this.dichVu = dichVu;
@@ -89,7 +108,7 @@ public class CTDichVu {
 	 * @throws SQLException {@code SQLException}: lỗi truy vấn
 	 */
 	public CTDichVu(ResultSet rs) throws SQLException {
-		this(rs.getInt("soLuongDat"), rs.getDouble("donGia"), new DichVu(rs));
+		this(rs.getInt("soLuongDat"), rs.getDouble("donGia"), new DichVu(rs), new HoaDon(rs));
 	}
 
 	@Override
@@ -119,7 +138,7 @@ public class CTDichVu {
 
 	@Override
 	public String toString() {
-		return "CTDichVu [dichVu=" + dichVu + ", soLuongDat=" + soLuongDat + "]";
+		return "CTDichVu [dichVu=" + dichVu + ", donGia=" + donGia + ", soLuongDat=" + soLuongDat + "]";
 	}
 
 	/**

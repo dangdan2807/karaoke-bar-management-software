@@ -3,8 +3,10 @@ package UI.PanelCustom;
 import javax.swing.*;
 import javax.swing.table.*;
 
+import com.toedter.calendar.JDateChooser;
+
 import DAO.*;
-import Event_Handlers.InputEventHandler;
+import Event_Handlers.*;
 import UI.*;
 import entity.*;
 
@@ -12,7 +14,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Giao diện quản lý nhân viên của phần mềm
@@ -21,46 +26,44 @@ import java.util.ArrayList;
  * <p>
  * Ngày tạo: 04/10/2021
  * <p>
- * Lần cập nhật cuối: 19/11/2021
+ * Lần cập nhật cuối: 18/12/2021
  * <p>
- * Nội dung cập nhật: thêm phân trang cho phần mềm
+ * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh, 
  * <p>
  */
 public class PnNhanVien extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 5815784686959486363L;
 	private JTable tblTableStaff;
 	private DefaultTableModel modelTableStaff;
 	private JTextField txtCMND, txtPhoneNumber, txtStaffName, txtStaffID, txtBFieldSearch, txtKeyWord;
 	private JTextField txtBFieldSearchPosition, txtBFieldPosition, txtUsername;
-	private MyTextField txtNumPage;
 	private JComboBox<String> cboSearch, cboSearchType, cboPosition;
 	private JLabel lblCMND, lblBirthDay, lblGender, lblPosition, lblSalary, lblPhoneNumber, lbStaffID;
 	private JLabel lblStaffName, lblStatus, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnResetPassword, btnNextToRight, btnNextToLast,
-			btnNextToLeft, btnNextToFirst;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnResetPassword, btnNextToRight;
+	private MyButton btnNextToLast, btnNextToLeft, btnNextToFirst;
 	private JRadioButton radWorking, radRetired, radMale, radFemale;
-	private kDatePicker dpBirthDay;
+	private JDateChooser dpBirthday;
 	private JSpinner spnSalary;
+	private PnTextFiledPaging txtPaging;
 
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-	private ImageIcon addIcon = CustomUI.ADD_ICON;
-	private ImageIcon refreshIcon = CustomUI.REFRESH_ICON;
-	private ImageIcon searchIcon = CustomUI.SEARCH_ICON;
-	private ImageIcon backIcon = CustomUI.BACK_ICON;
-	private ImageIcon updateIcon = CustomUI.UPDATE_ICON;
-	private ImageIcon nextIconRight = new ImageIcon(
-			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextRightIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon nextLeftIcon = new ImageIcon(
-			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextLeftIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon addIcon = new ImageIcon(PnNhanVien.class.getResource(CustomUI.ADD_ICON));
+	private ImageIcon refreshIcon = new ImageIcon(PnNhanVien.class.getResource(CustomUI.REFRESH_ICON));
+	private ImageIcon searchIcon = new ImageIcon(PnNhanVien.class.getResource(CustomUI.SEARCH_ICON));
+	private ImageIcon backIcon = new ImageIcon(PnNhanVien.class.getResource(CustomUI.BACK_ICON));
+	private ImageIcon updateIcon = new ImageIcon(PnNhanVien.class.getResource(CustomUI.UPDATE_ICON));
+	private ImageIcon bg = new ImageIcon(new ImageIcon(PnNhanVien.class.getResource(
+			CustomUI.BACKGROUND)).getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon nextIconRight = new ImageIcon(new ImageIcon(PnNhanVien.class.getResource(
+			CustomUI.NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(new ImageIcon(PnNhanVien.class.getResource(
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(new ImageIcon(PnNhanVien.class.getResource(
+			CustomUI.NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(new ImageIcon(PnNhanVien.class.getResource(
+			CustomUI.DOUBLE_NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
 
@@ -69,9 +72,11 @@ public class PnNhanVien extends JPanel
 	private boolean isResetPassword = false;
 	private boolean isInsertStaff = false;
 	private int lineNumberDisplayed = 10;
+	private NhanVienDAO staffDAO = NhanVienDAO.getInstance();
+	private TaiKhoanDAO accountDAO = TaiKhoanDAO.getInstance();
 
 	/**
-	 * Constructor form quản lý nhân viên
+	 * Khởi tạo giao diện quản lý nhân viên
 	 * 
 	 * @param staff {@code NhanVien}: nhân viên truy cập
 	 */
@@ -107,9 +112,6 @@ public class PnNhanVien extends JPanel
 		this.add(pnlMain);
 
 		JPanel pnlTitle = new JPanel() {
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -130,12 +132,12 @@ public class PnNhanVien extends JPanel
 		pnlTitle.add(btnBack);
 		pnlMain.add(pnlTitle);
 
-		JLabel lbTitle = new JLabel("QUẢN LÝ NHÂN VIÊN");
-		lbTitle.setFont(new Font("Dialog", Font.BOLD, 24));
-		lbTitle.setForeground(Color.WHITE);
-		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lbTitle.setBounds(0, 0, 1250, 45);
-		pnlTitle.add(lbTitle);
+		JLabel lblTitle = new JLabel("QUẢN LÝ NHÂN VIÊN");
+		lblTitle.setFont(new Font("Dialog", Font.BOLD, 24));
+		lblTitle.setForeground(Color.WHITE);
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setBounds(0, 0, 1250, 45);
+		pnlTitle.add(lblTitle);
 
 		JPanel pnlInfo = new JPanel();
 		pnlInfo.setLayout(null);
@@ -143,15 +145,10 @@ public class PnNhanVien extends JPanel
 		pnlInfo.setBounds(10, 50, 1238, 210);
 		pnlMain.add(pnlInfo);
 
-		dpBirthDay = new kDatePicker(250, 20);
-		dpBirthDay.setBackgroundColor(new Color(255, 255, 255, 50));
-		dpBirthDay.setBorderCustom(CustomUI.BORDER_BOTTOM_UN_FOCUS);
-		dpBirthDay.setForegroundCustom(Color.white);
-		dpBirthDay.setOpaqueCustom(false);
-		dpBirthDay.setToolTipTextCustom("Ngày sinh của nhân viên");
-		dpBirthDay.setFontCustom(new Font("Dialog", Font.PLAIN, 14));
-		pnlInfo.add(dpBirthDay);
-		dpBirthDay.setBounds(669, 76, 250, 20);
+		dpBirthday = new JDateChooser();
+		CustomUI.getInstance().setCustomJDateChooser(dpBirthday);
+		dpBirthday.setBounds(669, 76, 250, 20);
+		pnlInfo.add(dpBirthday);
 
 		txtCMND = new JTextField();
 		txtCMND.setBounds(165, 51, 250, 20);
@@ -264,17 +261,17 @@ public class PnNhanVien extends JPanel
 		CustomUI.getInstance().setCustomComboBox(cboPosition);
 		cboPosition.setToolTipText("Chọn chức vụ của nhân viên");
 		txtBFieldPosition = CustomUI.getInstance().setCustomCBoxField(cboPosition);
+		cboPosition.setEnabled(false);
 		cboPosition.setBounds(669, 51, 250, 20);
 		pnlInfo.add(cboPosition);
 
 		JPanel pnlSearch = new JPanel();
 		pnlSearch.setBounds(40, 173, 1160, 35);
-		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
 		pnlInfo.add(pnlSearch);
 
-		lblSearch = new JLabel("Tìm theo:");
+		lblSearch = new JLabel("Lọc theo:");
 		CustomUI.getInstance().setCustomLabel(lblSearch);
 		lblSearch.setBounds(0, 5, 100, 20);
 		pnlSearch.add(lblSearch);
@@ -284,6 +281,7 @@ public class PnNhanVien extends JPanel
 		cboSearch.addItem("Tên nhân viên");
 		cboSearch.addItem("Số điện thoại");
 		cboSearch.addItem("Chức vụ");
+		cboSearch.addItem("Mã nhân viên");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		cboSearch.setToolTipText("Chọn loại thông tin cần lọc");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
@@ -301,9 +299,9 @@ public class PnNhanVien extends JPanel
 		pnlSearch.add(lblKeyWord);
 
 		txtKeyWord = new JTextField();
-		txtKeyWord.setBounds(629, 6, 250, 20);
-		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtKeyWord);
+		txtKeyWord.setToolTipText("Nhập từ khóa cần tìm kiếm");
+		txtKeyWord.setBounds(629, 6, 250, 20);
 		txtKeyWord.setVisible(false);
 		pnlSearch.add(txtKeyWord);
 
@@ -322,8 +320,6 @@ public class PnNhanVien extends JPanel
 		pnlInfo.add(lbUsername);
 
 		txtUsername = new JTextField();
-		txtUsername.setForeground(Color.WHITE);
-		txtUsername.setCaretColor(Color.WHITE);
 		txtUsername.setBounds(669, 102, 250, 20);
 		txtUsername.setToolTipText("Tên đăng nhập phải có từ 6 đến 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtUsername);
@@ -346,22 +342,22 @@ public class PnNhanVien extends JPanel
 			}
 		});
 		btnRefresh.setBounds(1036, 91, 150, 35);
-		pnlInfo.add(btnRefresh);
 		btnRefresh.setBackground(Color.CYAN);
 		btnRefresh.setToolTipText("Xóa rỗng form thông tin");
+		pnlInfo.add(btnRefresh);
 
 		btnResetPassword = new MyButton(150, 35, "Đặt lại mật khẩu", gra, updateIcon.getImage(), 31, 19, 10, 5);
 		btnResetPassword.setBounds(1036, 128, 150, 35);
-		pnlInfo.add(btnResetPassword);
 		btnResetPassword.setBackground(Color.CYAN);
 		btnResetPassword.setToolTipText("Làm mới lại mật khẩu nhân viên");
+		pnlInfo.add(btnResetPassword);
 
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
 		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách nhân viên");
-		pnlTable.setBounds(18, 260, 1220, 270);
 		pnlTable.setOpaque(false);
+		pnlTable.setBounds(18, 260, 1220, 270);
 		String[] cols = { "STT", "Mã nhân viên", "Tên nhân viên", "CMND/CCCD", "Chức vụ", "SDT", "Ngày sinh",
 				"Mức lương", "Giới tính", "Trạng thái", "Tài khoản" };
 		modelTableStaff = new DefaultTableModel(cols, 0) {
@@ -374,19 +370,10 @@ public class PnNhanVien extends JPanel
 		};
 
 		tblTableStaff = new JTable(modelTableStaff);
-		tblTableStaff.setBackground(new Color(255, 255, 255, 0));
-		tblTableStaff.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableStaff);
 		tblTableStaff.setRowHeight(21);
-		tblTableStaff.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tblTableStaff.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tblTableStaff.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		tblTableStaff.getTableHeader().setBackground(new Color(255, 255, 255));
-		JScrollPane scrTable = new JScrollPane(tblTableStaff, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 20, 1200, 240);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableStaff);
+		scrTable.setBounds(10, 20, 1200, 235);
 
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
@@ -407,9 +394,10 @@ public class PnNhanVien extends JPanel
 		btnNextToFirst.setBounds(430, 540, 70, 35);
 		pnlMain.add(btnNextToFirst);
 
-		txtNumPage = new MyTextField("12");
-		txtNumPage.setBounds(590, 540, 90, 35);
-		pnlMain.add(txtNumPage);
+		txtPaging = new PnTextFiledPaging(90, 35);
+		txtPaging.setBounds(590, 540, 91, 36);
+		txtPaging.setTextColor(Color.WHITE);
+		pnlMain.add(txtPaging);
 
 		btnAdd.addActionListener(this);
 		btnSearch.addActionListener(this);
@@ -435,7 +423,7 @@ public class PnNhanVien extends JPanel
 
 		txtCMND.addFocusListener(this);
 		cboSearch.addFocusListener(this);
-		dpBirthDay.addFocusListener(this);
+		dpBirthday.addFocusListener(this);
 		txtKeyWord.addFocusListener(this);
 		cboPosition.addFocusListener(this);
 		txtUsername.addFocusListener(this);
@@ -457,16 +445,9 @@ public class PnNhanVien extends JPanel
 		txtUsername.addKeyListener(this);
 		txtStaffName.addKeyListener(this);
 		txtPhoneNumber.addKeyListener(this);
-		txtNumPage.addKeyListener(this);
+		txtPaging.getTextFieldPaging().addKeyListener(this);
 
 		allLoaded();
-	}
-
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new fQuanTri(staff).setVisible(true);
-		});
 	}
 
 	@Override
@@ -487,16 +468,16 @@ public class PnNhanVien extends JPanel
 			isResetPassword = true;
 			updateStaffInfo();
 		} else if (o.equals(btnNextToLeft)) {
-			txtNumPage.subtractOne();
+			txtPaging.subtractOne();
 			searchEventUsingBtnSearch();
 		} else if (o.equals(btnNextToRight)) {
-			txtNumPage.plusOne();
+			txtPaging.plusOne();
 			searchEventUsingBtnSearch();
 		} else if (o.equals(btnNextToFirst)) {
-			txtNumPage.toTheFirstPage();
+			txtPaging.toTheFirstPage();
 			searchEventUsingBtnSearch();
 		} else if (o.equals(btnNextToLast)) {
-			txtNumPage.toTheLastPage();
+			txtPaging.toTheLastPage();
 			searchEventUsingBtnSearch();
 		}
 	}
@@ -505,6 +486,7 @@ public class PnNhanVien extends JPanel
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
 		if (o.equals(cboSearch)) {
+			txtPaging.setCurrentPage(1);
 			String searchTypeName = cboSearch.getSelectedItem().toString();
 			txtKeyWord.setText("");
 			if (searchTypeName.equalsIgnoreCase("Chức vụ") || searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
@@ -538,7 +520,9 @@ public class PnNhanVien extends JPanel
 		} else if (o.equals(txtBFieldSearchPosition)) {
 			cboSearchType.showPopup();
 		} else if (o.equals(txtBFieldPosition)) {
-			cboPosition.showPopup();
+			if (cboPosition.isEnabled()) {
+				cboPosition.showPopup();
+			}
 		} else if (o.equals(tblTableStaff)) {
 			int selectedRow = tblTableStaff.getSelectedRow();
 			txtStaffID.setText(tblTableStaff.getValueAt(selectedRow, 1).toString().trim());
@@ -550,9 +534,20 @@ public class PnNhanVien extends JPanel
 				cboPosition.setSelectedIndex(1);
 			}
 			txtPhoneNumber.setText(tblTableStaff.getValueAt(selectedRow, 5).toString().trim());
-			dpBirthDay.setValue(tblTableStaff.getValueAt(selectedRow, 6).toString().trim());
+
+			String birthdayStr = tblTableStaff.getValueAt(selectedRow, 6).toString().trim();
+			java.util.Date birthday = Calendar.getInstance().getTime();
+			try {
+				birthday = new SimpleDateFormat("dd-MM-yyyy").parse(birthdayStr);
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+				birthday = Calendar.getInstance().getTime();
+			}
+			dpBirthday.setDate(birthday);
+			
 			String salaryStr = tblTableStaff.getValueAt(selectedRow, 7).toString().trim().replace(",", "");
 			spnSalary.setValue(Double.parseDouble(salaryStr));
+			
 			String genderStr = tblTableStaff.getValueAt(selectedRow, 8).toString().trim();
 			radMale.setSelected(true);
 			if (genderStr.equalsIgnoreCase("Nữ")) {
@@ -589,7 +584,9 @@ public class PnNhanVien extends JPanel
 		} else if (o.equals(txtBFieldSearchPosition)) {
 			cboSearchType.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
 		} else if (o.equals(txtBFieldPosition)) {
-			cboPosition.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+			if (cboPosition.isEnabled()) {
+				cboPosition.setBorder(CustomUI.BORDER_BOTTOM_FOCUS);
+			}
 		}
 	}
 
@@ -612,7 +609,13 @@ public class PnNhanVien extends JPanel
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
+		Object o = e.getSource();
+		int key = e.getKeyCode();
+		if (o.equals(txtPaging.getTextFieldPaging())) {
+			if (key == KeyEvent.VK_ENTER) {
+				searchEventUsingBtnSearch();
+			}
+		}
 	}
 
 	@Override
@@ -626,18 +629,19 @@ public class PnNhanVien extends JPanel
 				searchEventUsingBtnSearch();
 			}
 			if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-				handler.enterOnlyNumbers(key, txtKeyWord, 10);
+				handler.enterOnlyNumbersAndLimitInput(key, txtKeyWord, 10);
+			} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên") ||
+					searchTypeName.equalsIgnoreCase("Mã nhân viên")) {
+				handler.characterInputLimit(key, txtKeyWord, 100);
 			}
 		} else if (o.equals(txtPhoneNumber)) {
-			handler.enterOnlyNumbers(key, txtPhoneNumber, 10);
+			handler.enterOnlyNumbersAndLimitInput(key, txtPhoneNumber, 10);
 		} else if (o.equals(txtCMND)) {
-			handler.enterOnlyNumbers(key, txtCMND, 12);
+			handler.enterOnlyNumbersAndLimitInput(key, txtCMND, 12);
 		} else if (o.equals(txtStaffName)) {
 			handler.characterInputLimit(key, txtStaffName, 100);
 		} else if (o.equals(txtUsername)) {
 			handler.characterInputLimit(key, txtUsername, 100);
-		} else if (o.equals(txtNumPage)) {
-			handler.enterOnlyNumbers(key, txtNumPage, 20);
 		}
 	}
 
@@ -683,11 +687,13 @@ public class PnNhanVien extends JPanel
 	private void allLoaded() {
 		reSizeColumnTable();
 		String workingStatus = cboSearchType.getSelectedItem().toString().trim();
-		int totalLine = NhanVienDAO.getInstance().getTotalLineByWorkingStatus(workingStatus);
-		txtNumPage.setCurrentPage(1);
-		txtNumPage.setNumberOfPages(getLastPage(totalLine));
-		ArrayList<NhanVien> staffList = NhanVienDAO.getInstance()
-				.getStaffListByWorkingStatusAndPageNumber(workingStatus, 1);
+		int totalLine = 1;
+		ArrayList<NhanVien> staffList = new ArrayList<>();
+		txtPaging.setCurrentPage(1);
+		totalLine = staffDAO.getTotalLineOfStaffListByWorkingStatus(workingStatus);
+		txtPaging.setTotalPage(getLastPage(totalLine));
+		staffList = staffDAO.getStaffListByWorkingStatusAndPageNumber(workingStatus, 1,
+				lineNumberDisplayed);
 		loadStaffList(staffList, 1);
 	}
 
@@ -736,7 +742,7 @@ public class PnNhanVien extends JPanel
 			return valid;
 		}
 
-		valid = ValidationData.getInstance().ValidBirthDay(this, dpBirthDay, "nhân viên", 16);
+		valid = ValidationData.getInstance().ValidBirthDay(this, dpBirthday, "nhân viên", 16);
 		if (!valid) {
 			return valid;
 		}
@@ -756,7 +762,7 @@ public class PnNhanVien extends JPanel
 				showMessage(txtUsername, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			TaiKhoan account = TaiKhoanDAO.getInstance().getAccountByUsername(username);
+			TaiKhoan account = accountDAO.getAccountByUsername(username);
 			if (account != null) {
 				message = "Tài khoản đã tồn tại, vui lòng nhập tài khoản khác";
 				showMessage(txtUsername, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
@@ -772,15 +778,16 @@ public class PnNhanVien extends JPanel
 	 * @return {@code String}: mã nhân viên mới
 	 */
 	private String createNewStaffID() {
-		String lastStaffId = NhanVienDAO.getInstance().getLastStaffID();
+		String newStaffIdStr = "";
+		String lastStaffId = staffDAO.getLastStaffID();
 		String idStr = "NV";
 		int oldNumberStaffID = 0;
-		if (lastStaffId.equalsIgnoreCase("") == false || lastStaffId != null) {
+		if (!lastStaffId.equals("") && !lastStaffId.isEmpty() && lastStaffId != null) {
 			oldNumberStaffID = Integer.parseInt(lastStaffId.replace(idStr, ""));
 		}
 
 		int newStaffID = ++oldNumberStaffID;
-		String newStaffIdStr = idStr + newStaffID;
+		newStaffIdStr = idStr + newStaffID;
 		boolean flag = true;
 		while (flag) {
 			newStaffIdStr = newStaffIdStr.replace(idStr, idStr + "0");
@@ -805,15 +812,17 @@ public class PnNhanVien extends JPanel
 		Double salary = Double.parseDouble(spnSalary.getValue().toString());
 		String phoneNumber = txtPhoneNumber.getText().trim();
 		String cmnd = txtCMND.getText().trim();
-		Date birthDay = dpBirthDay.getValueSqlDate();
+		Date birthDay = new Date(dpBirthday.getDate().getTime());
 		boolean gender = radMale.isSelected() ? false : true;
 		String username = txtUsername.getText().trim();
 		TaiKhoan account = new TaiKhoan(username);
 		account.setTinhTrangTK(accountStatus);
-		if (isResetPassword == true || isInsertStaff == true)
+		if (isResetPassword == true || isInsertStaff == true) {
 			account.setMatKhau("123456");
-		else {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername(username);
+		} else {
+			NhanVien staff = staffDAO.getStaffByUsername(username);
+			if (staff == null)
+				staff = new NhanVien();
 			String password = staff.getTaiKhoan().getMatKhau();
 			account.setMatKhau(password);
 		}
@@ -881,7 +890,8 @@ public class PnNhanVien extends JPanel
 	/**
 	 * Hiển thị danh sách nhân viên
 	 * 
-	 * @param staffList {@code ArrayList <NhanVien>}: danh sách nhân viên
+	 * @param staffList   {@code ArrayList <NhanVien>}: danh sách nhân viên
+	 * @param currentPage {@code int}: số của trang hiện tại
 	 */
 	private void loadStaffList(ArrayList<NhanVien> staffList, int currentPage) {
 		modelTableStaff.getDataVector().removeAllElements();
@@ -928,41 +938,52 @@ public class PnNhanVien extends JPanel
 	 */
 	private void searchEventUsingBtnSearch() {
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
-		ArrayList<NhanVien> staffList = null;
+		ArrayList<NhanVien> staffList = new ArrayList<>();
 		String keyword = "";
-		String currentPageStr = txtNumPage.getText().trim();
-		int currentPage = currentPageStr.isEmpty() ? 1 : Integer.parseInt(currentPageStr);
+		int currentPage = txtPaging.getCurrentPage();
 		int totalLine = 1;
-		if (searchTypeName.equalsIgnoreCase("Trạng thái làm việc")) {
-			keyword = "Đang làm";
-			if (cboSearchType.getSelectedItem() != null) {
-				keyword = cboSearchType.getSelectedItem().toString().trim();
-			}
-			totalLine = NhanVienDAO.getInstance().getTotalLineByWorkingStatus(keyword);
-			staffList = NhanVienDAO.getInstance().getStaffListByWorkingStatusAndPageNumber(keyword, currentPage);
-		} else if (searchTypeName.equalsIgnoreCase("Tên nhân viên")) {
-			keyword = txtKeyWord.getText().trim();
-			totalLine = NhanVienDAO.getInstance().getTotalLineByStaffName(keyword);
-			staffList = NhanVienDAO.getInstance().getStaffListByStaffNameAndPageNumber(keyword, currentPage);
-		} else if (searchTypeName.equalsIgnoreCase("Số điện thoại")) {
-			keyword = txtKeyWord.getText().trim();
-			if (keyword.matches("^[\\d]{0,10}$")) {
-				totalLine = NhanVienDAO.getInstance().getTotalLineByPhoneNumber(keyword);
-				staffList = NhanVienDAO.getInstance().getStaffListByPhoneNumberAndPageNumber(keyword, currentPage);
-			} else {
-				String message = "Sổ điện phải phải là số, không được quá 10 số";
-				showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
-			}
-		} else if (searchTypeName.equalsIgnoreCase("Chức vụ")) {
-			keyword = "Nhân viên";
-			if (cboSearchType.getSelectedItem() != null) {
-				keyword = cboSearchType.getSelectedItem().toString().trim();
-			}
-			totalLine = NhanVienDAO.getInstance().getTotalLineByPosition(keyword);
-			staffList = NhanVienDAO.getInstance().getStaffListByPositionAndPageNumber(keyword, currentPage);
+		switch (searchTypeName) {
+			case "Trạng thái làm việc":
+				keyword = "Đang làm";
+				if (cboSearchType.getSelectedItem() != null) {
+					keyword = cboSearchType.getSelectedItem().toString().trim();
+				}
+				totalLine = staffDAO.getTotalLineOfStaffListByWorkingStatus(keyword);
+				staffList = staffDAO.getStaffListByWorkingStatusAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
+				break;
+			case "Tên nhân viên":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = staffDAO.getTotalLineByStaffName(keyword);
+				staffList = staffDAO.getStaffListByStaffNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
+			case "Số điện thoại":
+				keyword = txtKeyWord.getText().trim();
+				if (keyword.matches("^[\\d]{0,10}$")) {
+					totalLine = staffDAO.getTotalLineByPhoneNumber(keyword);
+					staffList = staffDAO.getStaffListByPhoneNumberAndPageNumber(keyword, currentPage,
+							lineNumberDisplayed);
+				} else {
+					String message = "Sổ điện phải phải là số, không được quá 10 số";
+					showMessage(txtKeyWord, 1, message, "Thông báo", JOptionPane.ERROR_MESSAGE);
+				}
+				break;
+			case "Chức vụ":
+				keyword = "Nhân viên";
+				if (cboSearchType.getSelectedItem() != null) {
+					keyword = cboSearchType.getSelectedItem().toString().trim();
+				}
+				totalLine = staffDAO.getTotalLineByPosition(keyword);
+				staffList = staffDAO.getStaffListByPositionAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
+			case "Mã nhân viên":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = staffDAO.getTotalLineByStaffId(keyword);
+				staffList = staffDAO.getStaffListByStaffIdAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
 		}
 		int lastPage = getLastPage(totalLine);
-		txtNumPage.setNumberOfPages(lastPage);
+		txtPaging.setTotalPage(lastPage);
 		loadStaffList(staffList, currentPage);
 	}
 
@@ -985,7 +1006,7 @@ public class PnNhanVien extends JPanel
 		spnSalary.setValue((double) 0);
 		radMale.setSelected(true);
 		cboPosition.setSelectedIndex(0);
-		dpBirthDay.setValueToDay();
+		dpBirthday.setDate(Calendar.getInstance().getTime());
 		radWorking.setSelected(true);
 		txtUsername.setText("");
 		txtUsername.setEditable(true);
@@ -1002,17 +1023,25 @@ public class PnNhanVien extends JPanel
 		String message = "";
 		if (validData()) {
 			NhanVien staff = getStaffDataInForm();
-			if (staff.getChucVu().equalsIgnoreCase("chủ quán")) {
-				Boolean result = NhanVienDAO.getInstance().insertStaff(staff);
+			if (staff.getChucVu().equalsIgnoreCase("Nhân viên")) {
+				Boolean result = staffDAO.insertStaff(staff);
 				String name = "nhân viên";
 				if (result) {
+					int lastPage = txtPaging.getTotalPage();
+					int stt = tblTableStaff.getRowCount();
+					if (lastPage == 1 && stt >= 10) {
+						txtPaging.setTotalPage(lastPage + 1);
+					}
+					txtPaging.toTheLastPage();
+					searchEventUsingBtnSearch();
 					message = "Thêm " + name + " mới thành công";
 					txtStaffID.setText(staff.getMaNhanVien());
-					int stt = tblTableStaff.getRowCount() + 1;
-					addRow(stt, staff);
-					int lastIndex = tblTableStaff.getRowCount() - 1;
-					tblTableStaff.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-					tblTableStaff.scrollRectToVisible(tblTableStaff.getCellRect(lastIndex, lastIndex, true));
+					// int stt = tblTableStaff.getRowCount() + 1;
+					// addRow(stt, staff);
+					// int lastIndex = tblTableStaff.getRowCount() - 1;
+					// tblTableStaff.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
+					// tblTableStaff.scrollRectToVisible(tblTableStaff.getCellRect(lastIndex,
+					// lastIndex, true));
 					CustomUI.getInstance().setCustomTextFieldOff(txtUsername);
 					btnAdd.setEnabledCustom(false);
 					btnUpdate.setEnabledCustom(true);
@@ -1039,7 +1068,7 @@ public class PnNhanVien extends JPanel
 			boolean isUpdateStatus = isManager && staff.getTrangThaiNV().equalsIgnoreCase("Đã nghỉ");
 			boolean isUpdateManager = isManager && staff.getChucVu().equalsIgnoreCase("Nhân viên");
 			if (!isUpdateStatus && !isUpdateManager) {
-				String staffName = NhanVienDAO.getInstance().getStaffNameById(staff.getMaNhanVien());
+				String staffName = staffDAO.getStaffNameById(staff.getMaNhanVien());
 				int selectedRow = tblTableStaff.getSelectedRow();
 				String name = "nhân viên";
 				if (selectedRow == -1) {
@@ -1054,9 +1083,9 @@ public class PnNhanVien extends JPanel
 					if (choose == JOptionPane.OK_OPTION) {
 						Boolean result = false;
 						if (isResetPassword || staff.getTaiKhoan().getTinhTrangTK() == false) {
-							result = NhanVienDAO.getInstance().updateInfoStaffAndAccount(staff);
+							result = staffDAO.updateInfoStaffAndAccount(staff);
 						} else {
-							result = NhanVienDAO.getInstance().updateInfoStaff(staff);
+							result = staffDAO.updateInfoStaff(staff);
 						}
 						if (result) {
 							message = "Cập nhật thông tin " + name + " thành công";
@@ -1071,6 +1100,7 @@ public class PnNhanVien extends JPanel
 						} else {
 							message = "Cập nhật thông tin " + name + " thất bại";
 						}
+						JOptionPane.showMessageDialog(this, message);
 					}
 				}
 			} else {
@@ -1078,11 +1108,17 @@ public class PnNhanVien extends JPanel
 					message = "Bạn không thể vô hiệu hóa tài khoản của chính bạn";
 				else if (isUpdateManager)
 					message = "Bạn không thể thay đổi chức vụ của chính bạn";
+				JOptionPane.showMessageDialog(this, message);
 			}
-			JOptionPane.showMessageDialog(this, message);
 		}
 	}
 
+	/**
+	 * tính số trang của bảng dựa trên tổng số nhân viên tìm được
+	 * 
+	 * @param totalLine {@code int} tổng số nhân viên tìm được
+	 * @return {@code int} số trang
+	 */
 	public int getLastPage(int totalLine) {
 		int lastPage = totalLine / lineNumberDisplayed;
 		if (totalLine % lineNumberDisplayed != 0) {

@@ -1,16 +1,26 @@
 package entity;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Calendar;
 
+/**
+ * Lớp nhân viên
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 01/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm javadoc
+ */
 public class NhanVien {
 	private String maNhanVien;
 	private String hoTen;
 	private String cmnd;
+	private Boolean gioiTinh;
 	private Date ngaySinh;
 	private String soDienThoai;
-	private Boolean gioiTinh;
 	private String chucVu;
 	private Double mucLuong;
 	private String trangThaiNV;
@@ -250,6 +260,17 @@ public class NhanVien {
 	 * Tạo 1 {@code NhanVien} không tham số
 	 */
 	public NhanVien() {
+		this.chucVu = "";
+		this.cmnd = "";
+		this.gioiTinh = true;
+		this.hoTen = "";
+		this.maNhanVien = "";
+		this.mucLuong = 0.0;
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(1900, 0, 1);
+		this.ngaySinh = new Date((calendar.getTimeInMillis()));
+		this.soDienThoai = "";
+		this.taiKhoan = new TaiKhoan();
 	}
 
 	/**
@@ -259,8 +280,8 @@ public class NhanVien {
 	 * @throws SQLException {@code SQLException}: lỗi truy vấn
 	 */
 	public NhanVien(ResultSet rs) throws SQLException {
-		this(rs.getString("maNhanVien"), rs.getString("cmndNV"), rs.getString("hoTenNV"), rs.getDate("ngaySinhNV"),
-				rs.getString("sdtNV"), rs.getString("chucVu"), rs.getDouble("mucLuong"), rs.getBoolean("gioiTinhNV"),
+		this(rs.getString("maNhanVien"), rs.getString("cmnd"), rs.getString("hoTen"), rs.getDate("ngaySinh"),
+				rs.getString("soDienThoai"), rs.getString("chucVu"), rs.getDouble("mucLuong"), rs.getBoolean("gioiTinh"),
 				rs.getString("trangThaiNV"), new TaiKhoan(rs));
 	}
 

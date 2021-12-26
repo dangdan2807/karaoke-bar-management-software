@@ -3,18 +3,14 @@ package DAO;
 import java.sql.*;
 import java.util.ArrayList;
 
+import DAO.CTDichVuDAO;
 import entity.CTDichVu;
 import entity.DichVu;
 
 /**
- * Thêm, sửa, đọc dữ liệu từ database:
- * <ul>
- * <li>{@code java.sql.Date} sang {@code java.util.Date}</li>
- * <li>{@code java.sql.Date} sang {@code String}</li>
- * <li>{@code java.sql.Timestamp} sang {@code String}</li>
- * </ul>
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code CTDichVu}
  * <p>
- * Người tham gia thiết kế: Phạm Đăng Đan, Huỳnh Tuấn Anh
+ * Người tham gia thiết kế: Phạm Đăng Đan
  * <p>
  * Ngày tạo: 13/10/2021
  * <p>
@@ -40,13 +36,13 @@ public class CTDichVuDAO {
     public ArrayList<CTDichVu> getServiceDetailListByRoomId(String roomId) {
         ArrayList<CTDichVu> dataList = new ArrayList<CTDichVu>();
         String query = "{CALL USP_getServiceDetailListByRoomId( ? )}";
-        Object[] parameter = new Object[] { roomId };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        Object[] params = { roomId };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
         try {
             while (rs.next()) {
                 dataList.add(new CTDichVu(rs));
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return dataList;
@@ -61,13 +57,13 @@ public class CTDichVuDAO {
     public ArrayList<CTDichVu> getServiceDetailListByBillId(String billId) {
         ArrayList<CTDichVu> dataList = new ArrayList<CTDichVu>();
         String query = "{CALL USP_getServiceDetailListByBillId( ? )}";
-        Object[] parameter = new Object[] { billId };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        Object[] params = { billId };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
         try {
             while (rs.next()) {
                 dataList.add(new CTDichVu(rs));
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return dataList;
@@ -76,7 +72,7 @@ public class CTDichVuDAO {
     /**
      * Lấy ra 1 chi tiết dịch vụ dựa trên mã hóa đơn và mã dịch vụ
      * 
-     * @param billId {@code String}: mã hóa đơn cần tìm
+     * @param billId    {@code String}: mã hóa đơn cần tìm
      * @param serviceId {@code String}: mã dịch vụ cần tìm
      * @return {@code CTHoaDon}: kết quả trả về của câu truy vấn
      *         <ul>
@@ -85,37 +81,39 @@ public class CTDichVuDAO {
      *         </ul>
      */
     public CTDichVu getServiceDetailByBillIdAndServiceId(String billId, String serviceId) {
-        CTDichVu data = null;
+        CTDichVu result = null;
         String query = "{CALL USP_getServiceDetailByBillIdAndServiceId( ? , ? )}";
-        Object[] parameter = new Object[] { billId, serviceId };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        Object[] params = { billId, serviceId };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
         try {
-            if (rs.next()) {
-                data = new CTDichVu(rs);
+            while (rs.next()) {
+                result = new CTDichVu(rs);
+                break;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return data;
+        return result;
     }
 
     /**
      * Thêm một chi tiết dịch vụ
      * 
-     * @param serviceDetail   {@code CTDichVu}: chi tiết dịch vụ cần thêm
-     * @param quantity {@code int}: số lượng đặt
-     * @param billId   {@code String}: mã hóa đơn
+     * @param serviceDetail {@code CTDichVu}: chi tiết dịch vụ cần thêm
+     * @param quantity      {@code int}: số lượng đặt
+     * @param billId        {@code String}: mã hóa đơn
      * @return {@code boolean}: kết quả trả về của câu truy vấn
      *         <ul>
      *         <li>Nếu thành công thì trả về {@code true}</li>
      *         <li>Nếu thất bại thì trả về {@code false}</li>
      *         </ul>
      */
-    public boolean insertServiceDetail(CTDichVu serviceDetail, int quantity, String billId) {
-        String query = "{CALL USP_insertServiceDetail( ? , ? , ? , ? )}";
+    public boolean updateServiceDetail(CTDichVu serviceDetail, int quantity, String billId) {
+        String query = "{CALL USP_updateServiceDetail( ? , ? , ? , ? )}";
         DichVu service = serviceDetail.getDichVu();
-        Object[] parameter = new Object[] { service.getMaDichVu(), billId, quantity, serviceDetail.getDonGia() };
-        int result = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
+        Object[] params = { service.getMaDichVu(), billId, quantity, serviceDetail.getDonGia() };
+        Object obj = DataProvider.getInstance().executeNonQuery(query, params);
+        int result = obj == null ? 0 : (int) obj;
         return result > 0;
     }
 }

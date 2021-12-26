@@ -2,9 +2,20 @@ package DAO;
 
 import java.sql.*;
 import java.util.ArrayList;
-
 import entity.LoaiPhong;
+import DAO.LoaiPhongDAO;
 
+/**
+ * Thêm, sửa, đọc dữ liệu từ database cho lớp {@code LoaiPhong}
+ * <p>
+ * Người tham gia thiết kế: Võ Minh Hiếu
+ * <p>
+ * Ngày tạo: 03/10/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm, sửa các hàm hỗ trợ lấy dữ liệu dựa trên phân trang
+ */
 public class LoaiPhongDAO {
     private static LoaiPhongDAO instance = new LoaiPhongDAO();
 
@@ -20,17 +31,51 @@ public class LoaiPhongDAO {
      * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
      */
     public ArrayList<LoaiPhong> getRoomTypeList() {
+        String query = "{CALL USP_getRoomTypeList()}";
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, null);
         ArrayList<LoaiPhong> dataList = new ArrayList<LoaiPhong>();
-        String query = "{CALL USP_getRoomTypeList}";
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, null);
         try {
             while (rs.next()) {
                 dataList.add(new LoaiPhong(rs));
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return dataList;
+    }
+
+    /**
+     * Lấy danh sách loại phòng theo từng trang
+     * 
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
+     */
+    public ArrayList<LoaiPhong> getRoomTypeListAndPageNumber(int currentPage, int lineNumberDisplayed) {
+        ArrayList<LoaiPhong> dataList = new ArrayList<LoaiPhong>();
+        String query = "{CALL USP_getRoomTypeListAndPageNumber( ? , ? )}";
+        Object[] params = new Object[] { currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
+        try {
+            while (rs.next()) {
+                dataList.add(new LoaiPhong(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy số lượng loại phòng
+     * 
+     * @return {@code int}: số lượng loại phòng
+     */
+    public int getTotalLineOfRoomTypeList() {
+        String query = "{CALL USP_getTotalLineOfRoomTypeList()}";
+        Object obj = DataProvider.getInstance().executeScalar(query, null);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**
@@ -45,31 +90,48 @@ public class LoaiPhongDAO {
      */
     public String getRoomTypeNameById(String roomId) {
         String query = "{CALL USP_getRoomTypeNameById( ? )}";
-        Object[] parameter = new Object[] { roomId };
-        Object obj = DataProvider.getInstance().ExecuteScalar(query, parameter);
-        String roomTypeName = obj != null ? roomTypeName = obj.toString() : "";
-        return roomTypeName;
+        Object[] params = new Object[] { roomId };
+        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        String result = obj != null ? obj.toString() : "";
+        return result;
     }
 
     /**
-     * Lấy danh sách loại phòng có tên phù hợp với từ khóa
+     * Lấy danh sách loại phòng có tên và số trang
      * 
-     * @param roomTypeName {@code String}: từ khóa trong tên loại phòng
-     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng phù hợp điều kiện
+     * @param roomTypeName        {@code String}: từ khóa trong tên loại phòng
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
      */
-    public ArrayList<LoaiPhong> getRoomTypeListByName(String roomTypeName) {
-        String query = "{CALL USP_getRoomTypeListByName( ? )}";
-        Object[] parameter = new Object[] { roomTypeName };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        ArrayList<LoaiPhong> staffList = new ArrayList<LoaiPhong>();
+    public ArrayList<LoaiPhong> getRoomTypeListByNameAndPageNumber(String roomTypeName, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getRoomTypeListByNameAndPageNumber( ? , ? , ? )}";
+        ArrayList<LoaiPhong> dataList = new ArrayList<>();
+        Object[] params = new Object[] { roomTypeName, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
         try {
             while (rs.next()) {
-                staffList.add(new LoaiPhong(rs));
+                dataList.add(new LoaiPhong(rs));
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return staffList;
+        return dataList;
+    }
+
+    /**
+     * Lấy số lượng loại phòng theo tên và số trang
+     * 
+     * @param roomTypeName {@code String}: tên loại phòng
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
+     */
+    public int getTotalLineOfRoomTypeListByName(String roomTypeName) {
+        String query = "{CALL USP_getTotalLineOfRoomTypeListByName( ? )}";
+        Object[] params = new Object[] { roomTypeName };
+        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**
@@ -82,10 +144,10 @@ public class LoaiPhongDAO {
      *         </ul>
      */
     public String getLastRoomTypeId() {
-        String query = "{CALL USP_getLastRoomTypeId}";
-        Object obj = DataProvider.getInstance().ExecuteScalar(query, null);
-        String roomTypeId = obj != null ? obj.toString() : "";
-        return roomTypeId;
+        String query = "{CALL USP_getLastRoomTypeId()}";
+        Object obj = DataProvider.getInstance().executeScalar(query, null);
+        String result = obj != null ? obj.toString() : "";
+        return result;
     }
 
     /**
@@ -99,17 +161,19 @@ public class LoaiPhongDAO {
      *         </ul>
      */
     public LoaiPhong getRoomTypeById(String roomTypeId) {
-        LoaiPhong data = null;
         String query = "{CALL USP_getRoomTypeById( ? )}";
-        Object[] parameter = new Object[] { roomTypeId };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        Object[] params = new Object[] { roomTypeId };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
+        LoaiPhong result = null;
         try {
-            if (rs.next())
-                data = new LoaiPhong(rs);
-        } catch (SQLException e) {
+            while (rs.next()) {
+                result = new LoaiPhong(rs);
+                break;
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return data;
+        return result;
     }
 
     /**
@@ -124,10 +188,10 @@ public class LoaiPhongDAO {
      */
     public Boolean insertRoomType(LoaiPhong roomType) {
         String query = "{CALL USP_insertRoomType( ? , ? , ? , ? )}";
-        Object[] parameter = new Object[] { roomType.getMaLP(), roomType.getTenLP(), roomType.getSucChua(),
-                roomType.getGiaTien() };
-        Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
-        int result = obj != null ? result = (int) obj : 0;
+        Object[] params = new Object[] { roomType.getMaLP(), roomType.getTenLP(),
+                roomType.getSucChua(), roomType.getGiaTien() };
+        Object obj = DataProvider.getInstance().executeNonQuery(query, params);
+        int result = obj != null ? (int) obj : 0;
         return result > 0;
     }
 
@@ -143,32 +207,49 @@ public class LoaiPhongDAO {
      */
     public Boolean updateInfoRoomType(LoaiPhong roomType) {
         String query = "{CALL USP_updateInfoRoomType( ? , ? , ? , ? )}";
-        Object[] parameter = new Object[] { roomType.getMaLP(), roomType.getTenLP(), roomType.getSucChua(),
-                roomType.getGiaTien() };
-        Object obj = DataProvider.getInstance().ExecuteNonQuery(query, parameter);
-        int result = obj != null ? result = (int) obj : 0;
+        Object[] params = new Object[] { roomType.getMaLP(), roomType.getTenLP(),
+                roomType.getSucChua(), roomType.getGiaTien() };
+        Object obj = DataProvider.getInstance().executeNonQuery(query, params);
+        int result = obj != null ? (int) obj : 0;
         return result > 0;
     }
 
     /**
-     * Lấy danh sách loại phòng có giá phòng phù hợp với giá được nhập
+     * Lấy danh sách loại phòng theo giá phòng và số trang
      * 
-     * @param price {@code String}: Giá phòng
-     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng phù hợp điều kiện
+     * @param price               {@code String}: Giá phòng
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
      */
-    public ArrayList<LoaiPhong> getRoomTypeListByPrice(String price) {
-        String query = "{CALL USP_getRoomTypeListByPrice( ? )}";
-        Object[] parameter = new Object[] { price };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
-        ArrayList<LoaiPhong> staffList = new ArrayList<LoaiPhong>();
+    public ArrayList<LoaiPhong> getRoomTypeListByPriceAndPageNumber(String price, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getRoomTypeListByPriceAndPageNumber( ? , ? , ? )}";
+        ArrayList<LoaiPhong> dataList = new ArrayList<>();
+        Object[] params = new Object[] { price, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
         try {
             while (rs.next()) {
-                staffList.add(new LoaiPhong(rs));
+                dataList.add(new LoaiPhong(rs));
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return staffList;
+        return dataList;
+    }
+
+    /**
+     * Lấy số lượng loại phòng theo giá và số trang
+     * 
+     * @param price {@code String}: Giá phòng
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
+     */
+    public int getTotalLineOfRoomTypeListByPrice(String price) {
+        String query = "{CALL USP_getTotalLineOfRoomTypeListByPrice( ? )}";
+        Object[] params = new Object[] { price };
+        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 
     /**
@@ -182,16 +263,56 @@ public class LoaiPhongDAO {
      *         </ul>
      */
     public LoaiPhong getRoomTypeByName(String roomTypeName) {
-        LoaiPhong data = null;
         String query = "{CALL USP_getRoomTypeByName( ? )}";
-        Object[] parameter = new Object[] { roomTypeName };
-        ResultSet rs = DataProvider.getInstance().ExecuteQuery(query, parameter);
+        Object[] params = new Object[] { roomTypeName };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
+        LoaiPhong result = null;
         try {
-            if (rs.next())
-                data = new LoaiPhong(rs);
-        } catch (SQLException e) {
+            while (rs.next()) {
+                result = new LoaiPhong(rs);
+                break;
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return data;
+        return result;
+    }
+
+    /**
+     * Lấy danh sách loại phòng có tên và số trang
+     * 
+     * @param roomTypeName        {@code String}: từ khóa trong tên loại phòng
+     * @param currentPage         {@code int}: số của trang cần lấy thông tin
+     * @param lineNumberDisplayed {@code int}: số dòng được hiển thị trên một trang
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
+     */
+    public ArrayList<LoaiPhong> getRoomTypeListByIdAndPageNumber(String roomTypeName, int currentPage,
+            int lineNumberDisplayed) {
+        String query = "{CALL USP_getRoomTypeListByIdAndPageNumber( ? , ? , ? )}";
+        ArrayList<LoaiPhong> dataList = new ArrayList<>();
+        Object[] params = new Object[] { roomTypeName, currentPage, lineNumberDisplayed };
+        ResultSet rs = DataProvider.getInstance().executeQuery(query, params);
+        try {
+            while (rs.next()) {
+                dataList.add(new LoaiPhong(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * Lấy số lượng loại phòng theo tên và số trang
+     * 
+     * @param roomTypeName {@code String}: tên loại phòng
+     * @return {@code ArrayList<LoaiPhong>}: danh sách loại phòng
+     */
+    public int getTotalLineOfRoomTypeListById(String roomTypeName) {
+        String query = "{CALL USP_getTotalLineOfRoomTypeListById( ? )}";
+        Object[] params = new Object[] { roomTypeName };
+        Object obj = DataProvider.getInstance().executeScalar(query, params);
+        int result = obj != null ? (int) obj : 0;
+        return result;
     }
 }

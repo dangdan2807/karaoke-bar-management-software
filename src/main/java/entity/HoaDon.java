@@ -1,23 +1,50 @@
 package entity;
 
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Lớp hóa đơn
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 01/10/2021
+ * <p>
+ * Lần cập nhật cuối: 19/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm javadoc
+ */
 public class HoaDon {
 	private String maHoaDon;
 	private Timestamp ngayGioDat;
 	private Timestamp ngayGioTra;
 	private int tinhTrangHD;
 
+	private Double giaPhong;
+	private Double tongTienHD;
 	private NhanVien nhanVien;
-	private KhachHang khachHang;
 	private Phong phong;
+	private KhachHang khachHang;
 
 	private List<CTDichVu> dsCTDichVu;
+
+	/**
+	 * Lấy giá của phòng đang cho thuê
+	 */
+	public Double getGiaPhong() {
+		return giaPhong;
+	}
+
+	/**
+	 * Thiết lập giá của phòng đang cho thuê
+	 * 
+	 * @param giaPhong {@code Double}: giá của phòng đang cho thuê
+	 */
+	public void setGiaPhong(Double giaPhong) {
+		this.giaPhong = giaPhong;
+	}
 
 	/**
 	 * Lấy mã hóa đơn
@@ -71,6 +98,7 @@ public class HoaDon {
 	 */
 	public void setNgayGioTra(Timestamp ngayGioTra) {
 		this.ngayGioTra = ngayGioTra;
+		this.tongTienHD = ((tinhTongTienDichVu() + tinhTienPhong()) * 1.1);
 	}
 
 	/**
@@ -169,6 +197,7 @@ public class HoaDon {
 	 */
 	public void setDsCTDichVu(List<CTDichVu> ctDSDichVu) {
 		this.dsCTDichVu = ctDSDichVu;
+		this.tongTienHD = ((tinhTongTienDichVu() + tinhTienPhong()) * 1.1);
 	}
 
 	/**
@@ -182,22 +211,25 @@ public class HoaDon {
 	 *                    <li>Nếu chưa thanh toán thì truyền vào {@code 0}</li>
 	 *                    <li>Nếu đã thanh toán thì truyền vào {@code 1}</li>
 	 *                    </ul>
+	 * @param giaPhong    {@code Double}: giá phòng
 	 * @param nhanVien    {@code NhanVien}: nhân viên tạo hóa đơn
 	 * @param khachHang   {@code KhachHang}: khách hàng đặt phòng
 	 * @param phong       {@code Phong}: phòng được chọn
 	 */
-	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD, NhanVien nhanVien,
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD, double giaPhong,
+			NhanVien nhanVien,
 			KhachHang khachHang, Phong phong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
 		this.ngayGioTra = ngayGioTra;
 		this.tinhTrangHD = tinhTrangHD;
+		this.giaPhong = giaPhong;
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
 		this.phong = phong;
 
-		dsCTDichVu = new ArrayList<CTDichVu>();
-
+		this.dsCTDichVu = new ArrayList<CTDichVu>();
+		this.tongTienHD = ((tinhTongTienDichVu() + tinhTienPhong()) * 1.1);
 	}
 
 	/**
@@ -210,20 +242,24 @@ public class HoaDon {
 	 *                    <li>Nếu chưa thanh toán thì truyền vào {@code 0}</li>
 	 *                    <li>Nếu đã thanh toán thì truyền vào {@code 1}</li>
 	 *                    </ul>
+	 * @param giaPhong    {@code Double}: giá phòng
 	 * @param nhanVien    {@code NhanVien}: nhân viên tạo hóa đơn
 	 * @param khachHang   {@code KhachHang}: khách hàng đặt phòng
 	 * @param phong       {@code Phong}: phòng được chọn
 	 */
-	public HoaDon(String maHoaDon, Timestamp ngayGioDat, int tinhTrangHD, NhanVien nhanVien, KhachHang khachHang,
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, int tinhTrangHD, double giaPhong, NhanVien nhanVien,
+			KhachHang khachHang,
 			Phong phong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
 		this.tinhTrangHD = tinhTrangHD;
+		this.giaPhong = giaPhong;
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
 		this.phong = phong;
 
-		dsCTDichVu = new ArrayList<CTDichVu>();
+		this.dsCTDichVu = new ArrayList<CTDichVu>();
+		this.tongTienHD = 0.0;
 	}
 
 	/**
@@ -231,34 +267,43 @@ public class HoaDon {
 	 * 
 	 * @param maHoaDon   {@code String}: mã hóa đơn
 	 * @param ngayGioDat {@code Timestamp}: ngày giờ đặt
+	 * @param giaPhong   {@code Double}: giá phòng
 	 * @param nhanVien   {@code NhanVien}: nhân viên tạo hóa đơn
 	 * @param khachHang  {@code KhachHang}: khách hàng đặt phòng
 	 * @param phong      {@code Phong}: phòng được chọn
 	 */
-	public HoaDon(String maHoaDon, Timestamp ngayGioDat, NhanVien nhanVien, KhachHang khachHang, Phong phong) {
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, double giaPhong, NhanVien nhanVien, KhachHang khachHang,
+			Phong phong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
 		this.tinhTrangHD = 0;
+		this.giaPhong = giaPhong;
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
 		this.phong = phong;
 
-		dsCTDichVu = new ArrayList<CTDichVu>();
+		this.dsCTDichVu = new ArrayList<CTDichVu>();
+		this.tongTienHD = 0.0;
 	}
 
 	/**
 	 * Tạo 1 {@code HoaDon} mới (tính trạng chưa thanh toán) với các tham số sau:
 	 * 
-	 * @param maHoaDon   {@code String}: mã hóa đơn
-	 * @param ngayGioDat {@code Timestamp}: ngày giờ đặt
+	 * @param maHoaDon    {@code String}: mã hóa đơn
+	 * @param ngayGioDat  {@code Timestamp}: ngày giờ đặt
+	 * @param ngayGioTra  {@code Timestamp}: ngày giờ tính tiền
+	 * @param tinhTrangHD {@code int}: tình trạng hóa đơn
+	 * @param giaPhong    {@code Double}: giá phòng
 	 */
-	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD) {
+	public HoaDon(String maHoaDon, Timestamp ngayGioDat, Timestamp ngayGioTra, int tinhTrangHD, double giaPhong) {
 		this.maHoaDon = maHoaDon;
 		this.ngayGioDat = ngayGioDat;
 		this.ngayGioTra = ngayGioTra;
 		this.tinhTrangHD = tinhTrangHD;
+		this.giaPhong = giaPhong;
 
-		dsCTDichVu = new ArrayList<CTDichVu>();
+		this.dsCTDichVu = new ArrayList<CTDichVu>();
+		this.tongTienHD = ((tinhTongTienDichVu() + tinhTienPhong()) * 1.1);
 	}
 
 	/**
@@ -287,7 +332,7 @@ public class HoaDon {
 	 */
 	public HoaDon(ResultSet rs) throws SQLException {
 		this(rs.getString("maHoaDon"), rs.getTimestamp("ngayGioDat"), rs.getTimestamp("ngayGioTra"),
-				rs.getInt("tinhTrangHD"));
+				rs.getInt("tinhTrangHD"), rs.getDouble("giaPhong"));
 	}
 
 	@Override
@@ -306,14 +351,12 @@ public class HoaDon {
 	}
 
 	/**
-	 * Tính tiền hóa đơn
+	 * Lấy tổng tiền dịch vụ
 	 * 
-	 * @return {@code double}: tiền hóa đơn
+	 * @return {@code double}: tổng tiền dịch vụ
 	 */
-	public Double tinhTongTienHoaDon() {
-		Double tongTienHD = tinhTongTienDichVu() + tinhTienPhong();
-		Double vat = tongTienHD * 0.1;
-		return tongTienHD + vat;
+	public Double getTongTienHD() {
+		return tongTienHD;
 	}
 
 	/**
@@ -329,10 +372,12 @@ public class HoaDon {
 	 *         </ul>
 	 */
 	public boolean themCTDichVu(DichVu dichVu, int soLuongDat, double donGia) {
-		CTDichVu ctDV = new CTDichVu(soLuongDat, donGia, dichVu);
+		CTDichVu ctDV = new CTDichVu(soLuongDat, donGia, dichVu, this);
 		if (dsCTDichVu.contains(ctDV)) {
 			return false;
 		}
+		this.dsCTDichVu.add(ctDV);
+		this.tongTienHD = ((tinhTongTienDichVu() + tinhTienPhong()) * 1.1);
 		return true;
 	}
 
@@ -342,13 +387,16 @@ public class HoaDon {
 	 * @return {@code Double}: số giờ thuê phòng
 	 */
 	public Double tinhGioThue() {
-		int minutes = 0;
+		int soPhut = 0;
 		if (ngayGioTra != null && ngayGioDat != null) {
 			long difference = ngayGioTra.getTime() - ngayGioDat.getTime();
-			minutes = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
+			soPhut = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
 		}
-		minutes = (int) minutes / 15;
-		return minutes * 1.0 / 4;
+		if(soPhut <= 60) {
+			soPhut = 60;
+		}
+		soPhut = (int) soPhut / 15;
+		return soPhut * 1.0 / 4;
 	}
 
 	/**
@@ -361,7 +409,6 @@ public class HoaDon {
 		if (soGio < 1.0) {
 			soGio = 1.0;
 		}
-		Double tongTien = soGio * phong.getLoaiPhong().getGiaTien();
-		return tongTien;
+		return soGio * giaPhong;
 	}
 }

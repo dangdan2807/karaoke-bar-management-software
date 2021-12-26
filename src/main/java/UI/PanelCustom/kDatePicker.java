@@ -15,34 +15,27 @@ import java.sql.Date;
 
 /**
  * {@code kDatePicker} dùng để tạo 1 {@code JPanel} có thể dùng để chọn ngày
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 23/04/2021
+ * <p>
+ * Lần cập nhật cuối: 21/12/2021
+ * <p>
+ * Nội dung cập nhật: chỉnh sửa đường dẫn ảnh để xuất file jar không mất ảnh
  */
 public class kDatePicker extends JPanel implements ActionListener, MouseListener {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 2154011239157650194L;
-	private JTextField txt;
+    private JTextField txt;
     private JButton btn;
     private int widthDefault = 150;
     private int heightDefault = 20;
     private DialogDatePicker f = new DialogDatePicker();
-    private String pathImg = "src/main/resources/images/";
-    private ImageIcon calenderIcon = new ImageIcon(pathImg + "calender_16.png");
+    private String pathImg = CustomUI.pathIcon;
+    private ImageIcon calenderIcon = new ImageIcon(kDatePicker.class.getResource(pathImg + "calender_16.png"));
     private Color backgroundColor = Color.decode("#f9f9f9");
     private Border borderBottomFocus = BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#FCA120"));
     private Border borderBottomUnFocus = BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 161, 32, 100));
-
-    /**
-     * Constructor mặc định không tham số
-     */
-    public kDatePicker() {
-        setLayout(null);
-        // setSize(200, 200);
-        // setResizable(false);
-        // setLocationRelativeTo(null);
-        // setDefaultCloseOperation(EXIT_ON_CLOSE);
-        createGUI();
-    }
+    private boolean isActive = true;
 
     /**
      * Constructor với 2 tham số
@@ -79,19 +72,17 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
         txt.addMouseListener(this);
     }
 
-    public static void main(String[] args) {
-        new kDatePicker().setVisible(true);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if (o.equals(btn)) {
-            f.setModal(true);
-            f.setVisible(true);
-            String date = f.getValueString();
-            if (!(date.equals(""))) {
-                txt.setText(date);
+            if (isActive) {
+                f.setModal(true);
+                f.setVisible(true);
+                String date = f.getValueString();
+                if (!(date.equals(""))) {
+                    txt.setText(date);
+                }
             }
         }
     }
@@ -100,11 +91,13 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     public void mouseClicked(MouseEvent e) {
         Object o = e.getSource();
         if (o.equals(txt)) {
-            f.setModal(true);
-            f.setVisible(true);
-            String date = f.getValueString();
-            if (!(date.equals(""))) {
-                txt.setText(date);
+            if (isActive) {
+                f.setModal(true);
+                f.setVisible(true);
+                String date = f.getValueString();
+                if (!(date.equals(""))) {
+                    txt.setText(date);
+                }
             }
         }
     }
@@ -122,7 +115,9 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     public void mouseEntered(MouseEvent e) {
         Object o = e.getSource();
         if (o.equals(txt)) {
-            txt.setBorder(borderBottomFocus);
+            if (isActive) {
+                txt.setBorder(borderBottomFocus);
+            }
         }
 
     }
@@ -162,7 +157,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
      * 
      * @param color {@code Color}: màu cần thay đổi
      */
-    public void setForegroundCustom(Color color) {
+    public void setTextColor(Color color) {
         txt.setForeground(color);
     };
 
@@ -198,8 +193,29 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
      * 
      * @param font {@code Font}: font cần thay đổi
      */
-    public void setFontCustom(Font font) {
+    public void setTextFont(Font font) {
         txt.setFont(font);
+    }
+
+    /**
+     * kích hoạt để có thể sử dụng mặc định là {@code true} - có thể sử dụng
+     * 
+     * @param isActive {@code boolean}:
+     *                 <ul>
+     *                 <li>{@code true} (giá trị mặc định) kích hoạt</li>
+     *                 <li>{@code false} không kích hoạt</li>
+     *                 </ul>
+     */
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+        btn.setEnabled(isActive);
+        if (isActive) {
+            txt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        } else {
+            txt.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            btn.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
     }
 
     /**
@@ -207,7 +223,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
      * 
      * @return {@code String}: ngày được hiển thị
      */
-    public String getValueStr() {
+    public String getValueString() {
         return txt.getText();
     }
 
@@ -273,11 +289,12 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     }
 
     /**
-     * Lấy ra ngày kế tiếp của ngày được chọn
+     * Lấy ra n ngày kế tiếp của ngày được chọn
      * 
+     * @param numberOfDays {@code int}: số ngày kế tiếp cần lấy
      * @return {@code java.sql.Date}: ngày tiếp theo
      */
-    public Date getNextDay() {
+    public Date getNextDays(int numberOfDays) {
         String strDate = txt.getText().trim();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         java.util.Date date = null;
@@ -285,7 +302,7 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
         try {
             date = sdf.parse(strDate);
             cal.setTime(date);
-            cal.add(Calendar.DATE, 1);
+            cal.add(Calendar.DATE, numberOfDays);
             date = cal.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -295,11 +312,12 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
     }
 
     /**
-     * Lấy ra ngày kề trước của ngày được chọn
+     * Lấy ra n ngày kế trước của ngày được chọn
      * 
+     * @param numberOfDays {@code int}: số ngày kế trước cần lấy
      * @return {@code java.sql.Date}: ngày kề trước
      */
-    public Date getYesterday() {
+    public Date getPreviousDays(int numberOfDays) {
         String strDate = txt.getText().trim();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         java.util.Date date = null;
@@ -307,13 +325,70 @@ public class kDatePicker extends JPanel implements ActionListener, MouseListener
         try {
             date = sdf.parse(strDate);
             cal.setTime(date);
-            cal.add(Calendar.DATE, -1);
+            cal.add(Calendar.DATE, (-1 * numberOfDays));
             date = cal.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
         Date sqlDate = new Date(date.getTime());
         return sqlDate;
+    }
+
+    /**
+     * cập nhật ngày dựa trên đơn vị thời gian và số ngày lệnh kể từ ngày hiện tại
+     * 
+     * @param timeUnit {@code int}: đơn vị thời gian (là 1 trong các giá trị:
+     *                 {@code Calendar.DATE}, {@code Calendar.MONTH}, ...)
+     * @param number   {@code int}: số dựa trên {@code timeUnit} cần lấy.
+     *                 <ul>
+     *                 <li>Cộng lên thì {number} là số dương</li>
+     *                 <li>Trừ đi thì {number} là số âm</li>
+     *                 </ul>
+     */
+    public void setDatesFromToday(int timeUnit, int numberOfMonths) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = getDatesFromToday(timeUnit, numberOfMonths);
+        txt.setText(sdf.format(date.getTime()));
+    }
+
+    /**
+     * Lấy ra ngày dựa trên đơn vị thời gian và số ngày lệnh kể từ ngày hiện tại
+     * 
+     * @param timeUnit {@code int}: đơn vị thời gian (là 1 trong các giá trị:
+     *                 {@code Calendar.DATE}, {@code Calendar.MONTH}, ...)
+     * @param number   {@code int}: số dựa trên {@code timeUnit} cần lấy.
+     *                 <ul>
+     *                 <li>Cộng lên thì {number} là số dương</li>
+     *                 <li>Trừ đi thì {number} là số âm</li>
+     *                 </ul>
+     * @return {@code java.sql.Date}: ngày được chọn
+     */
+    public Date getDatesFromToday(int timeUnit, int number) {
+        String strDate = DialogDatePicker.getToDay();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        java.util.Date date = null;
+        Calendar cal = Calendar.getInstance();
+        try {
+            date = sdf.parse(strDate);
+            cal.setTime(date);
+            cal.add(timeUnit, number);
+            date = cal.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date sqlDate = new Date(date.getTime());
+        return sqlDate;
+    }
+
+    /**
+     * Cập nhật giá trị với giá trị đầu vào là một {@code java.util.Date}
+     * 
+     * @param date {@code java.util.Date}: ngày cần cập nhật
+     */
+    public void setValue(java.util.Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String dateStr = sdf.format(date);
+        txt.setText(dateStr);
     }
 
     /**

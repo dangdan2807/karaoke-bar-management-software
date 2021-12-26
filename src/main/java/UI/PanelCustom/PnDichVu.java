@@ -2,7 +2,6 @@ package UI.PanelCustom;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -11,10 +10,21 @@ import javax.swing.table.*;
 
 import DAO.*;
 import Event_Handlers.InputEventHandler;
-import UI.fDieuHuong;
-import UI.fQuanTri;
+import Event_Handlers.ValidationData;
+import UI.*;
 import entity.*;
 
+/**
+ * Giao diện quản lý dịch vụ của phần mềm
+ * <p>
+ * Người tham gia thiết kế: Võ Minh Hiếu
+ * <p>
+ * Ngày tạo: 26/10/2021
+ * <p>
+ * Lần cập nhật cuối: 18/12/2021
+ * <p>
+ * Nội dung cập nhật: thay đổi đường dẫn file hình ảnh,
+ */
 public class PnDichVu extends JPanel
 		implements ActionListener, MouseListener, ItemListener, KeyListener, FocusListener {
 	/**
@@ -23,32 +33,41 @@ public class PnDichVu extends JPanel
 	private static final long serialVersionUID = -356436856151590278L;
 	private GradientPaint gra = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0,
 			Color.decode("#FAFFD1"));
-	private ImageIcon bg = new ImageIcon(
-			CustomUI.BACKGROUND.getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
-	private ImageIcon nextIconRight = new ImageIcon(
-			CustomUI.NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextRightIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_RIGHT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon nextLeftIcon = new ImageIcon(
-			CustomUI.NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
-	private ImageIcon doubleNextLeftIcon = new ImageIcon(
-			CustomUI.DOUBLE_NEXT_LEFT_ICON.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon bg = new ImageIcon(new ImageIcon(PnDichVu.class.getResource(
+			CustomUI.BACKGROUND)).getImage().getScaledInstance(1270, 630, Image.SCALE_SMOOTH));
+	private ImageIcon nextIconRight = new ImageIcon(new ImageIcon(PnDichVu.class.getResource(
+			CustomUI.NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextRightIcon = new ImageIcon(new ImageIcon(PnDichVu.class.getResource(
+			CustomUI.DOUBLE_NEXT_RIGHT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon nextLeftIcon = new ImageIcon(new ImageIcon(PnDichVu.class.getResource(
+			CustomUI.NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon doubleNextLeftIcon = new ImageIcon(new ImageIcon(PnDichVu.class.getResource(
+			CustomUI.DOUBLE_NEXT_LEFT_ICON)).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+	private ImageIcon backIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.BACK_ICON));
+	private ImageIcon addIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.ADD_ICON));
+	private ImageIcon updateIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.UPDATE_ICON));
+	private ImageIcon refreshIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.REFRESH_ICON));
+	private ImageIcon searchIcon = new ImageIcon(PnDichVu.class.getResource(CustomUI.SEARCH_ICON));
+
 	private JTable tblTableService;
 	private DefaultTableModel modelTableService;
 	private JTextField txtServiceName, txtServiceID, txtBFieldSerType, txtBFieldSearch;
 	private JTextField txtBFieldSearchSerType, txtKeyWord;
 	private JLabel lblServiceType, lblServiceName, lblQuantityInStock, lblServiceID, lblPrice, lblSearch;
-	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch,btnNextRight,
-	btnDoubleNextRight, btnNextLeft, btnDoubleNextLeft;
+	private MyButton btnAdd, btnUpdate, btnRefresh, btnBack, btnSearch, btnNextToRight, btnNextToLast;
+	private MyButton btnNextToLeft, btnNextToFirst;
 	private JComboBox<String> cboServiceType, cboSearch, cboSearchServiceType;
 	private JSpinner spnQuantity, spnPrice;
-	private DecimalFormat df = new DecimalFormat("#,###.##");
+	private PnTextFiledPaging txtPaging;
 
+	private int lineNumberDisplayed = 10;
+	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private NhanVien staffLogin = null;
-	private MyTextField txtIndex;
+	private DichVuDAO serviceDAO = DichVuDAO.getInstance();
+	private LoaiDichVuDAO serviceTypeDAO = LoaiDichVuDAO.getInstance();
 
 	/**
-	 * Constructor mặc định của panel Dịch vụ
+	 * khởi tạo giao diện quản lý dịch vụ
 	 * 
 	 * @param staff {@code NhanVien}: nhân viên truy cập
 	 */
@@ -89,7 +108,7 @@ public class PnDichVu extends JPanel
 		pnlTitle.setOpaque(false);
 		pnlTitle.setLayout(null);
 
-		btnBack = new MyButton(100, 35, "Quay lại", gra, CustomUI.BACK_ICON.getImage(), 30, 19);
+		btnBack = new MyButton(100, 35, "Quay lại", gra, backIcon.getImage(), 30, 19);
 		btnBack.setBounds(1150, 10, 100, 35);
 		btnBack.setToolTipText("Quay lại giao diện điều hướng");
 		pnlTitle.add(btnBack);
@@ -109,7 +128,6 @@ public class PnDichVu extends JPanel
 		pnlMain.add(pnlInfo);
 
 		txtServiceName = new JTextField();
-		txtServiceName.setForeground(Color.WHITE);
 		txtServiceName.setBounds(685, 21, 250, 20);
 		txtServiceName.setToolTipText("Nhập tên dịch vụ, không quá 100 ký tự");
 		CustomUI.getInstance().setCustomTextFieldUnFocus(txtServiceName);
@@ -144,7 +162,6 @@ public class PnDichVu extends JPanel
 		pnlInfo.add(spnPrice);
 
 		txtServiceID = new JTextField();
-		txtServiceID.setForeground(Color.WHITE);
 		txtServiceID.setBounds(214, 21, 250, 20);
 		txtServiceID.setToolTipText("Mã dịch vụ");
 		CustomUI.getInstance().setCustomTextFieldOff(txtServiceID);
@@ -161,28 +178,24 @@ public class PnDichVu extends JPanel
 		lblPrice.setBounds(89, 56, 120, 20);
 		pnlInfo.add(lblPrice);
 
-		
-		btnAdd = new MyButton(130, 35, "Thêm", gra, CustomUI.ADD_ICON.getImage(), 50, 19, 10, 6);
+		btnAdd = new MyButton(130, 35, "Thêm", gra, addIcon.getImage(), 50, 19, 10, 6);
 		btnAdd.setToolTipText("Thêm loại dịch vụ mới sau khi đã điền đủ thông tin");
 		btnAdd.setBounds(1023, 10, 130, 35);
 		pnlInfo.add(btnAdd);
 
-		btnUpdate = new MyButton(130, 35, "Sửa", gra, CustomUI.UPDATE_ICON.getImage(), 55, 19, 10, 6);
+		btnUpdate = new MyButton(130, 35, "Sửa", gra, updateIcon.getImage(), 55, 19, 10, 6);
 		btnUpdate.setToolTipText("Sửa thông tin loại dịch vụ");
 		btnUpdate.setBounds(1023, 50, 130, 35);
 		btnUpdate.setEnabledCustom(false);
 		pnlInfo.add(btnUpdate);
 
-		btnRefresh = new MyButton(130, 35, "Làm mới", gra, CustomUI.REFRESH_ICON.getImage(), 40, 19, 10, 5);
+		btnRefresh = new MyButton(130, 35, "Làm mới", gra, refreshIcon.getImage(), 40, 19, 10, 5);
 		btnRefresh.setToolTipText("Làm mới form");
 		btnRefresh.setBounds(1023, 90, 130, 35);
 		pnlInfo.add(btnRefresh);
-		
-		
 
 		JPanel pnlSearch = new JPanel();
 		pnlSearch.setBounds(190, 138, 851, 53);
-		pnlInfo.add(pnlSearch);
 		pnlSearch.setOpaque(false);
 		pnlSearch.setLayout(null);
 		pnlInfo.add(pnlSearch);
@@ -196,13 +209,14 @@ public class PnDichVu extends JPanel
 		cboSearch.addItem("Tất cả");
 		cboSearch.addItem("Tên dịch vụ");
 		cboSearch.addItem("Tên loại dịch vụ");
+		cboSearch.addItem("Mã dịch vụ");
 		CustomUI.getInstance().setCustomComboBox(cboSearch);
 		cboSearch.setToolTipText("Loại tìm kiếm");
 		txtBFieldSearch = CustomUI.getInstance().setCustomCBoxField(cboSearch);
 		cboSearch.setBounds(140, 18, 160, 20);
 		pnlSearch.add(cboSearch);
 
-		btnSearch = new MyButton(130, 35, "Tìm kiếm", gra, CustomUI.SEARCH_ICON.getImage(),40, 19, 10, 5);
+		btnSearch = new MyButton(130, 35, "Tìm kiếm", gra, searchIcon.getImage(), 40, 19, 10, 5);
 		btnSearch.setToolTipText("Tìm kiếm thông tin dịch vụ theo từ khóa");
 		btnSearch.setBounds(702, 10, 130, 35);
 		pnlSearch.add(btnSearch);
@@ -238,48 +252,41 @@ public class PnDichVu extends JPanel
 		JPanel pnlTable = new JPanel();
 		pnlTable.setBackground(Color.WHITE);
 		pnlTable.setLayout(null);
-		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable,"Danh sách dịch vụ");
-		pnlTable.setBounds(18, 270, 1220, 260);
+		CustomUI.getInstance().setBorderTitlePanelTable(pnlTable, "Danh sách dịch vụ");
+		pnlTable.setBounds(18, 270, 1220, 265);
 		pnlTable.setOpaque(false);
+
 		String[] cols = { "STT", "Mã dịch vụ", "Tên dịch vụ", "Giá bán", "Số lượng", "Loại dịch vụ" };
 		modelTableService = new DefaultTableModel(cols, 0);
 		tblTableService = new JTable(modelTableService);
-		tblTableService.setBackground(new Color(255, 255, 255, 0));
-		tblTableService.setForeground(new Color(255, 255, 255));
+		CustomUI.getInstance().setCustomTable(tblTableService);
 		tblTableService.setRowHeight(21);
-		tblTableService.setFont(new Font("Dialog", Font.PLAIN, 14));
-		tblTableService.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 14));
-		tblTableService.getTableHeader().setForeground(Color.decode("#9B17EB"));
-		
-		JScrollPane scrTable = new JScrollPane(tblTableService, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrTable.getViewport().setBackground(Color.WHITE);
-		scrTable.setBounds(10, 20, 1200, 230);
-		scrTable.setOpaque(false);
-		scrTable.getViewport().setOpaque(false);
+
+		JScrollPane scrTable = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableService);
+		scrTable.setBounds(10, 20, 1200, 235);
 		pnlTable.add(scrTable);
 		pnlMain.add(pnlTable);
-		
-		btnNextRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
-		btnNextRight.setBounds(690, 540, 70, 35);
-		pnlMain.add(btnNextRight);
 
-		btnDoubleNextRight = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextRight.setBounds(770, 540, 70, 35);
-		pnlMain.add(btnDoubleNextRight);
+		btnNextToRight = new MyButton(70, 35, "", gra, nextIconRight.getImage(), 0, 0, 14, -8);
+		btnNextToRight.setBounds(690, 540, 70, 35);
+		pnlMain.add(btnNextToRight);
 
-		btnNextLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnNextLeft.setBounds(510, 540, 70, 35);
-		pnlMain.add(btnNextLeft);
+		btnNextToLast = new MyButton(70, 35, "", gra, doubleNextRightIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLast.setBounds(770, 540, 70, 35);
+		pnlMain.add(btnNextToLast);
 
-		btnDoubleNextLeft = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
-		btnDoubleNextLeft.setBounds(430, 540, 70, 35);
-		pnlMain.add(btnDoubleNextLeft);
+		btnNextToLeft = new MyButton(70, 35, "", gra, nextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToLeft.setBounds(510, 540, 70, 35);
+		pnlMain.add(btnNextToLeft);
 
-		txtIndex = new MyTextField("2222");
-		txtIndex.setBounds(590, 540, 90, 35);
-		pnlMain.add(txtIndex);
+		btnNextToFirst = new MyButton(70, 35, "", gra, doubleNextLeftIcon.getImage(), 0, 0, 14, -8);
+		btnNextToFirst.setBounds(430, 540, 70, 35);
+		pnlMain.add(btnNextToFirst);
 
+		txtPaging = new PnTextFiledPaging(90, 35);
+		txtPaging.setBounds(590, 540, 90, 35);
+		txtPaging.setTextColor(Color.WHITE);
+		pnlMain.add(txtPaging);
 
 		tblTableService.addMouseListener(this);
 		txtBFieldSearch.addMouseListener(this);
@@ -290,6 +297,10 @@ public class PnDichVu extends JPanel
 		btnUpdate.addActionListener(this);
 		btnSearch.addActionListener(this);
 		btnRefresh.addActionListener(this);
+		btnNextToLast.addActionListener(this);
+		btnNextToLeft.addActionListener(this);
+		btnNextToRight.addActionListener(this);
+		btnNextToFirst.addActionListener(this);
 
 		cboSearch.addItemListener(this);
 		cboSearchServiceType.addItemListener(this);
@@ -305,12 +316,14 @@ public class PnDichVu extends JPanel
 		allLoaded();
 	}
 
-	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		SwingUtilities.invokeLater(() -> {
-			NhanVien staff = NhanVienDAO.getInstance().getStaffByUsername("phamdangdan");
-			new fQuanTri(staff).setVisible(true);
-		});
-	}
+	// public static void main(String[] args) throws InvocationTargetException,
+	// InterruptedException {
+	// SwingUtilities.invokeLater(() -> {
+	// NhanVien staff = new NhanVien("NV00000001");
+	// PnDichVu login = new PnDichVu(staff);
+	// login.setVisible(true);
+	// });
+	// }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -322,22 +335,30 @@ public class PnDichVu extends JPanel
 				String message = "";
 				if (validData()) {
 					DichVu service = getServiceDataInForm();
-					Boolean result = DichVuDAO.getInstance().insertService(service);
+					Boolean result = serviceDAO.insertService(service);
 					if (result) {
+						int lastPage = txtPaging.getTotalPage();
+						int stt = tblTableService.getRowCount();
+						if (lastPage == 1 && stt >= 10) {
+							txtPaging.setTotalPage(lastPage + 1);
+						}
+						txtPaging.toTheLastPage();
+						searchEventUsingBtnSearch();
 						message = "Thêm dịch vụ mới thành công";
 						txtServiceID.setText(service.getMaDichVu());
-						int stt = tblTableService.getRowCount();
-						addRow(stt, service);
-						int lastIndex = tblTableService.getRowCount() - 1;
-						tblTableService.getSelectionModel().setSelectionInterval(lastIndex, lastIndex);
-						tblTableService.scrollRectToVisible(tblTableService.getCellRect(lastIndex, lastIndex, true));
-						JOptionPane.showMessageDialog(this, message);
+						// int stt = tblTableService.getRowCount();
+						// addRow(stt, service);
+						// int lastIndex = tblTableService.getRowCount() - 1;
+						// tblTableService.getSelectionModel().setSelectionInterval(lastIndex,
+						// lastIndex);
+						// tblTableService.scrollRectToVisible(tblTableService.getCellRect(lastIndex,
+						// lastIndex, true));
 						btnAdd.setEnabledCustom(false);
 						btnUpdate.setEnabledCustom(true);
 					} else {
 						message = "Thêm dịch vụ thất bại";
-						JOptionPane.showMessageDialog(this, message);
 					}
+					JOptionPane.showMessageDialog(this, message);
 				}
 			}
 		} else if (o.equals(btnBack)) {
@@ -356,7 +377,7 @@ public class PnDichVu extends JPanel
 		} else if (o.equals(btnUpdate)) {
 			if (validData()) {
 				DichVu service = getServiceDataInForm();
-				String serviceName = DichVuDAO.getInstance().getServiceNameById(service.getMaDichVu());
+				String serviceName = serviceDAO.getServiceNameById(service.getMaDichVu());
 				String message = "";
 				int selectedRow = tblTableService.getSelectedRow();
 				String name = "dịch vụ";
@@ -370,14 +391,15 @@ public class PnDichVu extends JPanel
 							"Xác nhận cập nhật thông tin " + name + "", JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
 					if (choose == JOptionPane.OK_OPTION) {
-						Boolean result = DichVuDAO.getInstance().updateInfoService(service);
+						Boolean result = serviceDAO.updateInfoService(service);
 						if (result) {
 							message = "Cập nhật thông tin " + name + " thành công";
 							updateRow(selectedRow, service);
 							btnAdd.setEnabledCustom(false);
 							btnUpdate.setEnabledCustom(true);
 							tblTableService.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-							tblTableService.scrollRectToVisible(tblTableService.getCellRect(selectedRow, selectedRow, true));
+							tblTableService
+									.scrollRectToVisible(tblTableService.getCellRect(selectedRow, selectedRow, true));
 						} else {
 							message = "Cập nhật thông tin " + name + " thất bại";
 						}
@@ -385,6 +407,18 @@ public class PnDichVu extends JPanel
 					}
 				}
 			}
+		} else if (o.equals(btnNextToLeft)) {
+			txtPaging.subtractOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToRight)) {
+			txtPaging.plusOne();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToFirst)) {
+			txtPaging.toTheFirstPage();
+			searchEventUsingBtnSearch();
+		} else if (o.equals(btnNextToLast)) {
+			txtPaging.toTheLastPage();
+			searchEventUsingBtnSearch();
 		}
 	}
 
@@ -449,6 +483,7 @@ public class PnDichVu extends JPanel
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getSource();
 		if (o.equals(cboSearch)) {
+			txtPaging.toTheFirstPage();
 			String searchType = cboSearch.getSelectedItem().toString();
 			txtKeyWord.setText("");
 			if (searchType.equalsIgnoreCase("Tên loại dịch vụ")) {
@@ -459,7 +494,7 @@ public class PnDichVu extends JPanel
 				cboSearchServiceType.setVisible(false);
 				if (searchType.equalsIgnoreCase("Tất cả")) {
 					CustomUI.getInstance().setCustomTextFieldOff(txtKeyWord);
-				} else if (searchType.equalsIgnoreCase("Tên dịch vụ")) {
+				} else if (searchType.equalsIgnoreCase("Tên dịch vụ") || searchType.equalsIgnoreCase("Mã dịch vụ")) {
 					CustomUI.getInstance().setCustomTextFieldOn(txtKeyWord);
 				}
 			}
@@ -531,8 +566,13 @@ public class PnDichVu extends JPanel
 	 */
 	public void allLoaded() {
 		reSizeColumnTable();
-		loadServiceTypeList(LoaiDichVuDAO.getInstance().getServiceTypeList());
-		loadServiceList(DichVuDAO.getInstance().getServiceList());
+		txtPaging.setCurrentPage(1);
+		ArrayList<DichVu> serviceList = new ArrayList<>();
+		loadServiceTypeList(serviceTypeDAO.getServiceTypeList());
+		int totalLine = serviceDAO.getTotalLineOfServiceList();
+		txtPaging.setTotalPage(getLastPage(totalLine));
+		serviceList = serviceDAO.getServiceListAndPageNumber(1, lineNumberDisplayed);
+		loadServiceList(serviceList, 1);
 	}
 
 	/**
@@ -549,7 +589,9 @@ public class PnDichVu extends JPanel
 		if (serviceId.equals("") || serviceId.length() <= 0) {
 			serviceId = createNewServiceID();
 		}
-		LoaiDichVu serviceType = LoaiDichVuDAO.getInstance().getServiceTypeByName(serviceTypeName);
+		LoaiDichVu serviceType = serviceTypeDAO.getServiceTypeByName(serviceTypeName);
+		if (serviceType == null)
+			serviceType = new LoaiDichVu(serviceTypeName);
 		return new DichVu(serviceId, staffName, price, quantity, serviceType);
 	}
 
@@ -576,7 +618,8 @@ public class PnDichVu extends JPanel
 	 * @return {@code String}: mã dịch vụ mới
 	 */
 	private String createNewServiceID() {
-		String lastServiceId = DichVuDAO.getInstance().getLastServiceID();
+		String lastServiceId = "";
+		lastServiceId = serviceDAO.getLastServiceID();
 		String idStr = "DV";
 		int oldNumberStaffID = 0;
 		if (lastServiceId.equalsIgnoreCase("") == false || lastServiceId != null) {
@@ -642,12 +685,13 @@ public class PnDichVu extends JPanel
 	/**
 	 * Hiển thị danh sách dịch vụ
 	 * 
+	 * @param roomList    {@code ArrayList<Phong>}: danh sách phòng
 	 * @param serviceList {@code ArrayList<DichVu>}: danh sách dịch vụ
 	 */
-	private void loadServiceList(ArrayList<DichVu> serviceList) {
+	private void loadServiceList(ArrayList<DichVu> serviceList, int currentPage) {
 		modelTableService.getDataVector().removeAllElements();
 		modelTableService.fireTableDataChanged();
-		int i = 1;
+		int i = 1 + (currentPage - 1) * lineNumberDisplayed;
 		for (DichVu item : serviceList) {
 			addRow(i++, item);
 		}
@@ -698,17 +742,34 @@ public class PnDichVu extends JPanel
 	private void searchEventUsingBtnSearch() {
 		String searchTypeName = cboSearch.getSelectedItem().toString().trim();
 		String keyword = "";
+		int currentPage = txtPaging.getCurrentPage();
+		int totalLine = 1;
 		ArrayList<DichVu> serviceList = new ArrayList<DichVu>();
-		if (searchTypeName.equalsIgnoreCase("Tất cả")) {
-			serviceList = DichVuDAO.getInstance().getServiceList();
-		} else if (searchTypeName.equalsIgnoreCase("Tên dịch vụ")) {
-			keyword = txtKeyWord.getText().trim();
-			serviceList = DichVuDAO.getInstance().getServiceListByName(keyword);
-		} else if (searchTypeName.equalsIgnoreCase("Tên loại dịch vụ")) {
-			keyword = cboSearchServiceType.getSelectedItem().toString().trim();
-			serviceList = DichVuDAO.getInstance().getServiceListByServiceTypeName(keyword);
+		switch (searchTypeName) {
+			case "Tất cả":
+				totalLine = serviceDAO.getTotalLineOfServiceList();
+				serviceList = serviceDAO.getServiceListAndPageNumber(currentPage, lineNumberDisplayed);
+				break;
+			case "Tên dịch vụ":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = serviceDAO.getTotalLineOfServiceListByName(keyword);
+				serviceList = serviceDAO.getServiceListByNameAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
+			case "Mã dịch vụ":
+				keyword = txtKeyWord.getText().trim();
+				totalLine = serviceDAO.getTotalLineOfServiceListById(keyword);
+				serviceList = serviceDAO.getServiceListByIdAndPageNumber(keyword, currentPage, lineNumberDisplayed);
+				break;
+			case "Tên loại dịch vụ":
+				keyword = cboSearchServiceType.getSelectedItem().toString().trim();
+				totalLine = serviceDAO.getTotalLineOfServiceListByServiceTypeName(keyword);
+				serviceList = serviceDAO.getServiceListByServiceTypeNameAndPageNumber(keyword, currentPage,
+						lineNumberDisplayed);
+				break;
 		}
-		loadServiceList(serviceList);
+		int lastPage = getLastPage(totalLine);
+		txtPaging.setTotalPage(lastPage);
+		loadServiceList(serviceList, currentPage);
 	}
 
 	/**
@@ -724,5 +785,19 @@ public class PnDichVu extends JPanel
 	 */
 	public JButton getBtnBack() {
 		return btnBack;
+	}
+
+	/**
+	 * tính số trang của bảng dựa trên tổng số khách hàng tìm được
+	 * 
+	 * @param totalLine {@code int} tổng số khách hàng tìm được
+	 * @return {@code int} số trang
+	 */
+	public int getLastPage(int totalLine) {
+		int lastPage = totalLine / lineNumberDisplayed;
+		if (totalLine % lineNumberDisplayed != 0) {
+			lastPage++;
+		}
+		return lastPage;
 	}
 }

@@ -3,7 +3,6 @@ package UI.PanelCustom;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -13,8 +12,21 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 
 import DAO.*;
+import Event_Handlers.ConvertTime;
+import Event_Handlers.ExportBill;
 import entity.*;
 
+/**
+ * Giao diện thanh toán hóa đơn
+ * <p>
+ * Người tham gia thiết kế: Phạm Đăng Đan
+ * <p>
+ * Ngày tạo: 03/11/2021
+ * <p>
+ * Lần cập nhật cuối: 20/11/2021
+ * <p>
+ * Nội dung cập nhật: thêm giải thích lớp javadoc
+ */
 public class DialogHoaDon extends JDialog implements ActionListener {
 	private JTextField txtBillId, txtStaffName, txtCustomerName, txtRoomId, txtRoomTypeName, txtRoomPrice, txtStartTime,
 			txtEndTime, txtUsedTime, txtTotalPriceService, txtTotalPriceRoom, txtVAT, txtTotalPriceBill;
@@ -24,28 +36,45 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 			Color.decode("#FAFFD1"));
 	private MyButton btnPayment, btnBack, btnExportPdf, btnExportExcel;
 
-	private ImageIcon logoApp = CustomUI.LOGO_APP;
-	private ImageIcon backIcon = CustomUI.BACK_ICON;
-	private ImageIcon paymentIcon = CustomUI.PAYMENT_ICON;
-	private ImageIcon pdfIcon = CustomUI.PDF_ICON;
-	private ImageIcon excelIcon = CustomUI.EXCEL_ICON;
-	private ImageIcon logoIcon = new ImageIcon(
-			CustomUI.LOGO_ICON.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH));
+	private ImageIcon logoApp = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.LOGO_APP));
+	private ImageIcon backIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.BACK_ICON));
+	private ImageIcon paymentIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.PAYMENT_ICON));
+	private ImageIcon pdfIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.PDF_ICON));
+	private ImageIcon excelIcon = new ImageIcon(DialogHoaDon.class.getResource(CustomUI.EXCEL_ICON));
+	private ImageIcon logoIcon = new ImageIcon(new ImageIcon(DialogHoaDon.class.getResource(CustomUI.LOGO_ICON))
+			.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH));
 
 	private String formatTime = "HH:mm:ss dd/MM/yyyy";
 	private DecimalFormat df = new DecimalFormat("#,###.##");
 	private final String WORKING_DIR = System.getProperty("user.dir");
-	private String path = WORKING_DIR + "/src/main/resources/bill/";
+	private String path = WORKING_DIR + "/bill/";
 	private HoaDon bill = new HoaDon();
 	private boolean paid = false;
+	private HoaDonDAO billDAO = HoaDonDAO.getInstance();
+	private NhanVienDAO staffDAO = NhanVienDAO.getInstance();
+	private KhachHangDAO customerDAO = KhachHangDAO.getInstance();
+	private CTDichVuDAO serviceDetailDAO = CTDichVuDAO.getInstance();
 
+	/**
+	 * Khởi tạo giao diện thanh toán hóa đơn
+	 * 
+	 * @param bill {@code HoaDon}: hóa đơn cần thanh toán
+	 */
 	public DialogHoaDon(HoaDon bill) {
 		this.bill = bill;
-		NhanVien staff = NhanVienDAO.getInstance().getStaffByBillId(bill.getMaHoaDon());
+		NhanVien staff = null;
+		KhachHang customer = null;
+		List<CTDichVu> serviceOrders = new ArrayList<>();
+		staff = staffDAO.getStaffByBillId(bill.getMaHoaDon());
+		customer = customerDAO.getCustomerByBillId(bill.getMaHoaDon());
+		serviceOrders = serviceDetailDAO.getServiceDetailListByBillId(bill.getMaHoaDon());
+		if (staff == null)
+			staff = new NhanVien();
+		if (customer == null)
+			customer = new KhachHang();
 		bill.setNhanVien(staff);
-		KhachHang customer = KhachHangDAO.getInstance().getCustomerByBillId(bill.getMaHoaDon());
 		bill.setKhachHang(customer);
-
+		bill.setDsCTDichVu(serviceOrders);
 		setSize(800, 720);
 		setIconImage(logoApp.getImage());
 		// setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -148,11 +177,11 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		CustomUI.getInstance().setCustomTable(tblTableBillInfo);
 		tblTableBillInfo.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 16));
 		tblTableBillInfo.getTableHeader().setBackground(new Color(255, 255, 255, 0));
-		// tblTableBillInfo.getTableHeader().setForeground(Color.BLACK);
+		tblTableBillInfo.getTableHeader().setForeground(Color.WHITE);
 		tblTableBillInfo.setOpaque(false);
 		tblTableBillInfo.setShowGrid(false);
 		tblTableBillInfo.setRowHeight(25);
-		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPane(tblTableBillInfo);
+		JScrollPane scrTableBillInfo = CustomUI.getInstance().setCustomScrollPaneNotScroll(tblTableBillInfo);
 		scrTableBillInfo.setBounds(1, 1, 777, 199);
 		pnTable.add(scrTableBillInfo);
 
@@ -340,43 +369,44 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		allLoaded();
 	}
 
-	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		SwingUtilities.invokeLater(() -> {
-			String billId = "HD2021100100001";
-			HoaDon bill = HoaDonDAO.getInstance().getBillByBillId(billId);
-			Phong room = PhongDAO.getInstance().getRoomByBillId(billId);
-			bill.setPhong(room);
-			ArrayList<CTDichVu> billInfoList = CTDichVuDAO.getInstance().getServiceDetailListByBillId(billId);
-			bill.setDsCTDichVu(billInfoList);
-			new DialogHoaDon(bill).setVisible(true);
-		});
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnExportExcel)) {
 			Boolean result = ExportBill.getInstance().exportBillToExcel(bill, path);
-			String message = "Lỗi khi xuất file excel";
-			if (!result) {
-				JOptionPane.showMessageDialog(null, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
+			String message = "";
+			int type = JOptionPane.INFORMATION_MESSAGE;
+			if (result) {
+				message = "Xuất file pdf thành công";
+				type = JOptionPane.INFORMATION_MESSAGE;
+			} else {
+				message = "Xuất file pdf thất bại";
+				type = JOptionPane.ERROR_MESSAGE;
 			}
+			JOptionPane.showMessageDialog(null, message, "Thông báo", type);
 		} else if (o.equals(btnExportPdf)) {
 			Boolean result = ExportBill.getInstance().exportBillToPdf(bill, path);
-			String message = "Lỗi khi xuất file pdf";
-			if (!result) {
-				JOptionPane.showMessageDialog(null, message, "Lỗi", JOptionPane.ERROR_MESSAGE);
+			String message = "";
+			int type = JOptionPane.INFORMATION_MESSAGE;
+			if (result) {
+				message = "Xuất file pdf thành công";
+				type = JOptionPane.INFORMATION_MESSAGE;
+			} else {
+				message = "Xuất file pdf thất bại";
+				type = JOptionPane.ERROR_MESSAGE;
 			}
+			JOptionPane.showMessageDialog(null, message, "Thông báo", type);
 		} else if (o.equals(btnPayment)) {
-			Double totalPriceBill = bill.tinhTongTienHoaDon();
-			boolean isPaid = HoaDonDAO.getInstance().payment(bill.getMaHoaDon(), bill.getNgayGioTra(), totalPriceBill);
+			boolean isPaid = billDAO.payment(bill.getMaHoaDon(), bill.getTongTienHD(), bill.getNgayGioTra());
 			if (isPaid) {
 				paid = isPaid;
 				btnExportExcel.setEnabledCustom(true);
 				btnExportPdf.setEnabledCustom(true);
 				btnPayment.setEnabledCustom(false);
+				JOptionPane.showMessageDialog(null, "Thanh toán hóa đơn thành công", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
 			} else {
-				JOptionPane.showMessageDialog(null, "Lỗi khi thanh toán vui lòng thử lại!!!", "Lỗi",
+				JOptionPane.showMessageDialog(null, "Lỗi khi thanh toán vui lòng thử lại!!!", "Thông báo",
 						JOptionPane.ERROR_MESSAGE);
 			}
 			// this.dispose();
@@ -420,7 +450,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		txtCustomerName.setText(bill.getKhachHang().getHoTen());
 		txtRoomId.setText(bill.getPhong().getMaPhong());
 		txtRoomTypeName.setText(roomType.getTenLP());
-		txtRoomPrice.setText(df.format(roomType.getGiaTien()) + " đ/giờ");
+		txtRoomPrice.setText(df.format(bill.getGiaPhong()) + " đ/giờ");
 		Timestamp startTime = bill.getNgayGioDat();
 		String startTimeStr = ConvertTime.getInstance().convertTimeToString(startTime, formatTime);
 		txtStartTime.setText(startTimeStr);
@@ -470,7 +500,7 @@ public class DialogHoaDon extends JDialog implements ActionListener {
 		txtTotalPriceRoom.setText(df.format(totalPriceRoom));
 		double vat = (totalPriceService + totalPriceRoom) * 0.1;
 		txtVAT.setText(df.format(vat));
-		double totalPrice = bill.tinhTongTienHoaDon();
+		double totalPrice = bill.getTongTienHD();
 		txtTotalPriceBill.setText(df.format(totalPrice));
 	}
 
